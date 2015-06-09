@@ -12,12 +12,12 @@ y(a) &= y_0,
 	\end{split}\label{ivp:generic}
 \end{align}
 where $f$ is a continuous function. 
-A solution of this IVP is a continuously differentiable function $y(x)$ that satisfies the equation $y' = f(x,y)$ on the interval $[a,b]$ and for which $y(a) = y_0$. 
-In this lab we will focus on numerical methods for approximating a solution $y(x)$, and sidestep the important mathematical problem of verifying that \eqref{ivp:generic} has a unique solution.
+A solution of \eqref{ivp:generic} is a continuously differentiable function $y(x)$ that satisfies the equation $y' = f(x,y)$ on the interval $[a,b]$ and for which $y(a) = y_0$. 
+In this lab we will focus on numerical methods for approximating $y(x)$, and sidestep the important mathematical problem of verifying that \eqref{ivp:generic} has a unique solution.
 
 There are many IVPs where it is impossible to find a closed form, analytic expression for the solution.
 For other IVPs there is a closed form expression for the solution, but it may be difficult to interpret.
-In either case, we can usually make good use of various methods of numerical approximation to study the solution. 
+In either case, we can usually make good use of numerical methods to study the solution. 
 
 As an example, consider the initial value problem
 \begin{align}
@@ -26,17 +26,17 @@ y'(x) &= \sin y(x), \\
 y(0) &= y_0.
 	\end{split}\label{ivp:example}
 \end{align}
-This IVP does have solution, which is defined implicitly by
+This has a solution $y(x)$, defined implicitly by
 \[x = \ln \left|\frac{\cos y_0 + \cot y_0}{\csc y + \cot y} \right|.\]
-Since this solution is not very helpful intuitively, we turn to a combination of qualitative and numerical methods. 
-We begin by noting that since $\sin (n \pi) = 0$ for $n \in \mathbb{N},$ this differential equation has constant solutions $y_n(x) = n \pi,$ $n \in \mathbb{N}$. 
+Since this analytic expression is not very helpful intuitively, we turn to a combination of qualitative and numerical methods. 
+We begin by noting that since $\sin (n \pi) = 0$, this differential equation has constant solutions $y_n(x) = n \pi,$ $n \in \mathbb{N}$. 
 We can also use an IVP solver to numerically approximate solutions for several other initial values. 
-After plotting these solutions (see Figure \ref{ivp:int_curves}), it becomes  obvious how solutions of this IVP will behave.
+After plotting these solutions (see Figure \ref{ivp:int_curves}), it becomes obvious how solutions of \eqref{ivp:example} behave in general.
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{Fig2.pdf}
-\caption{Several solutions of \eqref{ivp:example}, using the Python solver \li{dopri5}. }
+\includegraphics[width=\textwidth]{example.pdf}
+\caption{Several solutions of \eqref{ivp:example}, using the Numpy's IVP solver \li{dopri5}. }
 \label{ivp:int_curves}
 \end{figure}
 
@@ -44,18 +44,18 @@ After plotting these solutions (see Figure \ref{ivp:int_curves}), it becomes  ob
 \section*{Numerical Methods}
 Numerical methods for solving initial value problems require us to approximate the solution on a set of grid points $a = x_0< x_1<\hdots< x_n = b$ in our interval.  
 For simplicity we will assume that each of the $n$ subintervals $[x_{i-1},x_i]$ has equal length $h = (b-a)/n$. $h$ is called the \textit{step size}. 
-We then look for values $y_0, y_1, \hdots, y_n$ that approximate the solution at $x_0, x_1, \hdots, x_n$.
-For a fixed value of $i$, $ 1 \leq i \leq n$, Taylor's theorem says that
+We then look for values $y_0, y_1, \hdots, y_n$ that approximate the solution at the grid points.
+For each $i$, Taylor's theorem says that
 \begin{align*}
 y(x_{i+1}) &= y(x_{i}) + h y'(x_i) + \frac{h^2}{2} y''(\xi_i)\text{ for some }\xi_i \in [x_i,x_{i+1}].
 \end{align*}
-For small values of $h$, the quantity $\frac{h^2}{2} y''(\xi_i)$ will be negligible and thus
+The quantity $\frac{h^2}{2} y''(\xi_i)$ is negligible for small $h$, and thus
 \begin{align*}
 y(x_{i+1}) &\approx y(x_{i}) + h y'(x_i)  ,\\
 &\approx y(x_{i}) + h f(x_i,y(x_i)).
 \end{align*}
-This approximation leads to a method called Euler's method: Fix $y_0 = y(a)$, and for $i = 0, 1, \hdots, n-1$, let $y_{i+1} = y_i +hf(x_i,y_i)$. 
-Euler's method is first order, so-named because its error is $\mathcal{O}(h^1)$.
+This approximation leads to a method called Euler's method: Letting $y_0 = y(a)$, $y_{i+1}$ is given by $y_{i+1} = y_i +hf(x_i,y_i)$ for $i = 0, 1, \hdots, n-1$.
+Euler's method is a first order method, with error $\mathcal{O}(h^1)$.
 % \begin{enumerate}
 % \item Let $y_0 = y(a)$.
 % \item For $i = 0, 1, \hdots, n-1$, let $y_{i+1} = y_i +hf(x_i,y_i)$.
@@ -69,7 +69,7 @@ thus for small $h$
 \begin{align*}
 y(x_{i+1}) &\approx  y(x_{i}) + h f(x_{i+1},y(x_{i+1})).
 \end{align*}
-This approximation leads to another first order method called the backwards Euler method: Fix $y_0 = y(a)$ and for $i = 0, \hdots, n-1$, solve  $y_{i} = y_{i+1}-hf(x_{i+1},y_{i+1})$ for $y_{i+1}$.
+This approximation leads to another first order method called the backwards Euler method: Letting $y_0 = y(a)$, for $i = 0, \hdots, n-1$ we  solve  $y_{i} = y_{i+1}-hf(x_{i+1},y_{i+1})$ for $y_{i+1}$.
 
 Note that for both the Euler and backwards Euler methods, only $y_i, f,$ and other points in the interval $[x_i, x_{i+1}]$ are needed to find $y_{i+1}$. 
 Because of this, they are called \textit{one-step methods}.
@@ -81,21 +81,22 @@ While implicit methods require an equation to be solved at each time step, they 
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\textwidth]{Fig1.pdf}
-\caption{The solution of $y' - y= -2x+4,$ $y(0) = 0$, is $y(x) = -2+2x + 2e^x.$ 
-We plot $y(x)$, alongside several approximations using Euler's method.}
+\includegraphics[width=\textwidth]{prob1.pdf}
+\caption{The solution of \eqref{ivp:prob1}, alongside several approximations using Euler's method.}
 \label{ivp:euler}
 \end{figure}
 
 
-\begin{problem} The solution of the IVP
-\begin{align*}
-y' + y &= 2-2x,\quad 0 \leq x \leq 2, \\
-y(0) &= 0,
-\end{align*}
-is given by $y(x) = 4-2x -4e^{-x}$.
+\begin{problem} The solution of
+\begin{align}
+	\begin{split}
+		y' &= y - 2x + 4,\quad 0 \leq x \leq 2, \\
+		y(0) &= 0,
+	\end{split}\label{ivp:prob1}
+\end{align}
+is given by $y(x) = -2+2x + 2e^x.$
 Use Euler's method to numerically approximate the solution with step sizes $h = 0.4, 0.2$, and $0.1.$ 
-Plot your results.
+Check that your results match Figure \ref{ivp:euler}.
 \end{problem}
 
 So how do we come up with numerical methods with higher order accuracy? 
@@ -125,7 +126,7 @@ In practice, methods of order four or higher, such as the following, are most co
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\textwidth]{Fig3.pdf}
+\includegraphics[width=\textwidth]{relative_error.pdf}
 \caption{The solution of $y' -y= -2x+4,$ $y(0) = 0$, is $y(x) = -2+2x + 2e^x.$ This loglog plot shows the relative error in numerically approximating $y(2)$, using step sizes $h = 0.2,$ $0.1,$ $0.05,$ $0.025,$ and $0.0125$. The slope of each line demonstrates the first, second, and fourth order convergence of the Euler, Midpoint, and RK4 methods, respectively.}
 \label{ivp:relative_error}
 \end{figure}
@@ -142,8 +143,10 @@ Notice that these methods are doing a type of quadrature where we are sampling t
 
 \begin{problem} Consider the IVP given by
 \begin{align*}
-y' + y &= 2-2x,\quad 0 \leq x \leq 2, \\
+	\begin{split}
+y' &= y - 2x + 4,\quad 0 \leq x \leq 2, \\
 y(0) &= 0.
+	\end{split} \label{ivp:prob2}
 \end{align*}
 Use Euler's method, the Midpoint method, and the fourth order Runge-Kutta method (RK4) to approximate the value of the solution at $x = 2$, with a step size of $h = 0.2,$ $ 0.1,$ $0.05 $, $0.025,$ and $0.0125.$ 
 Create a log-log plot of the relative error of each approximation using the \li{loglog} function in \li{matplotlib} (see Figure \ref{ivp:relative_error}).
