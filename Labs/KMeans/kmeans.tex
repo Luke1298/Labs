@@ -179,9 +179,62 @@ Create a scatter plot showing each cluster mean, along with the earthquake epice
 
 Though plotting our results in two dimensions gives us a good picture, we can see that this is not entirely accurate.  There are points that appear to be closer to a different cluster center than the one to which they belong.  This comes from viewing the results in only two dimensions.  When viewing in three dimensions, we can see more clearly the accuracy of our results.  
 \begin{problem}
-Add a keyword argument \li{3d=False} to your \li{kmeans} function, and add code to show the three-dimensional plot instead of the two-dimensional scatter plot should this argument be set to \li{True}.  Maintain the same color-coding scheme as before.  Use the function \li{mpl_toolkits.mplot3d.Axes3D} to make your plot.
+Add a keyword argument \li{3d=False} to your \li{kmeans} function, and add code to show the three-dimensional plot instead of the two-dimensional scatter plot should this argument be set to \li{True}.  Maintain the same color-coding scheme as before.  Use \li{mpl_toolkits.mplot3d.Axes3D} to make your plot.
 \end{problem}
 
-\begin{comment}
-A section on spectral clustering should be included here.
-\end{comment}
+
+\subsection*{Spectral Clustering}
+We now turn to another method for solving a clustering problem, namely that of Spectral Clustering.  As you can see in figure something, it can cluster data not just by its location on a graph, but can even separate concentric circles into distinct clusters.  It does so by utilizing the spectral properties of a Laplacian matrix.  Different types of Laplacian matrices can be used.  In order to construct a Laplacian matrix, we first need to create a graph of vertices and edges from our data points.  This graph can be represented as a symmetric matrix $W$ where $w_{ij}$ represents the edge from $x_i$ to $x_j$.  In the simplest approach, we can set $w_{ij} = 1$ if there exists an edge and $w_{ij} = 0$ otherwise.  However, we are interested in the similarity of points, so we will weight the edges by using a \emph{similarity measure}.  One such measure is the \emph{Gaussian similarity function}, which defines the similarity between points $x_i$ and $x_j$ as
+\begin{equation*}
+s(x_i,x_j) = e^{- \frac{\| x_i - x_j \| ^2}{2 \sigma ^2}} .
+\end{equation*}
+
+Note that some similarity functions can yield extremely small values for dissimilar points.  We have several options for dealing with this possibility.  One is simply to set all values which are less than some $\epsilon$ to be zero, entirely erasing the edge between these two points.  Another option is to keep only $K$ edges for each vertex (the K-Nearest Neighbors).  Whichever method we choose to use, we will end up with a symmetric, weighted \emph{similarity matrix} $W$.  Using this we can find the diagonal \emph{degree matrix} $D$, which gives the number of edges found at each vertex.  If we have the original fully-connected graph, then $D_{ii} = n-1$ for each $i$.  If we keep the K-Nearest Neighbors, $D_{ii} = K$ for each $i$.
+
+As mentioned before, we may use different types of Laplacian matrices.  Three such possibilities are:
+\begin{enumerate}
+    \item The \emph{unnormalized Laplacian}, $L = D - W$
+    \item The \emph{symmetric normalized Laplacian}, $L_{sym} = I - D^{-1/2}WD^{-1/2}$
+    \item The \emph{random walk normalized Laplacian}, $L_{rw} = I - D^{-1}W$.
+ \end{enumerate}
+
+Given a similarity measure, which type of Laplacian to use, and the desired number of clusters $k$, we can now proceed with the Spectral Clustering algorithm as follows:
+\begin{itemize}
+    \item Compute the first $k$ eigenvectors $u_1, \cdots , u_k$ of the Laplacian matrix.
+    \item Set $U = [u_1, \cdots , u_k]$, and if using $L_{sym}$ or $L_{rw}$ normalize $U$ so that each row is a unit vector in the Euclidean norm.
+    \item Perform $k$-means clustering on the $n$ rows of $U$.
+    \item The $n$ labels returned from your \li{kmeans} function correspond to the label assignments for $x_1, \cdots, x_n$.
+\end{itemize}
+
+\begin{problem}
+Implement the Spectral Clustering Algorithm by calling your \li{kmeans} function, using the following function declaration:
+\begin{lstlisting}
+def specClust(measure,Laplacian,eps=None,K=None,args):
+    """
+    Cluster a dataset using the k-means algorithm.
+
+    Parameters
+    ----------
+    measure : function
+        The function used to calculate the similarity measure.
+    Laplacian : int in {1,2,3}
+        Which Laplacian matrix to use. 1 corresponds to the unnormalized,
+        2 to the symmetric normalized, 3 to the random walk normalized.
+    eps : None or float
+        The cut-off value, only used if Laplacian==2.
+    K : None or int
+        The K-Nearest Neighbors to keep, only used if Laplacian==3.
+    args : tuple
+        The arguments as they were passed into your k-means function,
+        consisting of (data, n_clusters, init, max_iter). Note that you
+        will not pass the original data into your k-means function.
+
+    Returns
+    -------
+    labels : ndarray of shape (n,)
+        The i-th entry is an integer in [0,n_clusters-1] indicating
+        which cluster the i-th row of data belongs to.
+    """
+    pass
+\end{lstlisting}
+\end{problem}
