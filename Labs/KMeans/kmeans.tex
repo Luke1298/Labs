@@ -184,12 +184,12 @@ Add a keyword argument \li{3d=False} to your \li{kmeans} function, and add code 
 
 
 \subsection*{Spectral Clustering}
-We now turn to another method for solving a clustering problem, namely that of Spectral Clustering.  As you can see in Figure ???, it can cluster data not just by its location on a graph, but can even separate shapes that overlap others into distinct clusters.  It does so by utilizing the spectral properties of a Laplacian matrix.  Different types of Laplacian matrices can be used.  In order to construct a Laplacian matrix, we first need to create a graph of vertices and edges from our data points.  This graph can be represented as a symmetric matrix $W$ where $w_{ij}$ represents the edge from $x_i$ to $x_j$.  In the simplest approach, we can set $w_{ij} = 1$ if there exists an edge and $w_{ij} = 0$ otherwise.  However, we are interested in the similarity of points, so we will weight the edges by using a \emph{similarity measure}.  Points that are similar to one another are assigned a high similarity measure value, and dissimilar points a low value.  One possible measure is the \emph{Gaussian similarity function}, which defines the similarity between points $x_i$ and $x_j$ as
+We now turn to another method for solving a clustering problem, namely that of Spectral Clustering.  As you can see in Figure ???, it can cluster data not just by its location on a graph, but can even separate shapes that overlap others into distinct clusters.  It does so by utilizing the spectral properties of a Laplacian matrix.  Different types of Laplacian matrices can be used.  In order to construct a Laplacian matrix, we first need to create a graph of vertices and edges from our data points.  This graph can be represented as a symmetric matrix $W$ where $w_{ij}$ represents the edge from $x_i$ to $x_j$.  In the simplest approach, we can set $w_{ij} = 1$ if there exists an edge and $w_{ij} = 0$ otherwise.  However, we are interested in the similarity of points, so we will weight the edges by using a \emph{similarity measure}.  Points that are similar to one another are assigned a high similarity measure value, and dissimilar points a low value.  One possible measure is the \emph{Gaussian similarity function}, which defines the similarity between distinct points $x_i$ and $x_j$ as
 \begin{equation*}
 s(x_i,x_j) = e^{- \frac{\| x_i - x_j \| ^2}{2 \sigma ^2}} .
 \end{equation*}
 
-Note that some similarity functions can yield extremely small values for dissimilar points.  We have several options for dealing with this possibility.  One is simply to set all values which are less than some $\epsilon$ to be zero, entirely erasing the edge between these two points.  Another option is to keep only the $T$ largest valued edges for each vertex.  Whichever method we choose to use, we will end up with a weighted \emph{similarity matrix} $W$.  Using this we can find the diagonal \emph{degree matrix} $D$, which gives the number of edges found at each vertex.  If we have the original fully-connected graph, then $D_{ii} = n-1$ for each $i$.  If we keep the $T$ highest-valued edges, $D_{ii} = T$ for each $i$.
+Note that some similarity functions can yield extremely small values for dissimilar points.  We have several options for dealing with this possibility.  One is simply to set all values which are less than some $\epsilon$ to be zero, entirely erasing the edge between these two points.  Another option is to keep only the $T$ largest-valued edges for each vertex.  Whichever method we choose to use, we will end up with a weighted \emph{similarity matrix} $W$.  Using this we can find the diagonal \emph{degree matrix} $D$, which gives the number of edges found at each vertex.  If we have the original fully-connected graph, then $D_{ii} = n-1$ for each $i$.  If we keep the $T$ highest-valued edges, $D_{ii} = T$ for each $i$.
 
 As mentioned before, we may use different types of Laplacian matrices.  Three such possibilities are:
 \begin{enumerate}
@@ -199,6 +199,7 @@ As mentioned before, we may use different types of Laplacian matrices.  Three su
  \end{enumerate}
 
 Given a similarity measure, which type of Laplacian to use, and the desired number of clusters $k$, we can now proceed with the Spectral Clustering algorithm as follows:
+
 \begin{itemize}
     \item Compute $W$, $D$, and the appropriate Laplacian matrix.
     \item Compute the first $k$ eigenvectors $u_1, \cdots , u_k$ of the Laplacian matrix.
@@ -207,10 +208,12 @@ Given a similarity measure, which type of Laplacian to use, and the desired numb
     \item The $n$ labels returned from your \li{kmeans} function correspond to the label assignments for $x_1, \cdots, x_n$.
 \end{itemize}
 
+As before, we need to run through our $k$-means function multiple times to find the best measure when we use random initialization.  Also, if you normalize the rows of $U$, then you will need to set the argument \li{normalize = True}.
+
 \begin{problem}
 Implement the Spectral Clustering Algorithm by calling your \li{kmeans} function, using the following function declaration:
 \begin{lstlisting}
-def specClus(measure,Laplacian,args,arg1=None):
+def specClus(measure,Laplacian,args,arg1=None,kiters=10):
     """
     Cluster a dataset using the k-means algorithm.
 
@@ -229,6 +232,9 @@ def specClus(measure,Laplacian,args,arg1=None):
         If Laplacian==1, it should remain as None
         if Laplacian==2, the cut-off value, epsilon.
         If Laplacian==3, the number of edges to retain, T.
+    kiters : int
+        How many times to call your kmeans function to get the best
+        measure.
 
     Returns
     -------
@@ -238,12 +244,11 @@ def specClus(measure,Laplacian,args,arg1=None):
     """
     pass
 \end{lstlisting}
-Note that when normalizing the rows of $U$, some values may be excessively small.  In order to avoid numerical underflow, you will want to zero out any entries that are less than a threshold value, say $1e^{-7}$.
 \end{problem}
 
-You may use the following code to test your function.  This will generate random data for up to six concentric circles, and will show the results using both Spectral Clustering and $k$-means.  Note that it may take several tries to correctly classify the data.  As arguments for this function, you need to pass in two lists giving the radii and number of points for each concentric circle, respectively, which Laplacian, and the additional argument \li{arg1} as described previously. If using \li{radii = [2.,6.]} and \li{pts = [300,700]},  your results should be similar to Figure ???.
+You may use the following code to test your function.  This will generate random data for up to six concentric circles, and will show the results using both Spectral Clustering and $k$-means.  Note that it may take several tries to correctly classify the data, and will take a long time to run.  As arguments for this function, you need to pass in two lists giving the radii and number of points for each concentric circle, respectively, which Laplacian, and the additional argument \li{arg1} as described previously. If using \li{radii = [2.,6.]} and \li{pts = [300,700]},  your results should be similar to Figure ???.
 \begin{lstlisting}
-def test_specClus(radii,pts,Laplacian,arg1):
+def test_specClus(radii,pts,Laplacian,arg1,kiters=10):
     n_clusters = len(radii)
     def measure(xi,xj):
         return np.exp(-(la.norm(xi-xj)**2))
@@ -268,9 +273,11 @@ def test_specClus(radii,pts,Laplacian,arg1):
     init = 'random'
     max_iters = 300
     normalize = False
+    if Laplacian != 1:
+        normalize = True
     args = (data,n_clusters,init,max_iters,normalize)
     
-    spec_clus_labels = specClust(measure,Laplacian,args,arg1)
+    spec_clus_labels = specClust(measure,Laplacian,args,arg1,kiters)
     kmeans_labels = kmeans(data,n_clusters,init,max_iters,normalize)[1]
     colors = ['r.','g.','b.','k.','c.','y.']
     
