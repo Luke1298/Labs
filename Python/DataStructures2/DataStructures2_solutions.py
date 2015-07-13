@@ -6,9 +6,9 @@ Solutions file. Written by Shane A. McQuarrie.
 # TODO: check that the AVL tree is actually working correctly.
 # TODO: generate a better image for problem 4.
 
-# Students should import their tree classes from BST.py
-# from BST import BST
-# from BST import AVL
+# Students should import their tree classes from Trees.py
+# from Trees import BST
+# from Trees import AVL
 from WordList import create_word_list
 from time import time
 from matplotlib import pyplot as plt
@@ -67,8 +67,30 @@ def recursive_search(linkedlist, data):
 
 # Problem 3: Implement BST.remove() in BST.py
 
-# Problem 4: Test build speeds for LinkedList, BST, and AVL objects.
+# Problem 4: Test build and search speeds for LinkedList, BST, and AVL objects.
 def plot_times(filename="English.txt"):
+    """Vary n from 500 to 5000, inclusive, incrementing by 500. At each
+    iteration, use the create_word_list() from the 'WordList' module to
+    generate a list of n randomized words from the specified file.
+    
+    Time (separately) how long it takes to load a LinkedList, a BST, and
+    an AVL with the data set.
+    
+    Choose 5 random words from the data set. Time how long it takes to
+    find each word in each object. Calculate the average search time for
+    each object.
+    
+    Create one plot with two subplots. In the first subplot, plot the
+    number of words in each dataset against the build time for each object.
+    In the second subplot, plot the number of words against the search time
+    for each object.
+    
+    Inputs:
+        filename (str): the file to use in creating the data sets.
+    
+    Returns:
+        Show the plot, but do not return any values.
+    """
     
     # Initialize lists to hold results
     lls_build, lls_search = list(), list()
@@ -151,7 +173,7 @@ def plot_times(filename="English.txt"):
 
 
 # ============================== Tree classes ============================== #
-# The following classes should be located in BST.py.
+# The following classes should be located in Trees.py.
 
 class BSTNode(object):
     """A Node class for Binary Search Trees. Contains some data, a
@@ -163,13 +185,14 @@ class BSTNode(object):
         """
         self.data = data
         self.prev = None        # A reference to this node's parent node.
-        self.left = None        # This node's data will be less than self.data
-        self.right = None       # This node's data will be greater than self.data
+        self.left = None        # self.left.data < self.data
+        self.right = None       # self.data < self.right.data
         
     def __str__(self):
         """String representation: the data contained in the node."""
         return str(self.data)
 
+# Modify this class for problems 2 and 3.
 class BST(object):
     """Binary Search Tree data structure class.
     The first node is referenced to by 'root'.
@@ -367,7 +390,7 @@ class BST(object):
             if current.right and current.right not in visited:
                 _visit(current.right, depth+1)  # travel right recursively (DFS)
         
-        _visit(self.root,0)                     # Load 'tree', the list of lists.
+        _visit(self.root,0)                     # Load the list of lists.
         out = ""                                # Build the final string.
         for level in str_tree:
             if level != list():                 # Ignore empty levels.
@@ -476,7 +499,7 @@ class AVL(BST):
     
     def remove(self, *args):
         """Disable remove() to keep the tree in balance."""
-        raise NotImplementedError("remove() has been disabled for the AVL class.")
+        raise NotImplementedError("remove() has been disabled for this class.")
 
 def _height(current):
     """Calculate the height of a given node by descending recursively until

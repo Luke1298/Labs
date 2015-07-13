@@ -14,13 +14,12 @@ class BSTNode(object):
         """
         self.data = data
         self.prev = None        # A reference to this node's parent node.
-        self.left = None        # This node's data will be less than self.data
-        self.right = None       # This node's data will be greater than self.data
+        self.left = None        # self.left.data < self.data
+        self.right = None       # self.data < self.right.data
         
     def __str__(self):
         """String representation: the data contained in the node."""
         return str(self.data)
-
 
 # Modify this class for problems 2 and 3.
 class BST(object):
@@ -61,6 +60,15 @@ class BST(object):
         """Insert a new node containing 'data' at the appropriate location.
         Do not allow for duplicates in the tree: if there is already a node
         containing 'data' in the tree, raise a ValueError.
+        
+        Example:
+            >>> b = BST()       |   >>> b.insert(1)     |       (4)
+            >>> b.insert(4)     |   >>> print(b)        |       / \
+            >>> b.insert(3)     |   [4]                 |     (3) (6)
+            >>> b.insert(6)     |   [3, 6]              |     /   / \
+            >>> b.insert(5)     |   [1, 5, 7]           |   (1) (5) (7)
+            >>> b.insert(7)     |   [8]                 |             \
+            >>> b.insert(8)     |                       |             (8)
         """
         raise NotImplementedError
     
@@ -107,12 +115,12 @@ class BST(object):
             """
             str_tree[depth].append(current.data)
             visited.add(current)
-            if current.left:                    # travel left recursively
-                if current.left  not in visited: _visit(current.left, depth+1)
-            if current.right:                   # travel right recursively
-                if current.right not in visited: _visit(current.right, depth+1)
+            if current.left and current.left not in visited:
+                _visit(current.left, depth+1)   # travel left recursively
+            if current.right and current.right not in visited:
+                _visit(current.right, depth+1)  # travel right recursively
         
-        _visit(self.root,0)                     # Load 'tree', the list of lists.
+        _visit(self.root,0)                     # Load the list of lists.
         out = ""                                # Build the final string.
         for level in str_tree:
             if level != list():                 # Ignore empty levels.
@@ -121,8 +129,6 @@ class BST(object):
                 break
         return out
 
-
-# Use this class to complete problems 4 and 5.
 class AVL(BST):
     """AVL Binary Search Tree data structure class. Inherits from the BST class.
     Includes methods for rebalancing upon insertion. If your BST.insert() method
@@ -195,16 +201,16 @@ class AVL(BST):
     def _rebalance(self,n):
         """Rebalance the subtree starting at the node 'n'."""
         if self._checkBalance(n):
-            if _height(n.left) - _height(n.right) > 0:
+            if _height(n.left) > _height(n.right):
                 # Left Left case
-                if _height(n.left.left) - _height(n.left.right) > 0:
+                if _height(n.left.left) > _height(n.left.right):
                     n = self._rotateLeftLeft(n)
                 # Left Right case
                 else:
                     n = self._rotateLeftRight(n)
             else:
                 # Right Right case
-                if _height(n.right.right) - _height(n.right.left) > 0:
+                if _height(n.right.right) > _height(n.right.left):
                     n = self._rotateRightRight(n)
                 # Right Left case
                 else:
@@ -215,15 +221,15 @@ class AVL(BST):
         """Insert a node containing 'data' into the tree, then rebalance."""
         # insert the data like usual
         BST.insert(self, data)
-        n = self.find(data)
         # rebalance from the bottom up
+        n = self.find(data)
         while n:
             n = self._rebalance(n)
             n = n.prev
     
     def remove(self, *args):
         """Disable remove() to keep the tree in balance."""
-        raise NotImplementedError("remove() has been disabled for the AVL class.")
+        raise NotImplementedError("remove() has been disabled for this class.")
 
 def _height(current):
     """Calculate the height of a given node by descending recursively until

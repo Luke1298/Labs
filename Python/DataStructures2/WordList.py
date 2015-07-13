@@ -1,6 +1,6 @@
 # WordList.py
 """Volume II Lab 5: Data Structures II (Auxiliary file)
-    Do not modify this file.
+Do not modify this file.
 """
 
 import numpy as np

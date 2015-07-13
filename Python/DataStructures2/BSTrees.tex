@@ -127,7 +127,6 @@ def iterative_search(linkedlist, data):
 It is not always better to rewrite an iterative method recursively.
 In Python, a function may only call itself 999 times.
 On the $1000^{th}$ call, a \li{RuntimeError} is raised to prevent a stack overflow.
-%For example, the recursive method in the preceding problem is subject to failure if the \li{LinkedList} object holds more than 1000 items.
 Whether or not recursion is appropriate depends on the problem to be solved and the algorithm to solve it.
 \end{warn}
 
@@ -496,11 +495,11 @@ Then choose 5 random words from the data set, and time how long it takes to find
 Use the \li{iterative_search} function from problem 1 to search the \li{LinkedList} and \li{find} so search the trees.
 Calculate the average search time for each object.
 
-In the first subplot, plot the number of words in each data set against the time it took to build each of the tree objects.
-In the second subplot, plot the number of words in each data set against the average time it took to search the \li{BST} and the \li{AVL} objects.
+In the first subplot, plot the number of words in each data set against the time it took to build each object.
+In the second subplot, plot the number of words in each data set against the average time it took to search each object.
 Your plot should look similar to Figure \ref{fig:times}.
 
-% TODO: redo this figure.
+% TODO: merge this figure in.
 
 \begin{comment}
 
