@@ -76,7 +76,6 @@ class LinkedList(object):
         """
         new_node = LinkedListNode(data)
         # or new_node = Node(data), depending on how LinkedListNode was imported
-        new_node = LinkedListNode(data)
         if self.head is None:
             self.head = new_node
         else:
@@ -291,7 +290,7 @@ class SortedLinkedList(DoublyLinkedList):
     
     def insert(self, *args):
         """Disable insert() so the user is forced to use add()."""
-        raise ValueError("insert() has been disabled for this class.")
+        raise NotImplementedError("insert() has been disabled for this class.")
 
 # Conclude problem 6 by implementing this function.
 def sort_words(filename = "English.txt"):
@@ -676,7 +675,7 @@ def test(student_module, late=False):
             l2.insert(1,2,3,4,5)
             feedback += "\n\tNo ValueError exception raised by"
             feedback += " SortedLinkedList.insert()"
-        except ValueError as e:
+        except NotImplementedError as e:
             print(e.message)
             p,f = strTest(1, "\n\tSortedLinkedList.insert()" + 
                                 " failed to report as disabled")
