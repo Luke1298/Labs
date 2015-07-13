@@ -115,7 +115,7 @@ Your clustering should be similar to the first clustering in Figure \ref{fig:iri
 
 \subsection*{Detecting Active Earthquake Regions}
 Suppose we are interested in learning about which regions are prone to experience frequent earthquake activity.
-We could make a map of all earthquakes over a given period of time and examine it ourselves, but we recognize this as an unsupervised learning problem and are eager to apply our new k-means clustering tool.
+We could make a map of all earthquakes over a given period of time and examine it ourselves, but this, as an unsupervised learning problem, can be solved using our k-means clustering tool.
 
 Our data is contained in 6 text files, each with earthquake data throughout the world covering a time period of one month, giving us data from January 2010 through June 2010.
 These files contain a lot of information which isn't of interest to us at the present time; all we would like to extract from them is the location of each earthquake, which appears in characters $21$ through $33$ of each line.
@@ -139,7 +139,7 @@ This, however, would be incorrect, because the earth is not flat. We must recogn
 Since our \emph{k-means} algorithm is based on Euclidean distance, we need to transform our data into 3-dimensional Euclidean coordinates.
 
 A simple way to accomplish this transformation is to first transform the latitude and longitude values to spherical coordinates, and then to Euclidean coordinates.
-Recall that a spherical coordinate in $\mathbb{R}^3$ is a triple $(r,\theta,\varphi)$, where $r$ is the distance from the origin, $\theta$ is the radial angle in the $xy$ plane from the $x$-axis,
+Recall that a spherical coordinate in $\mathbb{R}^3$ is a triple $(r,\theta,\varphi)$, where $r$ is the distance from the origin, $\theta$ is the radial angle in the $xy$-plane from the $x$-axis,
 and $\varphi$ is the angle from the $z$-axis. In our earthquake data, the longitude is already the appropriate $\theta$ value, and the $\varphi$ value (in degrees) is simply $90^\circ$ minus the latitude.
 For simplicity, we can take $r=1$, since the earth is roughly a sphere.
 We can then transform to Euclidean coordinates using the following relationships:
@@ -150,8 +150,8 @@ r & = \sqrt{x^{2} + y^{2} + z^{2}} & x & = r \sin \varphi \cos \theta \\
 \end{align*}
 
 \begin{problem}
-Transform your earthquake data into Euclidean coordinates.
-Be sure to consider if and when you need to transform your data from degrees to radians!
+Transform your earthquake data into three dimensional Euclidean coordinates.
+Be sure to consider if and when you need to transform your data from degrees to radians.
 \end{problem}
 
 We are now ready to cluster the earthquake data using the Euclidean coordinates.
@@ -186,8 +186,9 @@ Add a keyword argument \li{3d=False} to your \li{kmeans} function, and add code 
 \subsection*{Spectral Clustering}
 We now turn to another method for solving a clustering problem, namely that of Spectral Clustering.  As you can see in Figure ???, it can cluster data not just by its location on a graph, but can even separate shapes that overlap others into distinct clusters.  It does so by utilizing the spectral properties of a Laplacian matrix.  Different types of Laplacian matrices can be used.  In order to construct a Laplacian matrix, we first need to create a graph of vertices and edges from our data points.  This graph can be represented as a symmetric matrix $W$ where $w_{ij}$ represents the edge from $x_i$ to $x_j$.  In the simplest approach, we can set $w_{ij} = 1$ if there exists an edge and $w_{ij} = 0$ otherwise.  However, we are interested in the similarity of points, so we will weight the edges by using a \emph{similarity measure}.  Points that are similar to one another are assigned a high similarity measure value, and dissimilar points a low value.  One possible measure is the \emph{Gaussian similarity function}, which defines the similarity between distinct points $x_i$ and $x_j$ as
 \begin{equation*}
-s(x_i,x_j) = e^{- \frac{\| x_i - x_j \| ^2}{2 \sigma ^2}} .
+s(x_i,x_j) = e^{- \frac{\| x_i - x_j \| ^2}{2 \sigma ^2}}
 \end{equation*}
+for some set value $\sigma$.
 
 Note that some similarity functions can yield extremely small values for dissimilar points.  We have several options for dealing with this possibility.  One is simply to set all values which are less than some $\epsilon$ to be zero, entirely erasing the edge between these two points.  Another option is to keep only the $T$ largest-valued edges for each vertex.  Whichever method we choose to use, we will end up with a weighted \emph{similarity matrix} $W$.  Using this we can find the diagonal \emph{degree matrix} $D$, which gives the number of edges found at each vertex.  If we have the original fully-connected graph, then $D_{ii} = n-1$ for each $i$.  If we keep the $T$ highest-valued edges, $D_{ii} = T$ for each $i$.
 
@@ -230,7 +231,7 @@ def specClus(measure,Laplacian,args,arg1=None,kiters=10):
         that you will not pass 'data' into your k-means function.
     arg1 : None, float, or int
         If Laplacian==1, it should remain as None
-        if Laplacian==2, the cut-off value, epsilon.
+        If Laplacian==2, the cut-off value, epsilon.
         If Laplacian==3, the number of edges to retain, T.
     kiters : int
         How many times to call your kmeans function to get the best
@@ -248,7 +249,7 @@ def specClus(measure,Laplacian,args,arg1=None,kiters=10):
 
 You may use the following code to test your function.  This will generate random data for up to six concentric circles, and will show the results using both Spectral Clustering and $k$-means.  Note that it may take several tries to correctly classify the data, and will take a long time to run.  As arguments for this function, you need to pass in two lists giving the radii and number of points for each concentric circle, respectively, which Laplacian, and the additional argument \li{arg1} as described previously. If using \li{radii = [2.,6.]} and \li{pts = [300,700]},  your results should be similar to Figure ???.
 \begin{lstlisting}
-def test_specClus(radii,pts,Laplacian,arg1,kiters=10):
+def test_specClus(radii,pts,Laplacian,arg1=None,kiters=10):
     n_clusters = len(radii)
     def measure(xi,xj):
         return np.exp(-(la.norm(xi-xj)**2))
