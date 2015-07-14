@@ -1,6 +1,9 @@
 # Node.py
-"""Volume II Lab 4: Data Structures 1 (Auxiliary File)
-    Defines various Node classes. Modify this file for problem 1.
+"""Volume II Lab 4: Data Structures 1 (Linked Lists). Auxiliary file.
+Define various Node classes. Modify this file for problem 1.
+<Name>
+<Class>
+<Date>
 """
 
 
@@ -17,7 +20,8 @@ class LinkedListNode(Node):
     Contains a reference to the next node in the list.
     """
     def __init__(self, data):
-        """Construct a Node and add an attribute for the next node in the list.
+        """Construct a Node and initialize an attribute for the next
+        node in the list.
         """
         Node.__init__(self, data)
         self.next = None
@@ -28,7 +32,7 @@ class DoublyLinkedListNode(LinkedListNode):
     Contains references to the next and previous nodes in the list.
     """
     def __init__(self,data):
-        """Set the next and prev attributes."""
+        """Initialize the next and prev attributes."""
         Node.__init__(self,data)
         self.next = None
         self.prev = None

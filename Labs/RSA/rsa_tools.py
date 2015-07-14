@@ -1,13 +1,13 @@
 # rsa_tools.py
 """Volume II Lab 3: Public Key Encryption (RSA). Auxiliary file.
-    Helper code for the myRSA class. Do not modify this file.
+Helper code for the 'myRSA' class. Do not modify.
 """
 
 from itertools import izip_longest
 
 def partition(iterable, n, fillvalue=None):
-    """Partition data into blocks of length 'n', padding with 'fillvalue' if
-    needed. Return a list of the partitions.
+    """Partition data into blocks of length 'n', padding with 'fillvalue'
+    if needed. Return a list of the partitions.
     Example:
     >>> partition('ABCDEFG, 3, 'x')
     """
@@ -18,8 +18,8 @@ def partition(iterable, n, fillvalue=None):
 def string_size(n):
     """Return the maximum number of characters that can be encoded with the
     public key (e, n). In other words, find the largest integer L such that
-    if 'string' has at most L characters, then string_to_int('string') will be
-    less than 'n'.
+    if 'string' has at most L characters, then string_to_int('string') will
+    be less than 'n'.
     """
     L=0
     max_int = 0

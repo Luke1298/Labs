@@ -34,7 +34,7 @@ class ComplexNumber(object):
         real (int): the real part of the complex number.
         imag (int): the imaginary part of the complex number.
     
-    # WRITE A DOCSTRING for __init__.
+    # WRITE A DOCSTRING for each method.
     # Good docstrings are required for full credit.
     """
     pass

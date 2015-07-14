@@ -1,8 +1,8 @@
 # name this file 'solutions.py'
 """Volume II Lab 4: Data Structures 1
-    <Name>
-    <Class>
-    <Date>
+<Name>
+<Class>
+<Date>
 """
 
 from Node import LinkedListNode

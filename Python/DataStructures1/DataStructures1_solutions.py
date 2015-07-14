@@ -1,15 +1,11 @@
 # DataStructures_solutions.py
 """Volume II Lab 4: Data Structures 1
-    Solutions file. Written by Shane McQuarrie, Summer 2015.
+Solutions file. Written by Shane A. McQuarrie.
 """
 
-# The student should import their various Node classes from 'Node.py'.
-# from Node import LinkedListNode
-# from Node import DoublyLinkedListNode
-from WordList import create_word_list
 
-# ============================== Node classes ============================== #
-# The following classes should be located in the students' 'Node.py' file.
+# ================================= Node.py ================================= #
+# Provided to students and modified for problem 1.
 
 
 # Problem 1: Add the magic methods __str__, __lt__, __eq__, and __gt__.
@@ -46,7 +42,11 @@ class DoublyLinkedListNode(LinkedListNode):
         self.prev = None
 
 # ============================== List classes ============================== #
-# The following classes should be located in the students' 'solutions.py' file.
+
+# from Node import LinkedListNode
+# from Node import DoublyLinkedListNode
+from WordList import create_word_list
+
 
 # Problem 1: in Node.py, add magic methods to the Node class.
 
@@ -331,7 +331,7 @@ def test(student_module, late=False):
     total = 80
     feedback = s.__doc__
 
-    def testPart(x,y,m):
+    def strTest(x,y,m):
         """Test to see if x and y have the same string representation. If
         correct, award a points and return no message. If incorrect, return
         0 and return 'm' as feedback.
@@ -353,7 +353,7 @@ def test(student_module, late=False):
             m += "\n\t\tStudent tail: " + str(y)
             return 0, m
     
-    def strTest(p,m):
+    def grade(p,m):
         """Manually grade a problem worth 'p' points with error message 'm'."""
         part = -1
         while part > p or part < 0:
@@ -393,7 +393,7 @@ def test(student_module, late=False):
             feedback += " Node class comparison magic method(s) failed"
         # __str__
         n1 = Node(6)
-        p,f = testPart(n1,n2,"\n\tNode.__str__ failed")
+        p,f = strTest(n1,n2,"\n\tNode.__str__ failed")
         points += (p * 2); feedback += f
         
         score += points; feedback += "\nScore += " + str(points)
@@ -405,24 +405,24 @@ def test(student_module, late=False):
         # Empty list
         l1 = list()
         l2 = s.LinkedList()
-        p,f = testPart(l1,l2,"\n\tLinkedList.__str__ failed on empty list")
+        p,f = strTest(l1,l2,"\n\tLinkedList.__str__ failed on empty list")
         points += p; feedback += f
         # Single item
         l1.append('this')
         l2.add('this')
-        p,f = testPart(l1,l2,"\n\tLinkedList.__str__ failed with single item")
+        p,f = strTest(l1,l2,"\n\tLinkedList.__str__ failed with single item")
         points += (p * 3); feedback += f
         # Two items
         l1.append('little')
         l2.add('little')
-        p,f = testPart(l1,l2,"\n\tLinkedList.__str__ failed with two items")
+        p,f = strTest(l1,l2,"\n\tLinkedList.__str__ failed with two items")
         points += (p * 3); feedback += f
         # Many items
         entries = ['Linked List',3,10.0,-1+3j,set(),[1,2,3]]
         for i in entries:
             l1.append(i)
             l2.add(i)
-        p,f = testPart(l1,l2,"\n\tLinkedList.__str__ failed with many items")
+        p,f = strTest(l1,l2,"\n\tLinkedList.__str__ failed with many items")
         points += (p * 3); feedback += f
         if points == 0:
             feedback += "\n\tCheck LinkedList.add() and LinkedList.__str__"
@@ -444,29 +444,29 @@ def test(student_module, late=False):
             feedback += " on empty list"
         except ValueError as e:
             points += 1; print(e.message)
-            p,f = strTest(1,
+            p,f = grade(1,
                 "\n\tLinkedList.remove() failed to report on empty list")
             points += p; feedback += f;
         # Test add() (no credit, but vital for other points)
         for i in [1,3,2,5,4,7,6,9,8]:
             l1.add(i); l2.add(i)
-        p,f=testPart(l1,l2,
+        p,f=strTest(l1,l2,
             "\n\tIf LinkedList.__str__ fails, these tests will all fail!")
         feedback += f
         # remove() head
         l1.remove(1); l1.remove(3)
         l2.remove(1); l2.remove(3)
-        p,f = testPart(l1,l2, "\n\tLinkedList.remove() failed on head removal")
+        p,f = strTest(l1,l2, "\n\tLinkedList.remove() failed on head removal")
         points += (p * 2); feedback += f
         # remove() end
         l1.remove(8); l1.remove(9)
         l2.remove(8); l2.remove(9)
-        p,f = testPart(l1,l2, "\n\tLinkedList.remove() failed on tail removal")
+        p,f = strTest(l1,l2, "\n\tLinkedList.remove() failed on tail removal")
         points += (p * 2); feedback += f
         # remove() from middle
         l1.remove(5); l1.remove(4)
         l2.remove(5); l2.remove(4)
-        p,f=testPart(l1,l2, "\n\tLinkedList.remove() failed on middle removal")
+        p,f=strTest(l1,l2, "\n\tLinkedList.remove() failed on middle removal")
         points += (p * 2); feedback += f
         # remove() nonexistent
         print("\nCorrect output:\t100 is not in the list.")
@@ -477,7 +477,7 @@ def test(student_module, late=False):
             feedback += " for 'x' not in list"
         except ValueError as e:
             points += 1; print(e.message)
-            p,f = strTest(1,
+            p,f = grade(1,
                 "\n\tLinkedList.remove(x) failed to report for 'x' not in list")
             points += p; feedback += f;
         
@@ -498,18 +498,18 @@ def test(student_module, late=False):
             feedback += " on empty list"
         except ValueError as e:
             points += 1; print(e.message)
-            p,f = strTest(1,
+            p,f = grade(1,
                 "\n\tLinkedList.insert() failed to report on empty list")
             points += p; feedback += f;
         # insert() before head
         l1.add(5); l1.insert(3,5); l1.insert(1,3)
         l2.add(5); l2.insert(3,5); l2.insert(1,3)
-        p,f=testPart(l1,l2,"\n\tLinkedList.insert() failed on head insertion")
+        p,f=strTest(l1,l2,"\n\tLinkedList.insert() failed on head insertion")
         points += (p * 5); feedback += f
         # insert() in the middle
         l1.insert(2,3); l1.insert(4,5)
         l2.insert(2,3); l2.insert(4,5)
-        p,f=testPart(l1,l2,
+        p,f=strTest(l1,l2,
             "\n\tLinkedList.insert() failed on middle insertion")
         points += (p * 5); feedback += f
         # insert(place, x) on nonexistant place
@@ -521,7 +521,7 @@ def test(student_module, late=False):
             feedback += " for 'place' not in list"
         except ValueError as e:
             points += 2; print(e.message)
-            p,f = strTest(1, "\n\tLinkedList.remove(x, place)" + 
+            p,f = grade(1, "\n\tLinkedList.remove(x, place)" + 
                                 " failed to report for 'place' not in list")
             points += p; feedback += f;
         
@@ -542,20 +542,20 @@ def test(student_module, late=False):
             feedback += " on empty list"
         except ValueError as e:
             print(e.message)
-            p,f = strTest(1,
+            p,f = grade(1,
                 "\n\tDoublyLinkedList.remove() failed to report on empty list")
             points += p; feedback += f;
         # Test add() (no credit, but vital for other points)
         for i in [1,3,2,5,4,7,6,9,8]:
             l1.add(i); l2.add(i)
-        p,f = testPart(l1,l2,"\n\tDoublyLinkedList.add() failed")
+        p,f = strTest(l1,l2,"\n\tDoublyLinkedList.add() failed")
         feedback += f
         p,f = testTail(l1,l2,"\n\tDoublyLinkedList.tail failed on add()")
         points += p; feedback += f
         # remove() head
         l1.remove(1); l1.remove(3)
         l2.remove(1); l2.remove(3)
-        p,f = testPart(l1,l2,
+        p,f = strTest(l1,l2,
             "\n\tDoublyLinkedList.remove() failed on head removal")
         points += (p * 2); feedback += f
         p,f = testTail(l1,l2,
@@ -564,7 +564,7 @@ def test(student_module, late=False):
         # remove() end
         l1.remove(8); l1.remove(9)
         l2.remove(8); l2.remove(9)
-        p,f = testPart(l1,l2,
+        p,f = strTest(l1,l2,
             "\n\tDoublyLinkedList.remove() failed on tail removal")
         points += (p * 2); feedback += f
         p,f = testTail(l1,l2,
@@ -573,7 +573,7 @@ def test(student_module, late=False):
         # remove() from middle
         l1.remove(5); l1.remove(4)
         l2.remove(5); l2.remove(4)
-        p,f=testPart(l1,l2,
+        p,f=strTest(l1,l2,
             "\n\tDoublyLinkedList.remove() failed on middle removal")
         points += (p * 2); feedback += f
         p,f = testTail(l1,l2,
@@ -588,7 +588,7 @@ def test(student_module, late=False):
             feedback += " for 'x' not in list"
         except ValueError as e:
             print(e.message)
-            p,f = strTest(1, "\n\tDoublyLinkedList.remove(x)" + 
+            p,f = grade(1, "\n\tDoublyLinkedList.remove(x)" + 
                                 " failed to report for 'x' not in list")
             points += p; feedback += f;
         # insert() empty list
@@ -601,13 +601,13 @@ def test(student_module, late=False):
             feedback += " on empty list"
         except ValueError as e:
             print(e.message)
-            p,f = strTest(1, "\n\tDoublyLinkedList.insert()" + 
+            p,f = grade(1, "\n\tDoublyLinkedList.insert()" + 
                                 " failed to report on empty list")
             points += p; feedback += f;
         # insert() before head
         l1.add(5); l1.insert(3,5); l1.insert(1,3)
         l2.add(5); l2.insert(3,5); l2.insert(1,3)
-        p,f=testPart(l1,l2,
+        p,f=strTest(l1,l2,
             "\n\tDoublyLinkedList.insert() failed on head insertion")
         points += (p * 2); feedback += f
         p,f = testTail(l1,l2,
@@ -616,7 +616,7 @@ def test(student_module, late=False):
         # insert() in the middle
         l1.insert(2,3); l1.insert(4,5)
         l2.insert(2,3); l2.insert(4,5)
-        p,f=testPart(l1,l2,
+        p,f=strTest(l1,l2,
             "\n\tDoublyLinkedList.insert() failed on middle insertion")
         points += (p * 2); feedback += f
         p,f = testTail(l1,l2,
@@ -632,7 +632,7 @@ def test(student_module, late=False):
             feedback += " for 'place' not in list"
         except ValueError as e:
             print(e.message)
-            p,f = strTest(1, "\n\tDoublyLinkedList.remove(x,place)" + 
+            p,f = grade(1, "\n\tDoublyLinkedList.remove(x,place)" + 
                                 " failed to report for 'place' not in list")
             points += p; feedback += f;
         if not issubclass(s.DoublyLinkedList, s.LinkedList):
@@ -652,21 +652,21 @@ def test(student_module, late=False):
         entries = [1,2,3,4,5,6,7,8,9]
         for i in entries:
             l1.add(i); l2.add(i)
-        p,f = testPart(l1,l2,"\n\tSortedLinkedList.add() failed")
+        p,f = strTest(l1,l2,"\n\tSortedLinkedList.add() failed")
         points += (p * 3); feedback += f
         # test 2
         l1.__init__(); l2.__init__()
         entries = [9,8,7,6,5,4,2,3,1]
         for i in entries:
             l1.add(i); l2.add(i)
-        p,f = testPart(l1,l2,"\n\tSortedLinkedList.add() failed")
+        p,f = strTest(l1,l2,"\n\tSortedLinkedList.add() failed")
         points += (p * 3); feedback += f
         # test 3
         l1.__init__(); l2.__init__()
         entries = [1,3,5,7,9,2,4,6,8]
         for i in entries:
             l1.add(i); l2.add(i)
-        p,f = testPart(l1,l2,"\n\tSortedLinkedList.add() failed")
+        p,f = strTest(l1,l2,"\n\tSortedLinkedList.add() failed")
         points += (p * 3); feedback += f
         # Test that insert() was disabled (1 point)
         print("\nCorrect output:\tinsert() has been disabled for this class.")
@@ -677,7 +677,7 @@ def test(student_module, late=False):
             feedback += " SortedLinkedList.insert()"
         except NotImplementedError as e:
             print(e.message)
-            p,f = strTest(1, "\n\tSortedLinkedList.insert()" + 
+            p,f = grade(1, "\n\tSortedLinkedList.insert()" + 
                                 " failed to report as disabled")
             points += p; feedback += f;
         except TypeError:
@@ -688,7 +688,7 @@ def test(student_module, late=False):
         word_list = create_word_list("Short.txt")
         word_list.sort()
         out = s.sort_words("Short.txt")
-        p,f = testPart(word_list, out, "\n\tsort_words() function failed.")
+        p,f = strTest(word_list, out, "\n\tsort_words() function failed.")
         points += (p * 10); feedback += f
         # detect cheating
         if out.__doc__ != l2.__doc__:

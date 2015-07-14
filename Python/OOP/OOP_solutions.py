@@ -307,7 +307,7 @@ def test(student_module, late=False):
         feedback (str): a printout of the test results for the student.
     """
     
-    def strTest(p,m):
+    def grade(p,m):
         """Manually grade a problem worth 'p' points with error message 'm'."""
         part = -1
         while part > p or part < 0:
@@ -316,6 +316,7 @@ def test(student_module, late=False):
         else: return part,""
     
     def attrTest(x,y,m):
+        """Test that 'x' and 'y' are equal with error message 'm'."""
         if x == y: return 1, ""
         else:
             message  = m
@@ -357,7 +358,7 @@ def test(student_module, late=False):
         b2.put('f'); b2.put('u'); b2.put('n')
         print("Correct output:\t"),; b1.put('this should not fit')
         print("Student output:\t"),; b2.put('this should not fit')
-        p,f = strTest(1,"\n\tBackpack.put() failed to print 'Backpack Full!'")
+        p,f = grade(1,"\n\tBackpack.put() failed to print 'Backpack Full!'")
         points += p; feedback += f
         p,f = attrTest(b1.contents, b2.contents,
             "\n\tBackpack.put() failed (Backpack.contents over max_size)")
@@ -370,7 +371,7 @@ def test(student_module, late=False):
         # Test docstrings
         print("\nStudent Backpack class docstrings:\n")
         print(b2.__doc__); print(b2.__init__.__doc__)
-        p,f = strTest(2,"\n\tbad Backpack docstring(s)")
+        p,f = grade(2,"\n\tbad Backpack docstring(s)")
         points += p; feedback += f
         
         score += points; feedback += "\nScore += " + str(points)
@@ -409,7 +410,7 @@ def test(student_module, late=False):
         b2.put('f'); b2.put('u'); b2.put('n')
         print("\nCorrect output:\t"),; b1.put('this should not fit')
         print("Student output:\t"),; b2.put('this should not fit')
-        p,f = strTest(1,"\n\tBackpack.put() failed to print 'Backpack Full!'")
+        p,f = grade(1,"\n\tBackpack.put() failed to print 'Backpack Full!'")
         points += p; feedback += f
         p,f = attrTest(b1.contents, b2.contents,
             "\n\tJetpack.put() failed (Jetpack.contents over max_size)")
@@ -423,7 +424,7 @@ def test(student_module, late=False):
         b1.fuel = 10; b2.fuel = 10
         print("\nCorrect output:\t"),; b1.fly(20)
         print(  "Student output:\t"),; b2.fly(20)
-        p,f = strTest(1,"\n\tJetpack.put() failed to print 'Not enough fuel!'")
+        p,f = grade(1,"\n\tJetpack.put() failed to print 'Not enough fuel!'")
         points += p; feedback += f
         p,f = attrTest(b1.fuel, b2.fuel,
             "\n\tJetpack.fly() failed to decrease fuel correctly")
@@ -435,7 +436,7 @@ def test(student_module, late=False):
         # Test docstrings
         print("\nStudent Jetpack class docstrings:\n")
         print(b2.__doc__); print(b2.__init__.__doc__)
-        p,f = strTest(2,"\n\tbad Jetpack docstring(s)")
+        p,f = grade(2,"\n\tbad Jetpack docstring(s)")
         points += p; feedback += f
         
         score += points; feedback += "\nScore += " + str(points)
@@ -449,7 +450,7 @@ def test(student_module, late=False):
         b2 = s.Backpack()
         print("\nCorrect output:"); print(b1)
         print("\nStudent output:"); print(b2)
-        p,f = strTest(3,"\n\tBackpack.__str__ failed")
+        p,f = grade(3,"\n\tBackpack.__str__ failed")
         points += p; feedback += f
         if p < 3: feedback += "\n\tStudent str(Backpack):\n\n" + str(b2) + '\n'
         # Test __str__ on a partially full backpack
@@ -459,7 +460,7 @@ def test(student_module, late=False):
         b2.put('thing1'); b2.put('thing2'); b2.put('thing3')
         print("\nCorrect output:"); print(b1)
         print("\nStudent output:"); print(b2)
-        p,f = strTest(5,"\n\tBackpack.__str__ failed")
+        p,f = grade(5,"\n\tBackpack.__str__ failed")
         points += p; feedback += f
         if p < 5: feedback += "\n\tStudent str(Backpack):\n\n" + str(b2) + '\n'
         # Test __eq__ in False case
@@ -566,7 +567,7 @@ def test(student_module, late=False):
         # Test docstrings
         print("\nStudent docstrings:\n")
         print(y1.__doc__); print(y1.__init__.__doc__)
-        p,f = strTest(2,"\n\tbad ComplexNumber docstring(s)")
+        p,f = grade(2,"\n\tbad ComplexNumber docstring(s)")
         points += p; feedback += f
         
         score += points; feedback += "\nScore += " + str(points)
