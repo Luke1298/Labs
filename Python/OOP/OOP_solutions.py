@@ -3,10 +3,11 @@
     Solutions file. Written by Shane McQuarrie, Spring 2015.
 """
 
-# Students should have their 'Backpack' class in a 'Backpack.py' file and
-#   import it with the following line:
+# Students should import their 'Backpack' class from a 'Backpack.py'
 # from Backpack import Backpack
 
+
+# =============================== Backpack.py =============================== #
 
 # Problem 1: Modify this class. Add 'name' and max_size' attributes, modify
 #   the put() method, and add a dump() method. Remember to update docstrings.
@@ -34,7 +35,6 @@ class Backpack(object):
         Returns:
             A backpack object wth no contents.
         """
-        
         self.color = color
         self.name = name
         self.max_size = max_size
@@ -55,30 +55,48 @@ class Backpack(object):
         """Remove all items from the backpack."""
         self.contents = []
     
+    # -------------------- Magic Methods (Problem 3) -------------------- #
+    
     def __add__(self, other):
-        """Add the contents of 'other' to the contents of 'self'. Note that the
-        contents of 'other' are unchanged.
+        """Add the contents of 'other' to the contents of 'self'.
+        Note that the contents of 'other' are unchanged.
+        
+        Inputs:
+            self (Backpack): the backpack on the left-hand side of the
+                '+' addition operator.
+            other (Backpack): The backpack on the right-hand side of the
+                '+' addition operator.
         """
         self.contents = self.contents + other.contents
     
     def __lt__(self,other):
+        """Compare two backpacks. If 'self' has fewer contents than 'other',
+        return True. Otherwise, return False.
+        
+        Inputs:
+            self (Backpack): the backpack on the left-hand side of the
+                '<' comparison operator.
+            other (Backpack): The backpack on the right-hand side of the
+                '<' comparison operator.
+        """
         return len(self.contents) < len(other.contents)
     
     # Problem 3: Write the __str__ and __eq__ methods for the Backpack class.
     def __str__(self):
-        """String Representation.
-        Examples:
-            >>> b = Backpack()             |    Or,
-            >>> b.put('something')         |
-            >>> b.put('something else')    |    >>> c = Backpack('red','Bob',3)
-            >>> print(b)                   |    >>> print(c)
-            Name:       backpack           |    Name:       Bob
-            Color:      black              |    Color:      red
-            Size:       2                  |    Size:       0
-            Max Size:   5                  |    Max Size:   3
-            Contents:                      |    Contents:   Empty
-                        something          |
-                        something else     |
+        """String Representation: a list of the backpack's attributes.
+        
+        Examples:                           |
+            >>> b = Backpack()              |   Or,
+            >>> b.put('something')          |
+            >>> b.put('something else')     |   >>> c = Backpack('red','Bob',3)
+            >>> print(b)                    |   >>> print(c)
+            Name:       backpack            |   Name:       Bob
+            Color:      black               |   Color:      red
+            Size:       2                   |   Size:       0
+            Max Size:   5                   |   Max Size:   3
+            Contents:                       |   Contents:   Empty
+                        something           |
+                        something else      |
         """
         out = "Name:\t\t" + self.name
         out += "\nColor:\t\t" + self.color
@@ -108,12 +126,20 @@ class Backpack(object):
         return True                     # If nothing is unequal, return True.
 
 
-# An example class for Inheritance. Students do not need to modify this class;
-#   it is given to them in 'Knapsack.py' but is not used in their solutions.
+# An example class of inheritance. Students do not need to modify this class.
 class Knapsack(Backpack):
-    """Knapsack object. Inherits from the Backpack class.
+    """A Knapsack object class. Inherits from the Backpack class.
     A knapsack is smaller than a backpack and can be tied closed.
+    
+    Attributes:
+        color (str): the color of the knapsack.
+        name (str): the name of the knapsack.
+        max_size (int): the maximum number of items that can fit in the
+            knapsack.
+        contents (list): the contents of the backpack.
+        closed (bool): whether or not the knapsack is tied shut.
     """
+    
     def __init__(self, color='brown', name='knapsack', max_size=3):
         """Constructor for a knapsack object. A knapsack only holds 3 item by
         default instead of 5. Use the Backpack constructor to initialize the
@@ -122,8 +148,8 @@ class Knapsack(Backpack):
         Inputs:
             color (str, opt): the color of the knapsack. Defaults to 'brown'.
             name (str, opt): the name of the knapsack. Defaults to 'knapsack'.
-            max_size (int, opt): the maximum number of items that can be stored
-                in the knapsack. Defaults to 3.
+            max_size (int, opt): the maximum number of items that can be
+                stored in the knapsack. Defaults to 3.
         
         Returns:
             A knapsack object with no contents.
@@ -135,14 +161,14 @@ class Knapsack(Backpack):
     def put(self, item):
         """If the knapsack is untied, use the Backpack put() method."""
         if self.closed:
-            print "Knapsack is closed!"
+            print "Knapsack closed!"
         else:
             Backpack.put(self, item)
     
     def take(self, item):
         """If the knapsack is untied, use the Backpack take() method."""
         if self.closed:
-            print "Knapsack is closed!"
+            print "Knapsack closed!"
         else:
             Backpack.take(self, item)
     
@@ -154,11 +180,13 @@ class Knapsack(Backpack):
         """Tie the knapsack."""
         self.closed = True
 
+# ============================== Solutions.py =============================== #
 
 # Problem 2: Write a 'Jetpack' class that inherits from the 'Backpack' class.
 class Jetpack(Backpack):
-    """Jetpack object. Inherits from the Backpack class. In addition to storing
-    items like a backpack, a jetpack has fuel that is used to fly.
+    """A Jetpack object class. Inherits from the Backpack class.
+    In addition to storing items like a backpack, a jetpack has fuel
+    that is used to fly.
     
     Attributes:
         color (str): the color of the jetpack.
@@ -228,13 +256,13 @@ class ComplexNumber(object):
     def norm(self):
         """Return the magnitude of the complex number."""
         return self.real**2 + self.imag**2
-
+    
     def __add__(self, other):
         return ComplexNumber(self.real + other.real, self.imag + other.imag)
-
+    
     def __sub__(self, other):
         return ComplexNumber(self.real - other.real, self.imag - other.imag)
-
+    
     def __mul__(self, other):
         r = (self.real * other.real) - (self.imag * other.imag)
         i = (self.real * other.imag) + (self.imag * other.real)
@@ -259,7 +287,7 @@ class ComplexNumber(object):
         # return ComplexNumber(numer.real/denom, numer.imag/denom)
 
 
-# =========================== END OF SOLUTIONS =========================== #
+# ============================ END OF SOLUTIONS ============================= #
 
 
 def test(student_module, late=False):
@@ -490,8 +518,6 @@ def test(student_module, late=False):
         points += p; feedback += f
         p,f = attrTest(x1.imag, y1.imag, "\n\tComplexNumber.imag failed")
         points += p; feedback += f
-        
-        
         # Test conjugate()
         x2 = x1.conjugate(); y2 = y1.conjugate()
         p,f = attrTest(x2.real, y2.real,
@@ -558,3 +584,5 @@ def test(student_module, late=False):
     if   percentage >=  98.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
     return score, feedback
+
+# =============================== END OF FILE =============================== #

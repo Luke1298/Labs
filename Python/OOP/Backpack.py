@@ -9,7 +9,7 @@ Modify this file for problems 1 and 3.
 # Problem 1: Modify this class. Add 'name' and max_size' attributes, modify
 #   the put() method, and add a dump() method. Remember to update docstrings.
 class Backpack:
-    """Backpack object. Has a color and a list of contents.
+    """A Backpack object class. Has a color and a list of contents.
     
     Attributes:
         color (str): the color of the backpack.
@@ -19,8 +19,8 @@ class Backpack:
     """
     
     def __init__(self, color='black'):
-        """Constructor for a backpack object. Set the color and initialize
-        the contents list.
+        """Constructor for a backpack object.
+        Set the color and initialize the contents list.
         
         Inputs:
             color (str, opt): the color of the backpack. Defaults to 'black'.
@@ -49,15 +49,15 @@ class Backpack:
         
         Inputs:
             self (Backpack): the backpack on the left-hand side of the
-                addition operator.
+                '+' addition operator.
             other (Backpack): The backpack on the right-hand side of the
-                addition operator.
+                '+' addition operator.
         """
         self.contents = self.contents + other.contents
     
     def __lt__(self, other):
-        """Compare two backpacks. If 'self' has fewer contents than 'other',
-        return True. Otherwise, return False.
+        """Compare two backpacks. If 'self' has fewer contents than
+        'other', return True. Otherwise, return False.
         
         Inputs:
             self (Backpack): the backpack on the left-hand side of the
@@ -97,7 +97,7 @@ class Backpack:
 
 # Study this example of inheritance. You are not required to modify it.
 class Knapsack(Backpack):
-    """Knapsack object. Inherits from the Backpack class.
+    """A Knapsack object class. Inherits from the Backpack class.
     A knapsack is smaller than a backpack and can be tied closed.
     
     Attributes:
@@ -130,14 +130,14 @@ class Knapsack(Backpack):
     def put(self, item):
         """If the knapsack is untied, use the Backpack put() method."""
         if self.closed:
-            print "Knapsack is closed!"
+            print "Knapsack closed!"
         else:
             Backpack.put(self, item)
     
     def take(self, item):
         """If the knapsack is untied, use the Backpack take() method."""
         if self.closed:
-            print "Knapsack is closed!"
+            print "Knapsack closed!"
         else:
             Backpack.take(self, item)
     

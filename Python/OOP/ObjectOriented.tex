@@ -30,7 +30,7 @@ For example, the following is a class that created backpack objects.
 # Backpack.py
 
 class Backpack(object):
-    """Backpack object. Has a color and a list of contents.
+    """A Backpack object class. Has a color and a list of contents.
     
     Attributes:
         color (str): the color of the backpack.
@@ -39,8 +39,8 @@ class Backpack(object):
     
     
     def __init__(self, color = 'black'):
-        """Constructor for a backpack object. Set the color and initialize the
-        contents list.
+        """Constructor for a backpack object.
+		Set the color and initialize the contents list.
         
         Inputs:
             color (str, opt): the color of the backpack. Defaults to 'black'.
@@ -96,20 +96,18 @@ Once imported, the \li{Backpack} class can be called to construct backpack objec
 ['notebook']
 \end{lstlisting}
 
+% Problem 1: expand the Backpack class.
 \begin{problem}
-This exercise will expand the \li{Backpack} class.
-Add attributes to the class called \li{name} and \li{max_size}.
-The \li{name} attribute will be a label for the backpack.
-The \li{max_size} attribute is the total capacity of the backpack.
-Modify the constructor method to accept \li{name} and \li{max_size} in addition to \li{color}.
-Set the default value of \li{name} to `backpack' and \li{max_size} to 5.
+Expand the \li{Backpack} class.
+Add attributes called \li{name} and \li{max_size}.
+The \li{name} attribute is a label for the backpack, and the \li{max_size} attribute is the total capacity of the backpack.
+Modify the constructor method to accept a \li{name} and a \li{max_size} in addition to \li{color}.
+Set the default values of \li{name} to `backpack' and \li{max_size} to 5.
 
-Once the new attributes are set, modify the \li{put} method.
-Ensure that the backpack does not go over capacity.
-If the user tries to put in more than max\_size items, print a message that says ``Backpack Full.''
+Once the new attributes are set, modify the \li{put} method to ensure that the backpack does not go over capacity.
+If the user tries to put in more than \li{max\_size} items, print ``Backpack Full.''
 
-Finally, add a new method to the backpack called \li{dump}.
-This method removes all the contents of the backpack.
+Finally, add a new method to the backpack called \li{dump} that empties the contents of the backpack.
 \end{problem}
 
 \section*{Inheritance}
@@ -124,14 +122,11 @@ The class that a subclass inherits from is called a \emph{superclass}.
 We define a \li{Knapsack} subclass that inherits from the \li{Backpack} superclass using the following code:
 
 \begin{lstlisting}
-# Knapsack.py
+# Backpack.py
 
-# First, import the Backpack class from Backpack.py
-from Backpack import Backpack
-
-# Inherit the Backpack class in the Knapsack definition		
+# Inherit the Backpack class in the Knapsack definition
 class Knapsack(Backpack):
-    """Knapsack object. Inherits from the Backpack class.
+    """A Knapsack object class. Inherits from the Backpack class.
     A knapsack is smaller than a backpack and can be tied closed.
     
     Attributes:
@@ -151,16 +146,14 @@ class Knapsack(Backpack):
         Inputs:
             color (str, opt): the color of the knapsack. Defaults to 'brown'.
             name (str, opt): the name of the knapsack. Defaults to 'knapsack'.
-            max_size (int, opt): the maximum number of items that can be stored
-                in the knapsack. Defaults to 3.
+            max_size (int, opt): the maximum number of items that can be
+                stored in the knapsack. Defaults to 3.
         
         Returns:
             A knapsack object with no contents.
         """
-        # Call the constructor of the Backpack class
-        Backpack.__init__(self, color, name, max_size)
         
-        # Add an attribute to keep track of whether the knapsack is tied shut.
+        Backpack.__init__(self, color, name, max_size)
         self.closed = True
 \end{lstlisting}
 
@@ -171,17 +164,18 @@ For example, the \li{put} and \li{take} methods in \li{knapsack} are modified to
 \li{tie} and \li{untie} methods are added as well.
 
 \begin{lstlisting}
+# Knapsack class
     def put(self, item):
         """If the knapsack is untied, use the Backpack put() method."""
-        if self.closed:					# same as 'if self.closed == True:'
-            print "Knapsack is closed!"
+        if self.closed:
+            print "Knapsack closed!"
         else:
             Backpack.put(self, item)
     
     def take(self, item):
         """If the knapsack is untied, use the Backpack take() method."""
         if self.closed:
-            print "Knapsack is closed!"
+            print "Knapsack closed!"
         else:
             Backpack.take(self, item)
     
@@ -194,18 +188,18 @@ For example, the \li{put} and \li{take} methods in \li{knapsack} are modified to
         self.closed = True
 \end{lstlisting}
 
-Since \li{Knapsack} inherits \li{Backpack}, a knapsack object is a backpack object.
+Since \li{Knapsack} inherits from \li{Backpack}, a knapsack object is a backpack object.
 All methods defined in the \li{Backpack} class are available to instances of the \li{Knapsack} class.
 Thus, in this example, the \li{dump} method is available even though it is not defined explicitly in the \li{knapsack} class.
 
 \begin{lstlisting}
-# Import the Knapsack class from Knapsack.py
->>> from Knapsack import Knapsack
+# Import the Knapsack class from Backpay.py
+>>> from Backpack import Knapsack
 >>> my_knapsack = Knapsack()
 
 # The put and take method now require the knapsack to be open.
 >>> my_knapsack.put('compass')
-Knapsack is closed!
+Knapsack closed!
 
 # Open the knapsack and put in some items.
 >>> my_knapsack.untie()
@@ -221,15 +215,16 @@ Knapsack is closed!
 []
 \end{lstlisting}
 
+% Problem 2: create an inheritance class.
 \begin{problem}
-
-Create a jetpack class that inherits the backpack class.
+Create a jetpack class that inherits from the backpack class.
 Overwrite the constructor so that the \li{color} attribute defaults to `silver', the \li{name} defaults to `jetpack', and the \li{max_size} defaults to 2.
 Also in the constructor initialize a \li{fuel} attribute that keeps track of how much fuel is left in the jetpack.
-Set the default amount of fuel to be 10.
-Finally, add a \li{fly} method that accepts an amount of fuel to be burned, and decrement the amount of fuel by that amount.
+Set the default amount of \li{fuel} to 10.
+
+Add a \li{fly} method that accepts an amount of fuel to be burned, and decrement \li{fuel} by that amount.
 If the user tries to burn more fuel than remains, print ``Not enough fuel!"
-Finally, overload the \li{dump} method so that both the contents and fuel are emptied.
+Finally, overload the \li{dump} method so that both the contents and the fuel tank are emptied.
 \end{problem}
 
 \section*{Magic Methods}
@@ -237,50 +232,38 @@ Finally, overload the \li{dump} method so that both the contents and fuel are em
 Python magic methods can be used to make objects behave like built-in data types.
 All magic methods begin and end with two underscores, like \li{__init__}.
 Every Python object is automatically endowed with several magic methods, but they are hidden from the user because they begin with an underscore (this is a way of hiding attributes or methods from the user; for example, try hiding the \li{closed} attribute in the \li{Knapsack} class by changing it to \li{_closed}).
-You can see all of the available magic methods for a \li{Backpack} object with the following code:
+You can see all of the available magic methods for a \li{Backpack} object in IPython with the following code:
 
 \begin{lstlisting}
->>> from Backpack import Backpack
->>> b = Backpack()
->>> b.__	# Press 'tab'
-b.__add__     b.__eq__      b.__lt__      b.__repr__    
-b.__doc__     b.__init__    b.__module__
+In [1]: from Backpack import Backpack
+In [2]: b = Backpack()
+In [3]: b.__	# Press 'tab'
+b.__add__     b.__eq__      b.__lt__      b.__str__     
+b.__doc__     b.__init__    b.__module__  
 \end{lstlisting}
 
-In all of our preceding examples, the comments enclosed by sets of three double quotes are stored as the object's \emph{docstring}, stored as \li{__doc__}.
+In all of our preceding examples, the comments enclosed by sets of three double quotes are the object's \emph{docstring}, stored as \li{__doc__}.
 It is important to write good docstrings so that others can utilize your code correctly.
 
 Now, suppose we wanted an operation for adding two backpacks together.
 In the following class, adding two backpacks combines their contents.
 
 \begin{lstlisting}
-# Backpack.py
-
-class Backpack(object):
-    def __init__(self, color = 'black'):
-        self.color = color
-        self.contents = []
-
-    def put(self, item):
-        self.contents.append(item)
-
-    def take(self, item):
-        self.contents.remove(item)
-
+# Backpack class
     def __add__(self, other):
         """Add the contents of 'other' to the contents of 'self'.
         Note that the contents of 'other' are unchanged.
         
         Inputs:
             self (Backpack): the backpack on the left-hand side of the
-                addition operator.
+                '+' addition operator.
             other (Backpack): The backpack on the right-hand side of the
-                addition operator.
+                '+' addition operator.
         """
         self.contents = self.contents + other.contents
 \end{lstlisting}
 
-To demonstrate the addition method, create two backpacks and add them together.
+To demonstrate the addition method, create two instances of the \li{Backpack} class and add them together.
 
 \begin{lstlisting}
 >>> from Backpack import Backpack
@@ -305,29 +288,16 @@ The methods \li{__lt__}, \li{__le__}, \li{__gt__}, and \li{__ge__} methods corre
 For example, one backpack might be less than another if it has fewer items in contents.
 
 \begin{lstlisting}
-class Backpack(object):
-    def __init__(self, color = 'black'):
-        self.color = color
-        self.contents = []
-    
-    def put(self, item):
-        self.contents.append(item)
-    
-    def take(self, item):
-        self.contents.remove(item)
-
-    def __add__(self, other):
-        self.contents = self.contents + other.contents
-
+# Backpack class
     def __lt__(self, other):
         """Compare two backpacks. If 'self' has fewer contents than 'other',
         return True. Otherwise, return False.
         
         Inputs:
             self (Backpack): the backpack on the left-hand side of the
-                inequality.
+                '<' comparison operator.
             other (Backpack): The backpack on the right-hand side of the
-                inequality.
+                '<' comparison operator.
         """
         if len(self.contents) < len(other.contents):
             return True
@@ -353,11 +323,11 @@ True
 
 A complete list of available magic methods can be found \href{https://docs.python.org/2/reference/datamodel.html#special-method-names}{here}.
 
-% Problem 3: __str__ magic method
+% Problem 3: __str__ and __eq__ magic methods
 \begin{problem}
-The \li{__str__} magic method is used to give the string representation of an object.
-When the object is used with the \li{print} command, the \li{__str__} method is called.
-Add the \li{__str__} method to Backpack.py so that \li{print backpack} yields
+Endow the \li{Backpack} class with additional magic methods:
+\begin{enumerate}
+\item The \li{__str__} magic method is used to give the string representation of an object. When the object is used with the \li{print} command, the \li{__str__} method is called. Add the \li{__str__} method to the \li{Backpack} class so that printing a \li{Backpack} object yields:
 \begin{lstlisting}
  Name:		<name>
  Color:		<color>
@@ -367,21 +337,21 @@ Add the \li{__str__} method to Backpack.py so that \li{print backpack} yields
  			<item1>
  			<item2> ...
 \end{lstlisting}
-
 If the backpack is empty, the contents line should read:
 \begin{lstlisting}
 Contents:	Empty
 \end{lstlisting}
 (Hint: Use the `\textbackslash{t}' tab character to help align output.)
 
-The \li{__eq__} magic method is used to determine if two objects are equal.
-Add the \li{__eq__} magic method to Backpack.py so that two backpack objects are equal if and only if they have the same name, color, and contents.
-Note that the contents do not need to be in the same order for the contents to be the same.
+\item The \li{__eq__} magic method is used to determine if two objects are equal. Add the \li{__eq__} magic method to Backpack.py so that two backpack objects are equal if and only if they have the same name, color, and contents. Note that the contents do not need to be in the same order for the contents to be the same.
+\end{enumerate}
 \end{problem}
 
 % Problem 4: ComplexNumber class
 \begin{problem}
-Create a \li{ComplexNumber} class that supports the basic operations of complex numbers. Implement a \li{conjugate} method that return a \li{ComplexNumber} object that is the complex conjugate, and a \li{norm} method that returns the magnitude of the complex number.
+Create a \li{ComplexNumber} class that supports the basic operations of complex numbers. Implement a \li{conjugate} method that returns a \li{ComplexNumber} object that is the complex conjugate, and a \li{norm} method that returns the magnitude of the complex number.
+Neither method should receive any arguments.
+
 Also implement the following magic methods:
 \begin{enumerate}
 \item \li{__add__(self, other)}
