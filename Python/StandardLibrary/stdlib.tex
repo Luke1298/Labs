@@ -1,5 +1,5 @@
 \lab{The Standard Library}{Standard Library}
-\objective{Become familiar with the Python standard library}
+\objective{Become familiar with the Python standard library and learn how to import and use modules.}
 \label{lab:Standard Library}
 
 \section*{Introduction}
@@ -8,13 +8,11 @@ Python is designed to make it easy to implement complex tasks with little code.
 To that end, any Python distribution includes several built-in functions for accomplishing common tasks.
 In addition, Python is designed to import and reuse Python code written by others.
 A Python file that can be imported is called a module.
-%In other words, the Python programming language is designed to be extendable.
 For example, it is possible to import a Python module that produces graphs and figures.
-%Also included with any Python distribution is a collection of modules for accomplishing a variety of tasks.
 Any Python distribution includes a collection of modules for accomplishing a variety of tasks.
 These modules are called the Python standard library.
 
-In this lab, Python built-in functions and standard library are described and explored.
+In this lab, we describe and explore Python built-in functions and the standard library.
 Having a solid foundation in this material will lead to more efficient coding in future labs.
 
 \section*{Python Built-in Functions}
@@ -22,41 +20,43 @@ Having a solid foundation in this material will lead to more efficient coding in
 As mentioned, every Python installation will come with several built-in functions.
 A listing of all Python built-in functions can be found \href{https://docs.python.org/2/library/functions.html}{here}.
 Built-in functions may be used at any time and Python will recognize them.
-Examples of some built-in functions that will be useful for future labs follow.
+The following examples of some built-in functions will be useful for future labs.
 
 \begin{lstlisting}
 # abs() returns the absolute value of a number
->>>abs(-5)
+>>> abs(-5)
 5
 
 # min() returns the smallest element of a list or string
 >>>min([1,2,3])
 1
->>>min('xyz')
+>>> min('xyz')
 'x'
 
 # max() returns the largest element of a list or string
->>>max([1,2,3])
+>>> max([1,2,3])
 3
->>>max('xyz')
+>>> max('xyz')
 'z'
 
 # len() returns the length of a list or string
->>>len([1,2,3])
+>>> len([1,2,3])
 3
->>>len('abc')
+>>> len('abc')
 3
 
 # sum() returns the sum of a list
->>>sum([1,2,3])
+>>> sum([1,2,3])
 6
 
 # range(n) returns a list of numbers from 0 to n-1
->>>range(3)
+>>> range(3)
 [0,1,2]
 \end{lstlisting}
 
+% Problem 1: built-in methods with lists
 \begin{problem}
+Download \li{spec.py} to use as a solutions script and save it as \li{solutions.py}.
 Write a function that accepts a list of numbers as input and returns a list with the minimum, maximum, and average of the original list.
 Remember to use floating point division to calculate the average.
 \end{problem}
@@ -64,7 +64,7 @@ Remember to use floating point division to calculate the average.
 \section*{Names, Namespaces, and Modules}
 
 \subsection*{Names and Namespaces}
-Any object created in Python resides in memory.
+All objects created in Python resides in memory.
 These objects may be data, data structures, methods, or any other sort of Python object.
 A Python name is a reference to a Python object.
 
@@ -73,16 +73,16 @@ For example, in the following code block we create several names.
 
 \begin{lstlisting}
 # The number 13 is the object, x is the name.
->>>x = 13
+>>> x = 13
 
 # The number 4 is the object, number_of_students is the name.
 >>> number_of_sudents = 4
 
-# This is more complicated.  The set of Python statements form an object.  
+# This is more complicated. The set of Python statements form an object.
 # The name is add_numbers.
->>> def add_numbers(a,b):
->>>   return a+b
-
+>>> def add_numbers(a, b):
+...     return a + b
+... 
 # The list is the object, and students is the name.
 >>> students = ["John", "Paul", "George", "Ringo"]
 \end{lstlisting}
@@ -96,7 +96,8 @@ For example, if as above the name \li{students} is assigned a list of names, and
 \begin{lstlisting}
 >>> students = ["John", "Paul", "George", "Ringo"]
 >>> band_members = students
-#band_members now referes to the same object as students.
+
+# band_members now referes to the same object as students.
 >>> band_members
 ['John', 'Paul', 'George', 'Ringo']
 \end{lstlisting}
@@ -119,10 +120,10 @@ TypeError: 'tuple' object does not support item assignment
 \end{lstlisting}
 
 If two names refer to the same mutable object, then any changes to the object is reflected in both names.
-To avoid this, it is possible to create a copy of an object.
+To avoid this, create a copy of an object.
 Changes made to the copy will not change the original object.
 The way to make a copy of an object varies with object types.
-To make a copy of a list, the \li{list()} built-in method may be used (See the following code block).
+To make a copy of a list, use the \li{list()} built-in method.
 
 \begin{lstlisting}
 >>> students = ["John", "Paul", "George", "Pete"]
@@ -130,48 +131,49 @@ To make a copy of a list, the \li{list()} built-in method may be used (See the f
 
 # Replace 'Pete' with 'Ringo' in band_members
 >>> band_members[3] = "Ringo"
->>> band_members
-"John", "Paul", "George", "Ringo"
+>>> print(band_members)
+['John', 'Paul', 'George', 'Ringo']
 
-# Since students and band_members refer to the same object, 
+# Since 'students' and 'band_members' refer to the same object, 
 # 'Ringo' also replaces 'Pete' in students
->>>students
-"John", "Paul", "George", "Ringo"
+>>> print(students)
+['John', 'Paul', 'George', 'Ringo']
 
 # Make a copy this time
 >>> students = ["John", "Paul", "George", "Pete"]
 >>> band_members = list(students)
 >>> band_members[3] = "Ringo"
->>> band_members
-'John', 'Paul', 'George', 'Ringo'
->>> students
-'John', 'Paul', 'George', 'Pete'
+>>> print(band_members)
+['John', 'Paul', 'George', 'Ringo']
+>>> print(students)
+['John', 'Paul', 'George', 'Pete']
 \end{lstlisting}
 
+% Problem 2: which Python objects are immutable?
 \begin{problem}
 Python has several methods that seem to change immutable objects.
-These methods actually work by making copies of objects.
-It is possible to determine which object types are mutable and immutable by using the equal sign and 'changing' the objects.
+These methods actually work by making copies of objects. We can determine which object types are mutable and immutable by using the equal sign and ``changing'' the objects.
 For example, if two names refer to the same list then changes to the entries of one name show up in the second.
+
 \begin{lstlisting}
->>>list_1 = [1,2,3]
->>>list_2 = list_1
->>>list_1.append(4)
->>>list_1
-[1,2,3,4]
->>>list_2
-[1,2,3,4]
+>>> list_1 = [1,2,3]
+>>> list_2 = list_1
+>>> list_1.append(4)
+>>> print(list_1)
+[1, 2, 3, 4]
+>>> print(list_2)
+[1, 2, 3, 4]
 \end{lstlisting}
 
 Performing a similar operation on a tuple yields a different result.
 \begin{lstlisting}
->>>tuple1 = (1,2,3)
->>>tuple2 = tuple1
->>>tuple1 = tuple1 + (4,)
->>>tuple1
-(1,2,3,4)
->>>tuple2
-(1,2,3)
+>>> tuple_1 = (1,2,3)
+>>> tuple_2 = tuple_1
+>>> tuple_1 = tuple_1 + (4,)
+>>> print(tuple_1)
+(1, 2, 3, 4)
+>>> print(tuple_2)
+(1, 2, 3)
 \end{lstlisting}
 
 Using this technique, determine which Python object types are mutable and which are immutable.
@@ -204,64 +206,66 @@ The \li{import} statement first tries to find the Python file specified.
 Once found, every statement in the Python file is executed.
 Once imported, a module's names are available to the user.
 
-For example, download the file "test\_module.py" and save it to a directory.
+For example, download the file \li{example\_module.py} and save it to a directory.
 In a Python interpreter, navigate to a directory where the file is not saved.
-If the interpreter then tries to import \li{test\_module}, it throws an error:
+If the interpreter then tries to import \li{example\_module}, it throws an error:
 
 \begin{lstlisting}
->>> import test_module
+>>> import example_module
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-ImportError: No module named test_module
+ImportError: No module named example_module
 \end{lstlisting}
 
-If the interpreter is running a directory that contains the module no error is thrown and the module names become available:
+If the interpreter is running a directory that contains the module, no error is thrown and the module's names become available:
 
 \begin{lstlisting}
->>> import test_module
->>> test_module.add_numbers(1,1)
+>>> import example_module
+>>> example_module.add_numbers(1,1)
 2
->>> test_module.print_students()
+>>> example_module.print_students()
 John
 Paul
 George
 Ringo
->>> test_module.students
+>>> example_module.students
 ['John', 'Paul', 'George', 'Ringo']
 \end{lstlisting}
 
-If the module is changed after it is imported, then to access those changes the \li{reload} command is used.
-The import command will not update the module.
-Continuing the example, if a method called \li{subtract\_numbers} is added to \li{test\_module}, then \li{reload} is used.
+If the module is changed after it is imported, use the \li{reload} command to access those changes.
+Using the \li{import} command again will not change the module.
+For example, if a method called \li{subtract\_numbers} is added to \li{example\_module}, then \li{reload} is used instead of \li{import}.
 
 \begin{lstlisting}
-'''
-Add the following to test_module.py and save it.
+# Add this function to example_module.py and save it.
 
 def subtract_numbers(a,b):
 	return a - b
-'''
->>> import test_module
->>> test_module.subtract_numbers(2,1)
+\end{lstlisting}
+
+\begin{lstlisting}
+# After modifying example_module.py, try to update the module with 'import'.
+>>> import example_module
+>>> example_module.subtract_numbers(2,1)
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 AttributeError: 'module' object has no attribute 'subtract_numbers'
 
-#Using reload instead of import
->>> reload(test_module)
->>> test_module.subtract_numbers(2,1)
+# Now use 'reload' instead of 'import'.
+>>> reload(example_module)
+>>> example_module.subtract_numbers(2,1)
 1
 \end{lstlisting}
 
+% Problem 3: create your own module.
 \begin{problem}
-
 Create a module called \li{calculator.py}.
-Include methods that add and multiply two numbers and return the results.
-Also include a method that returns the square root of a number (Hint:  Read the first paragraphs of the next section).
+Write a function that returns the sum of two arguments, a function that returns the product of two arguments, and a function that returns the square root of a single argument.
+(Hint: read the first paragraphs of the next section).
+
 In your solutions file, import the \li{calculator} module.
 Using the functions defined in the module, write a new function that calculates the length of the hypotenuse of a right triangle given the lengths of the other two sides.
 \end{problem}
-%finish the module.  Use the addition method?
 
 \section*{Python Standard Library}
 
@@ -285,7 +289,7 @@ Functions also have docstrings.
 
 More extensive documentation is available using the \li{help} built-in function.
 Many Python interpreters provide a similar function by using a question mark.
-For example, in IPython, the question mark yields:
+In IPython, the question mark yields:
 
 \begin{lstlisting}
 In [0]: import math
@@ -319,6 +323,7 @@ math.lgamma     math.pow        math.tanh       math.atan2
 math.degrees    math.fabs       math.gamma      math.log        
 math.radians    math.trunc
 
+
 In [2]: math.sqrt?
 Type:        builtin_function_or_method
 String form: <built-in function sqrt>
@@ -348,22 +353,25 @@ $ python test_script.py I am the walrus
 ['test_script', 'I', 'am', 'the', 'walrus']
 \end{lstlisting}
 
+Note that command line arguments are parsed as strings.
 This method can be used to point a Python script to a file to be analyzed.
-It can also be used to control a scripts behavior.
-For example, a script's might have two methods and let the user decide which to use.
+It can also be used to control a script's behavior.
+For example, the following script has two methods, but which one is called depends on the command line arguments.
+
 \begin{lstlisting}
 import sys
 
-arg = 'a thing'
+arg = "an input for a method"
 
 def method1(arg):
-	#Do something
+	print("-".join(arg))
 
 def method2(arg):
-	#Do something else
+	print(arg.split())
 
 if sys.argv[1] == 1:
 	method1(arg)
+
 elif sys.argv[1] == 2:
 	method2(arg)
 \end{lstlisting}
@@ -374,16 +382,16 @@ The \li{time} module includes functions for dealing with time.
 In particular, functions in \li{time} access the computer's system clock.
 This is useful for precisely measuring how long it takes for code to run.
 
-The \li{time} module includes a function also called \li{time} that measures the number of seconds from a fixed starting point.
+The \li{time} module includes a function also called \li{time} that measures the number of seconds from a fixed starting point, the ``Epoch''.
 For most machines, this starting point will be January 1, 1970.
 
 \begin{lstlisting}
 >>> import time
 
-# This will give the number of seconds since January 1, 1970 at the time of execution.
-# Note that if this command will give a new time each time it is run.
+# time.time() returns the number of seconds from January 1, 1970 to the
+# time of execution. This command gives a new time every time it is run.
 >>> time.time()
-1432229561.022016
+1436832057.321525
 \end{lstlisting}
 
 In order to measure how long it takes to execute some Python code, a mesurement is taken right before and right after it is run.
@@ -391,41 +399,39 @@ Subtracting the first measurement from the second gives the amount of time in se
 
 \begin{lstlisting}
 def time_for_loop():
-	#This measures how long it takes a for loop to go through 10000 iterations using range.
-	time1 = time.time()
-	for i in range(10000):
-		pass
-	time2 = time.time()
-	duration = time2 - time2
-	print duration
+	# Time how long it takes to go through 10000 iterations using 'range'.
+	start = time.time()				# clock the starting time
+	for i in range(10000): pass		# perform the operation
+	end = time.time()				# clock the ending time
+	return end - start				# report the difference
 \end{lstlisting}
 
 The standard library also has a module called \li{timeit}.
-This library is built to time Python code.
-In practice, \li{timeit} is the correct module for timing code.
-In IPython, it can be used like a built-in function any time with the \li{\%timeit} command.
+This library is built to time Python code and has more tools than 
+\li{time}.
+In IPython, \li{timeit} can be used like a built-in function any time with the \li{\%timeit} command.
 
 \begin{lstlisting}
 # Put any code or function name after %timeit to time how long it takes to run.
 # %timeit will run the code as many times as possible and return the best time.
 
-#This example calculates how it takes to got through a for loop of length 100
-In [0]: %timeit for i in xrange(100): pass 
-100000 loops, best of 3: 2.88 µs per loop 
+# Time how long it takes to go through 10000 iterations using 'xrange'.
+In [0]: %timeit for i in xrange(10000): pass 
+1000 loops, best of 3: 303 µs per loop
 \end{lstlisting}
 
+% Problem 4: running a file from the command line and timing code segments
 \begin{problem}
-
 Download the files \li{matrix\_multiply.py} and \li{matrices.npz}.
-The file \li{matrix\_multiply.py} is a module that has three methods for multiplying two matrices together, called \li{method1}, \li{method2}, and \li{method3}.
-It also has a \li{load\_matrices} method that returns two matrices from \li{matrices.npz}
+The Python file \li{matrix\_multiply.py} is a module that has three methods for multiplying two matrices together, called \li{method1}, \li{method2}, and \li{method3}.
+It also has a \li{load\_matrices} method that returns two matrices from \li{matrices.npz}.
+
 Write a function that will do the following:
 \begin{enumerate}
 \item Import the \li{matrix\_multiply} module.
 \item If no command line argument is given, print ``No Input."  If anything other than \li{matrices.npz} is given, print ``Incorrect Input."
-\item If \li{matrices.npz} is given as a command line argument, use the \li{load\_matrices} function to load two matrices called \li{A} and \li{B}.
+\item If \li{matrices.npz} is given as a command line argument, use the \li{load\_matrices} function to load two matrices.
 \item Finally, time how long each method takes to multiply the two matrices together. Print the results to the terminal.
 \end{enumerate}
 \end{problem}
-
 

@@ -34,7 +34,7 @@ def iterative_search(linkedlist, data):
 
 
 # Problem 1: rewrite iterative_search() using recursion.
-def recursive_search():
+def recursive_search(linkedlist, data):
     """Find the node containing 'data' using a recursive approach.
     If there is no such node in the list, raise a ValueError with error
     message "<data> is not in the list."
@@ -46,7 +46,7 @@ def recursive_search():
     Returns:
         The node in 'linkedlist' containing 'data'.
     """
-    pass
+    raise NotImplementedError("Problem 1 incomplete")
 
 # Problem 2: Implement BST.insert() in Trees.py.
 
@@ -76,4 +76,4 @@ def plot_times(filename="English.txt"):
     Returns:
         Show the plot, but do not return any values.
     """
-    pass
+    raise NotImplementedError("Problem 4 incomplete")

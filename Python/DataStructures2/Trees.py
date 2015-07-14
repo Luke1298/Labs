@@ -70,7 +70,7 @@ class BST(object):
             >>> b.insert(7)     |   [8]                 |             \
             >>> b.insert(8)     |                       |             (8)
         """
-        raise NotImplementedError
+        raise NotImplementedError("Problem 2 incomplete")
     
     # Problem 3: Implement BST.remove().
     def remove(self, data):
@@ -87,7 +87,7 @@ class BST(object):
             If the tree is empty, or if there is no node containing 'data',
             raise a ValueError.
         """
-        raise NotImplementedError
+        raise NotImplementedError("Problem 3 incomplete")
     
     def __str__(self):
         """String representation: a hierarchical view of the BST.

@@ -1,6 +1,6 @@
 # StandardLibrary_solutions.py
 """Volume II Lab 1: The Standard Library
-    Solutions file. Written by Shane McQuarrie, Summer 2015.
+Solutions file. Written by Shane McQuarrie, Summer 2015.
 """
 
 # import calculator # as c
@@ -8,12 +8,14 @@ import sys
 import time
 # import matrix_multiply # as m
 
-# ============================ AUXILIARY FILES ============================ #
+# In many labs, students will submit multiple files.
+# Every solutions file contains all of the code that students will write,
+# separated by file.
 
-# calculator.py
-"""Volume II Lab 1: The Standard Library (Auxiliary file)
-    This module is written as part of problem 3. Do not provide to students.
-"""
+
+# ============================== calculator.py ============================== #
+# Students write this module as part of problem 3. Do not provide to students.
+
 import math
 
 def add(x,y):
@@ -27,11 +29,8 @@ def sqrt(x):
 
 # Or "sqrt = math.sqrt"
 
-
-# matrix_multiply.py
-"""Volume II Lab 1: The Standard Library (Auxiliary File)
-    Use this module to complete problem 4. Do not modify this file in any way.
-"""
+# =========================== matrix_multiply.py ============================ #
+# This module is provided to students and used to complete problem 4.
 
 import numpy as np
 
@@ -56,7 +55,7 @@ def method1(A,B):
 
 def method2(A,B):
     """Multiply the matrices 'A' and 'B' together with some vectorization.
-    We also use xrange() instead of range() to make things a little faster.
+    Use xrange() instead of range() to make things a little faster.
     """
     
     product_matrix = np.zeros((A.shape[0], B.shape[1]))
@@ -72,8 +71,9 @@ def method3(A,B):
     return np.dot(A,B)
 
 
-# ============================ SOLUTIONS FILES ============================ #
-
+# ============================== Solutions.py =============================== #
+# The students are provided a specifications file called 'spec.py' with the
+# following functions. They are to rename the file 'solutions.py'.
 
 # Problem 1: Implement this function.
 def prob1(l):
@@ -98,41 +98,51 @@ def prob2():
     num2 = num1
     num1 += 1
     print("Numbers:\t"),
-    if num1 == num2: print("Mutable")
-    else: print("Immutable")
+    if num1 == num2:
+        print("Mutable")
+    else:
+        print("Immutable")
 
     # strings: str1 += 'a'
     str1 = "a"
     str2 = str1
     str1 += "a"
     print("Strings:\t"),
-    if str1 == str2: print("Mutable")
-    else: print("Immutable")
+    if str1 == str2:
+        print("Mutable")
+    else:
+        print("Immutable")
 
     # lists: list1.append(1)
     list1 = [4,3,2]
     list2 = list1
     list1.append(1)
     print("Lists:\t\t"),
-    if list1 == list2: print("Mutable")
-    else: print("Immutable")
+    if list1 == list2:
+        print("Mutable")
+    else:
+        print("Immutable")
 
     # tuples: tup1 += (1,)
     tup1 = (4,3,2)
     tup2 = tup1
     tup1 += (1,)
     print("Tuples:\t\t"),
-    if tup1 == tup2: print("Mutable")
-    else: print("Immutable")
+    if tup1 == tup2:
+        print("Mutable")
+    else:
+        print("Immutable")
 
     # dictionaries: dic1[1] = 'a'
     dic1 = dict()
     dic1[1] = 'b'
     dic2 = dic1
     dic1[1] = 'a'
-    print ("Dictionaries:\t"),
-    if dic1 == dic2: print("Mutable")
-    else: print("Immutable")
+    print("Dictionaries:\t"),
+    if dic1 == dic2:
+        print("Mutable")
+    else:
+        print("Immutable")
 
 
 # Problem 3: Create a 'calculator' module and use it to implement this function.
@@ -156,22 +166,25 @@ def prob3(a,b):
     return c.sqrt(c.add(c.mult(a,a),c.mult(b,b)))
 
 
-# Problem 4: Utilize the 'matrix_multiply' module and 'matrices.npz' to
+# Problem 4: Utilize the 'matrix_multiply' module and 'matrices.npz' file to
 #   implement this function.
 def prob4():
-    """If no command line argument is given, print "No Input." If anything
-    other than "matrices.npz is given, print "Incorrect Input." If
-    "matrices.npz" is given as a command line argument, use the 'load_matrices'
-    function to load two matrices called 'A' and 'B'. Finally, time how long
-    each method takes to multiply the two matrices together. Print your results
-    to the terminal.
+    """If no command line argument is given, print "No Input."
+    If anything other than "matrices.npz is given, print "Incorrect Input."
+    If "matrices.npz" is given as a command line argument, use functions
+    from the provided 'matrix_multiply' module to load two matrices, then
+    time how long each method takes to multiply the two matrices together.
+    Print your results to the terminal.
     """
     # Students should use matrix_multiply.method() instead of method()
     # m = matrix_multiply     # or "import matrix_multiply as m" at the top
-    if len(sys.argv) == 1: print("No input")
-    elif sys.argv[1] != "matrices.npz": print("Incorrect Input")
+    if len(sys.argv) == 1:
+        print("No input")
+    elif sys.argv[1] != "matrices.npz":
+        print("Incorrect Input")
     else:   # If the correct filename is given,
-        A,B = load_matrices(sys.argv[1])  # load the matrices
+        # load the matrices
+        A,B = load_matrices(sys.argv[1])
         
         # time method1()
         start = time.time()
@@ -188,13 +201,15 @@ def prob4():
         method3(A,B)
         print(time.time() - start)
 
+
 # Everything under this 'if' statement is executed when this file is run from
-#   the terminal. In this case, if we enter 'python solutions.py word' into the
-#   terminal, then sys.argv is ['solutions.py', 'word'], and prob4() is executed.
+#   the terminal. In this case, if we enter 'python solutions.py word' into
+#   the terminal, then sys.argv is ['solutions.py', 'word'], and prob4() is
+#   executed. Note that the arguments are parsed as strings. Do not modify.
 if __name__ == "__main__":
     prob4()
 
-# =========================== END OF SOLUTIONS =========================== #
+# ============================ END OF SOLUTIONS ============================= #
 
 # Test script
 def test(student_module, late=False):
@@ -297,3 +312,5 @@ def test(student_module, late=False):
     if   percentage >= 100.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
     return score, feedback
+
+# ============================== END OF FILE ================================ #

@@ -1,8 +1,9 @@
 # matrix_multiply.py
 """Volume II Lab 1: The Standard Library (Auxiliary File)
-    Use this module to complete problem 4. Do not modify this file in any way.
+Use this module to complete problem 4. Do not modify.
 """
 
+# numpy, short for "numerical python", will be introduced in Volume I Lab 2
 import numpy as np
 
 def load_matrices(filename):
@@ -26,7 +27,7 @@ def method1(A,B):
 
 def method2(A,B):
     """Multiply the matrices 'A' and 'B' together with some vectorization.
-    We also use xrange() instead of range() to make things a little faster.
+    Use xrange() instead of range() to make things a little faster.
     """
     
     product_matrix = np.zeros((A.shape[0], B.shape[1]))
@@ -40,3 +41,5 @@ def method3(A,B):
     """Use numpy's matrix multiplication method for maximum speed."""
     
     return np.dot(A,B)
+    
+# ============================== END OF FILE ================================ #

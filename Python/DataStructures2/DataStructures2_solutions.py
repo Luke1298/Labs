@@ -3,9 +3,6 @@
 Solutions file. Written by Shane A. McQuarrie.
 """
 
-# TODO: check that the AVL tree is actually working correctly.
-# TODO: generate a better image for problem 4.
-
 # Students should import their tree classes from Trees.py
 # from Trees import BST
 # from Trees import AVL
@@ -99,7 +96,7 @@ def plot_times(filename="English.txt"):
     
     # Get the values [500, 1000, 1500, ..., 5000]
     domain = list()
-    for n in xrange(500,5500,200):
+    for n in xrange(500,5500,500):
     
         # Initialize wordlist and data structures
         word_list = create_word_list(filename)[:n]
@@ -127,7 +124,7 @@ def plot_times(filename="English.txt"):
         
         # Search Times
         search1, search2, search3 = list(), list(), list()
-        for i in xrange(15):
+        for i in xrange(5):
             target = word_list[randint(0, n-1)]
             
             # Time LinkedList.find
@@ -531,7 +528,7 @@ class LinkedListNode(object):
         self.next = None
     def __str__(self):
         return str(self.data)
-    
+
 class LinkedList(object):
     """Simple singly-linked list. Used to test problem 1."""
     def __init__(self):
@@ -545,7 +542,7 @@ class LinkedList(object):
             while current.next is not None:
                 current = current.next
             current.next = n
-    
+
 # Test script
 def test(student_module, late=False):
     """Test script. You must import the students file as a module.

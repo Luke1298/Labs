@@ -1,10 +1,13 @@
 # name this file 'solutions.py'
 """Volume II Lab 1: The Standard Library
-    <Name>
-    <Class>
-    <Date>
+<Name>
+<Class>
+<Date>
 """
 
+# Add import statements here.
+# In future labs, do not modify any PROVIDED import statements.
+# You may always add others as needed.
 
 
 # Problem 1: Implement this function.
@@ -43,21 +46,22 @@ def prob3(a,b):
 # Problem 4: Utilize the 'matrix_multiply' module and 'matrices.npz' file to
 #   implement this function.
 def prob4():
-    """If no command line argument is given, print "No Input." If anything
-    other than "matrices.npz is given, print "Incorrect Input." If
-    "matrices.npz" is given as a command line argument, use the 'load_matrices'
-    function to load two matrices called 'A' and 'B', then time how long each
-    method takes to multiply the two matrices together. Print your results
-    to the terminal.
+    """If no command line argument is given, print "No Input."
+    If anything other than "matrices.npz is given, print "Incorrect Input."
+    If "matrices.npz" is given as a command line argument, use functions
+    from the provided 'matrix_multiply' module to load two matrices, then
+    time how long each method takes to multiply the two matrices together.
+    Print your results to the terminal.
     """
     pass
 
 
 # Everything under this 'if' statement is executed when this file is run from
-#   the terminal. In this case, if we enter 'python solutions.py word' into the
-#   terminal, then sys.argv is ['solutions.py', 'word'], and prob4() is executed.
+#   the terminal. In this case, if we enter 'python solutions.py word' into
+#   the terminal, then sys.argv is ['solutions.py', 'word'], and prob4() is
+#   executed. Note that the arguments are parsed as strings. Do not modify.
 if __name__ == "__main__":
     prob4()
 
 
-# ============================== END OF FILE ============================== #
+# ============================== END OF FILE ================================ #
