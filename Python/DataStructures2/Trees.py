@@ -1,6 +1,9 @@
 # Trees.py
 """Volume II Lab 5: Data Structures II (Trees). Auxiliary File.
 Contains Node and Tree classes. Modify this file for problems 2 and 3.
+<Name>
+<Date>
+<Class>
 """
 
 
