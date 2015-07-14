@@ -1,6 +1,6 @@
 # Trees.py
-"""Volume II Lab 5: Data Structures II (Trees)
-Auxiliary File. Contains Node and Tree classes.
+"""Volume II Lab 5: Data Structures II (Trees). Auxiliary File.
+Contains Node and Tree classes. Modify this file for problems 2 and 3.
 """
 
 
@@ -249,4 +249,4 @@ def _height(current):
         return -1           # Otherwise, descend down both branches.
     return 1 + max(_height(current.right), _height(current.left))
 
-# ============================== END OF FILE ============================== #
+# =============================== END OF FILE =============================== #

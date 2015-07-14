@@ -3,174 +3,8 @@
 Solutions file. Written by Shane A. McQuarrie.
 """
 
-# Students should import their tree classes from Trees.py
-# from Trees import BST
-# from Trees import AVL
-from WordList import create_word_list
-from time import time
-from matplotlib import pyplot as plt
-from random import randint
-
-# ============================== Main Solutions ============================== #
-# The following functions should be in solutions.py
-
-def iterative_search(linkedlist, data):
-    """Find the node containing 'data' using an iterative approach.
-    If there is no such node in the list, or if the list is empty,
-    raise a ValueError with error message "<data> is not in the list."
-    
-    Inputs:
-        linkedlist (LinkedList): a linked list object
-        data: the data to find in the list.
-    
-    Returns:
-        The node in 'linkedlist' containing 'data'.
-    """
-    # Start the search at the head.
-    current = linkedlist.head
-    # Iterate through the list, checking the data of each node.
-    while current is not None:
-        if current.data == data:
-            return current
-        current = current.next
-    # If 'current' no longer points to a Node, raise a value error.
-    raise ValueError(str(data) + " is not in the list.")
-
-# Problem 1: rewrite iterative_search() using recursion.
-def recursive_search(linkedlist, data):
-    """Find the node containing 'data' using a recursive approach.
-    If there is no such node in the list, raise a ValueError with error
-    message "<data> is not in the list."
-    
-    Inputs:
-        linkedlist (LinkedList): a linked list object
-        data: the data to find in the list.
-    
-    Returns:
-        The node in 'linkedlist' containing 'data'.
-    """
-    def _step(current):
-        """Check the current node, and step right if not found."""
-        if current is None:         # Base case 1: dead end
-            raise ValueError(str(data) + " is not in the list.")
-        if current.data == data:    # Base case 2: the data matches
-            return current
-        else:                       # Recurse if not found
-            return _step(current.next)
-    
-    return _step(linkedlist.head)
-
-# Problem 2: Implement BST.insert() in BST.py.
-
-# Problem 3: Implement BST.remove() in BST.py
-
-# Problem 4: Test build and search speeds for LinkedList, BST, and AVL objects.
-def plot_times(filename="English.txt"):
-    """Vary n from 500 to 5000, inclusive, incrementing by 500. At each
-    iteration, use the create_word_list() from the 'WordList' module to
-    generate a list of n randomized words from the specified file.
-    
-    Time (separately) how long it takes to load a LinkedList, a BST, and
-    an AVL with the data set.
-    
-    Choose 5 random words from the data set. Time how long it takes to
-    find each word in each object. Calculate the average search time for
-    each object.
-    
-    Create one plot with two subplots. In the first subplot, plot the
-    number of words in each dataset against the build time for each object.
-    In the second subplot, plot the number of words against the search time
-    for each object.
-    
-    Inputs:
-        filename (str): the file to use in creating the data sets.
-    
-    Returns:
-        Show the plot, but do not return any values.
-    """
-    
-    # Initialize lists to hold results
-    lls_build, lls_search = list(), list()
-    bst_build, bst_search = list(), list()
-    avl_build, avl_search = list(), list()
-    
-    # Get the values [500, 1000, 1500, ..., 5000]
-    domain = list()
-    for n in xrange(500,5500,500):
-    
-        # Initialize wordlist and data structures
-        word_list = create_word_list(filename)[:n]
-        bst = BST()
-        avl = AVL()
-        lls = LinkedList()
-        
-        # Time the singly-linked list build
-        start = time()
-        for word in word_list:
-            lls.add(word)
-        lls_build.append(time() - start)
-        
-        # Time the binary search tree build
-        start = time()
-        for word in word_list:
-            bst.insert(word)
-        bst_build.append(time() - start)
-        
-        # Time the AVL tree build
-        start = time()
-        for word in word_list:
-            avl.insert(word)
-        avl_build.append(time() - start)
-        
-        # Search Times
-        search1, search2, search3 = list(), list(), list()
-        for i in xrange(5):
-            target = word_list[randint(0, n-1)]
-            
-            # Time LinkedList.find
-            start = time()
-            iterative_search(lls, target)
-            search1.append(time() - start)
-            
-            # Time BST.find
-            start = time()
-            bst.find(target)
-            search2.append(time() - start)
-            
-            # Time AVL.find
-            start = time()
-            avl.find(target)
-            search3.append(time() - start)
-        
-        lls_search.append(sum(search1)/len(search1))
-        bst_search.append(sum(search2)/len(search2))
-        avl_search.append(sum(search3)/len(search3))
-        domain.append(n)
-    
-    # Plot the data
-    plt.subplot(121)
-    plt.title("Build Times")
-    plt.plot(domain,lls_build,label='Singly-Linked List')
-    plt.plot(domain,bst_build,label='Binary Search Tree')
-    plt.plot(domain,avl_build,label='AVL Tree')
-    plt.ylabel("seconds")
-    plt.xlabel("data points")
-    plt.legend(loc='upper left')
-    
-    plt.subplot(122)
-    plt.title("Search Times")
-    plt.plot(domain,lls_search,label='Singly-Linked List')
-    plt.plot(domain,bst_search,label='Binary Search Tree')
-    plt.plot(domain,avl_search,label='AVL Tree')
-    plt.ylabel("seconds")
-    plt.xlabel("data points")
-    plt.legend(loc='upper left')
-    
-    plt.show()
-
-
-# ============================== Tree classes ============================== #
-# The following classes should be located in Trees.py.
+# ============================== Trees.py ============================== #
+# Modify this file for problems 2 and 3
 
 class BSTNode(object):
     """A Node class for Binary Search Trees. Contains some data, a
@@ -516,7 +350,176 @@ def _height(current):
         return -1           # Otherwise, descend down both branches.
     return 1 + max(_height(current.right), _height(current.left))
 
-# ========================= End of Solutions ========================= #
+# ============================== solutions.py ============================== #
+
+
+# from Trees import BST
+# from Trees import AVL
+from WordList import create_word_list
+from time import time
+from matplotlib import pyplot as plt
+from random import randint
+
+
+def iterative_search(linkedlist, data):
+    """Find the node containing 'data' using an iterative approach.
+    If there is no such node in the list, or if the list is empty,
+    raise a ValueError with error message "<data> is not in the list."
+    
+    Inputs:
+        linkedlist (LinkedList): a linked list object
+        data: the data to find in the list.
+    
+    Returns:
+        The node in 'linkedlist' containing 'data'.
+    """
+    # Start the search at the head.
+    current = linkedlist.head
+    # Iterate through the list, checking the data of each node.
+    while current is not None:
+        if current.data == data:
+            return current
+        current = current.next
+    # If 'current' no longer points to a Node, raise a value error.
+    raise ValueError(str(data) + " is not in the list.")
+
+# Problem 1: rewrite iterative_search() using recursion.
+def recursive_search(linkedlist, data):
+    """Find the node containing 'data' using a recursive approach.
+    If there is no such node in the list, raise a ValueError with error
+    message "<data> is not in the list."
+    
+    Inputs:
+        linkedlist (LinkedList): a linked list object
+        data: the data to find in the list.
+    
+    Returns:
+        The node in 'linkedlist' containing 'data'.
+    """
+    def _step(current):
+        """Check the current node, and step right if not found."""
+        if current is None:         # Base case 1: dead end
+            raise ValueError(str(data) + " is not in the list.")
+        if current.data == data:    # Base case 2: the data matches
+            return current
+        else:                       # Recurse if not found
+            return _step(current.next)
+    
+    return _step(linkedlist.head)
+
+
+# Problem 2: Implement BST.insert() in BST.py.
+
+
+# Problem 3: Implement BST.remove() in BST.py
+
+
+# Problem 4: Test build and search speeds for LinkedList, BST, and AVL objects.
+def plot_times(filename="English.txt"):
+    """Vary n from 500 to 5000, inclusive, incrementing by 500. At each
+    iteration, use the create_word_list() from the 'WordList' module to
+    generate a list of n randomized words from the specified file.
+    
+    Time (separately) how long it takes to load a LinkedList, a BST, and
+    an AVL with the data set.
+    
+    Choose 5 random words from the data set. Time how long it takes to
+    find each word in each object. Calculate the average search time for
+    each object.
+    
+    Create one plot with two subplots. In the first subplot, plot the
+    number of words in each dataset against the build time for each object.
+    In the second subplot, plot the number of words against the search time
+    for each object.
+    
+    Inputs:
+        filename (str): the file to use in creating the data sets.
+    
+    Returns:
+        Show the plot, but do not return any values.
+    """
+    
+    # Initialize lists to hold results
+    lls_build, lls_search = list(), list()
+    bst_build, bst_search = list(), list()
+    avl_build, avl_search = list(), list()
+    
+    # Get the values [500, 1000, 1500, ..., 5000]
+    domain = list()
+    for n in xrange(500,5500,500):
+    
+        # Initialize wordlist and data structures
+        word_list = create_word_list(filename)[:n]
+        bst = BST()
+        avl = AVL()
+        lls = LinkedList()
+        
+        # Time the singly-linked list build
+        start = time()
+        for word in word_list:
+            lls.add(word)
+        lls_build.append(time() - start)
+        
+        # Time the binary search tree build
+        start = time()
+        for word in word_list:
+            bst.insert(word)
+        bst_build.append(time() - start)
+        
+        # Time the AVL tree build
+        start = time()
+        for word in word_list:
+            avl.insert(word)
+        avl_build.append(time() - start)
+        
+        # Search Times
+        search1, search2, search3 = list(), list(), list()
+        for i in xrange(5):
+            target = word_list[randint(0, n-1)]
+            
+            # Time LinkedList.find
+            start = time()
+            iterative_search(lls, target)
+            search1.append(time() - start)
+            
+            # Time BST.find
+            start = time()
+            bst.find(target)
+            search2.append(time() - start)
+            
+            # Time AVL.find
+            start = time()
+            avl.find(target)
+            search3.append(time() - start)
+        
+        lls_search.append(sum(search1)/len(search1))
+        bst_search.append(sum(search2)/len(search2))
+        avl_search.append(sum(search3)/len(search3))
+        domain.append(n)
+    
+    # Plot the data
+    plt.subplot(121)
+    plt.title("Build Times")
+    plt.plot(domain,lls_build,label='Singly-Linked List')
+    plt.plot(domain,bst_build,label='Binary Search Tree')
+    plt.plot(domain,avl_build,label='AVL Tree')
+    plt.ylabel("seconds")
+    plt.xlabel("data points")
+    plt.legend(loc='upper left')
+    
+    plt.subplot(122)
+    plt.title("Search Times")
+    plt.plot(domain,lls_search,label='Singly-Linked List')
+    plt.plot(domain,bst_search,label='Binary Search Tree')
+    plt.plot(domain,avl_search,label='AVL Tree')
+    plt.ylabel("seconds")
+    plt.xlabel("data points")
+    plt.legend(loc='upper left')
+    
+    plt.show()
+
+
+# ============================= END OF SOLUTIONS ============================ #
 
 import inspect
 

@@ -121,7 +121,7 @@ class LinkedList(object):
             >>> my_list.insert(2,4)
             4 is not in the list.
         """
-        raise NotImplementedError
+        raise NotImplementedError("Problem 4 incomplete.")
 
 
 # Problem 5: Implement this class for creating doubly-linked lists.
@@ -129,7 +129,8 @@ class DoublyLinkedList(LinkedList):
     """Doubly-linked list data structure class. Inherits from the 'LinkedList'
     class. Has a 'head' for the front of the list and a 'tail' for the end.
     """
-    pass
+    def __init__(self):
+        raise NotImplementedError("Problem 5 incomplete")
 
 
 # Problem 6: Implement this class for creating sorted linked lists.
@@ -151,11 +152,7 @@ class SortedLinkedList(DoublyLinkedList):
             >>> print(my_list)
             [2, 3, 4, 5, 6]
         """
-        raise NotImplementedError
-    
-    def insert(self, data):
-        """Disable insert() so the user is forced to use add()."""
-        raise NotImplementedError
+        raise NotImplementedError("Problem 6 incomplete")
 
 # Conclude problem 6 by implementing this function.
 def sort_words(filename = "English.txt"):
@@ -170,6 +167,6 @@ def sort_words(filename = "English.txt"):
     Returns:
         The SortedLinkedList object containing the sorted list.
     """
-    pass
+    raise NotImplementedError("Problem 6 incomplete.")
 
 # =========================== END OF File =========================== #

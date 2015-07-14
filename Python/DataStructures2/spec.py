@@ -48,9 +48,12 @@ def recursive_search(linkedlist, data):
     """
     raise NotImplementedError("Problem 1 incomplete")
 
+
 # Problem 2: Implement BST.insert() in Trees.py.
 
+
 # Problem 3: Implement BST.remove() in Trees.py
+
 
 # Problem 4: Test build and search speeds for LinkedList, BST, and AVL objects.
 def plot_times(filename="English.txt"):
@@ -77,3 +80,5 @@ def plot_times(filename="English.txt"):
         Show the plot, but do not return any values.
     """
     raise NotImplementedError("Problem 4 incomplete")
+
+# =============================== END OF FILE =============================== #

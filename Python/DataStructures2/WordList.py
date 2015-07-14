@@ -1,11 +1,11 @@
 # WordList.py
-"""Volume II Lab 5: Data Structures II (Auxiliary file)
-Do not modify this file.
+"""Volume II Lab 5: Data Structures II (Trees). Auxiliary file
+Use this function to complete problem 4. Do not modify.
 """
 
 import numpy as np
 
-# Use this function in problems 5 and 6
+# Use this function in problem 4.
 def create_word_list(filename='English.txt'):
     """Read in a list of words from the specified file.
     Randomize the ordering and return the list.

@@ -92,7 +92,10 @@ def test_myRSA(message, p, q, e):
     Returns:
         True if no exception is raised.
     """
-    pass
+    # A NotImplementedError usually indicates that a class method will be
+    #   overwritten by children classes, or that the method or function is
+    #   still under construction.
+    raise NotImplementedError("Problem 2 incomplete.")
 
 
 # Problem 3: Fermat's test for primality.
@@ -111,7 +114,7 @@ def is_prime(n):
         (or 0 if no witnesses were found).
     
     """
-    pass
+    raise NotImplementedError("Problem 3 incomplete.")
 
 
 # Problem 4: Implement the following RSA system using PyCrypto.
@@ -144,10 +147,7 @@ class PyCrypto(object):
     """
     def __init__(self):
         """Initialize the _keypair and public_key attributes."""
-        # A NotImplementedError indicates that the method will be overwritten
-        #   by children classes, or that the method is under construction.
-        #   Here it is only being used as a temporary placeholder, like 'pass'.
-        raise NotImplementedError
+        raise NotImplementedError("Problem 4 incomplete.")
     
     def encrypt(self, message, key=None):
         """Encrypt 'message' with a public key and return its encryption. If
@@ -159,10 +159,10 @@ class PyCrypto(object):
                 used in the encryption. Defaults to 'None', in which case
                 '_keypair' is used to encrypt the message.
         """
-        raise NotImplementedError
+        raise NotImplementedError("Problem 4 incomplete.")
     
     def decrypt(self, ciphertext):
         """Decrypt 'ciphertext' with '_keypair' and return the decryption."""
-        raise NotImplementedError
+        raise NotImplementedError("Problem 4 incomplete.")
 
 # ============================== END OF FILE ============================== #
