@@ -1,5 +1,5 @@
 # DataStructures_solutions.py
-"""Volume II Lab 4: Data Structures 1
+"""Volume II Lab 4: Data Structures 1 (Linked Lists)
 Solutions file. Written by Shane A. McQuarrie.
 """
 
@@ -326,7 +326,7 @@ def test(student_module, late=False):
         feedback (str): a printout of test results for the student.
     """
     s = student_module
-    SNode = student_module.LinkedListNode
+    SNode = s.LinkedListNode
     score = 0
     total = 80
     feedback = s.__doc__

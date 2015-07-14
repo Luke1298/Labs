@@ -36,7 +36,6 @@ class LinkedList(object):
             >>> my_list.head.next.data
             2
         """
-        
         new_node = LinkedListNode(data)
         if self.head is None:
             # If the list is empty, point the head attribute to the new node.
@@ -68,7 +67,7 @@ class LinkedList(object):
             >>> str(my_list) == str([1,2,3])
             True
         """
-        return ""
+        raise NotImplementedError("Problem 2 incomplete.")
 
     # Problem 3: Finish implementing LinkedList.remove() so that if the node
     #   is not found, an exception is raised.
@@ -88,7 +87,6 @@ class LinkedList(object):
             >>> print(my_list)
             [1, 3]
         """
-        
         # First, check if the head is the node to be removed. If so, set the
         # new head to be the first node after the old head. This removes
         # the only reference to the old head, so it is then deleted.

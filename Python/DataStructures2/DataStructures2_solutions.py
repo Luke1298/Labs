@@ -766,6 +766,10 @@ def test(student_module, late=False):
     feedback += "\n\nTotal score: " + str(score) + "/" + str(total)
     percentage = (100.0 * score) / total
     feedback += " = " + str(percentage) + "%"
+    if percentage < 72.0 and not late:
+        feedback += "\n\nOn any given problem, if one test fails then"
+        feedback += " subsequent tests are likely to fail.\nFix the tests in"
+        feedback += " the order that they are mentioned in this feedback file."
     if   percentage >=  98.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
     return score, feedback

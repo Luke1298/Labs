@@ -211,6 +211,8 @@ if __name__ == "__main__":
 
 # ============================ END OF SOLUTIONS ============================= #
 
+import os
+
 # Test script
 def test(student_module, late=False):
     """Test script. You must import the students file as a module.
@@ -231,7 +233,6 @@ def test(student_module, late=False):
 
     s = student_module
     sFile = s.__file__    
-    import os
     if os.system('ls ' + sFile):
         return
 

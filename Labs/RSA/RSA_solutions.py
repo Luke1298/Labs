@@ -205,7 +205,7 @@ def test_myRSA(message, p, q, e):
     """
     # Input validation 1
     if type(message) != str:
-        raise TypeError("message must be a string")
+        raise TypeError("message must be a string.")
     
     # Input validation 2
     if type(p) != int or type(q) != int or type(e) != int:
@@ -377,7 +377,7 @@ def test(student_module, late=False):
     feedback = s.__doc__
     
     try:    # Problem 1: 20 points
-        feedback += "\nTesting problem 1 (20 points):"
+        feedback += "\n\nTesting problem 1 (20 points):"
         points = 0
         r1 =   myRSA()
         r2 = s.myRSA()
@@ -425,10 +425,10 @@ def test(student_module, late=False):
         points *= p; feedback += f
         
         score += points; feedback += "\n  Score += " + str(points)
-    except Exception as e: feedback += "\n\nError: " + e.message
+    except Exception as e: feedback += "\nError: " + e.message
     
     try:    # Problem 2: 10 points
-        feedback += "\nTesting problem 2 (10 points):"
+        feedback += "\n\nTesting problem 2 (10 points):"
         points = 0
         print("\nCorrect response:\tmessage must be a string.")
         print("Student response:\t"),
@@ -465,10 +465,10 @@ def test(student_module, late=False):
             feedback += "\n\t" + e.message + "(message = 'secret')"
         
         score += points; feedback += "\n  Score += " + str(points)
-    except Exception as e: feedback += "\n\nError: " + e.message
+    except Exception as e: feedback += "\nError: " + e.message
     
     try:    # Problem 3: 10 points
-        feedback += "\nTesting problem 3 (10 points):"
+        feedback += "\n\nTesting problem 3 (10 points):"
         points = 0
         # Feedback messages
         prime = "\n\tis_prime() failed (prime marked as nonprime: "
@@ -497,10 +497,10 @@ def test(student_module, late=False):
         else: feedback += nonprime + "340561)"
         
         score += points; feedback += "\n  Score += " + str(points)
-    except Exception as e: feedback += "\n\nError: " + e.message
+    except Exception as e: feedback += "\nError: " + e.message
     
     try:    # Problem 4: 10 points
-        feedback += "\nTesting problem 4 (10 points):"
+        feedback += "\n\nTesting problem 4 (10 points):"
         points = 0
         # Test encrypt() and decrypt together(), default key
         r2 = s.PyCrypto()
@@ -535,7 +535,7 @@ def test(student_module, late=False):
         points *= p; feedback += f
         
         score += points; feedback += "\n  Score += " + str(points)
-    except Exception as e: feedback += "\n\nError: " + e.message
+    except Exception as e: feedback += "\nError: " + e.message
     
     if late:    # Late submission penalty
         feedback += "\n\nHalf credit for late submission."
