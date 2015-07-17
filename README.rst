@@ -6,7 +6,7 @@ are being developed as part of BYU's Applied and Computational Mathematics degre
 The labs go in tandem with the four textbooks that are currently being written and will
 start rolling out in 2016.
 
-The data sets used in these labs can be found <a href="acme.byu.edu/data">here</a>.
+The data sets used in these labs can be found at: http://acme.byu.edu
 
 This work is licenced under the Creative Commons Attribution 3.0 United States License.  
 To view a copy of this license please visit:
