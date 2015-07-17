@@ -247,49 +247,42 @@ def specClus(measure,Laplacian,args,arg1=None,kiters=10):
 \end{lstlisting}
 \end{problem}
 
-You may use the following code to test your function.  This will generate random data for up to six concentric circles, and will show the results using both Spectral Clustering and $k$-means.  Note that it may take several tries to correctly classify the data, and will take a long time to run.  As arguments for this function, you need to pass in two lists giving the radii and number of points for each concentric circle, respectively, which Laplacian, and the additional argument \li{arg1} as described previously. If using \li{radii = [2.,6.]} and \li{pts = [300,700]},  your results should be similar to Figure ???.
+We now need a way to test our code.  The website http://cs.joensuu.fi/sipu/datasets/ contains many free data sets that will be of use to us.  Scroll down to the ``Shape sets" heading, and download some of the datasets found there to use for trial datasets.
+\begin{problem}
+Create a function that will return the accuracy of your spectral clustering implementation, as follows:
 \begin{lstlisting}
-def test_specClus(radii,pts,Laplacian,arg1=None,kiters=10):
-    n_clusters = len(radii)
-    def measure(xi,xj):
-        return np.exp(-(la.norm(xi-xj)**2))
-    
-    def circles(radii,pts):
-        ttl_pts = np.sum(pts)
-        positions = np.random.choice(range(ttl_pts),ttl_pts,replace=False)
-        data = np.empty((ttl_pts,2))
-        place = 0
-        for i in xrange(n_clusters):
-            randnessx = np.random.random(pts[i])-.5
-            randnessy = np.random.random(pts[i])-.5
-            data0 = 2*np.pi*np.random.random(pts[i])
-            datax = radii[i]*np.cos(data0)+randnessx
-            datay = radii[i]*np.sin(data0)+randnessy
-            data[positions[place:place+pts[i]],0] = datax
-            data[positions[place:place+pts[i]],1] = datay
-            place += pts[i]
-        return data
-    
-    data = circles(radii,pts)    
-    init = 'random'
-    max_iters = 300
-    normalize = False
-    if Laplacian != 1:
-        normalize = True
-    args = (data,n_clusters,init,max_iters,normalize)
-    
-    spec_clus_labels = specClust(measure,Laplacian,args,arg1,kiters)
-    kmeans_labels = kmeans(data,n_clusters,init,max_iters,normalize)[1]
-    colors = ['r.','g.','b.','k.','c.','y.']
-    
-    plt.subplot(121)
-    for i in xrange(n_clusters):
-        rel_data_pos = np.where(spec_clus_labels==i)[0]
-        plt.plot(data[rel_data_pos,0],data[rel_data_pos,1],colors[i])
-    plt.subplot(122)
-    for i in xrange(n_clusters):
-        rel_data_pos = np.where(kmeans_labels==i)[0]
-        plt.plot(data[rel_data_pos,0],data[rel_data_pos,1],colors[i])
-    plt.show()
-\end{lstlisting}
+def specClus(measure,Laplacian,args,arg1=None,kiters=10):
+    """
+    Cluster a dataset using the k-means algorithm.
 
+    Parameters
+    ----------
+    location : string
+        The location of the dataset to be tested.
+    measure : function
+        The function used to calculate the similarity measure.
+    Laplacian : int in {1,2,3}
+        Which Laplacian matrix to use. 1 corresponds to the unnormalized,
+        2 to the symmetric normalized, 3 to the random walk normalized.
+    args : tuple
+        The arguments as they were passed into your k-means function,
+        consisting of (data, n_clusters, init, max_iter, normalize). Note
+        that you will not pass 'data' into your k-means function.
+    arg1 : None, float, or int
+        If Laplacian==1, it should remain as None
+        If Laplacian==2, the cut-off value, epsilon.
+        If Laplacian==3, the number of edges to retain, T.
+    kiters : int
+        How many times to call your kmeans function to get the best
+        measure.
+    
+    Returns
+    -------
+    accuracy : float
+        The percent of labels correctly predicted by your spectral
+        clustering function with the given arguments (the number
+        correctly predicted divided by the total number of points.
+    """
+    pass
+\end{lstlisting}
+\end{problem}  
