@@ -3,6 +3,311 @@
 
 \objective{This section teaches about searching graphs and uses the parlor game ``the Six Degrees of Kevin Bacon'' as an application to graphs.}
 
+\section*{Introduction}
+
+Graph theory has practical applications.
+For example, graphs may represent a social network, a communication network, or the internet.
+In this lab we will explore basic graph algorithms in Python.
+
+\section*{Graphs in Python}
+
+A graph may be represented in several ways.
+In this lab they are represented with \emph{adjacency dictionaries}.
+An adjacency dictionary is a Python dictionary with a key for each node in the list.
+The value of each node is a list containing the nodes that are connected to the key.
+For example, the adjacency list for the graph in Figure \ref{fig:simple_graph} is:
+
+\begin{lstlisting}
+# Adjacency list of a graph in a python dictionary.
+graph = {'A':['B', 'C', 'D', 'E'], 'B':['A', 'C'], 'C':['B', 'A', 'D']
+		'D': ['A', 'C'], 'E':['A']}
+\end{lstlisting}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[auto,node distance=1.5cm,
+ thick,main node/.style={circle,draw}]
+
+  \node[main node] (1) {A};
+  \node[main node] (2) [left of=1] {B};
+  \node[main node] (3) [above of=1] {C};
+  \node[main node] (4) [right of=1] {D};
+  \node[main node] (5) [below of=1] {E};
+
+  \path[every node/.style={font=\sffamily\small}]
+     (1) edge node [] {} (4)
+     	  edge node [] {} (3)
+     	  edge node [] {} (5)
+     (2) edge node [] {} (1)
+     	  edge node []{}(3)
+     (3) edge node []{}(4);
+\end{tikzpicture}
+\caption{A siple graph on five vertices.  }
+\label{fig:simple_graph}
+\end{figure}
+
+\begin{problem}
+Implement the initializer of the graph class in \li{lab6_spec}.
+The \li{data_machine} module has a method called \li{generate_graph_data} that returns a list of lists.
+The first entry in the list is the node in the graph, and the subsequent entries are the node's neighbors.
+Convert the output from the \li{generate_graph_data} output into an adjacency dictionary, and store it as an attribute called \li{adjacency_dictionary}
+Store the first node added to \li{adjacency_dictionary} as an attribute called \li{root}
+\end{problem}
+
+\section*{Breadth First Search}
+
+An important technique for working with graphs is search.
+Given a starting point and a target, a search will explore the graph until the target is found.
+There are several different ways to search a graph, each with its advantages and disadvantages.
+We will implement breadth first search.
+
+Breadth first search begins at a starting node.
+If the starting node is not the target node, then the search explores each of its neighbors.
+If none of the neighbors are the target, then the search explores the neighborhood of the starting node's first neighbor.
+If none of those neighbors are the target, then the neighborhood of the second neighbor is explored.
+This process continues until the target is found.
+For example, we will do a breadth first search of the graph in Figure \ref{fig:simple_graph} one step at a time.
+Suppose that we start at node $C$ and we are searching for node $E$.
+
+\begin{lstlisting}
+# A step-by-step example of a breadth first search on a small graph.
+
+# Start at node C
+>>> start = 'C'
+>>> current = 'C'
+
+# Now, check the neighbors of node C
+>>> graph[current]
+['B', 'A', 'D']
+
+# None of these are E, so go to the first neighbor, B.
+>>> current = graph[start][0]
+>>> graph[current]
+['A', 'C']
+
+# None of these are E either, so move to the next neighbor
+# of the starting node, which is A
+>>> current = graph[start][1]
+>>> graph[current]
+['B', 'C', 'D', 'E']
+
+# The last entry of this list is our target node, and the
+# search terminates.
+\end{lstlisting}
+
+You may have noticed that some problems in the previous approach that would arise in a more complicated graph.
+For example, what prevents us from entering a cycle?
+How can we algorithmically determine which nodes to visit as we explore deeper into the graph?
+We will solve these problems using data structures.
+
+\subsection*{Queues}
+
+A queue is a data structure that is similar to a linked list.
+A queue object has methods for adding to the queue and removing from the queue.
+New nodes are added to the end of the queue.
+The node at the front of the queue is the one that is removed.
+Think of a queue as a line at a bank.
+The person at the front of the line is served next, while newcomers add themselves to the back of the line (in a civilized society, at least).
+
+The \li{collections} module in the Python standard library has a special kind of queue called a deque.
+A deque is a double ended queue, that is, nodes may be added to the front or the end.
+For our purposes though, we will treat it as a regular queue using the \li{popleft()} method to remove and the \li{append()} method to add.
+For example:
+\begin{lstlisting}
+# Import the deque class from the collections module
+>>> from collections import deque
+
+# Add several items to the deque
+>>> my_deque = deque()
+>>> my_deque.append('a')
+>>> my_deque.append('b')
+>>> my_deque.append('c')
+>>> my_deque
+deque(['a','b','c'])
+
+# Remove from the front of the deque using the popleft() method
+>>> next = my_deque.popleft()
+>>> next
+'a'
+>>> next = my_deque.popleft()
+>>> next
+'b'
+>>> my_deque
+deque(['c'])
+\end{lstlisting}
+
+For breadth first search we use a queue to keep track of which node to explore next.
+
+\subsection*{Implementing Breadth First Search}
+
+Let us consider how breadth first search might be implemented with a queue.
+We will use the same graph as in the previous step-by-step example.
+
+\begin{lstlisting}
+# Start at node C.
+>>> start = 'C'
+>>> current = 'C'
+
+# Add the neighbors of C to the queue. Recall the graph[node] is a
+# list of the neighbors of node.
+>>> visit_queue = deque()
+>>> visit_queue.append(graph[current])
+>>> visit_queue
+deque(['B', 'A', 'D'])
+
+# Move to the next node by removing from the front of the queue.
+>>> current = visit_queue.popleft()
+>>> current
+'B'
+
+# This is not the node we are searching for, but we may want to explore its 
+# neighbors later.  They should be explored after the other neighbors
+# of the first node, so add them to the end of the queue.
+>>> visit_queue.append(graph[current])
+>>> visit_queue
+deque(['A', 'D', 'A', 'C'])
+\end{lstlisting}
+
+We have arrived at a new problem.
+The nodes $A$ and $C$ were added to the queue to be visited, even though $C$ has already been visited and $A$ is next in line.
+We can prevent these nodes from being added to the queue again by keeping a running list of nodes that don't need to be added.
+However, not all such nodes are created equal.
+For example, $C$ had already been visited, while $A$ is in line to be visited, but hasn't yet.
+We can distinguish between these two types of nodes with two lists: \li{visited} and \li{marked}.
+Nodes that are in \li{visited} have already been visited by the algorithm.
+Nodes that are in \li{marked} have been added to the queue, but not visited yet.
+If we check both of these lists at each step of the algorithm, the previous problems are avoided.
+
+\begin{lstlisting}
+# Start at node C, initialize marked and visited
+# We are looking for node E
+>>> start = 'C'
+>>> current = 'C'
+>>> target = 'E'
+>>> marked = []
+>>> visited = []
+
+# Since we start at C, add it to visited.
+>>> visited.append(current)
+
+# Add the neighbors of C to the queue. Recall the graph[node] is a
+# list of the neighbors of node.
+>>> visit_queue = deque()
+>>> visit_queue.append(graph[current])
+>>> visit_queue
+deque(['B', 'A', 'D'])
+
+# Since each neighbor will be visited now, also add them to marked.
+>>> for node in graph[current]: marked.append(node) 
+
+# Move to the next node by removing from the front of the queue.
+>>> current = visit_queue.popleft()
+>>> current
+'B'
+
+# Add the neighbors of B to the queue if they are not in marked.
+# Mark the nodes that are added to visit_queue
+>>> for node in graph[current]:
+		if node not in marked or visited:
+			marked.append(node)
+			visit_deque.append(node)
+
+# Since C is visited and A is in marked, the queue does not change.
+>>> visit_queue
+deque(['A', 'D'])
+
+# Move to the next node by removing from the front of the queue.
+>>> current = visit_deque.popleft()
+>>> current
+'A'
+
+# Adding the neighbors that are not in marked or visited yields:
+>>> visit_queue
+deque(['D', 'E'])
+
+# The process continues until the target node is reached.
+\end{lstlisting}
+
+\begin{problem}
+Implement the \li{search} method in \li{lab6_spec} using breadth first search as it has been outlined.
+Accept a target and start from the root node.
+Return the target once it is removed from the queue as well as the number of nodes that were searched before the target was reached.
+\end{problem}
+
+\section*{Network X}
+
+NetworkX is a python package for creating, manipulating, and exploring large graphs.
+It contains a graph object constructor as well as methods for adding nodes and edges to the graph.
+It also has methods for recovering information about the graph and its structure.
+
+\begin{lstlisting}
+>>> import networkx as nx
+
+# Create a new graph object using networkX
+>>> G = nx.Graph()
+
+# There are several ways to add nodes and edges to the graph.
+# One is to use the add_edge method.
+>>> G.add_edge('C', 'B')
+
+# The add_edge method creates new edge and node object as needed.
+# It also ignores duplicates.  We can see the edges and nodes in a
+# graph using the following commands.
+
+>>> G.add_edge('C', 'A')
+>>> G.add_edge('C', 'D')
+>>> G.add_edge('A', 'E')
+>>> G.nodes()
+['C', 'B', 'A', 'D', 'E']
+>>> G.edges()
+[('C', 'B'), ('C', 'A'), ('C', 'D'), ('A', 'E')]
+\end{lstlisting}
+
+\begin{problem}
+Implement the \li{convert_to_networx} method in \li{lab6_spec}.
+This method converts the adjacency list attribute of a graph object into a networkX object and returns it.
+\end{problem}
+
+\section*{The Keving Bacon Problem}
+
+A well known parlor game is "The 6 Degrees of Kevin Bacon."
+The game is played by naming an actor and then trying to find a chain of actors that of worked with each other that leads to Kevin Bacon.
+For example, the actress Uma Thurman was in a film called Chelsea Walls with Frank Whaley, who in turn was in a film called JFK with Kevin Bacon.
+Thus Uma Thurman has a Bacon number of 2.
+
+\begin{problem}
+The \li{data_machine} module has a method called \li{generate_movie_data}.
+This geneates a dictionary from \li{movieData.txt} where each key is a movie title and each value is a list with the actors appearing in the movie.
+Use this dictionary to generate a networkX graph of actors with edges connecting actors that have appeared in the same movie.
+In same method, generate a new dictionary where each key is an actor and each value is a list of movies that the actor has appeared in.
+Note that the actors are listed with last name first, followed by their first name.
+\end{problem}
+
+\begin{problem}
+NetworkX has a method called \li{shortest_path} that finds the shortest path between two given nodes.
+For example, consider the graph \li{G} from the previous section.
+\begin{lstlisting}
+# Find the shortest path from C to A in G.
+>>> nx.shortest_path(G, 'C', 'E')
+['C', 'A', 'E']
+\end{lstlisting}
+Use this to write a method called \li{find_bacon} that accepts an actor and returns the chain of actors linking the actor to Kevin Bacon.
+Include the movie that links connected actors in the list.
+This can be done using the actor-movie dictionary from the previous problem.
+For example, if the method were to be given "Thurman, Uma" as input, it should return
+\begin{lstlisting}
+>>> lab6_spec.find_bacon("Thurman, Uma")
+['Thurman, Uma', 'Chelsea Walls', 'Whaley, Frank', 'JFK', 'Bacon, Kevin']  
+\end{lstlisting}
+\end{problem}
+
+\begin{problem}
+Write a method that computes the average Bacon number in the \li{movieData.txt} data set.
+To do this, calculate the Bacon number for each actor in the the data set and take the average.
+Exclude any actors that are not connected to Kevin Bacon.
+\end{problem}
+
+\begin{comment}
 \section*{Graphs}
 \label{Graphs_section}
 We commonly use graphs to represent the relationships between objects in a set. A graph is
@@ -372,4 +677,5 @@ Find the average Bacon number for the dataset. Then find the number of actors
 associated with each Bacon number and the number of actors that have no connection
  to Kevin Bacon at all (we would say these people have a Bacon number of infinity).
 \end{problem}
+\end{comment}
 
