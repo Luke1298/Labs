@@ -129,7 +129,7 @@ This is done by replacing the first and last equations in \eqref{spectral1b:disc
 \begin{problem}
 Use the pseudospectral method to solve the boundary value problem
 \begin{align*}
-&{ } u'' = e^{2x}, \quad x \in [-1,1], \\
+&{ } u'' = e^{2x}, \quad x \in (-1,1), \\
 &{ } u(-1) = 0, \quad u(1) = 0.
 \end{align*}
 Compare your numerical solution with the exact solution,
@@ -146,20 +146,36 @@ u(x) = \frac{- \cosh(2) - \sinh(2)x + e^{2x}}{4}.
 % \label{fig:nonzeroDirichlet}
 % \end{figure}
 
+
+
+
+\begin{problem}
+	Use the pseudospectral method to solve the boundary value problem
+	\begin{align*}
+	&{ } u'' + u' = e^{3x}, \quad x \in (-1,1), \\
+	&{ } u(-1) = 2, \quad u(1) = -1.
+	\end{align*}
+\end{problem}
+
+The previous exercise involved setting up and solving a linear system 
+\[
+AU = F,
+\]
+where $F$ is a vector whose entries are $e^{3x}$ evaluated at the collocation points $x_j$, and $U$ represents the approximation to the solution $u$ at those points. 
+However, whenever the ODE is nonlinear, the discretization becomes a nonlinear system of equations that must be solved using Newton's method. 
+The next exercise contains a BVP whose ODE is nonlinear, with the additional complexity that the domain of the problem is not $[-1,1]$. 
+
 \begin{problem}
 Use the pseudospectral method to solve the boundary value problem
 \begin{align*}
-&{ } u'' + u' = e^{3x}, \quad x \in [-1,1], \\
-&{ } u(-1) = 2, \quad u(1) = -1.
+&{ } u'' = \lambda\sinh(\lambda u), \quad x \in (0,1), \\
+&{ } u(0) = 0, \quad u(1) = 1
 \end{align*}
-% Check that your numerical solution is converging.
-% How many subintervals are required to find the solution correct to three decimal places?
-% See Figure \ref{fig:nonzeroDirichlet}.
-	
-% Hint: Reduce the problem to one with zero Dirichlet conditions by letting $u = U+G$, where $G$ is a (simple) function satisfying the boundary conditions.
+for several values of $\lambda$: $\lambda = 4, 8, 12$. 
+
+Begin by transforming this BVP onto the domain $-1<x<1$. 
+Also, recall that Newton's method requires an initial guess. 
 \end{problem}
-
-
 
 
 

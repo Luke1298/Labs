@@ -178,10 +178,62 @@ def nonlinear_minimal_area_surface_of_revolution():
 	plt.show()
 	
 	
+
+def extra():
+	l_bc, r_bc = 0., 1.
+	lmbda = 12
+	N = 50
+	D, x = cheb_vectorized(N)
+	M = np.dot(D, D)
+	guess = (.5*(x+1))#**lmbda
+	N2 = 500
+	
+	def pseudospectral_ode(y):
+		out = np.zeros(y.shape)
+		ypp = M.dot(y)
+		out = 4*ypp - lmbda*np.sinh(lmbda*y)
+		out[0], out[-1] = y[0] - r_bc, y[-1] - l_bc
+		return out
+	
+	u = root(pseudospectral_ode,guess,method='lm',tol=1e-9)
+	print u.success
+	num_sol = BarycentricInterpolator(x,u.x)
+	
+	xx = np.linspace(-1, 1, N2)
+	uu = num_sol.__call__(xx)
+	plt.plot(x,guess,'*b')
+	plt.plot(xx, uu, '-r')						# Numerical solution via 
+												# the pseudospectral method
+	plt.axis([-1.,1.,0-.1,1.1])
+	plt.show()
+	plt.clf()
+	
+	# theta = np.linspace(0,2*np.pi,N2)
+	# X,Theta = np.meshgrid(xx,theta,indexing='ij')
+	# # print "\nxx = \n", xx
+	# # print "\nuu = \n", uu
+	# F = uu[:,np.newaxis] +np.zeros(uu.shape)
+	# # print "\nX = \n", X
+	# # print "\nTheta = \n", Theta
+	# # print "\nF = \n", F
+	# Y = F*np.cos(Theta)
+	# Z = F*np.sin(Theta)
+	#
+	# fig = plt.figure()
+	# ax = fig.add_subplot(111, projection='3d')
+	# ax.plot_wireframe(X, Y, Z, rstride=1, cstride=1)
+	# ax.azim=-65; ax.elev = 0
+	# plt.show()
+	
 	
 
 if __name__ == "__main__":
 	# deriv_matrix_exercise1()
 	# exercise2()
-	nonzeroDirichlet()
+	# nonzeroDirichlet()
 	# nonlinear_minimal_area_surface_of_revolution()
+	extra()
+	
+	
+	
+	
