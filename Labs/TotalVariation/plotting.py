@@ -1,4 +1,5 @@
 from __future__ import division
+from time import time
 
 import numpy as np
 np.set_printoptions(precision=15)
@@ -8,6 +9,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from scipy.optimize import root
 from scipy.misc import imread, imsave
+import numexpr as ne
 
 from solution import cheb, cheb_vectorized
 
@@ -185,7 +187,7 @@ def add_noise(imagename,changed_pixels=10000):
 		x_,y_ = random_integers(1,IM_x-2), random_integers(1,IM_y-2)
 		val =  .25*randn() + .5
 		IM[x_,y_] = max( min(val+ IM[x_,y_],1.), 0.)
-	imsave(name=("noised_"+imagename),arr=IM)
+	# imsave(name=("noised_"+imagename),arr=IM)
 
 
 def plot_image(imagename):
@@ -229,7 +231,9 @@ def gradient_descent_heat(imagename,time_steps=120):
 		u[0] = u[1]
 		iteration+=1
 	
-	imsave(name=("de"+imagename),arr=u[1])
+	# imsave(name=("de"+imagename),arr=u[1])
+	plt.imshow(u[1], cmap=cm.gray)
+	plt.show()
 	return
 
 
@@ -268,8 +272,61 @@ def gradient_descent_totalvariation(imagename,time_steps=120):
 										)/(
 										(epsilon + z_x[1:-1,1:-1]**2. + z_y[1:-1,1:-1]**2.)**(3./2) )
 										)
-
 	
+	def total_variation_numexpr(z):
+		lmbda = 1.
+		epsilon = 2e-7
+		
+		dt = delta_t
+		new_IM = IM.copy()
+		# Approximate first and second derivatives to second order accuracy.
+		z_N = np.roll(z,-1,axis=0)
+		z_S = np.roll(z,1,axis=0)
+		z_E = np.roll(z,-1,axis=1)
+		z_W = np.roll(z,1,axis=1)
+
+		znew = np.zeros(z.shape)
+		z_x = np.zeros(z.shape)
+		z_y = np.zeros(z.shape)
+		# z_xy = np.zeros(z.shape)
+		# z_xx = np.zeros(z.shape)
+		# z_yy = np.zeros(z.shape)
+
+		ne.evaluate('.5*(z_N-z_S)', out=z_x)
+		ne.evaluate('.5*(z_E-z_W)', out=z_y)
+		# ne.evaluate('.25*(z_N + z_E - z_S - z_W)', out=z_xy)
+
+		numerator = np.zeros(z.shape)
+		denominator = np.zeros(z.shape)
+		ne.evaluate('(z_N - 2*z + z_S)*z_y*z_y + (z_E - 2*z + z_W)*z_x*z_x - .5*z_x*z_y*(z_N + z_E - z_S - z_W)',out=numerator)
+		ne.evaluate('(epsilon + z_x**2. + z_y**2.)',out=denominator)
+		ne.evaluate('denominator**(3/2.)',out=denominator)
+
+		ne.evaluate('z-dt*( lmbda*(z-new_IM) - numerator/denominator )',out=znew)
+		z[1:-1,1:-1] = znew[1:-1,1:-1]
+		
+		# z_x = (np.roll(z,-1,axis=0) - np.roll(z,1,axis=0))/2.
+		# z_y  = (np.roll(z,-1,axis=1) - np.roll(z,1,axis=1))/2.
+		#
+		# z_xy = (np.roll(z_x,-1,axis=1) - np.roll(z_x,1,axis=1))/2.
+		# z_yx = (np.roll(z_y,-1,axis=0) - np.roll(z_y,1,axis=0))/2.
+		#
+		# z_xx = (np.roll(z,-1,axis=0) - 2.*z + np.roll(z,1,axis=0))
+		# z_yy = (np.roll(z,-1,axis=1) - 2.*z + np.roll(z,1,axis=1))
+		#
+		# # Find approximation for the next time step, using a first order Euler step
+		# z[1:-1,1:-1] -= delta_t*(   lmbda*(z[1:-1,1:-1]-IM[1:-1,1:-1]) -
+		# 							   (z_xx[1:-1,1:-1]*z_y[1:-1,1:-1]**2. +
+		# 								z_yy[1:-1,1:-1]*z_x[1:-1,1:-1]**2. -
+		# 								2.*z_x[1:-1,1:-1]*z_y[1:-1,1:-1]*z_xy[1:-1,1:-1]#.5*(z_xy[1:-1,1:-1] + z_yx[1:-1,1:-1])
+		# 								)/(
+		# 								(epsilon + z_x[1:-1,1:-1]**2. + z_y[1:-1,1:-1]**2.)**(3./2)
+		# 								  )
+		# 						)
+								
+		
+		
+		
 	def total_variation_fd1(z):
 		lmbda = 1.
 		epsilon = 2e-7
@@ -294,7 +351,7 @@ def gradient_descent_totalvariation(imagename,time_steps=120):
 	# Time step until successive iterations are close
 	iteration = 0
 	while iteration < time_steps:
-		total_variation(u[1])
+		total_variation_numexpr(u[1])
 		# total_variation_fd1(u[1])
 		if norm(np.abs((u[0] - u[1]))) < 1e-6:
 			break
@@ -302,13 +359,14 @@ def gradient_descent_totalvariation(imagename,time_steps=120):
 		u[0] = u[1]
 		iteration+=1
 	
-	imsave(name=("de"+imagename),arr=u[1])
+	# imsave(name=("de"+imagename),arr=u[1])
+	# plt.imshow(u[1], cmap=cm.gray)
+	# plt.show()
 	return
 
 
 
 if __name__=="__main__":
-	pass
 	# Note on the brachistochrone: These functions solve the Euler-Lagrange 
 	# equation, but the solution is not the curve minimizing transit time. 
 	# The brachistochrone is a curve whose derivative dy/dx is infinity at 
@@ -323,12 +381,12 @@ if __name__=="__main__":
 	
 	# nonlinear_minimal_area_surface_of_revolution()
 	# example_text()
-	add_noise(imagename='baloons_resized_bw.jpg',changed_pixels=40000)
-	gradient_descent_heat('noised_baloons_resized_bw.jpg',time_steps=550)
-	
-	# gradient_descent_totalvariation('noised_baloons_resized_bw.jpg',time_steps=220)
-	plot_image('denoised_baloons_resized_bw.jpg')
-	
+	# add_noise(imagename='baloons_resized_bw.jpg',changed_pixels=40000)
+	# gradient_descent_heat('noised_baloons_resized_bw.jpg',time_steps=550)
+	start = time()
+	# plot_image('lab_noised_baloons_resized_bw.jpg')
+	gradient_descent_totalvariation('lab_noised_baloons_resized_bw.jpg',time_steps=220)
+	print (time()- start), " seconds"
 	# TODO
 	# 1. Reexamine the discretization of the image. Use simple forward 
 	# differencing for the derivatives. Also, can we let delta_x = delta_y = 1?

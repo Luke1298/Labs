@@ -559,7 +559,7 @@ def tref_solitons():
 
 if __name__ == "__main__":
 	# deriv1()
-	advection()
+	# advection()
 	# bvp1_check()
 	# bvp1()
 	# bvp2_check()
@@ -568,7 +568,7 @@ if __name__ == "__main__":
 	# func0()
 	# Burgers()
 	# Solitons()
-	# tref_solitons()
+	tref_solitons()
 	# plot_spectral2_derivative()
 	
 	
