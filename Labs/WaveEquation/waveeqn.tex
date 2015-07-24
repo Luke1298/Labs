@@ -87,7 +87,8 @@ Ignoring the third order term, we obtain a second order approximation for the se
 \[U_{j}^{1}= U_{j}^{0} + g(x_j) \triangle t+ s^2 f''(x_j) \frac{\triangle t^2}{2}, \quad 1 \leq j \leq J-1\]
 or if $f$ is not readily differentiable,
 % & U_{j,1}= U_{j,0} + g(x_j) \triangle t+ c^2  \frac{f(x_{j+1}) -2 f(x_{j}) + f(x_{j-1})}{(\triangle x)^2}\frac{\triangle t^2}{2}.
-\[U_{j}^{1}= U_{j}^{0} + g(x_j) \triangle t+ \frac{\lambda^2}{2} (f(x_{j+1}) -2 f(x_{j}) + f(x_{j-1}))\]
+%\[U_{j}^{1}= U_{j}^{0} + g(x_j) \triangle t+ \frac{\lambda^2}{2} (f(x_{j+1}) -2 f(x_{j}) + f(x_{j-1}))\]
+\[U_{j}^{1}= U_{j}^{0} + g(x_j) \triangle t+ \frac{\lambda^2}{2} (U^0_{j-1} -2 U^0_j + U^0_{j+1})\]
 This method is conditionally stable; the CFL condition is that $\lambda \leq 1$.
 
 \begin{problem}

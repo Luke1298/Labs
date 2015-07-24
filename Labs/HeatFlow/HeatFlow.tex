@@ -18,12 +18,12 @@ and the rate at which the quantity enters $V$ is
 We let the source term be given by $f(\vec{x},t,u)$; we may interpret this to mean that the rate at which the quantity is produced in $V$ is
 \[\int_V f(\vec{x},t,u)\, dt.\]
 Then the integral form of the conservation law for $u$ is expressed as
-\[\frac{d}{dt} \int_V u(\vec{x},t) \, d\vec{x} = -\int_V \vec{J}\cdot \vec{n}\, dA + \int_V f(\vec{x},t,u)\, d\vec{x}.\]
+\[\frac{d}{dt} \int_V u(\vec{x},t) \, d\vec{x} = -\int_{\partial V} \vec{J}\cdot \vec{n}\, dA + \int_V f(\vec{x},t,u)\, d\vec{x}.\]
 
 If $u$ and $J$ are sufficiently smooth functions, then we have
 \[ \frac{d}{dt} \int_V u\, d\vec{x} = \int_V u_t \, d\vec{x},\]
 and
-\[ \int_V \vec{J}\cdot \vec{n}\, dA = \int_V \nabla \cdot \vec{J}\, d\vec{x} .\]
+\[ \int_{\partial V} \vec{J}\cdot \vec{n}\, dA = \int_V \nabla \cdot \vec{J}\, d\vec{x} .\]
 Since this holds for all nice subsets $V \subset \Omega$ with $V$ arbitrarily small, we obtain the differential form of the conservation law for $u$:
 \[ u_t + \nabla \cdot \vec{J} = f(\vec{x},t,u) .\]
 
@@ -295,7 +295,7 @@ The slope of the line there shows the proper rate of convergence.
 To measure the error, use the solution with the smallest $h$ (largest number of intervals) as if it were the exact solution, then sample each solution only at the x-values that are represented in the solution with the largest $h$ (smallest number of intervals).
 Use the $\infty$-norm on the arrays of values at those points to measure the error.
 
-Notice that, since the Crank-Nicolson method is unconditionally stable, there is no CFL condition and we can use the same number of spaces in time and space.
+Notice that, since the Crank-Nicolson method is unconditionally stable, there is no CFL condition and we can use the same number of intervals in time and space.
 \end{problem}
 
 % The matrix $A$ is sparse, and so we can use several functions from the package \texttt{scipy.sparse.linalg}.

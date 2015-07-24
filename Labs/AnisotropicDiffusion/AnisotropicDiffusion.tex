@@ -3,17 +3,17 @@
 
 \objective{Demonstrate the use of finite difference schemes in image analysis.}
 
-We will now look into one of the many applications of Finite Difference Methods.
+We will now look into one of the many applications of finite difference methods.
 It is often useful in image processing to remove extra static from an image.
 This is most easily done by simply blurring the image, but this has the unfortunate consequence of also blurring the boundary lines between distinct elements of the image.
 This blurring can be done by treating the image as a rectangular domain where we are applying the diffusion equation:
 \[u_t = b \Delta u\]
-where $b$ is some diffusion constant and $\Delta$ is the Laplace Operator.
+where $b$ is some diffusion constant and $\Delta$ is the Laplace operator.
 In this simple case, the diffusion equation is the same as the heat equation.
 A more general form of the diffusion equation in two dimensions is:
-\[u_t = div \left( c(x,y,t) \nabla u \right)\]
+\[u_t = \nabla\cdot \left( c(x,y,t) \nabla u \right)\]
 where $c$ is a function representing the diffusion coefficient at each given point and time.
-In this case, $div$ is the divergence operator and $\nabla$ is the gradient.
+In this case, $\nabla \cdot$ is the divergence operator and $\nabla$ is the gradient. 
 If we want to blur a picture uniformly, we can allow $c$ to be constant, but we are often interested in \textit{preserving the edges} between features of the image.
 $c$ can be used to control how much diffusion is allowed at each point, so we would like to modify it so that it minimizes diffusion across edges in the image.
 If we can limit diffusion near the boundaries between different features of the image, we will be able to allow smaller details of the image to blur away while maintaining the overall form of the image.
@@ -129,7 +129,7 @@ The best way to do this is with inplace operations.
 That will ensure that our code is not being slowed down by the costs from allocating and deallocating temporary arrays.
 We can also work to eliminate all duplicate computations in our difference scheme.
 Doing so gives us the following implementation of the same algorithm.
-Note! This is still neither the simplest way to do this, but these are the sorts of operations that a student will want to understand to be able to code this algorithm well.
+Note! This is still not the simplest way to do this, but these are the sorts of operations that a student will want to understand to be able to code this algorithm well.
 \begin{lstlisting}
 def anisdiff_bw_noBCs_fast(U, N, lambda_, sigma):
     """ Run the Anisotropic Diffusion differencing scheme
@@ -303,7 +303,7 @@ Do the other corners similarly.
 Essentially we are just using the terms of the difference scheme that are actually defined.
 
 You can do this by modifying the the numexpr version already given so that it includes the boundary values in the image.
-The following modifications are necessary:
+Make the following modifications to the code given above:
 \begin{itemize}
 
 \item Change the North, South, East, and West slices so that they include the boundaries.
@@ -384,7 +384,7 @@ U_{l,m}^{n+1} = U_{l,m}^n + & \lambda (g(||U_{l-1,m}^n - U_{l,m}^n||)(U_{l-1,m}^
 					& + g(||U_{l,m+1}^n - U_{l,m}^n||)(U_{l,m+1}^n - U_{l,m}^n))
 \end{align*}
 
-When implementing this scheme for colored images, use the $2$-norm on 3-space, i.e $||x||=max(x1,x2,x3)$ where $x1$, $x2$, and $x3$ are the different coordinates of $x$.
+When implementing this scheme for colored images, use the $2$-norm on 3-space, i.e $||x||=\sqrt{x1^2+x2^2+x3^2}$ where $x1$, $x2$, and $x3$ are the different coordinates of $x$.
 
 As before, this difference scheme can be implemented with simple slicing operations in NumPy.
 Here is a version that solves the problem with fixed boundary conditions.
@@ -493,7 +493,7 @@ def anisdiff_color_noBCs_numexpr(U, N, lambda_, sigma):
 
 \begin{problem}
 Make a new version of the code you wrote for the previous problem which processes a colored image.
-Measure the difference between using pixels using the $2$-norm.
+Measure the difference between pixels using the $2$-norm.
 Use the corresponding vector versions of the boundary conditions given in Problem \ref{prob:anisdiff_bw}.
 
 To do this, you must break up the computation of the different terms so that you can compute the norm along each triple of color values and then broadcast the g values along the last axis of the array of differences.
@@ -507,10 +507,10 @@ This should be similar to the variable \li{sums} shown in the example with fixed
 This will be like \li{hsums} and \li{vsums} in the code above.
 
 \item Make 3D views of the arrays \li{hsums} and \li{vsums}.
-There are severaly ways to do this.
+There are several ways to do this.
 One is shown in the example above using the \li{[...,None]} syntax.
 The \li{...} says that slices that follow apply to the last axes of the array and not the first ones.
-The \li{None} tels NumPy to create an array with an extra dimension of length 1 wherever the \li{None} appears.
+The \li{None} tells NumPy to create an array with an extra dimension of length 1 wherever the \li{None} appears.
 We do this so that we can broadcast along the third axis of $U$ to multiply each value of $g$ across its corresponding color triple.
 
 \item Split the computation of the different terms into three pieces (as shown in the example above).
