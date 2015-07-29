@@ -19,20 +19,22 @@ It is quickly gaining momentum as a fundamental tool in scientific computing bec
 \end{itemize}
 In addition to these, Python is freely available and can also be freely distributed.
 
-\section*{Running Python}
-Python 2.7 is required for the labs in this text and can be downloaded from \url{http://www.python.org/}. Although later versions of 
-Python are available, they do not have many of the features needed for scientific computing. 
+\section*{Installation}
+Python 2.7 is required for the labs in this text. We will download everything we need to get started using Anaconda. Anaconda is a free Python distribution that includes Python 2.7 and many of the commonly used libraries for scientific computing. Most of the libraries we will use in these labs are included in Anaconda. We will add more libraries in the future as needed. To download Anaconda, go to \url{http://continuum.io/downloads}, download the installer corresponding to your operating system, and follow the on-screen installation instructions. Make sure the installer you use corresponds to Python 2.7. Although later versions of Python are available, they do not yet have many of the features needed for scientific computing. For a detailed guide on initial installation, see Appendix \ref{win64install}. 
 
+
+\section*{Running Python}
 Many free IDEs (Integrated Development Environments) and text editors are compatible with Python. We recommend you use IPython, which provides three different interfaces: commandline, QTConsole, and Notebook. You can open these interfaces by running \li{ipython}, \li{ipython qtconsole}, or \li{ipython notebook} respectively.
 The commandline interface is the simplest of the three, as it merely adds colored syntax to the text in the terminal window.
 The QTConsole provides some extra features not available in the commandline interface.
 The Notebook interface has the most features and is displayed in a web browser.
 
+Some people prefer to use a text editor and IPython side-by-side. Some of the more popular text editors are described in Appendix A. It will be valuable for you to try a variety of programming environments and configurations until you find what suits you best.
+
 For more information on installing Python and various libraries, see Appendices \ref{win64install} and \ref{pythoninstall}.
 
-
 \section*{Learning Python}
-The remainder of this lab will introduce you to some basic Python data types and control flow blocks. The text for this lab is intended to tell you just enough so that you can create these objects and experiment with them. Each section has additional required readings, listed at its end. Moreover, as you begin your study of Python, we \emph{strongly} suggest you read the following:
+The remainder of this lab will introduce you to some basic Python data types and control flow blocks. The text for this lab is intended to tell you just enough so that you can create these objects and experiment with them. Moreover, as you begin your study of Python, we \emph{strongly} suggest you read the following:
 \begin{enumerate}
 \item Chapters 3, 4, and 5 of the Official Python Tutorial \\
         (\url{http://docs.python.org/2.7/tutorial/introduction.html}).
@@ -61,9 +63,14 @@ Namespace:  Python builtin
 Docstring:  L.append(object) -- append object to end
 \end{lstlisting}
 
-Finally, if you cannot answer your question using these strategies, try googling it. Many common questions about Python programming have been answered on internet forums.
+Finally, if you cannot answer your question using these strategies, try doing a Google search.  Many common questions about Python programming have been answered on internet forums.  StackOverflow.com, in particular, is often a valuable resource.
 
 \section*{Data Types}
+
+%=======================
+%              Numerical Types
+%=======================
+
 \subsection*{Numerical Types}
 There are four numerical data types, \li{int}, \li{long}, 
 \li{float}, and \li{complex}, each of which stores a certain kind of number. 
@@ -80,259 +87,129 @@ Python can be used as a calculator. Use \li{**} for exponentiation.
 \begin{lstlisting}
 >>> 3**2 + 2*5
 19
+
+>>> 13 % 3
+1
+
+# The underscore character is a variable with the value of the previous
+# command's output.  You may think of it as the ANS button on 
+# many calculators.
+>>> 12 * 3
+36
+>>> _ / 4
+9
+
+# Run the following command to gain access to the sqrt function.
+# More information on importing modules can be found in Volume 2, Lab 1.
+>>> from math import sqrt
+>>> sqrt(25)
+5.0
+>>> sqrt(2)
+1.4142135623730951
+\end{lstlisting}
+
+Some extra care will be necessary when performing division.
+\begin{lstlisting}
+>>> 9 / 3
+3
+>>> 15 / 4	# Notice the expected result would be 3.75
+3
+
+# If either the dividend or divisor is a float, traditional division will be
+# performed. This can be implemented in two different ways. 
+>>> 15 / 4.0
+3.75
+>>> float(15) / 4	# This is an example of type casting.
+3.75
+
 \end{lstlisting}
 
 We can also create and manipulate variables with Python.
 
 \begin{lstlisting}
 # Use a SINGLE equals sign to create a variable.
+# Note that we do not need to specify a data type.
 >>> x = 12
 >>> y = 2 * 6
 
+# If we wanted to change the default type that Python assigned to
+# our variable, we use type casting
+>>> y = float(y)	# changes y to a float
+
 # Use a DOUBLE equals sign to check equality of variables.
->>> x == y
+>>> x == y  
+True
+
+# Using the is operator checks for the equality of objects.  Even though
+# x and y have the same value, they are not the same object because
+# x is an integer and y is a float
+>>> x is y
+False                   
+\end{lstlisting}
+
+We can also create and manipulate complex numbers
+\begin{lstlisting}
+# There are two different ways to create complex numbers.
+>>> x = complex(2,3)
+>>> y = 2 + 3j	# Note that we use the letter j not i
+
+# We can also access the real and imaginary parts separately if desired.
+>>> x.real
+2
+>>> x.imag
+3
+\end{lstlisting}
+
+Comparisons act as we would expect.
+\begin{lstlisting}
+>>> 3 > 2
+True
+>>> 6 < 6
+False
+>>> 6 <= 6
 True
 \end{lstlisting}
 
-Required readings: 
-\begin{itemize}
-\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#numerical-types}
-\item \url{https://docs.python.org/2.7/tutorial/introduction.html#numbers}
-\item \url{https://docs.python.org/2.7/library/stdtypes.html#typesnumeric}
-\end{itemize}
+%Required readings: 
+%\begin{itemize}
+%\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#numerical-types}
+%\item \url{https://docs.python.org/2.7/tutorial/introduction.html#numbers}
+%\item \url{https://docs.python.org/2.7/library/stdtypes.html#typesnumeric}
+%\end{itemize}
 
-\begin{problem}
-Use the required readings and the strategies listed in the section ``Learning Python'' to help you answer the questions in this lab.
-\begin{enumerate}
-
-\item How do you convert an integer to a float? (This is called \emph{casting}.)
-\item What are the two ways to create a complex number? 
-How do you extract the real part or the imaginary part?
-\item The way the operator \li{/} behaves depends on the types of its operands. 
-\begin{enumerate}
-\item Why does \li{7/3} return 2? 
-\item How can you get decimal answers to a division problem like $7/3$? 
-\item How can you get integer answers when you divide floats?
-\end{enumerate}
-\end{enumerate}
-\end{problem}
-
-
-
-
-\subsection*{Strings}
-A Python \li{string} can be created with either single or double quotes. They can be concatenated with the \li{+} operator.
-\begin{lstlisting}
->>> str1 = "I love"
->>> str2 = 'the ACME program'
->>> my_string = str1 + " " + str2 + "!"
->>> mystring
-'I love the ACME program!'
-\end{lstlisting}
-
-We can access single characters of strings using brackets and a range of characters using \emph{slicing}. Slicing syntax is \li{[start:stop:step]}. The parameters \li{start} and \li{stop} default to the beginning and end of the string, respectively. The parameter \li{step} defaults to 0. For more information on slicing, see the section ``Lists.''
-
-\begin{lstlisting}
-# Indexing begins at 0 and negative numbers count backward from the end.
->>> my_string[-1]
-'!'
-
-# Pick out every other character in a string.
->>> my_string[::2]	# string[start:stop:step]
-'Ilv h CEporm'
-\end{lstlisting}
-
-Required readings: 
-\begin{itemize}
-\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#strings}
-\item \url{https://docs.python.org/2.7/tutorial/introduction.html#strings}
-\end{itemize}
-
-\begin{problem}
-Answer the following questions about strings.
-\begin{enumerate}
-\item Suppose \li{my_string = "I love the new ACME program\!"}. What output is produced by \li{my_string[::3]} and \li{my_string[::-1]}? 
-\item How can you print a \li{string} backward?
-\end{enumerate}
-\end{problem}
-
-
-\subsection*{Lists}
-A Python \li{list} is created by enclosing comma-separated values with square brackets. You can access a single entry of a \li{list} or a range of entries with the same indexing or slicing operations as we used on strings. 
-\begin{lstlisting}
->>> my_list = ["Remi", 21, "08/06", 1993]
->>> my_list
-['Remi', 21, '08/06', 1993]
->>> my_list[-2]
-'08/06'
-\end{lstlisting}
-
-Whenever possible, you should create your lists using a \emph{list comprehension}, which is demonstrated below.
-\begin{lstlisting}
-# The command range(n) produces the list [0, 1, 2, . . . , n-1].
->>> [x**2 for x in range(10)]
-[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
-\end{lstlisting}
-
-
-
-Required readings: 
-\begin{itemize}
-\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#lists} 
-\item \url{https://docs.python.org/2.7/tutorial/introduction.html#lists}
-\item \url{https://docs.python.org/2.7/tutorial/datastructures.html#list-comprehensions}
-\end{itemize}
-
-\begin{problem}
-Answer the following questions about lists.
-
-\begin{enumerate}
-\item If \li{my_list = ["mushrooms", "rock climbing", 1947, 1954, "yoga"]}, write a sequence of commands that does the following:
-\begin{enumerate}
-\item Finds the length of the list,
-\item Appends ``Jonathan, my pet fish'' to the end of the list,
-\item Inserts \li{'pizza'} at index 3, and
-\item Clears the entire list.
-\end{enumerate}
-\item Write a sequence of commands that does the following:
-\begin{enumerate}
-\item Creates an empty list called \li{num},
-\item Adds the integers \li{3}, \li{5}, \li{19}, \li{20}, and \li{4} to \li{num},
-\item Replaces the integer at index 3 with itself converted to a string,
-\item Removes the integer at index 2, and
-\item Sorts \li{num} backwards.
-\end{enumerate}
-\item Using a list comprehension, create a list that has the elements of \li{num} converted into strings. For example, if \li{num = [ 5, 4, 3, 2, 1]}, write a list comprehension that outputs \li{num=['5', '4', '3', '2', '1']}.
-\end{enumerate}
-
-\end{problem}
-
-
-\subsection*{Sets}
-A Python \li{set} is an unordered collection of distinct objects, and can be created from a list. We can add or remove members from a set after its creation.
-\begin{lstlisting}
->>> gym_members = set(["Doe, John", "Doe, John", "Smith, Jane", "Brown, Bob"])
->>> gym_members
-set(['Brown, Bob', 'Doe, John', 'Smith, Jane'])
->>> gym_members.discard("Doe, John");
->>> gym_members
-set(['Brown, Bob', 'Smith, Jane'])
->>> gym_members.add("Lytle, Josh")
->>> gym_members
-set(['Brown, Bob', 'Lytle, Josh', 'Smith, Jane'])
-\end{lstlisting}
-
-Like mathematical sets, a \li{set} has operations like union, intersection, 
-difference, and symmetric difference.
-
-\begin{lstlisting}
-# Set intersection returns a new set object.
->>> library_members = set(["Lytle, Josh", "Henriksen, Ian", "Grout, Ryan"])
->>> set.intersection(gym_members, library_members)
-set(['Lytle, Josh'])
-\end{lstlisting}
-
-Required readings: 
-\begin{itemize}
-\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#more_container_types}
-\item \url{https://docs.python.org/2.7/tutorial/datastructures.html#sets}
-\end{itemize}
-
-\begin{problem}
-Answer the following questions about sets.
-\begin{enumerate}
-\item What are two ways to create sets? How do you create an empty set?
-\item Define two sets and use a Python command to find their union.
-\end{enumerate}
-\end{problem}
-
-\subsection*{Dictionaries}
-Like a \li{set}, a Python \li{dictionary} is an unordered data type.  A \li{dictionary} stores \li{key:value} pairs, which are called \emph{items}. The values of a dictionary are indexed by its keys.
-\begin{lstlisting}
->>> tel = {"marriott": 4121, "math": 2061, "visual arts" : 7321} 
->>> tel["math"]
-2061
-\end{lstlisting}
-
-The keys of a dictionary must be \emph{immutable}, which means that they must be objects that cannot be modified after creation. Numerical types and strings are immutable objects. Lists, dictionaries, and sets are mutable.
-
-Required readings:
-\begin{itemize}
-\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#dictionaries}
-\item \url{https://docs.python.org/2.7/tutorial/datastructures.html#dictionaries}
-\end{itemize}
-
-\begin{problem}
-Answer the following questions about dictionaries.
-\begin{enumerate}
-\item What are two ways to create dictionaries? How do you create an empty dictionary?
-\item How do you delete a key-value pair from a dictionary?
-\item How do you access a list of all the values in your dictionary?  
-How do you access a list of all the items?
-\end{enumerate}
-\end{problem}
-
-
-\section*{Control Flow Tools}
-Control flow blocks control the order in which your code is executed.
-Python supports the usual control flow statements 
-including while loops, if statements, for loops, and function definitions. For examples besides those in this lab, see the following resources:
-
-\begin{itemize}
-\item Sections 1.2.3.1-1.2.3.4 of \url{http://scipy-lectures.github.io/intro/language/control_flow.html}
-\item \url{http://scipy-lectures.github.io/intro/language/functions.html}
-\item \url{https://docs.python.org/2.7/tutorial/introduction.html#first-steps-towards-programming}
-\item Sections 4.1-4.3, 4.6, and 4.7.1-4.7.2 of \url{https://docs.python.org/2.7/tutorial/controlflow.html}
-\end{itemize}
-
-\subsection*{The While Loop}
-Python uses indentation to identify the beginning and end of blocks of code, so you must indent each line of an execution block the same way.
-The convention is to indent blocks of code with four spaces. A \li{while} loop executes an indented block of code \emph{while} the given condition holds. 
-
-\begin{lstlisting}
->>> i = 0
->>> while i < 10:           # The colon is required.
-...     print i,             # This indented line is executed if i<10.
-...     i = i+1       # This indented line is also executed if i<10.
-...     
-0 1 2 3 4 5 6 7 8 9
-\end{lstlisting}
-In the above example, the comma in the line \li{print i,} makes Python print all the numbers on the same line (by stripping off newline characters). Try running this example without the comma and see what happens.
-
-
-\subsection*{The If Statement}
-An \li{if} statement executes the 
-indented code \emph{if} the given condition holds.
-The \li{elif} statement is short for ``else if'' and can be used multiple times following an \li{if} statement, or not at all. 
-The \li{else} keyword may be used at most once at the end of a series of \li{if}/\li{elif} statements.
-\begin{lstlisting}
->>> food = "bagel"         # Use a SINGLE equals sign create variables
->>> if food == "apple":    # Use a DOUBLE equals sign to check equality
-...     print "72 calories"
-... elif food == "banana":
-...     print "105 calories"
-... elif food == "egg":
-...     print "102 calories"
-... else: 
-...     print "calorie count unavailable"
-...     
-calorie count unavailable
-\end{lstlisting}
-
-
-\subsection*{The For Loop}
-A \li{for} loop iterates over the items in any \emph{iterable}. Iterables include lists, sets, and dictionaries.
-
-\begin{lstlisting}
->>> for i in range(10):
-...     print i,
-...     
-0 1 2 3 4 5 6 7 8 9
-\end{lstlisting}
-
+%======================
+%            Function Definition
+%======================
 
 \subsection*{Function Definition}
-To define a function, use the \li{def} keyword followed by the function name and a parenthesized list of formal parameters. Then indent the function body.
+To define a function, use the \li{def} keyword followed by the function name and a parenthesized list of formal parameters. Then indent the function body.  Whereas other languages use curly braces to delimit blocks, Python uses whitespace indentation.  This should be done using four spaces.  Many text editors will allow you to set the indentation type to spaces so you can use the Tab key on your keyboard to insert four spaces.
+
+Because Python uses whitespace indentation, the interpreter will assume the code following a function definition to be indented and part of the code block.  If you wish to have an empty code block, use \li{pass}.
+\begin{lstlisting}
+>>> def add(x, y):
+...return x + y
+...
+IndentationError: expected an indented block
+
+# Here is an example of a function implemented correctly. The colon denotes the
+# start of the code block.
+>>> def add(x,y):
+...    return x + y
+
+>>> def add(x, y):
+...    pass		# do nothing
+...
+
+# For multi-line functions, remember to indent all the lines that are supposed to
+# be included in the function.
+>>> def mult(x,y):
+...    product = x*y
+...    return product
+...
+\end{lstlisting}
+
+We define a function with \emph{parameters} and call it with \emph{arguments}. In the example below, \li{width} and \li{height} are parameters for the function \li{area}. The values \li{2} and \li{5} are the arguments that we pass when calling the function. In practice, the terms \emph{parameter} and \emph{argument} are often used interchangeably.
+
 \begin{lstlisting}
 # Compute the area of a rectangle
 >>> def area(width, height):
@@ -341,9 +218,6 @@ To define a function, use the \li{def} keyword followed by the function name and
 >>> area(2, 5)
 10
 \end{lstlisting}
-
-We define a function with \emph{parameters} and call it with \emph{arguments}.
-In the example above, \li{width} and \li{height} are parameters for the function \li{area}. The values \li{2} and \li{5} are the arguments that we pass when calling the function. In practice, the terms \emph{parameter} and \emph{argument} are often used interchangeably.
 
 It is also possible to specify default values for formal parameters, as in the following example.
 \begin{lstlisting}
@@ -365,30 +239,15 @@ We can pass arguments to \li{fn} based on position (positional arguments) or nam
 >>> fn(1, c=2, b=3)
 1 3 2
 \end{lstlisting}
-The final example demonstrates the flexibility of Python but is somewhat confusing. Whenever possible, you should pass arguments to a function in the order they are defined in the function. Thus, do the following.
-\begin{lstlisting}
-# Call fn with 1 positional argument and 2 named arguments
->>> fn(1, b=3, c=2)
-1 3 2
-\end{lstlisting}
 
+%The final example demonstrates the flexibility of Python but is somewhat confusing. Whenever possible, you should pass arguments to a function in the order they are defined in the function. Thus, do the following.
+%\begin{lstlisting}
+%# Call fn with 1 positional argument and 2 named arguments
+%>>> fn(1, b=3, c=2)
+%1 3 2
+%\end{lstlisting}
 
-
-\begin{problem}
-Define the following function in your interpreter.
-\begin{lstlisting}
->>> def track(n, my_list=[]):
-...    my_list.append(n)
-...    return my_list
-\end{lstlisting}
-\begin{enumerate}
-\item Now execute the following commands in your interpreter: \li{track(1)}, \li{track(2)}, \li{track(3)} and  \li{track(1, [1, 2, 3])}. What outputs do you get?
-\item The default values of a function are only evaluated once.
-This means that when you call \li{track} with the default value for \li{my_list}, the same list is used each time.
-Modify \li{track} so that the default value for \li{my_list} is not shared between calls.
-With your modified function, the outputs in part (a) should be \li{[1]}, \li{[2]}, \li{[3]} and \li{[1, 2, 3, 1]}. Hint: Read here about the Python constant \li{None}: \url{https://docs.python.org/2/library/constants.html}.
-\end{enumerate}
-\end{problem}
+It is important to note a big difference between the two functions we have defined in this section.  The first function has a \li{return} statement where as the second function has a \li{print} statement.  The \li{print} statement does nothing more than displaying the value of a given object in the terminal.  If you have any intention of using the results of a function, always use a \li{return} statement.
 
 The most general form of a function definition is as follows.
 \begin{lstlisting}
@@ -408,32 +267,353 @@ Keyword: {'apples': 3, 'oranges': 2}
 \end{lstlisting}
 
 \begin{problem}
+Write a function \li{hypotenuse} that accepts two parameters, \li{a} and \li{b}, that represent the two legs of a right triangle.  Your function should compute and return the hypotenuse of the triangle using the Pythagorean theorem. 
+\end{problem}
 
+%===========================
+%                        Strings 
+%===========================
+
+\subsection*{Strings}
+A Python \li{string} can be created with either single or double quotes. They can be concatenated with the \li{+} operator.
+\begin{lstlisting}
+>>> str1 = "Hello"
+>>> str2 = 'World'
+>>> my_string = str1 + " " + str2 + "!"
+>>> my_string
+'Hello World!'
+
+# Count the number of characters in a string
+>>> len(my_string)
+12
+
+# You can type cast a number to a string using str()
+>>> str(5)
+'5'
+\end{lstlisting}
+
+We can access single characters of strings using brackets and a range of characters using \emph{slicing}. Slicing syntax is \li{[start:stop:step]}. The parameters \li{start} and \li{stop} default to the beginning and end of the string, respectively. The parameter \li{step} defaults to 0. For more information on slicing, see the section ``Lists.''
+
+\begin{lstlisting}
+# Indexing begins at 0 and negative numbers count backward from the end.
+>>> my_string[4]
+'o'
+>>> my_string[-1]
+'!'
+
+# Splice the first 5 characters.  The syntax here means start at the beginning
+# and go up to (but not including) the 5th character.
+>>> my_string[:5]
+'Hello'
+
+# Splice from the 9th character to the end.
+>>> my_string[9:]
+'orld!'
+
+# Splice between the 3rd and 8th characters.
+>>> my_string[3:8]
+'lo Wo'
+
+# Pick out every other character in a string.
+>>> my_string[::2]	# string[start:stop:step]
+'HloWrd'
+\end{lstlisting}
+
+%Required readings: 
+%\begin{itemize}
+%\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#strings}
+%\item \url{https://docs.python.org/2.7/tutorial/introduction.html#strings}
+%\end{itemize}
+
+\begin{problem}
+Write the following functions:
 \begin{enumerate}
-\item Explain what the \li{print} and \li{return} statements do. How are they different?
-\item Modify the code below so that it produces the desired output.
-\begin{lstlisting}
-Grocery List = ['pineapple', 'orange juice', "avocados", "pesto sauce"]
-for i in range(Grocery List)
-if i % 2 = 0
-print i, Grocery List(i)
-\end{lstlisting}
-Desired output:
-\begin{lstlisting}
-0 pineapple
-2 avocados
-\end{lstlisting}
-\item When you call the function ``groceries'' below, it returns an error. Why?
-\begin{lstlisting}
->>> def groceries(food, drink):
-...     print food
-...     print drink    
-
->>> groceries(food="Bananas", "Juice")
-\end{lstlisting}
+\item Write a function \li{first_half} that accepts a parameter \li{my_string} and returns the first half of \li{my_string}.
+\item Write a function \li{reverse} that accepts a parameter \li{my_string} and reverses the characters in \li{my_string} using splicing.  Hint: The \li{step} parameter used in splicing can be negative.
 \end{enumerate}
 \end{problem}
 
+%===========================
+%                             Lists
+%===========================
+
+\subsection*{Lists}
+A Python \li{list} is created by enclosing comma-separated values with square brackets. Entries of a \li{list} do not have to be of the same type. You can access a single entry of a \li{list} or a range of entries with the same indexing or slicing operations we used on strings. 
+\begin{lstlisting}
+>>> my_list = ["Remi", 21, "08/06", 1993]
+>>> my_list
+['Remi', 21, '08/06', 1993]
+>>> my_list[0]
+'Remi'
+>>> my_list[-2]
+'08/06'
+>>> my_list[:2]
+['Remi', 21]
+\end{lstlisting}
+
+Some of most common methods of the \li{list} data type are \li{append}, \li{insert}, \li{remove}, and \li{pop}.
+\begin{lstlisting}
+>>> my_list = [1, 2]
+>>> my_list.append(4)
+>>> my_list.insert(2, 3)	# insert(index, value)
+>>> my_list
+[1, 2, 3, 4]
+>>> my_list.remove(3)	# remove(value)
+>>> my_list.pop()		# remove and return last value in my_list
+4
+>>> my_list
+[1, 2]
+\end{lstlisting}
+
+Splicing is also very useful for replacing values in a list.
+\begin{lstlisting}
+>>> my_list = [1, 2, 3, 4, 5]
+>>> my_list[3:] = [9, 10]
+[1, 2, 3, 9, 10]
+\end{lstlisting}
+
+Python has some built-in functions that are particularly helpful with lists.
+\begin{lstlisting}
+>>> my_list = [1, 2, 3, 4, 5]
+>>> sum(my_list)
+15
+>>> max(my_list)
+5
+>>> min(my_list)
+1
+\end{lstlisting}
+
+Another built-in function we will use a lot is \li{range()}.  This will be very important when we talk about \li{for} loops.  The basic syntax is \li{range(start,stop,step)}.
+\begin{lstlisting}
+>>> range(10)
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> range(5,10)
+[5, 6, 7, 8, 9]
+>>> range(0,100,10)
+[0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+\end{lstlisting}
+
+We can quickly check to see if a certain value is in a list using the \li{in} operator.
+\begin{lstlisting}
+>>> my_list = [1, 2, 3, 4, 5]
+>>> 2 in my_list
+True
+>>> 6 in my_list
+False
+\end{lstlisting}
+
+\begin{problem}
+Write a function \li{primes} that accepts a parameter \li{n} and returns the first \li{n} odd numbers.  This function can be implemented using one line of code.
+\end{problem}
+
+Whenever possible, you should create your lists using a \emph{list comprehension}, which is demonstrated below.  We will talk about list comprehension in more detail when we talk about \li{for} loops.
+\begin{lstlisting}
+>>> [float(x) for x in range(5)]
+[0.0, 1.0, 2.0, 3.0, 4.0]
+\end{lstlisting}
+
+\begin{problem}
+Write a function that accepts a list of numbers and converts each entry into a string using list comprehension.  For example, the list \li{[1, 2, 3]} would be changed to \li{["1", "2", "3"]}.
+\end{problem}
+
+%Required readings: 
+%\begin{itemize}
+%\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#lists} 
+%\item \url{https://docs.python.org/2.7/tutorial/introduction.html#lists}
+%\item \url{https://docs.python.org/2.7/tutorial/datastructures.html#list-comprehensions}
+%\end{itemize}
+
+% =================
+%               Sets
+% =================
+
+\subsection*{Sets}
+A Python \li{set} is an unordered collection of distinct objects and can be created from a list. We can add or remove members from a set after its creation. There are two different ways to initiate a set.
+\begin{lstlisting}
+>>> library_members = {"Lytle, Josh", "Henriksen, Amelia", "Grout, Ryan"}
+>>> gym_members = set(["Doe, John", "Doe, John", "Smith, Jane", "Brown, Bob"])
+>>> gym_members
+{'Brown, Bob', 'Doe, John', 'Smith, Jane'}
+>>> gym_members.discard("Doe, John");
+>>> gym_members
+{'Brown, Bob', 'Smith, Jane'}
+>>> gym_members.add("Lytle, Josh")
+>>> gym_members
+{'Brown, Bob', 'Lytle, Josh', 'Smith, Jane'}
+\end{lstlisting}
+
+Like mathematical sets, a \li{set} has operations like union, intersection, 
+difference, and symmetric difference.
+\begin{lstlisting}
+# Set intersection returns a new set object.
+>>> set.intersection(gym_members, library_members)
+{'Lytle, Josh'}
+\end{lstlisting}
+
+%Required readings: 
+%\begin{itemize}
+%\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#more_container_types}
+%\item \url{https://docs.python.org/2.7/tutorial/datastructures.html#sets}
+%\end{itemize}
+%
+%\begin{problem}
+%Answer the following questions about sets.
+%\begin{enumerate}
+%\item What are two ways to create sets? How do you create an empty set?
+%\item Define two sets and use a Python command to find their union.
+%\end{enumerate}
+%\end{problem}
+
+% ===================
+%              Dictionaries 
+% ===================
+
+
+\subsection*{Dictionaries}
+Like a \li{set}, a Python \li{dictionary} is an unordered data type.  A \li{dictionary} stores \li{key:value} pairs, which are called \emph{items}. The values of a dictionary are indexed by its keys.  Here are various examples of how to use dictionaries.
+\begin{lstlisting}
+>>> my_dictionary = {"business": 4121, "math": 2061, "visual arts" : 7321} 
+>>> my_dictionary["math"]
+2061
+>>> my_dictionary["science"] = 6284
+>>> del my_dictionary["business"]
+{"math":2061, "visual arts":7321, "science":6284}
+>>> my_dictionary.keys()
+["math", "visual arts", "science"]
+>>> my_dictionary.values()
+[2061, 7321, 6284]
+>>> my_dictionary.has_key("math")
+True
+\end{lstlisting}
+
+The keys of a dictionary must be \emph{immutable}, which means that they must be objects that cannot be modified after creation. Numerical types and strings are immutable objects. Lists, dictionaries, and sets are mutable.
+
+%Required readings:
+%\begin{itemize}
+%\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#dictionaries}
+%\item \url{https://docs.python.org/2.7/tutorial/datastructures.html#dictionaries}
+%\end{itemize}
+%
+%\begin{problem}
+%Answer the following questions about dictionaries.
+%\begin{enumerate}
+%\item What are two ways to create dictionaries? How do you create an empty dictionary?
+%\item How do you delete a key-value pair from a dictionary?
+%\item How do you access a list of all the values in your dictionary?  
+%How do you access a list of all the items?
+%\end{enumerate}
+%\end{problem}
+
+%==================
+%         Control Flow Tools
+%==================
+
+\section*{Control Flow Tools}
+Control flow blocks control the order in which your code is executed.
+Python supports the usual control flow statements 
+including \li{if} statements, \li{while} loops and \li{for} loops. 
+
+%\begin{itemize}
+%\item Sections 1.2.3.1-1.2.3.4 of \url{http://scipy-lectures.github.io/intro/language/control_flow.html}
+%\item \url{http://scipy-lectures.github.io/intro/language/functions.html}
+%\item \url{https://docs.python.org/2.7/tutorial/introduction.html#first-steps-towards-programming}
+%\item Sections 4.1-4.3, 4.6, and 4.7.1-4.7.2 of \url{https://docs.python.org/2.7/tutorial/controlflow.html}
+%\end{itemize}
+
+\subsection*{The If Statement}
+An \li{if} statement executes the 
+indented code \emph{if} the given condition holds.
+The \li{elif} statement is short for ``else if'' and can be used multiple times following an \li{if} statement, or not at all. 
+The \li{else} keyword may be used at most once at the end of a series of \li{if}/\li{elif} statements.
+\begin{lstlisting}
+>>> food = "bagel"         
+>>> if food == "apple":    # the colon denotes the start of the code block.
+...     print "72 calories"
+... elif food == "banana":
+...     print "105 calories"
+... elif food == "egg":
+...     print "102 calories"
+... else: 
+...     print "calorie count unavailable"
+...     
+calorie count unavailable
+\end{lstlisting}
+
+\begin{problem}
+Implement a function that translates a word into Pig Latin.  As a reminder, Pig Latin takes the first character in a word, moves it to the end, and adds \li{"ay"}.  For example, the word \li{"banana"} would be translated to \li{"ananabay"}.  There is a special case if the word starts with a vowel.  In this case, just add \li{"hay"} to the end of the word.  For example, \li{"apple"} would be translated to \li{"applehay"}.  Hint: use the \li{in} operator to check if the first letter of the word is a vowel.
+\end{problem}
+
+\subsection*{The While Loop}
+A \li{while} loop executes an indented block of code \emph{while} the given condition holds. 
+
+\begin{lstlisting}
+>>> i = 0
+>>> while i < 10:        
+...     print i,            
+...     i = i+1       
+...     
+0 1 2 3 4 5 6 7 8 9
+\end{lstlisting}
+In the above example, the comma in the line \li{print i,} makes Python print all the numbers on the same line (by stripping off newline characters). Try running this example without the comma and see what happens.
+
+An alternative implementation of the previous \li{while} loop is the following:
+\begin{lstlisting}
+>>> i = 0
+>>> while True:
+...    print i,
+...    i = i+1
+...    if i >= 10:
+...        break		# exits the loop
+...
+0 1 2 3 4 5 6 7 8 9
+\end{lstlisting}
+
+\subsection*{The For Loop}
+A \li{for} loop iterates over the items in any \emph{iterable}. Iterables include lists, sets, and dictionaries.  There are a few different ways to define a \li{for} loop.  The most common ways are demonstrated here. The method we choose solely depends on what we are trying to accomplish.
+
+\begin{lstlisting}
+>>> for i in range(10):
+...     print i,
+...     
+0 1 2 3 4 5 6 7 8 9
+
+# When needing to access the elements of a list and the index
+# of the entry is not important, use this method.
+>>> my_list = ["red", "green", "blue", "yellow"]
+>>> for entry in my_list:
+...    print entry,
+...
+red green blue yellow
+
+# When keeping track of indices is important, use this method.
+>>> for i in range(len(my_list)):
+...    print my_list[i] + str(i),
+...
+red0 green1 blue2 yellow3
+\end{lstlisting}
+
+\begin{problem}
+Write a function that translates a list of integers between 1-26 to the corresponding letter of the alphabet. For example, if the input was \li{[1, 2, 3]}, the output would be \li{["a", "b", "c"]}. Implement this function using a dictionary. 
+\end{problem}
+
+% ====================
+%           List Comprehension
+% ====================
+
+\subsection*{Revisiting List Comprehension}
+List Comprehension is a powerful, efficient way to build lists.  The code is more concise and also runs faster.  The following \li{for} loop and list comprehension produce the same list but he list comprehension takes about two-thirds the time to execute.
+
+\begin{lstlisting}
+>>> loop_output = []
+>>> for i in range(5):
+...    loop_output.append(i**2)
+...
+>>> list_output = [i**2 for i in range(5)]
+\end{lstlisting}
+
+\begin{problem}
+Recall that the alternating harmonic series (1 - 1/2 + 1/3 - 1/4 + 1/5 - ...) converges to ln(2).  Using the first \li{n} terms of this series, approximate ln(2).  Implement your function using list comprehension.  The sum of the first 500,000 terms of this series approximates ln(2) to five decimal places.
+\end{problem}
 
 \begin{comment}
 \section*{Specifications}
