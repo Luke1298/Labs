@@ -1,26 +1,30 @@
-\lab{Depth and Breadth-First Searching with Kevin Bacon}{Depth and Breadth-First Searching with Kevin Bacon}
+\lab{Breadth-First Search and the Kevin Bacon Problem}{Breadth-First Search and the Kevin Bacon Problem}
 \label{lab:SixDegreesKevinBacon}
 
-\objective{This section teaches about searching graphs and uses the parlor game ``the Six Degrees of Kevin Bacon'' as an application to graphs.}
+\objective{Implement a breadth-first search with adjacency dictionaries, learn to use NetworkX, and use the parlor game ``the Six Degrees of Kevin Bacon'' as an application to graph theory.}
 
 \section*{Introduction}
 
-Graph theory has practical applications.
+Graph theory has many practical applications.
 For example, graphs may represent a social network, a communication network, or the internet.
-In this lab we will explore basic graph algorithms in Python.
+Being able to construct, analyze, and search graphs yields critical insights into the system that the graph represents.
 
 \section*{Graphs in Python}
 
-A graph may be represented in several ways.
-In this lab they are represented with \emph{adjacency dictionaries}.
-An adjacency dictionary is a Python dictionary with a key for each node in the list.
-The value of each node is a list containing the nodes that are connected to the key.
-For example, the adjacency list for the graph in Figure \ref{fig:simple_graph} is:
+Computers can store graphs using different kinds of data structures.
+In previous labs, we stored trees as linked lists.
+For non-tree graphs, perhaps the most common data structure is an adjacency matrix, where each row of the matrix corresponds to a node in the graph and the entries of the row indicate which other nodes the current node is connected to.
+For a full treatment fo adjacency matrices, see chapter 2 of the Volume II text.
+In this lab, we will represent graphs with \emph{adjacency dictionaries}, another common graph data structure.
+
+An adjacency dictionary is a Python dictionary with a key for each node in the graph.
+The dictionary values are lists containing the nodes that are connected to the key.
+For example, the following is an adjacency list for the graph in Figure \ref{fig:simple_graph}:
 
 \begin{lstlisting}
-# Adjacency list of a graph in a python dictionary.
-graph = {'A':['B', 'C', 'D', 'E'], 'B':['A', 'C'], 'C':['B', 'A', 'D']
-		'D': ['A', 'C'], 'E':['A']}
+# Adjacency list of a graph in a Python dictionary.
+>>> adjacency_dictionary = {'A':['B', 'C', 'D', 'E'], 'B':['A', 'C'],
+'C':['B', 'A', 'D'], 'D':['A', 'C'], 'E':['A']}
 \end{lstlisting}
 
 \begin{figure}
@@ -42,10 +46,27 @@ graph = {'A':['B', 'C', 'D', 'E'], 'B':['A', 'C'], 'C':['B', 'A', 'D']
      	  edge node []{}(3)
      (3) edge node []{}(4);
 \end{tikzpicture}
-\caption{A siple graph on five vertices.  }
+\caption{A simple graph on five vertices.}
 \label{fig:simple_graph}
 \end{figure}
 
+% Problem 1: __str__ for Graph class (intro to dictionaries)
+\begin{problem}
+Implement the \li{__str__} method in the provided \li{Graph} class.
+Print each node in the graph in order, followed by an ordered list of its neighboring nodes.
+\begin{lstlisting}
+>>> adjacency_dictionary = {'A':['C', 'B'], 'C':['A'], 'B':['A']}
+>>> graph = Graph(adjacency_dictionary)
+>>> print(graph)
+A: B C
+B: A
+C: A
+\end{lstlisting}
+Note that this is not the default print setting for Python dictionaries.
+\end{problem}
+
+% Old first problem
+\begin{comment}
 \begin{problem}
 Implement the initializer of the graph class in \li{lab6_spec}.
 The \li{data_machine} module has a method called \li{generate_graph_data} that returns a list of lists.
@@ -53,59 +74,89 @@ The first entry in the list is the node in the graph, and the subsequent entries
 Convert the output from the \li{generate_graph_data} output into an adjacency dictionary, and store it as an attribute called \li{adjacency_dictionary}
 Store the first node added to \li{adjacency_dictionary} as an attribute called \li{root}
 \end{problem}
+\end{comment}
 
-\section*{Breadth First Search}
+\section*{Breadth-First Search}
 
-An important technique for working with graphs is search.
-Given a starting point and a target, a search will explore the graph until the target is found.
-There are several different ways to search a graph, each with its advantages and disadvantages.
-We will implement breadth first search.
+Many graph theory problems are solved by finding the shortest path between two nodes in the graph.
+To find the shortest path, we need a way to strategically search the graph.
+Two of the most common searches are depth-first search (DFS) and breadth-first search (BFS).
+For this lab, we focus on BFS.
 
-Breadth first search begins at a starting node.
-If the starting node is not the target node, then the search explores each of its neighbors.
-If none of the neighbors are the target, then the search explores the neighborhood of the starting node's first neighbor.
-If none of those neighbors are the target, then the neighborhood of the second neighbor is explored.
-This process continues until the target is found.
-For example, we will do a breadth first search of the graph in Figure \ref{fig:simple_graph} one step at a time.
+A BFS traverses a graph as follows: begin at a starting node.
+If the starting node is not the target node, explore each of the starting node's neighbors.
+If none of the neighbors are the target, explore the neighbors of the starting node's neighbors.
+If none of those neighbors are the target, explore each of their neighbors.
+Continue the process until the target is found.
+
+As an example, we will do a programmatic BFS on the graph in Figure \ref{fig:simple_graph} one step at a time.
 Suppose that we start at node $C$ and we are searching for node $E$.
 
 \begin{lstlisting}
-# A step-by-step example of a breadth first search on a small graph.
+>>> adjacency_dictionary = {'A':['B', 'C', 'D', 'E'], 'B':['A', 'C'],
+'C':['B', 'A', 'D'], 'D':['A', 'C'], 'E':['A']}
 
 # Start at node C
 >>> start = 'C'
 >>> current = 'C'
 
-# Now, check the neighbors of node C
->>> graph[current]
+# The starting node is not the target, so check the starting node's neighbors
+>>> adjacency_dictionary[current]
 ['B', 'A', 'D']
 
-# None of these are E, so go to the first neighbor, B.
->>> current = graph[start][0]
->>> graph[current]
+# None of these are E, so go to the first neighbor, B
+>>> current = adjacency_dictionary[start][0]
+>>> adjacency_dictionary[current]
 ['A', 'C']
 
 # None of these are E either, so move to the next neighbor
 # of the starting node, which is A
->>> current = graph[start][1]
->>> graph[current]
+>>> current = adjacency_dictionary[start][1]
+>>> adjacency_dictionary[current]
 ['B', 'C', 'D', 'E']
 
-# The last entry of this list is our target node, and the
-# search terminates.
+# The last entry of this list is our target node, and the search terminates.
 \end{lstlisting}
 
 You may have noticed that some problems in the previous approach that would arise in a more complicated graph.
 For example, what prevents us from entering a cycle?
 How can we algorithmically determine which nodes to visit as we explore deeper into the graph?
-We will solve these problems using data structures.
+We solve these problems using a simple data structure.
 
-\subsection*{Queues}
+% Recall that a queue is a type of limited-access list. Remove from front, insert to back. Refer back to the end of Data Structures 1 for more info.
 
-A queue is a data structure that is similar to a linked list.
-A queue object has methods for adding to the queue and removing from the queue.
-New nodes are added to the end of the queue.
-The node at the front of the queue is the one that is removed.
+%\begin{comment} % TODO: put this in DataStructures1
+\subsection*{Stacks, Queues, and Deques}
+Stacks, queues, and deques are specialized lists that restrict data access and insertion.
+Each structure restricts the user's access differently.
+
+\begin{itemize}
+\item \emph{Stacks} are ``last in, first out'' structures (LIFO).
+Only the last item that was inserted can be accessed.
+Think of a statck as a pile of plates.
+The last plate put on the pile is the first one to be taken off.
+
+\item \emph{Queues} (pronounced ``cues'') are ``first in, first out'' structures (FIFO).
+New nodes are added to the end of the queue, but an existing node can only be removed or accessed if it is at the front of the queue.
+Think of a queue as a line at the bank.
+The person at the front of the line is served next, while newcomers add themselves to the back of the line.
+
+\item \emph{Deques} (pronounced ``decks'') are double-ended queues. Nodes can be inserted or removed from either end, but data in the middle is inaccessible.
+Think of a deque as a deck of cards, where only the top and bottom cards are readily accessible.
+
+The \li{collections} module in the Python standard library has a \li{deque} object.
+The \li{popleft} method removes the first item in the deque, and the \li{append} method adds a new item to the end of the deque.
+If we restrict ourselves to these two operations, we effectively have a queue.
+\end{itemize}
+%\end{comment}
+
+\begin{comment} % waaaaay too long and unnecessary.
+\subsection*{Queues and Deques}
+
+A \emph{queue} is a kind of list that restricts data access and insertion.
+New nodes are added to the end of the queue, but an existing node can only be removed or accessed if it is at the front of the queue.
+Therefore, queues obey the rule of first-in, first-out (FIFO).
+
 Think of a queue as a line at a bank.
 The person at the front of the line is served next, while newcomers add themselves to the back of the line (in a civilized society, at least).
 
@@ -136,22 +187,30 @@ deque(['a','b','c'])
 deque(['c'])
 \end{lstlisting}
 
-For breadth first search we use a queue to keep track of which node to explore next.
+For breadth-first search we use a queue to keep track of which node to explore next.
+\end{comment}
 
 \subsection*{Implementing Breadth First Search}
 
-Let us consider how breadth first search might be implemented with a queue.
+A queue is helpful in a BFS to keep track of the order in which we will visit the nodes.
+At each level of the search, we add the neighbors of the current node to the queue.
 We will use the same graph as in the previous step-by-step example.
 
 \begin{lstlisting}
-# Start at node C.
+# Import the deque object and initialize the adjacency dictionary
+>>> from collections import deque
+>>> adjacency_dictionary = {'A':['B', 'C', 'D', 'E'], 'B':['A', 'C'],
+'C':['B', 'A', 'D'], 'D':['A', 'C'], 'E':['A']}
+
+# Start at node C
 >>> start = 'C'
 >>> current = 'C'
 
-# Add the neighbors of C to the queue. Recall the graph[node] is a
-# list of the neighbors of node.
+# The starting node is not the target, so add the starting node's neighbors
+# to the queue.
 >>> visit_queue = deque()
->>> visit_queue.append(graph[current])
+>>> for neighbor in adjacency_dictionary[current]:
+...     visit_queue.append(neighbor)
 >>> visit_queue
 deque(['B', 'A', 'D'])
 
@@ -159,11 +218,14 @@ deque(['B', 'A', 'D'])
 >>> current = visit_queue.popleft()
 >>> current
 'B'
+>>> visit_queue
+deque(['A', 'D'])
 
-# This is not the node we are searching for, but we may want to explore its 
-# neighbors later.  They should be explored after the other neighbors
+# This isn't the node we're looking for, but we may want to explore its 
+# neighbors later. They should be explored after the other neighbors
 # of the first node, so add them to the end of the queue.
->>> visit_queue.append(graph[current])
+>>> for neighbor in adjacency_dictionary[current]:
+...     visit_queue.append(neighbor)
 >>> visit_queue
 deque(['A', 'D', 'A', 'C'])
 \end{lstlisting}
@@ -172,10 +234,13 @@ We have arrived at a new problem.
 The nodes $A$ and $C$ were added to the queue to be visited, even though $C$ has already been visited and $A$ is next in line.
 We can prevent these nodes from being added to the queue again by keeping a running list of nodes that don't need to be added.
 However, not all such nodes are created equal.
-For example, $C$ had already been visited, while $A$ is in line to be visited, but hasn't yet.
-We can distinguish between these two types of nodes with two lists: \li{visited} and \li{marked}.
+For example, $C$ has already been visited, while $A$ is in line to be visited, but hasn't actually been visited yet.
+We distinguish between these two types of nodes with two additional lists: \li{visited} and \li{marked}.
+
 Nodes that are in \li{visited} have already been visited by the algorithm.
-Nodes that are in \li{marked} have been added to the queue, but not visited yet.
+If we make it a Python \li{list}, \li{visited} will also keep track of the order in which we visited the nodes in the graph.
+Nodes that are in \li{marked} have been added to the queue, but have not been visited yet.
+Since the ordering doesn't matter for which nodes are marked, we make marked a Python \li{set}.
 If we check both of these lists at each step of the algorithm, the previous problems are avoided.
 
 \begin{lstlisting}
@@ -184,8 +249,8 @@ If we check both of these lists at each step of the algorithm, the previous prob
 >>> start = 'C'
 >>> current = 'C'
 >>> target = 'E'
->>> marked = []
->>> visited = []
+>>> marked = set()
+>>> visited = list()
 
 # Since we start at C, add it to visited.
 >>> visited.append(current)
@@ -208,7 +273,7 @@ deque(['B', 'A', 'D'])
 # Add the neighbors of B to the queue if they are not in marked.
 # Mark the nodes that are added to visit_queue
 >>> for node in graph[current]:
-		if node not in marked or visited:
+		if node not in marked and node not in visited:
 			marked.append(node)
 			visit_deque.append(node)
 
@@ -229,14 +294,14 @@ deque(['D', 'E'])
 \end{lstlisting}
 
 \begin{problem}
-Implement the \li{search} method in \li{lab6_spec} using breadth first search as it has been outlined.
+Implement the \li{search} method in \li{lab6_spec} using breadth-first search as it has been outlined.
 Accept a target and start from the root node.
 Return the target once it is removed from the queue as well as the number of nodes that were searched before the target was reached.
 \end{problem}
 
 \section*{Network X}
 
-NetworkX is a python package for creating, manipulating, and exploring large graphs.
+NetworkX is a Python package for creating, manipulating, and exploring large graphs.
 It contains a graph object constructor as well as methods for adding nodes and edges to the graph.
 It also has methods for recovering information about the graph and its structure.
 
@@ -478,7 +543,7 @@ Implement methods that will perform depth-first and breadth-first searches on a 
 (Because Python implements sets as hash tables, they have very efficient membership
 testing.)
 
-\emph{Helpful Hint}: The implementations of a depth and a breadth first search
+\emph{Helpful Hint}: The implementations of a depth and a breadth-first search
 are almost exactly same, but they use a particular data structure differently.
 Which data structure constitutes this important difference? How is it used differently?
 \end{problem}
@@ -602,7 +667,7 @@ Now we want to connect our pizza ingredients together. Adding an edge is simple;
 Again, we can also add multiple edges using the \li{add_edges_from()} method.
 However, these edges must be provided as 2-tuples \li{(x,y)}, so we use the
 itertools module to create a list of the edges we want to add. It might be wise
-to review previous labs and the python documentation for this module as you implement
+to review previous labs and the Python documentation for this module as you implement
 NetworkX graphs.
 
 \begin{lstlisting}

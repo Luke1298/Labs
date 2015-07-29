@@ -12,7 +12,7 @@ class Graph(Object):
 		node's neighbors.  The root node is the first key that
 		is added to the graph.
 		'''
-		raise NotImplementedEmrror
+		raise NotImplementedError
 		
 
 	def breadth_first_search(self, target):
@@ -20,12 +20,12 @@ class Graph(Object):
 		search until the target node is found.  Returns the
 		target
 		'''
-		raise NotImplementedEmrror
+		raise NotImplementedError
 
 	def convert_to_networkX(self):
 		'''
 		'''
-		raise NotImplementedEmrror
+		raise NotImplementedError
 
 
 def generate_bacon_graph():
@@ -33,5 +33,5 @@ def generate_bacon_graph():
 
 
 def find_bacon_number(Actor):
-	raise NotImplementedEmrror
+	raise NotImplementedError
 

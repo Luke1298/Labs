@@ -1,9 +1,11 @@
 
 def generate_graph_data(filename):
+	# Not a good idea :P
+
 	file = open(filename, 'r')
 	file = file.read()
 	file = file.split('\n')
-	
+
 	lines = []
 	for line in file[:-1]:
 		line = line.split(',')
