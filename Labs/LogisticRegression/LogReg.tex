@@ -1,0 +1,94 @@
+\lab{Logistic Regression}{Logistic Regression}
+\objective{Understand the basics of Logistic Regression, and apply to the Titanic problem.}
+
+\subsection*{Binary Logistic Regression}
+Logistic Regression is a probability model that can be used to predict labels for a set of data.  We will first examine the binary logistic model, which classifies data in a Bernoulli manner with only two possibilities.  This model is used in many different fields.  One common medical example is predicting whether or not a patient has a particular disease.  Based upon several factors, such as gender, age, race, height, weight, etc., we can quantify the probability of being infected.  The contributing factors may be either continuous, such as height or weight, or categorical, such as gender and race.  This outcome prediction is made by use of a \emph{logistic function}, which given the contributing factors will return a probability value between $0$ and $1$.  This probability will then be used to assign a label to our input data.  Usually this is done by using some cut-off value, and will depend on the need for accuracy in the specific application.
+
+The basic logistic function will take in as input any real number and return a value between $0$ and $1$.  It is defined as
+\begin{equation}
+\phi(t) = \frac{1}{1 + e^{-t}},
+\end{equation}
+where $t$ is some combination of the input variables $x_i, \cdots, x_n$.  The graph of this function can be seen in Figure ???.   $\phi(x)$ can then be interpreted as the probability of success for one of the labels.  In some cases it is not possible to find a closed-form expression for the correct combination of the input variables.  However, in many cases we can acheive reasonable accuracy by using a linear combination of $x_i, \cdots, x_n$, i.e.
+\begin{equation*}
+t = c_0 + c_1 x_1 + \cdots + c_n x_n.
+\end{equation*}
+This can be written more compactly as
+\begin{equation*}
+t = c^{T}\bf{x},
+\end{equation*}
+where $\bf{x}$ $= (1, x_1, \cdots , x_n)^{T}$ and $c \in \mathbb{R}^{n+1}$ 
+
+\begin{problem}
+Come up with a good preliminary problem here.
+\end{problem}
+
+\subsection*{The Titanic Problem}
+One of the most common applications of Logistic Regression is what is referred to as the \emph{Titanic problem}.  It uses the actual data for survivals and deaths of the Titanic passengers.  The input variables include factors such as gender, age, passenger class, and ticket fare.  Using logistic regression, we can predict whether or not a passenger survived based on this data.  We separate the data into a test set and a training set, and we can predict the labels for the test set after training a model on the training set.
+
+Before beginning our classification, however, we will first need to process our data.  The Titanic data set contains much more information than is currently relevant for us.  You can obtain this data in Excel Spreadsheet form at {Insert link here}.  We recommend using pandas to read in and process the data.  The columns are as follows:
+\begin{itemize}
+\item \li{pclass}: An integer in $\{1, 2, 3\}$ which describes the class the passenger was in.
+\item \li{survived}:  The dependent variable.  $1$ indicates survival, and $0$ death.
+\item \li{name}: A string containing the passenger's name.
+\item \li{sex}: A string, either `male' or `female'.
+\item \li{age}: Either an integer or a float.
+\item \li{sibsp}: An integer giving the number of siblings and/or spouse who embarked with the passenger.
+\item \li{parch}: An integer giving the number of parents and/or children who embarked with the passenger.
+\item \li{ticket}: A string containing the transaction code for the ticket(s) purchased.
+\item \li{fare}: A float giving the cost of the ticket purchased.
+\item \li{cabin}: A string giving the assigned sleeping cabin for the passenger (note that the majority of this column is blank).
+\item \li{embarked}: A string in $\{S, C, Q\}$ corresponding to the location of the passenger's embarkment, Southampton (UK), Cherbourg (France), or Queenstown (Ireland), respectively.
+\item \li{boat}: An int or string for those who survived giving which boat they rode in.
+\item \li{body}: An int giving the number of body for those who died who were found and identified.
+\item \li{home.dest}: A string giving the home of or location to which the passenger was headed.
+\end{itemize}
+
+\begin{problem}
+Create a function called \li{initialize} which will process the Titanic data set into useable format by doing the following:
+\begin{enumerate}
+\item Choose the coulmns that you believe will be relevant in predicting the survival of the passengers, and drop the other columns.  You may not use \li{boat} or \li{body}.  Be sure to include \li{survived}, which will be separated later as the independent variable.
+\item Since \li{sex} is really a binary variable, make it one explicitly by changing ``female" and ``male" to be binary values.
+\item Drop the rows that contain missing values.  Make sure you have a significant number of rows left.  If you have too few, you may need to choose fewer columns to keep before deleting the incomplete rows.
+\item Because the \li{pclass} column is an integer in $\{1, 2, 3\}$, it will be read as a ranked variable instead of a simple categorical variable.  It may be useful to rank this variable, or it may mess up our classification.  Include a keyword argument \li{pclass_change} with default \li{True}.  If it is set to \li{True}, eliminate this ranking by dividing \li{pclass} into two binary columns.  Make one column a boolean for being $1^{st}$ class and the other a boolean for being $2^{nd}$ class. (This means that a value of $1$ would correspond to $[1, 0]$, $2$ to $[0, 1]$, and $3$ to $[0, 0]$.)
+\item Split into a training and a test set using a $60/40$ split.  Be sure and pick random rows for each group and not in any particular order.
+\end{enumerate}
+Have your function return the training set and the test set, in that order.
+\end{problem}
+
+We will perform our analysis in three different manners, namely by using an Unchanged Logistic Classifier, a Changed Logistic Classifier, and a Naive Bayes Classifier.  Each is useful in different situations.  We will try all three and then compare the accuracy of our results.
+The basic Logistic Regression discussed previously can be performed by using the \li{LogisticRegression} model found in \li{sklearn.linear_model}.  This requires an input value of something to be fixed here.  The unchanged logistic classifier will leave \li{pclass} unchanged, and the changed logistic classifier will change \li{pclass} into binary values.  When creating the model, you will need to include a keyword argument $C$.  This corresponds to something cool.  You will then need to fit your model using the training set, find the coefficients it returns, and get the probabilities for your test set.  The first column will contain the probability of failure ($label = 0$) and the second to the probability of success ($label = 1$).
+
+The second model is \li{MultinomialNB}, found in \li{sklearn.naive_bayes}.  You can use it in the same manner as \li{LogisticRegression}, except instead of passing in the keyword argument $C$, you will pass in a keyword argument $alpha$ corresponding to a smoothing parameter.
+
+\subsection*{Model Evaluation}
+
+We would like to compare the effectiveness of our models.  To do so, we will use the results predicted by our three models.  We have obtained the probabilities of success and failure, so what we need to do now is pick a threshold value on which to split the data.  In the simplest manner, we can simply pick a value of $.5$, which will simply give the most likely label.  However, there may be an even better value.  How can we find the ``best" threshold value?
+
+Before we can determine this, we need to discuss how to measure our accuracy.  We do so by obtaining four values: the number of \emph{true positives}, \emph{false positives}, \emph{true negatives}, and \emph{false positives}, which are abbreviated TP, FP, TN, and FP, respectively.  These values are integers which together sum to the number of labels we predicted.  You can see the definition of these in Table ???.  We can use these values to report our accuracy in various metrics:
+\begin{itemize}
+\item \emph{Prediction accuracy} is defined as $\frac{TP+TN}{TP+FN+FP+TN}$, and is the percentage of correctly predicted cases.
+\item \emph{Sensitivity}, also known as the \emph{true positive rate} or $TPR$, is given by the fraction of correctly predicted cases where the actual outcome is $1$, $\frac{TP}{TP+FN}$.
+\item \emph{Specificity}, the \emph{true negative rate}, or $TNR$ is the porportion of correctly predicted cases where the true outcome is $0$, $\frac{TN}{FP+TN}$.
+\item \emph{False Positive Rate}, or $FPR$, is the proportion of incorrectly predicted cases where the true outcome is $0$, and is given by $1 - \frac{TN}{FP+TN}$.
+\end{itemize}
+All of these depend strongly on the threshold value chosen.
+
+\begin{problem}
+Create a function named \li{roc} that accepts an integer \li{n_tau} giving the number of values to try for $\tau$, the threshold value.  Use \li{n_tau} evenly-spaced points between $0$ and $1$, exclusive, to obtain a set of \li{n_tau} points consisting of $(FPR_{\tau},TPR_{\tau})$ for each value of $\tau$.  Create a plot of these points, connecting them into a curve, which is called a \emph{roc curve}.  Intuitively, a more steeply-rising curve indicates a better classifier performance.  A purely random classifier would give a nearly linear curve.  Equivalently, a larger area under the curve denotes a better classifier.  The best choice for $\tau$ is the one that intersect the family of lines $y=x+b$ at only one point (intuitively the point closest to the vertex $(0, 1)$).  
+\end{problem}
+
+Then, using the \li{sklearn.metrics} packages \li{roc_curve} and \li{auc}, you can obtain the false probability rate and the true probability rate, as well as the suggested threshold.
+
+\begin{problem}
+Do the function pca as in our lab.
+\end{problem}
+
+Different values for $C$ and $alpha$ will yield different results.  We seek to find those that will maximize the auc score.
+\begin{problem}
+Create a function \li{find_best_parameters} which takes as input an integer giving the number of values to try between $0$ and $1$ for $C$ and $alpha$.  Return the best values for each method.
+\end{problem}
+
+Now that we have found the optimal inputs for these functions, we can test them against one another.
+\begin{problem}
+Create a function called \li{results} which will graph of the roc curves for each of the three methods, and return a string containing the name of the best method to use for the Titanic problem.
+\end{problem}
