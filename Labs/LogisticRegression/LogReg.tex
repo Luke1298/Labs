@@ -2,30 +2,32 @@
 \objective{Understand the basics of Logistic Regression, and apply to the Titanic problem.}
 
 \subsection*{Binary Logistic Regression}
-Logistic Regression is a probability model that can be used to predict labels for a set of data.  We will first examine the binary logistic model, which classifies data in a Bernoulli manner with only two possibilities.  This model is used in many different fields.  One common medical example is predicting whether or not a patient has a particular disease.  Based upon several factors, such as gender, age, race, height, weight, etc., we can quantify the probability of being infected.  The contributing factors may be either continuous, such as height or weight, or categorical, such as gender and race.  This outcome prediction is made by use of a \emph{logistic function}, which given the contributing factors will return a probability value between $0$ and $1$.  This probability will then be used to assign a label to our input data.  Usually this is done by using some cut-off value, and will depend on the need for accuracy in the specific application.
+A \emph{Logistic Regression Model} is a probability model that can be used to predict outcomes for a set of data.  Usually ``Logistic Regression" refers to what is more appropriately called \emph{binary logistic regression}.  This is a model which can assign data points to one of two sets, and is used in many different fields.  One common medical example is predicting whether or not a patient has a particular disease.  Based upon several factors, which may be both continuous (age, height, weight) and categorical (gender, race), we can quantify the probability of infection.  This probability is computed by way of the \emph{logistic function}, which, given the contributing factors, will return a probability value between $0$ and $1$.  This probability will then be used to assign a label to our input data (`infected' or `not infected', for example) by using some cut-off value, and will depend on the need for accuracy in the specific application.
 
-The basic logistic function will take in as input any real number and return a value between $0$ and $1$.  It is defined as
+The logistic function takes in as input any real number and returns a value between $0$ and $1$, and is defined explicitly as
 \begin{equation}
-\phi(t) = \frac{1}{1 + e^{-t}},
+\phi(t) = \frac{1}{1 + e^{-s}},
 \end{equation}
-where $t$ is some combination of the input variables $x_1, \cdots, x_n$.  The graph of this function can be seen in Figure ???.   $\phi(x)$ can then be interpreted as the probability of success for one of the labels.  In some cases it is not possible to find a closed-form expression for the correct combination of the input variables.  However, in many cases we can acheive reasonable accuracy by using a linear combination of $x_i, \cdots, x_n$, i.e.
+where $s$ is some combination of the input variables $x_1, \cdots, x_n$.  The graph of this function can be seen in Figure ???.   $\phi(x)$ can then be interpreted as the probability of success for one of the labels.  In some cases it is not possible to find a closed-form expression for the correct combination of the input variables.  However, in many cases we can acheive reasonable accuracy by using a linear combination of $x_i, \cdots, x_n$, i.e.
 \begin{equation*}
-t = c_0 + c_1 x_1 + \cdots + c_n x_n.
+s = c_0 + c_1 x_1 + \cdots + c_n x_n.
 \end{equation*}
 This can be written more compactly as
 \begin{equation*}
-t = c^{T}\bf{x},
+s = \bf{c}^{T}\bf{x},
 \end{equation*}
-where $\bf{x}$ $= (1, x_1, \cdots , x_n)^{T}$ and $c \in \mathbb{R}^{n+1}$ 
+where $\bf{x}$ $= (1, x_1, \cdots , x_n)^{T}$ and $\bf{c}$ $\in \mathbb{R}^{n+1}$.
+
+Given a training set of labeled data points, a Logisitc Regression Model will find the optimal $\bf{c}$ for the data, and can then be used to predict labels for further data points.
 
 \begin{problem}
 Come up with a good preliminary problem here.
 \end{problem}
 
 \subsection*{The Titanic Problem}
-One of the most common applications of Logistic Regression is what is referred to as the \emph{Titanic problem}.  It uses the actual data for survivals and deaths of the Titanic passengers.  The input variables include factors such as gender, age, passenger class, and ticket fare.  Using logistic regression, we can predict whether or not a passenger survived based on this data.  We separate the data into a test set and a training set, and we can predict the labels for the test set after training a model on the training set.
+The Titanic dataset is especially useful for Logistic Regression.  This dataset is composed of actual data obtained concerning the passengers on the ill-fated Titanic voyage, given in the bulleted list below.  Using logistic regression, we can predict whether or not a passenger survived based on this data.  We do so by training a model on a portion of the dataset, the training set, and predicting labels for the remaining data, the test set.
 
-Before beginning our classification, however, we will first need to process our data.  The Titanic data set contains much more information than is currently relevant for us.  You can obtain this data in Excel Spreadsheet form at {Insert link here}.  We recommend using pandas to read in and process the data.  The columns are as follows:
+Before beginning our classification, however, we will first need to process our data.  The Titanic dataset contains much more information than is currently relevant for our purposes.  You can obtain this data in Excel Spreadsheet form at [Insert link here].  We recommend using pandas to read in and process the data.  The columns are as follows:
 \begin{itemize}
 \item \li{pclass}: An integer in $\{1, 2, 3\}$ which describes the class the passenger was in.
 \item \li{survived}:  The dependent variable.  $1$ indicates survival, and $0$ death.
@@ -38,7 +40,7 @@ Before beginning our classification, however, we will first need to process our 
 \item \li{fare}: A float giving the cost of the ticket purchased.
 \item \li{cabin}: A string giving the assigned sleeping cabin for the passenger (note that the majority of this column is blank).
 \item \li{embarked}: A string in $\{S, C, Q\}$ corresponding to the location of the passenger's embarkment, Southampton (UK), Cherbourg (France), or Queenstown (Ireland), respectively.
-\item \li{boat}: An int or string for those who survived giving which boat they rode in.
+\item \li{boat}: An int or string for those who survived giving which life boat they rode in.
 \item \li{body}: An int giving the number of body for those who died who were found and identified.
 \item \li{home.dest}: A string giving the home of or location to which the passenger was headed.
 \end{itemize}
@@ -46,11 +48,11 @@ Before beginning our classification, however, we will first need to process our 
 \begin{problem}
 Create a function called \li{initialize} which will process the Titanic data set into useable format by doing the following:
 \begin{enumerate}
-\item Choose the coulmns that you believe will be relevant in predicting the survival of the passengers, and drop the other columns.  You may not use \li{boat} or \li{body}.  Be sure to include \li{survived}, which will be separated later as the independent variable.
+\item Choose the coulmns that you believe will be relevant in predicting the survival of the passengers, and drop the other columns.  You may not use \li{boat} or \li{body}, as these are dependent on whether or not the passenger survived.  Be sure to include \li{survived}, which will be separated later as the independent variable, as well as \li{sex} and \li{pclass}.
 \item Since \li{sex} is really a binary variable, make it one explicitly by changing ``female" and ``male" to be binary values.
 \item Drop the rows that contain missing values.  Make sure you have a significant number of rows left.  If you have too few, you may need to choose fewer columns to keep before deleting the incomplete rows.
-\item Because the \li{pclass} column is an integer in $\{1, 2, 3\}$, it will be read as a ranked variable instead of a simple categorical variable.  It may be useful to rank this variable, or it may mess up our classification.  Include a keyword argument \li{pclass_change} with default \li{True}.  If it is set to \li{True}, eliminate this ranking by dividing \li{pclass} into two binary columns.  Make one column a boolean for being $1^{st}$ class and the other a boolean for being $2^{nd}$ class. (This means that a value of $1$ would correspond to $[1, 0]$, $2$ to $[0, 1]$, and $3$ to $[0, 0]$.)
-\item Split into a training and a test set using a $60/40$ split.  Be sure and pick random rows for each group and not in any particular order.
+\item Because the \li{pclass} column is an integer in $\{1, 2, 3\}$, it will be treated as a ranked variable instead of simply a categorical variable.  It may be useful to rank this variable, or it may mess up our classification.  Include a keyword argument \li{pclass_change} with default \li{True}.  If it is set to \li{True}, eliminate this ranking by dividing \li{pclass} into two binary columns.  Make one column a boolean for being $1^{st}$ class and the other a boolean for being $2^{nd}$ class. (This means that a value of $1$ would correspond to $[1, 0]$, $2$ to $[0, 1]$, and $3$ to $[0, 0]$.)
+\item Split the remaining rows into a training and a test set using a $60/40$ split.  Be sure and pick random rows for each group and not rows in any particular order.
 \end{enumerate}
 Have your function return the training set and the test set, in that order.
 \end{problem}
