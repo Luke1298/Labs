@@ -50,20 +50,34 @@ In addition to these resources, there are other ways to learn Python. One useful
 # You can use a pound sign to write a single-line comment.
 
 # To see the methods associated to an object, type the object name followed by a period, and press tab.
->>> list.
+In [1]: list.
 list.append   list.extend   list.insert   list.pop      list.reverse  
 list.count    list.index    list.mro      list.remove   list.sort
 
 # To learn about a method, use "?".
->>> list.append?
-Type:       method_descriptor
-Base Class: <type 'method_descriptor'>
-String Form:<method 'append' of 'list' objects>
-Namespace:  Python builtin
+In [2]: list.append?
 Docstring:  L.append(object) -- append object to end
+Type:         method_descriptor
 \end{lstlisting}
 
-Finally, if you cannot answer your question using these strategies, try doing a Google search.  Many common questions about Python programming have been answered on internet forums.  StackOverflow.com, in particular, is often a valuable resource.
+IPython also has a built-in function \li{help()} that provides interactive help.  Lastly, if you cannot answer your question using these strategies, try doing a Google search.  Many common questions about Python programming have been answered on internet forums.  StackOverflow.com, in particular, is often a valuable resource.
+
+\begin{problem}
+We are going to start by making a simple script that outputs \li{"Hello World"}.  Create a new file in the text editor of your choice that contains the following line:
+\begin{lstlisting}
+print "Hello World"
+\end{lstlisting}
+Save this file as \li{hello.py}. Now that this simple script has been created, we will execute it. First, open the command prompt and navigate to the directory where you saved \li{hello.py}. There are two different ways to execute the \li{hello.py} script. To execute the script using the Python distribution, run the following command in your command line:
+\begin{lstlisting}
+$ python hello.py
+\end{lstlisting}
+To execute the script using IPython, run the following in the command prompt:
+\begin{lstlisting}
+$ ipython
+
+In [1]: run hello.py
+\end{lstlisting}
+\end{problem}
 
 \section*{Data Types}
 
@@ -147,7 +161,7 @@ True
 False                   
 \end{lstlisting}
 
-We can also create and manipulate complex numbers
+We can also create and manipulate complex numbers.
 \begin{lstlisting}
 # There are two different ways to create complex numbers.
 >>> x = complex(2,3)
@@ -267,7 +281,7 @@ Keyword: {'apples': 3, 'oranges': 2}
 \end{lstlisting}
 
 \begin{problem}
-Write a function \li{hypotenuse} that accepts two parameters, \li{a} and \li{b}, that represent the two legs of a right triangle.  Your function should compute and return the hypotenuse of the triangle using the Pythagorean theorem. 
+Write a function \li{volume_sphere} that accepts a parameter \li{r} and returns the volume of a sphere of radius \li{r}.
 \end{problem}
 
 %===========================
@@ -403,7 +417,7 @@ False
 \end{lstlisting}
 
 \begin{problem}
-Write a function \li{primes} that accepts a parameter \li{n} and returns the first \li{n} odd numbers.  This function can be implemented using one line of code.
+Write a function \li{odds} that accepts a parameter \li{n} and returns the first \li{n} odd numbers.  This function can be implemented using one line of code.
 \end{problem}
 
 Whenever possible, you should create your lists using a \emph{list comprehension}, which is demonstrated below.  We will talk about list comprehension in more detail when we talk about \li{for} loops.
