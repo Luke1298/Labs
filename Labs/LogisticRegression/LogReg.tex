@@ -2,13 +2,13 @@
 \objective{Understand the basics of Logistic Regression, and apply to the Titanic problem.}
 
 \subsection*{Binary Logistic Regression}
-A \emph{Logistic Regression Model} is a probability model that can be used to predict outcomes for a set of data.  Usually ``Logistic Regression" refers to what is more appropriately called \emph{binary logistic regression}.  This is a model which can assign data points to one of two sets, and is used in many different fields.  One common medical example is predicting whether or not a patient has a particular disease.  Based upon several factors, which may be both continuous (age, height, weight) and categorical (gender, race), we can quantify the probability of infection.  This probability is computed by way of the \emph{logistic function}, which, given the contributing factors, will return a probability value between $0$ and $1$.  This probability will then be used to assign a label to our input data (`infected' or `not infected', for example) by using some cut-off value, and will depend on the need for accuracy in the specific application.
+A \emph{Logistic Regression Model} is a probability model that can be used to predict outcomes for a set of data.  Usually ``Logistic Regression" refers to what is more appropriately called \emph{binary logistic regression}.  This is a model which can assign data points to one of two sets, and is used in many different fields.  One common medical example is predicting whether or not a patient has a particular disease.  Based upon several factors, which may be both continuous (age, height, weight) and categorical (gender, race), we can quantify the probability of infection.  This probability is computed by way of the \emph{logistic function}, which, given the contributing factors, will return a probability value between $0$ and $1$.  This probability will then be used to assign a label to our input data (`infected' or `not infected', for example) by using some cut-off value, and will depend on the need for accuracy in the specific application.  Success corresponds to a label of $1$, and failure to a label of $0$.
 
 The logistic function takes in as input any real number and returns a value between $0$ and $1$, and is defined explicitly as
 \begin{equation}
 \phi(t) = \frac{1}{1 + e^{-s}},
 \end{equation}
-where $s$ is some combination of the input variables $x_1, \cdots, x_n$.  The graph of this function can be seen in Figure ???.   $\phi(x)$ can then be interpreted as the probability of success for one of the labels.  In some cases it is not possible to find a closed-form expression for the correct combination of the input variables.  However, in many cases we can acheive reasonable accuracy by using a linear combination of $x_i, \cdots, x_n$, i.e.
+where $s$ is some combination of the input variables $x_1, \cdots, x_n$.  The graph of this function can be seen in Figure ???.   $\phi(x)$ can then be interpreted as the probability of success.  In some cases it is not possible to find a closed-form expression for the correct combination of the input variables.  However, in many cases we can acheive reasonable accuracy by using a linear combination of $x_i, \cdots, x_n$, i.e.
 \begin{equation*}
 s = c_0 + c_1 x_1 + \cdots + c_n x_n.
 \end{equation*}
@@ -18,11 +18,7 @@ s = \bf{c}^{T}\bf{x},
 \end{equation*}
 where $\bf{x}$ $= (1, x_1, \cdots , x_n)^{T}$ and $\bf{c}$ $\in \mathbb{R}^{n+1}$.
 
-Given a training set of labeled data points, a Logisitc Regression Model will find the optimal $\bf{c}$ for the data, and can then be used to predict labels for further data points.
-
-\begin{problem}
-Come up with a good preliminary problem here.
-\end{problem}
+Given a training set of labeled data points, a Logistic Regression Model will find the optimal $\bf{c}$ for the data, and can then be used to predict labels for further data points.
 
 \subsection*{The Titanic Problem}
 The Titanic dataset is especially useful for Logistic Regression.  This dataset is composed of actual data obtained concerning the passengers on the ill-fated Titanic voyage, given in the bulleted list below.  Using logistic regression, we can predict whether or not a passenger survived based on this data.  We do so by training a model on a portion of the dataset, the training set, and predicting labels for the remaining data, the test set.
@@ -57,40 +53,103 @@ Create a function called \li{initialize} which will process the Titanic data set
 Have your function return the training set and the test set, in that order.
 \end{problem}
 
-We will perform our analysis in three different manners, namely by using an Unchanged Logistic Classifier, a Changed Logistic Classifier, and a Naive Bayes Classifier.  Each is useful in different situations.  We will try all three and then compare the accuracy of our results.
-The basic Logistic Regression discussed previously can be performed by using the \li{LogisticRegression} model found in \li{sklearn.linear_model}.  This requires an input value of something to be fixed here.  The unchanged logistic classifier will leave \li{pclass} unchanged, and the changed logistic classifier will change \li{pclass} into binary values.  When creating the model, you will need to include a keyword argument $C$.  This corresponds to something cool.  You will then need to fit your model using the training set, find the coefficients it returns, and get the probabilities for your test set.  The first column will contain the probability of failure ($label = 0$) and the second to the probability of success ($label = 1$).
-
-The second model is \li{MultinomialNB}, found in \li{sklearn.naive_bayes}.  You can use it in the same manner as \li{LogisticRegression}, except instead of passing in the keyword argument $C$, you will pass in a keyword argument $alpha$ corresponding to a smoothing parameter.
-
 \subsection*{Model Evaluation}
+Now that we have our training set, we can train a model, which can be used to obtain the probability of success for each data point.  The label chosen depends heavily on the probability cut-off value mentioned previously, which we represent as $\tau$.  In the simplest manner, we can simply pick a value of $\tau = 0.5$, which will then assign the label with the highest likelihood.  However, it is often beneficial to choose a different value of $\tau$.  In regards to the probability of infection for serious diseases, it might be best to give a patient medicine if they have even a $10$ percent chance of infection.  So how can we find the ``best" cut-off value?
 
-We would like to compare the effectiveness of our models.  To do so, we will use the results predicted by our three models.  We have obtained the probabilities of success and failure, so what we need to do now is pick a threshold value on which to split the data.  In the simplest manner, we can simply pick a value of $.5$, which will simply give the most likely label.  However, there may be an even better value.  How can we find the ``best" threshold value?
-
-Before we can determine this, we need to discuss how to measure our accuracy.  We do so by obtaining four values: the number of \emph{true positives}, \emph{false positives}, \emph{true negatives}, and \emph{false positives}, which are abbreviated TP, FP, TN, and FP, respectively.  These values are integers which together sum to the number of labels we predicted.  You can see the definition of these in Table ???.  We can use these values to report our accuracy in various metrics:
+In order determine this, we need to discuss how to measure the accuracy of the labels predicted.  Say that we have picked a cut-off value $\tau$, and have assigned labels to the test set.  Using the predicted labels and the actual labels, we can obtain four important values: the number of \emph{true positives}, \emph{false positives}, \emph{true negatives}, and \emph{false positives}, which are abbreviated TP, FP, TN, and FP, respectively.  These values are integers which together sum to the number of labels predicted.  You can see the definition of these in Table ??? (until the figure is up, true positives are the points with predicted label 1 and true label 1, false positives have predicted label 1 true label 0, true negatives predicted label 0 true label 0, and false negatives true label 1 predicted label 0).  We can now use these to report our accuracy in various metrics:
 \begin{itemize}
 \item \emph{Prediction accuracy} is defined as $\frac{TP+TN}{TP+FN+FP+TN}$, and is the percentage of correctly predicted cases.
 \item \emph{Sensitivity}, also known as the \emph{true positive rate} or $TPR$, is given by the fraction of correctly predicted cases where the actual outcome is $1$, $\frac{TP}{TP+FN}$.
 \item \emph{Specificity}, the \emph{true negative rate}, or $TNR$ is the porportion of correctly predicted cases where the true outcome is $0$, $\frac{TN}{FP+TN}$.
-\item \emph{False Positive Rate}, or $FPR$, is the proportion of incorrectly predicted cases where the true outcome is $0$, and is given by $1 - \frac{TN}{FP+TN}$.
+\item \emph{False Positive Rate}, or $FPR$, is the proportion of incorrectly predicted cases where the true outcome is $0$, and is given by $\frac{FP}{FP+TN}$.
 \end{itemize}
-All of these depend strongly on the threshold value chosen.
+All of these depend strongly on the value chosen for $\tau$.
+
+A \emph{roc curve} is useful in measuring the accuracy of a model.  To make a roc curve, we pick many values for $\tau$, and obtain the False Positive Rate and the True Positive Rate for each.  Then we plot the data points  $(FPR_{\tau},TPR_{\tau})$ for each value of $\tau$ chosen and connect them into a curve.  A completely random label assignment would result in a nearly-linear roc curve, while a more accurate assignment would result in a more steeply-rising curve (see Figure ???).  A good choice for $\tau$ is the one that intersects the family of lines $y=x+b$ at only one point, which intuitively is the point closest to the vertex $(0, 1)$.  Mathematically, this is given by
+\begin{equation}
+\operatorname*{arg\,max}_{\tau} (TPR_{\tau} - FPR_{\tau}).
+\end{equation}
 
 \begin{problem}
-Create a function named \li{roc} that accepts an integer \li{n_tau} giving the number of values to try for $\tau$, the threshold value.  Use \li{n_tau} evenly-spaced points between $0$ and $1$, exclusive, to obtain a set of \li{n_tau} points consisting of $(FPR_{\tau},TPR_{\tau})$ for each value of $\tau$.  Create a plot of these points, connecting them into a curve, which is called a \emph{roc curve}.  Intuitively, a more steeply-rising curve indicates a better classifier performance.  A purely random classifier would give a nearly linear curve.  Equivalently, a larger area under the curve denotes a better classifier.  The best choice for $\tau$ is the one that intersect the family of lines $y=x+b$ at only one point (intuitively the point closest to the vertex $(0, 1)$).  
+Use the function declaration below to find the best value for $\tau$.  You should use evenly spaced values from $0$ to $1$, exclusive.
+\begin{lstlisting}
+def best_tau(predicted_labels, true_labels, n_tau=100, plot=True):
+    """
+    Parameters
+    ----------
+   predicted_labels : ndarray of shape (n,)
+        The predicted labels for the data
+    true_labels : ndarray of shape (n,)
+        The actual labels for the data
+    n_tau : int
+        The number of values to try for tau
+    plot : boolean
+        Whether or not to plot the roc curve
+
+    Returns
+    -------
+    best_tau : float
+        The optimal value for tau for the data.
+    """
+    pass
+\end{lstlisting}
 \end{problem}
 
-Then, using the \li{sklearn.metrics} packages \li{roc_curve} and \li{auc}, you can obtain the false probability rate and the true probability rate, as well as the suggested threshold.
+Now that we have a good value for $\tau$, we can quantify the accuracy of a model. We will do so for a few different types of models for the Titanic data you initialized previously.  For the first two, we will use the logistic classifier found in \li{sklearn.linear_model.LogisticRegression}.  The first model we use will be our ``Unchanged Logistic Classifier", which will use our Titanic data with \li{pclass} unchanged.  The second model is the ``Changed Logistic Classifier", which use the data with \li{pclass} changed.
+
+When using this package to create a classifier, we need to input a keyword argument \li{C}.  This value represents the inverse of the regularization strength.  Different values will yield different results.  A better value for \li{C} will yield a more steeply-rising roc curve.  The model can find the coefficients (the vector $\bf{c}$), along with the probabilities of failure and success for each label.  With these in hand, we can use the function \li{sklearn.metrics.roc_curve} to obtain the False Positive Rates, the True Positive Rates, and the optimal value for $\tau$.  You will need to pass in the test data, the probability of success, and the keyword argument \li{pos_label} $= 1$.  The accuracy of the model with input value \li{C} can then be obtained using \li{sklearn.metrics.auc}, which will give the area under the curve.  The larger the area, the more steeply-rising curve we have, and the better the model.  Note that we create a single roc curve using one value for \li{C} and multiple values for $\tau$.
 
 \begin{problem}
-Do the function pca as in our lab.
+Use the following function declaration to return the auc score for the two Logistic Regression models described.
+\begin{lstlisting}
+def auc_scores(unchanged_logreg, changed_logreg):
+    """
+    Parameters
+    ----------
+    unchanged_logreg : float in (0,1)
+        The value to use for C in the unchanged model
+    changed_logreg : float in (0,1)
+        The value to use for C in the changed model
+
+    Returns
+    -------
+    unchanged_auc : float
+        The auc for the unchanged model
+    changed_auc : float
+        The auc for the changed model
+    """
+    pass
+\end{lstlisting}
 \end{problem}
 
-Different values for $C$ and $alpha$ will yield different results.  We seek to find those that will maximize the auc score.
+We can test a Naive Bayes model against our Logistic Regression model for both the unchanged and changed models to see the comparative accuracy.  Use the model \li{MultinomialNB}, found in \li{sklearn.naive_bayes}.  You can use it in the same manner as \li{LogisticRegression}, except instead of passing in the keyword argument \li{C}, you will pass in a keyword argument \li{alpha} corresponding to a smoothing parameter.
 \begin{problem}
-Create a function \li{find_best_parameters} which takes as input an integer giving the number of values to try between $0$ and $1$ for $C$ and $alpha$.  Return the best values for each method.
+Add input variables \li{unchanged_bayes} and \li{changed_bayes} to your function from the previous problem to obtain the auc for each of these models.  Your function should return all four areas, unchanged logistic regression, changed logistic regression, unchanged Bayes, and changed Bayes, in that order.
+\end{problem}
+
+Different values for \li{C} and \li{alpha} will yield different results.  We seek to find those that will maximize the area under the curve.  One way to do so is to pick a number of evenly-spaced points between $0$ and $1$, exclusive, and try each one in turn, keeping the value that yields the greatest accuracy.
+\begin{problem}
+Use the function declaration below to find the optimal values for \li{C} and $alpha$ as described.
+\begin{lstlisting}
+def find_best_parameters(choices):
+    """
+    Parameters
+    ----------
+    choices : int
+        The number of values to try for C and alpha
+
+    Returns
+    -------
+    best : list of length 4
+        The best values for C for the unchanged and changed logistic
+         regression models, and the best values for alpha for the
+         unchanged and changed Naive Bayes models, respectively.
+    """
+    pass
+\end{lstlisting}
 \end{problem}
 
 Now that we have found the optimal inputs for these functions, we can test them against one another.
 \begin{problem}
-Create a function called \li{results} which will graph of the roc curves for each of the three methods, and return a string containing the name of the best method to use for the Titanic problem.
+Create a function called \li{results} which will graph of the roc curves for each of the methods, and will print out the names of the models with their corresponding areas, in numerically descending order.
 \end{problem}
