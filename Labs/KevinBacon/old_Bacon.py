@@ -86,6 +86,7 @@ numberWithoutKevinBaconNumber=len(actorMovie.keys())-len(values)
 howmany={0:0,1:0,2:0,3:0,4:0,5:0,6:0,'inf':numberWithoutKevinBaconNumber}
 for i in values:
     howmany[i]+=1
+print howmany
 #Solution
 #The average Bacon number is 2.66
 #How many people have each Bacon number {0: 1, 1: 345, 2: 15819, 3: 24235, 4: 1977, 5: 130, 6: 6, 'inf': 847} 

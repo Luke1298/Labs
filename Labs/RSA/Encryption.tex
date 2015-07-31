@@ -195,7 +195,42 @@ Traceback (most recent call last):
 ValueError: 'x' should not exceed 5.
 \end{lstlisting}
 
-For now we are only concerned with raising exceptions, but documentation on handling exceptions can be found \href{https://docs.python.org/2/tutorial/errors.html}{here}.
+\subsection*{Handling Exceptions}
+
+To prevent an exception from stopping the program, it must be handled by
+putting any lines of code that throw the exception in a \li{try}.
+An \li{except} block then follows.
+If an exception is thrown, the compiler exits the \li{try} block and enters the \li{except} block.
+
+\begin{lstlisting}
+# the 'try' block should hold any lines of code that might raise the exception
+>>> try:
+...     raise Exception
+...     print("No exception raised")
+... # the 'except' block is entered into after the exception is thrown
+... except:
+...     print("Exception raised!")
+... 
+Exception raised!
+
+# Specific types of exceptions can also be caught explicitly
+>>> try:
+...     bad = 0 / 0
+... except ZeroDivisionError:
+...     print("Divided by zero!")
+... 
+Divided by zero!
+
+# Finally, the exception object can be used to get information.
+>>> try:
+...     import magic
+... except ImportError as e:
+...     print("Sorry! " + e.message)
+... 
+Sorry! No module named magic
+\end{lstlisting}
+
+Documentation on handling exceptions can be found \href{https://docs.python.org/2/tutorial/errors.html}{here}.
 
 % Problem 2: Exceptions and testing my_RSA.
 \begin{problem}
@@ -265,7 +300,7 @@ The current version of PyCrypto at the time of writing is version 2.6.1.
 \end{warn}
 
 The RSA module in PyCrypto is located in the PublicKey module.
-The library allows us to explicity construct a key, or generate a key automatically.
+The library allows us to explicitly construct a key, or generate a key automatically.
 \begin{lstlisting}
 >>> from Crypto.PublicKey import RSA
 
@@ -278,7 +313,6 @@ The library allows us to explicity construct a key, or generate a key automatica
 \end{lstlisting}
 
 The \li{share_this} variable may be distributed as a public key.
-Another user may then import it and use it to encrypt a message.
 
 \begin{lstlisting}
 >>> encrypter = RSA.importKey(share_this)
@@ -300,9 +334,9 @@ xca\xcf\x18\xd1I\xcd\x1dl\xd7\xe0Y\xdf}F\x93\x92\xe1(d\xcc\xdc\xa7
 'abcde'
 \end{lstlisting}
 
-The RSA encryption and decryption methods on these keys are textbook approaches.
-
 \begin{comment}
+
+The RSA encryption and decryption methods on these keys are textbook approaches.
 However, to increase security, we will want to pad the messages so every message encrypted with a particular key will become exactly as large (in bits) as the key itself.
 A commonly used padding algorithm is implemented in PyCrypto in the \li{Crypto.Cipher.PKCS1_OAEP} module.
 \begin{lstlisting}
@@ -327,7 +361,7 @@ The \li{encrypt} method accepts a string and encrypts it, using \li{_keypair} as
 If the string representation of a different public key is provided, then the message should be encrypted with the provided key.
 The \li{decrypt} method decrypts an encrypted message using \li{_keypair}.
 
-With a partner, test your classes by exchanging public keys and sending secret messages.
+Try testing your class with a partner by exchanging public keys.
 \end{problem}
 
 \begin{warn}
