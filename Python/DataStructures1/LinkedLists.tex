@@ -1,7 +1,7 @@
 \lab{Data Structures I: Lists}{Data Structures I}
 \label{lab:Python_DataStructures}
 
-\objective{Discuss the purpose of data structures and implement several kinds of linked lists.}
+\objective{Implement linked lists as an introduction to data structures.}
 
 \section*{Introduction}
 
@@ -35,7 +35,6 @@ The data structure links the nodes together in a way that is efficient for its p
 
 \begin{lstlisting}
 # Node.py
-
 class Node(object):
 	"""A Node class for storing data."""
 	def __init__(self, data):
@@ -66,40 +65,36 @@ For example, a Node \li{x} is less than a Node \li{y} if and only if the data co
 
 \section*{Linked Lists}
 
+\begin{figure}
+\centering
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto, node distance=1.5cm,thick,main node/.style={rectangle,draw}, minimum size=.5cm]
+\tikzset{rect node/.style={rectangle, draw, minimum height = .5cm, minimum width=.2cm}}
+  \node[main node] (1) {A};
+  \node[main node] (2) [right of=1] {B};
+  \node[main node] (3) [right of=2] {C};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [above left of=1](H) {Head};
+\foreach \r in {1, 2, 3}{
+  \node[rect node][right of=\r, node distance = .36cm]{};}
+\foreach \s/\t  in {1/2, 2/3}{
+    \path[draw](\s) edge[shorten <=.1cm](\t);}
+  \draw[black!20!blue] (H) edge (1.north);
+  \node[draw=none, node distance = 1.5cm] [right of=3]{}; % centralize
+\end{tikzpicture}
+\caption{A Singly-linked List. The head attribute tracks the first node.}
+\label{fig:singly_linked}
+\end{figure}
+
 A linked list is a data type that chains nodes together.
 Each node instance in a linked list stores a reference to the next link in the chain.
 A linked list class also stores a reference to the first node in the chain, called the \li{head}.
 See Figure \ref{fig:singly_linked}.
 
-\begin{figure}
-\centering
-\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto, node distance=1.5cm,thick,main node/.style={rectangle,draw}, minimum size=.5cm]
-\tikzset{rect node/.style={rectangle, draw, minimum height = .5cm, minimum width=.2cm}}
-  \node[main node] (1) {B};
-  \node[main node] (2) [right of=1] {F};
-  \node[main node] (3) [right of=2] {G};
-  \node[main node] (4) [right of=3] {C};
-  \node[draw = none, black!20!blue, node distance=1.5cm] [above left of=1](H) {Head};
-\foreach \r in {1, 2, 3, 4}{
-  \node[rect node][right of=\r, node distance = .36cm]{};}
-\node[draw = none, node distance = 1.5cm] [right of=4]{};  % Centralize this particular figure
-\foreach \s/\t  in {1/2, 2/3, 3/4}{
-    \path[draw](\s) edge[shorten <=.1cm](\t);}
-  \draw[black!20!blue] (H) edge (1.north);
-\end{tikzpicture}
-\caption{Singly-linked List}
-\label{fig:singly_linked}
-\end{figure}
-
 \begin{lstlisting}
 # Node.py
-
 class LinkedListNode(Node):
 	"""A Node class for linked lists. Inherits from the 'Node' class.
 	Contains a reference to the next node in the list.
     """
-	
-	
     def __init__(self, data):
         """Construct a Node and initialize an attribute for the next
         node in the list.
@@ -107,6 +102,37 @@ class LinkedListNode(Node):
         Node.__init__(self, data)
         self.next = None
 \end{lstlisting}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto, node distance=1.5cm,thick,main node/.style={rectangle,draw}, minimum size=.5cm]
+\tikzset{rect node/.style={rectangle, draw, minimum height = .5cm, minimum width=.2cm}}
+  \node[main node] (1) {A};
+  \node[main node] (2) [right of=1] {B};
+  \node[main node] (3) [right of=2] {C};
+  \node[main node] (4) [below right of=3] {D};
+  \node[main node] (5) [right of=3, node distance = 3cm] {A};
+  \node[main node] (6) [right of=5] {B};
+  \node[main node] (7) [right of=6] {C};
+  \node[main node] (8) [below right of=7] {D};
+  \node[draw=none, black!20!blue, node distance=1.5cm] [above left of=1](H1) {Head};
+  \node[draw=none, black!20!blue, node distance=1.5cm] [above left of=5](H2) {Head};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [below left of=1](C1) {Current};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [below left of=7](C2) {Current};
+\foreach \r in {1, 2, 3, 4, 5, 6, 7, 8}{
+  \node[rect node][right of=\r, node distance = .36cm]{};}
+\foreach \s/\t  in {1/2, 2/3, 5/6, 6/7}{
+  \path[draw](\s) edge[shorten <=.1cm](\t);}
+  \path[draw](7) edge[red, shorten <=.1cm] (8.north);
+  \draw[black!20!blue, shorten >=.1cm] (H1) edge (1.north);
+  \draw[black!20!blue, shorten >=.1cm] (C1) edge (1.south);
+  \draw[black!20!blue, shorten >=.1cm] (H2) edge (5.north);
+  \draw[black!20!blue, shorten >=.1cm] (C2) edge (7.south);
+  \node[draw=none, node distance = 1.5cm] [right of=8]{}; % centralize
+\end{tikzpicture}
+\caption{To add a new node to the end of the list, create a new node and start at the head. Iterate to the last node in the list and connect it to the new node.}
+\label{fig:add}
+\end{figure}
 
 A basic implementation of a linked list will have a constructor and a method for adding new nodes to the end of the list.
 To get to the end of the list, start at the \li{head} of the list.
@@ -116,8 +142,7 @@ This is done in the following class.
 See Figure \ref{fig:add} for an illustration.
 
 \begin{lstlisting}
-# spec.py
-
+# solutions.py
 from Node import LinkedListNode
 
 class LinkedList(object):
@@ -153,12 +178,6 @@ class LinkedList(object):
 			current_node.next = new_node
 \end{lstlisting}
 
-\begin{figure}
-\centering
-\caption{Include a picture of the \li{add} method and describe it.}
-\label{fig:add}
-\end{figure}
-
 % Problem 2: __str__ for the LinkedList class.
 \begin{problem}
 Write the \li{__str__} method for the \li{LinkedList} class so that when a \li{LinkedList} instance is printed, its output matches that of a Python list.
@@ -169,8 +188,56 @@ To delete a node, all references to the node must be removed.
 Then Python will automatically delete the object, since there is no way for the user to access it.
 Na{\"i}vely, this might be done by finding the previous node to the one being removed, and setting its \li{next} attribute to none.
 
+\begin{figure}
+\centering
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto, node distance=1.5cm,thick,main node/.style={rectangle,draw}, minimum size=.5cm]
+\tikzset{rect node/.style={rectangle, draw, minimum height = .5cm, minimum width=.2cm}}
+  \node[main node] (1) {A};
+  \node[main node] (2) [right of=1] {B};
+  \node[main node] (3) [right of=2] {C};
+  \node[main node] (4) [right of=3] {D};
+  \node[main node] (5) [right of=4, node distance=2.25cm] {A};
+  \node[main node] (6) [right of=5] {B};
+  \node[main node] (7) [right of=6] {C};
+  \node[main node] (8) [right of=7] {D};
+  \node[draw=none, black!20!blue, node distance=1.5cm] [above left of=1](H1) {Head};
+  \node[draw=none, black!20!blue, node distance=1.5cm] [above left of=5](H2) {Head};
+  \node[draw=none, black!20!blue, node distance=1.5cm] [below left of=1](C1) {Current};
+  \node[draw=none, black!20!blue, node distance=1.5cm] [below left of=6](C2) {Current};
+\foreach \r in {1, 2, 3, 4, 5, 6, 7, 8}{
+  \node[rect node][right of=\r, node distance = .36cm]{};}
+\foreach \s/\t  in {1/2, 2/3, 3/4, 5/6, 7/8}{
+  \path[draw](\s) edge[shorten <=.1cm](\t);}
+  \draw[black!20!blue, shorten >=.1cm] (H1) edge (1.north);
+  \draw[black!20!blue, shorten >=.1cm] (C1) edge (1.south);
+  \draw[black!20!blue, shorten >=.1cm] (H2) edge (5.north);
+  \draw[black!20!blue, shorten >=.1cm] (C2) edge (6.south);
+  \node[draw=none, node distance = 1.5cm] [right of=8]{}; % centralize
+\end{tikzpicture}
+
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto, node distance=1.5cm,thick,main node/.style={rectangle,draw}, minimum size=.5cm]
+\tikzset{rect node/.style={rectangle, draw, minimum height = .5cm, minimum width=.2cm}}
+  \node[main node] (1) {A};
+  \node[main node] (2) [right of=1] {B};
+  \node[main node] (3) [right of=2] {C};
+  \node[main node] (4) [right of=3] {D};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [above left of=1](H) {Head};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [below left of=2](C) {Current};
+\foreach \r in {1, 2, 3, 4}{
+  \node[rect node][right of=\r, node distance = .36cm]{};}
+\foreach \s/\t  in {1/2, 3/4}{
+  \path[draw](\s) edge[shorten <=.1cm](\t);}
+  \path[draw, red, shorten <=.2cm](2) edge[bend left] (4);
+  \draw[black!20!blue, shorten >=.1cm] (H) edge (1.north);
+  \draw[black!20!blue, shorten >=.1cm] (C) edge (2.south);
+  \node[draw=none, node distance = 1.5cm] [right of=4]{}; % centralize
+\end{tikzpicture}
+\caption{By disconnecting $B$ from $C$, $C$ and $D$ are deleted since nothing points to $C$. To keep $D$ from being lost, connect $B$ to $D$ first. Then only $C$ is deleted.}
+\label{fig:remove}
+\end{figure}
+
 \begin{lstlisting}
-# A naive node removal - Does not work.
+# A naive node removal method - Does not work.
 
 def remove(self, data):
 	"""Remove the Node containing 'data'."""
@@ -192,19 +259,10 @@ This can be remedied by pointing the previous node's next attribute to the node 
 Then there will be no reference to the removed node and it will be deleted. 
 See Figure \ref{fig:remove} for an illustration.
 
-\begin{figure}
-\centering
-\caption{Include two pictures of the \li{remove} method: the na{\"i}ve method that doesn't work, and the true method that does. Describe them.}
-\label{fig:remove}
-\end{figure}
-
-
 \begin{lstlisting}
-# A node removal that works
-
+# A node removal method that works
 def remove(self, data):
 	"""Remove the Node containing 'data'."""
-
 	# First, check if the head is the node to be removed. If so, set the
 	# new head to be the first node after the old head. This removes
 	# the only reference to the old head, so it is then deleted.
@@ -237,15 +295,40 @@ Modify the \li{remove} method to account for possible errors: if the list is emp
 
 \begin{figure}
 \centering
-\caption{Include a picture of the \li{insert} method and describe it.}
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto, node distance=1.5cm,thick,main node/.style={rectangle,draw}, minimum size=.5cm]
+\tikzset{rect node/.style={rectangle, draw, minimum height = .5cm, minimum width=.2cm}}
+  \node[main node] (1) {A};
+  \node[main node] (2) [right of=1] {B};
+  \node[main node] (3) [right of=2] {C};
+  \node[main node] (4) [below right of=2] {D};
+  \node[main node] (5) [right of=3, node distance=2.25cm] {A};
+  \node[main node] (6) [right of=5] {B};
+  \node[main node] (7) [right of=6] {C};
+  \node[main node] (8) [below right of=6] {D};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [above left of=1](H1) {Head};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [below left of=1](C1) {Current};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [above left of=5](H2) {Head};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [below left of=6](C2) {Current};
+\foreach \r in {1, 2, 3, 4, 5, 6, 7, 8}{
+  \node[rect node][right of=\r, node distance = .36cm]{};}
+\node[draw = none, node distance = 1.5cm] [right of=4]{}; % centralize
+\foreach \s/\t in {1/2, 2/3, 5/6}{
+    \path[draw](\s) edge[shorten <=.1cm](\t);}
+\foreach \s/\t in {6/8, 8/7}{
+    \path[draw](\s) edge[red, shorten <=.1cm](\t);}
+  \draw[black!20!blue, shorten >=.1cm] (H1) edge (1.north);
+  \draw[black!20!blue, shorten >=.1cm] (C1) edge (1.south);
+  \draw[black!20!blue, shorten >=.1cm] (H2) edge (5.north);
+  \draw[black!20!blue, shorten >=.1cm] (C2) edge (6.south);
+\end{tikzpicture}
+\caption{To insert $D$ before $C$, find the node before $C$ and set the connections.}
 \label{fig:insert}
 \end{figure}
 
 % Problem 4: LinkedList.insert()
 \begin{problem}
-Inserting a node at a specified location is similar to removing a node.
 Add an \li{insert} method to the \li{LinkedList} class that inserts a new node before the first node in the list that contains the data specified by the user.
-This function accepts two arguments: the data for the new node (\li{data}), and the data of the node before which the new node will be inserted (\li{place}).
+Accept data for the new node (\li{data}) and data for the node before which the new node will be inserted (\li{place}).
 If the list is empty, or there is no node containing \li{place} in the list, raise a \li{ValueError} with error message ``\li{place} is not in the list.''
 
 See Figure \ref{fig:insert} for an illustration of the \li{insert} method.
@@ -274,7 +357,7 @@ Note that since \li{insert} inserts a node before a specified node that is alrea
   \draw[black!20!blue] (H) edge (1.north);
   \draw[black!20!blue] (T) edge (4.north);
 \end{tikzpicture}
-\caption{Doubly-linked List}
+\caption{A Doubly-linked List. The tail attribute tracks the last node.}
 \label{fig:doubly_linked}
 \end{figure}
 
@@ -299,27 +382,117 @@ class DoublyLinkedListNode(LinkedListNode):
 
 \begin{figure}
 \centering
-\caption{Illustrate insertion for doubly-linked lists.}
-\label{fig:d_insertion}
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto, node distance=1.6cm,thick,main node/.style={rectangle,draw}, minimum size=.5cm]
+\tikzset{rect node/.style={rectangle, draw, minimum height = .5cm, minimum width=.2cm}}
+  \node[main node] (1) {A};
+  \node[main node] (2) [right of=1] {B};
+  \node[main node] (3) [right of=2] {C};
+  \node[main node] (4) [below right of=2] {D};
+  \node[main node] (5) [right of=3, node distance=3.5cm] {A};
+  \node[main node] (6) [right of=5] {B};
+  \node[main node] (7) [right of=6, node distance=2.2cm] {C};
+  \node[main node] (8) [below right of=6] {D};
+  \node[draw=none, node distance=.07cm] (1up) [above of=1] {};
+  \node[draw=none, node distance=.07cm] (1dn) [below of=1] {};
+  \node[draw=none, node distance=.07cm] (2up) [above of=2] {};
+  \node[draw=none, node distance=.07cm] (2dn) [below of=2] {};
+  \node[draw=none, node distance=.07cm] (3up) [above of=3] {};
+  \node[draw=none, node distance=.07cm] (3dn) [below of=3] {};
+  \node[draw=none, node distance=.07cm] (4up) [above of=4] {};
+  \node[draw=none, node distance=.07cm] (4dn) [below of=4] {};
+  \node[draw=none, node distance=.07cm] (5up) [above of=5] {};
+  \node[draw=none, node distance=.07cm] (5dn) [below of=5] {};
+  \node[draw=none, node distance=.07cm] (6up) [above of=6] {};
+  \node[draw=none, node distance=.07cm] (6dn) [below of=6] {};
+  \node[draw=none, node distance=.07cm] (7up) [above of=7] {};
+  \node[draw=none, node distance=.07cm] (7dn) [below of=7] {};
+  \node[draw=none, node distance=.07cm] (8up) [above of=8] {};
+  \node[draw=none, node distance=.07cm] (8dn) [below of=8] {};
+  \node[draw=none, black!20!blue, node distance=1.5cm] [above left of=1](H1) {Head};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [below left of=1](C1) {Current};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [above right of=3](T1) {Tail};
+  \node[draw=none, black!20!blue, node distance=1.5cm] [above left of=5](H2) {Head};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [below left of=6](C2) {Current};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [above right of=7](T2) {Tail};
+\foreach \r in {1, 2, 3, 4, 5, 6, 7, 8}{
+    \node[rect node][right of=\r, node distance = .36cm]{};
+    \node[rect node][left  of=\r, node distance = .36cm]{};}
+\foreach \s/\t in {1up/2up, 2dn/1dn, 2up/3up, 3dn/2dn, 5up/6up, 6dn/5dn}{
+    \path[draw](\s) edge[shorten <=.1cm](\t);}
+\foreach \s/\t in {6up/8up, 8dn/6dn, 8up/7up, 7dn/8dn}{
+    \path[draw](\s) edge[red, shorten <=.1cm](\t);}
+  \draw[black!20!blue, shorten >=.1cm] (H1) edge (1.north);
+  \draw[black!20!blue, shorten >=.1cm] (T1) edge (3.north);
+  \draw[black!20!blue, shorten >=.1cm] (C1) edge (1.south);
+  \draw[black!20!blue, shorten >=.1cm] (H2) edge (5.north);
+  \draw[black!20!blue, shorten >=.1cm] (T2) edge (7.north);
+  \draw[black!20!blue, shorten >=.1cm] (C2) edge (6.south);
+  \node[draw = none, node distance = 1.5cm] [right of=8]{};  % Centralize
+\end{tikzpicture}
+\caption{Insertion for Doubly-linked Lists.}
+\label{fig:double_insertion}
 \end{figure}
 
 \begin{figure}
 \centering
-\caption{Illustrate removal for doubly-linked lists.}
-\label{fig:d_removal}
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto, node distance=1.5cm,thick,main node/.style={rectangle,draw}, minimum size=.5cm]
+\tikzset{rect node/.style={rectangle, draw, minimum height = .5cm, minimum width=.2cm}}
+  \node[main node] (1) {A};
+  \node[main node] (2) [right of=1] {B};
+  \node[main node] (3) [right of=2] {C};
+  \node[main node] (4) [right of=3] {D};
+  \node[main node] (5) [right of=4, node distance=2.6cm] {A};
+  \node[main node] (6) [right of=5] {B};
+  \node[main node] (7) [right of=6] {C};
+  \node[main node] (8) [right of=7] {D};
+  \node[draw=none, node distance=.07cm] (1up) [above of=1] {};
+  \node[draw=none, node distance=.07cm] (1dn) [below of=1] {};
+  \node[draw=none, node distance=.07cm] (2up) [above of=2] {};
+  \node[draw=none, node distance=.07cm] (2dn) [below of=2] {};
+  \node[draw=none, node distance=.07cm] (3up) [above of=3] {};
+  \node[draw=none, node distance=.07cm] (3dn) [below of=3] {};
+  \node[draw=none, node distance=.07cm] (4up) [above of=4] {};
+  \node[draw=none, node distance=.07cm] (4dn) [below of=4] {};
+  \node[draw=none, node distance=.07cm] (5up) [above of=5] {};
+  \node[draw=none, node distance=.07cm] (5dn) [below of=5] {};
+  \node[draw=none, node distance=.07cm] (6up) [above of=6] {};
+  \node[draw=none, node distance=.07cm] (6dn) [below of=6] {};
+  \node[draw=none, node distance=.07cm] (8up) [above of=8] {};
+  \node[draw=none, node distance=.07cm] (8dn) [below of=8] {};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [above of=1](H1) {Head};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [below of=1](C1) {Current};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [above of=4](T1) {Tail};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [above of=5](H2) {Head};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [below of=7](C2) {Current};
+  \node[draw = none, black!20!blue, node distance=1.5cm] [above of=8](T2) {Tail};
+\foreach \r in {1, 2, 3, 4, 5, 6, 7, 8}{
+  \node[rect node][right of=\r, node distance = .36cm]{};
+  \node[rect node][left of=\r, node distance = .36cm]{};}
+\foreach \s/\t in {1up/2up, 2dn/1dn, 2up/3up, 3dn/2dn, 3up/4up, 4dn/3dn, 5up/6up, 6dn/5dn, 7/6, 7/8}{
+    \path[draw](\s) edge[shorten <=.1cm](\t);}
+  \path[draw, shorten <=.2cm](6) edge[red, bend left] (8);
+  \path[draw, shorten <=.2cm](8) edge[red, bend left] (6);
+  \draw[black!20!blue, shorten >=.1cm] (H1) edge (1.north);
+  \draw[black!20!blue, shorten >=.1cm] (T1) edge (4.north);
+  \draw[black!20!blue, shorten >=.1cm] (C1) edge (1.south);
+  \draw[black!20!blue, shorten >=.1cm] (H2) edge (5.north);
+  \draw[black!20!blue, shorten >=.1cm] (T2) edge (8.north);
+  \draw[black!20!blue, shorten >=.1cm] (C2) edge (7.south);
+  \node[draw=none, node distance=1.5cm] [right of=8]{};  % Centralize
+\end{tikzpicture}
+\caption{Removal for Doubly-linked Lists.}
+\label{fig:double_removal}
 \end{figure}
 
-
 All of the methods for linked lists can be implemented for doubly-linked lists.
-See Figures \ref{fig:d_insertion} and \ref{fig:d_removal} for illustrations of the insert and remove methods.
+See Figure \ref{fig:double_operations} for illustrations of the insert and remove methods.
 
 % Problem 5: doubly-linked list
 \begin{problem}
 Implement a \li{DoublyLinkedList} class that inherits from \li{LinkedList} and uses \li{DoublyLinkedListNode} instances to build the list.
-Add an attribute called \li{tail} that keeps track of the node at the end of the list.
-Overwrite the \li{add}, \li{remove}, and \li{insert} methods.
-Use the \li{tail} attribute to make the \li{add} method more efficient.
-Raise the same exceptions in the \li{insert} and \li{remove} methods as before.
+Add a \li{tail} attribute that keeps track of the node at the end of the list.
+Overwrite \li{add}, \li{remove}, and \li{insert}.
+Raise the same exceptions as before.
 \end{problem}
 
 % Problem 6: sorted linked list
@@ -345,7 +518,7 @@ Write a function called \li{sort_words} that sorts the list generated by \li{cre
 Then return the object.
 
 \begin{warn}
-\li{English.txt}, the default source file for \li{create_word_list}, contains over 58,000 English words.
+\texttt{English.txt}, the default source file for \li{create_word_list}, contains over 58,000 English words.
 Sorting the entire data set should take about 15 minutes.
 Test your data structure on small data sets first.
 \end{warn}
@@ -378,7 +551,7 @@ A deque has two methods for insertion and two for removal, usually called \li{ap
 
 In practice, a deque can also be used as a stack or a queue.
 If we restrict our usage to \li{append} and \li{pop} (or to \li{appendleft} and \li{popleft}), we effectively have a stack.
-similarly, if we are restricted to \li{append} and \li{popleft} (or to \li{appendleft} and \li{pop}), we effectively have a queue.
+Similarly, if we are restricted to \li{append} and \li{popleft} (or to \li{appendleft} and \li{pop}), we effectively have a queue.
 \end{itemize}
 
 The \li{collections} module in the Python standard library has a \li{deque} object, implemented as a doubly-linked list.
@@ -387,7 +560,7 @@ This is an excellent object to use in practice instead of a Python \li{list} whe
 \begin{problem}
 (Optional) Write \li{Stack}, \li{Queue}, and \li{Deque} classes.
 
-The \li{Deque} class should inherit from the \li{DoublyLinkeList} class.
+The \li{Deque} class should inherit from the \li{DoublyLinkedList} class.
 Use inheritance to implement \li{append}, \li{appendleft}, \li{pop}, and \li{popleft} methods as described in the preceding section.
 The \li{append} and \li{appendleft} methods should accept a single parameter (the data to be added) and return nothing, while the \li{pop} and \li{popleft} methods should accept no parameters and return a single value (the data removed).
 Disable all other methods to restrict data access.
