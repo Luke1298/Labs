@@ -3,37 +3,10 @@
 Solutions file. Written by Shane A. McQuarrie.
 """
 
-# =========================== bacon_data.py ============================= #
-
-# This function is provided to students to help with problem 6
-def parse(filename="movieData.txt"):
-    """Generate an adjacency dictionary where each key is
-    a movie and each value is a list of actors in the movie.
-    """
-
-    # open the file, read it in, and split the text by '\n'
-    movieFile = open(filename, 'r')
-    movieFile = movieFile.read()
-    movieFile = movieFile.split('\n')
-    graph = dict()
-
-    # for each movie in the file,
-    for line in movieFile:
-        # get movie name and list of actors
-        names = line.split('/')
-        movie = names[0]
-        graph[movie] = []
-        # add the actors to the dictionary
-        for actor in names[1:]:
-            graph[movie].append(actor)
-
-    return graph    
-
 # =========================== solutions.py ============================== #
 
 from collections import deque
 import networkx as nx
-from bacon_data import parse
 from matplotlib import pyplot as plt
 
 
@@ -234,6 +207,31 @@ def convert_to_networkx(dictionary):
     return output
 
 
+# Helper function for problem 6
+def parse(filename="movieData.txt"):
+    """Generate an adjacency dictionary where each key is
+    a movie and each value is a list of actors in the movie.
+    """
+
+    # open the file, read it in, and split the text by '\n'
+    movieFile = open(filename, 'r')
+    movieFile = movieFile.read()
+    movieFile = movieFile.split('\n')
+    graph = dict()
+
+    # for each movie in the file,
+    for line in movieFile:
+        # get movie name and list of actors
+        names = line.split('/')
+        movie = names[0]
+        graph[movie] = []
+        # add the actors to the dictionary
+        for actor in names[1:]:
+            graph[movie].append(actor)
+
+    return graph 
+
+
 # Problems 6-8: Implement the following class
 class BaconSolver(object):
     """Class for solving the Kevin Bacon problem."""
@@ -301,9 +299,10 @@ class BaconSolver(object):
                 bacon.append(self.bacon_number(actor, target))
             except nx.NetworkXNoPath:
                 pass
+        name = target.partition(",")[0]
         plt.hist(bacon, bins=7)
-        plt.title("Bacon Number Distribution")
-        plt.xlabel("Bacon Number")
+        plt.title(name + " Number Distribution")
+        plt.xlabel(name + " Number")
         plt.ylabel("Actors")
         plt.show()
 
@@ -331,8 +330,6 @@ def test(student_module, late=False):
     10 points for problem 6
     10 points for problem 7
      3 points for problem 8 (Extra Credit)
-
-    ...
     
     Parameters:
         student_module: the imported module for the student's file.
