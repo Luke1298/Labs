@@ -281,11 +281,11 @@ Keyword: {'apples': 3, 'oranges': 2}
 \end{lstlisting}
 
 \begin{problem}
-Write a function \li{volume_sphere} that accepts a parameter \li{r} and returns the volume of a sphere of radius \li{r}.
+Write a function \li{sphere_volume} that accepts a parameter \li{r} and returns the volume of a sphere of radius \li{r}.
 \end{problem}
 
 %===========================
-%                        Strings 
+%           Strings 
 %===========================
 
 \subsection*{Strings}
@@ -348,7 +348,7 @@ Write the following functions:
 \end{problem}
 
 %===========================
-%                             Lists
+%          Lists
 %===========================
 
 \subsection*{Lists}
@@ -407,12 +407,19 @@ False
 \end{lstlisting}
 
 \begin{problem}
-Write a function \li{odds} that accepts a parameter \li{n} and returns a list of the first \li{n} odd numbers.  This function can be implemented using one line of code.
+Start with the list \li{my_list = ["ant","baboon","cat","dog"]} and perform the following operations:
+\begin{enumerate}
+\item Append the word, \li{"elephant"}.
+\item Remove \li{"ant"}.
+\item Remove index 1.
+\item Replace the word at index 2 with the word, \li{"donkey"}.
+\item Append the word, \li{"fox"}.
+\end{enumerate}
 \end{problem}
 
-Whenever possible, you should create your lists using a \emph{list comprehension}, which is demonstrated below.  We will talk about list comprehension in more detail when we talk about \li{for} loops.
+Whenever possible, you should create your lists using a \emph{list comprehension}, which is demonstrated below.  We will talk about list comprehension in more detail after we talk about \li{for} loops.
 \begin{lstlisting}
->>> [float(x) for x in xrange(5)]
+>>> [float(n) for n in xrange(5)]
 [0.0, 1.0, 2.0, 3.0, 4.0]
 \end{lstlisting}
 
@@ -607,7 +614,55 @@ Write a function that translates a list of integers between 1-26 to the correspo
 \end{problem}
 
 % ====================
-%           List Comprehension
+%      Generators
+% ====================
+
+\subsection*{Generators}
+
+Let's say we are given a large data set and we need to loop through data as we analyze it. If we were to use the techniques we have discussed thus far, we would need to add each piece of data to a list before being able to loop through it. Or let's say we needed to pass this large data set to a function. Passing the entire list would be very inefficient. We get around this problem using \emph{generators}. 
+
+When we want to produce a generator from a function, we use \li{yield} instead of \li{return}. Because \li{return} only gets called once, all the data that needs to be returned by a function must be processed before the return statement. When using \li{yield}, each piece of data can be processed and returned one and a time.
+
+See the following code box for an example of implementation:
+
+\begin{lstlisting}
+>>> def range_generator(n):
+...    i = 0
+...    while i < n:
+...        yield i 
+...        i += 1
+...
+
+>>> three = range_generator(3)
+>>> three.next()
+0
+>>> three.next()
+1
+>>> three.next()
+2
+
+# Generators can be used as iterators in for loops
+>>> six = range_generator(6)
+>>> for i in three:
+...     print i,
+...
+0 1 2 3 4 5
+
+# We can even make an infinite generator. Clearly, this would not be possible using a list.
+>>> def inf_generator():
+...    i = 0
+...    while True:
+...        yield i
+...        i += 1
+
+\end{lstlisting}
+
+\begin{problem}
+Write a function \li(squares) that accepts a parameter \li{n} and creates a generator of all squares less than \li{n}.  For example, \li{squares(10)} would generate \li{0, 1, 2, 4,} and \li{9}.
+\end{problem}
+
+% ====================
+%   List Comprehension
 % ====================
 
 \subsection*{Revisiting List Comprehension}
