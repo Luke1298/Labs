@@ -184,13 +184,6 @@ False
 True
 \end{lstlisting}
 
-%Required readings: 
-%\begin{itemize}
-%\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#numerical-types}
-%\item \url{https://docs.python.org/2.7/tutorial/introduction.html#numbers}
-%\item \url{https://docs.python.org/2.7/library/stdtypes.html#typesnumeric}
-%\end{itemize}
-
 %======================
 %            Function Definition
 %======================
@@ -333,12 +326,6 @@ We can access single characters of strings using brackets and a range of charact
 'HloWrd'
 \end{lstlisting}
 
-%Required readings: 
-%\begin{itemize}
-%\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#strings}
-%\item \url{https://docs.python.org/2.7/tutorial/introduction.html#strings}
-%\end{itemize}
-
 \begin{problem}
 Write the following functions:
 \begin{enumerate}
@@ -461,20 +448,6 @@ difference, and symmetric difference.
 {'Lytle, Josh'}
 \end{lstlisting}
 
-%Required readings: 
-%\begin{itemize}
-%\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#more_container_types}
-%\item \url{https://docs.python.org/2.7/tutorial/datastructures.html#sets}
-%\end{itemize}
-%
-%\begin{problem}
-%Answer the following questions about sets.
-%\begin{enumerate}
-%\item What are two ways to create sets? How do you create an empty set?
-%\item Define two sets and use a Python command to find their union.
-%\end{enumerate}
-%\end{problem}
-
 % ===================
 %     Dictionaries 
 % ===================
@@ -499,22 +472,6 @@ True
 
 The keys of a dictionary must be \emph{immutable}, which means that they must be objects that cannot be modified after creation. Numerical types and strings are immutable objects. Lists, dictionaries, and sets are mutable.
 
-%Required readings:
-%\begin{itemize}
-%\item \url{http://scipy-lectures.github.io/intro/language/basic_types.html#dictionaries}
-%\item \url{https://docs.python.org/2.7/tutorial/datastructures.html#dictionaries}
-%\end{itemize}
-%
-%\begin{problem}
-%Answer the following questions about dictionaries.
-%\begin{enumerate}
-%\item What are two ways to create dictionaries? How do you create an empty dictionary?
-%\item How do you delete a key-value pair from a dictionary?
-%\item How do you access a list of all the values in your dictionary?  
-%How do you access a list of all the items?
-%\end{enumerate}
-%\end{problem}
-
 %==================
 %    Control Flow Tools
 %==================
@@ -523,13 +480,6 @@ The keys of a dictionary must be \emph{immutable}, which means that they must be
 Control flow blocks control the order in which your code is executed.
 Python supports the usual control flow statements 
 including \li{if} statements, \li{while} loops and \li{for} loops. 
-
-%\begin{itemize}
-%\item Sections 1.2.3.1-1.2.3.4 of \url{http://scipy-lectures.github.io/intro/language/control_flow.html}
-%\item \url{http://scipy-lectures.github.io/intro/language/functions.html}
-%\item \url{https://docs.python.org/2.7/tutorial/introduction.html#first-steps-towards-programming}
-%\item Sections 4.1-4.3, 4.6, and 4.7.1-4.7.2 of \url{https://docs.python.org/2.7/tutorial/controlflow.html}
-%\end{itemize}
 
 \subsection*{The If Statement}
 An \li{if} statement executes the 
@@ -658,7 +608,7 @@ See the following code box for an example of implementation:
 \end{lstlisting}
 
 \begin{problem}
-Write a function \li{squares} that accepts a parameter \li{n} and creates a generator of all squares less than \li{n}.  For example, \li{squares(10)} would generate \li{0, 1, 2, 4,} and \li{9}.
+Write a function \li{squares} that accepts a parameter \li{n} and creates a generator of all squares less than \li{n}. For example, \li{squares(10)} would generate \li{0, 1, 2, 4,} and \li{9}.
 \end{problem}
 
 % ====================
@@ -677,7 +627,7 @@ List Comprehension is a powerful, efficient way to build lists.  The code is mor
 \end{lstlisting}
 
 \begin{problem}
-Recall that the alternating harmonic series (1 - 1/2 + 1/3 - 1/4 + 1/5 - ...) converges to ln(2).  Using the first \li{n} terms of this series, approximate ln(2).  Implement your function using list comprehension.  The sum of the first 500,000 terms of this series approximates ln(2) to five decimal places.
+Recall that the alternating harmonic series (1 - 1/2 + 1/3 - 1/4 + 1/5 - ...) converges to ln(2). Using the first \li{n} terms of this series, approximate ln(2).  Implement your function using list comprehension.  The sum of the first 500,000 terms of this series approximates ln(2) to five decimal places.
 \end{problem}
 
 \begin{comment}
