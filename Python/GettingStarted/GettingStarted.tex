@@ -397,16 +397,6 @@ Python has some built-in functions that are particularly helpful with lists.
 1
 \end{lstlisting}
 
-Another built-in function we will use a lot is \li{range()}.  This will be very important when we talk about \li{for} loops.  The basic syntax is \li{range(start,stop,step)}.
-\begin{lstlisting}
->>> range(10)
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
->>> range(5,10)
-[5, 6, 7, 8, 9]
->>> range(0,100,10)
-[0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
-\end{lstlisting}
-
 We can quickly check to see if a certain value is in a list using the \li{in} operator.
 \begin{lstlisting}
 >>> my_list = [1, 2, 3, 4, 5]
@@ -417,12 +407,12 @@ False
 \end{lstlisting}
 
 \begin{problem}
-Write a function \li{odds} that accepts a parameter \li{n} and returns the first \li{n} odd numbers.  This function can be implemented using one line of code.
+Write a function \li{odds} that accepts a parameter \li{n} and returns a list of the first \li{n} odd numbers.  This function can be implemented using one line of code.
 \end{problem}
 
 Whenever possible, you should create your lists using a \emph{list comprehension}, which is demonstrated below.  We will talk about list comprehension in more detail when we talk about \li{for} loops.
 \begin{lstlisting}
->>> [float(x) for x in range(5)]
+>>> [float(x) for x in xrange(5)]
 [0.0, 1.0, 2.0, 3.0, 4.0]
 \end{lstlisting}
 
@@ -438,7 +428,7 @@ Write a function that accepts a list of numbers and converts each entry into a s
 %\end{itemize}
 
 % =================
-%               Sets
+%       Sets
 % =================
 
 \subsection*{Sets}
@@ -479,7 +469,7 @@ difference, and symmetric difference.
 %\end{problem}
 
 % ===================
-%              Dictionaries 
+%     Dictionaries 
 % ===================
 
 
@@ -519,7 +509,7 @@ The keys of a dictionary must be \emph{immutable}, which means that they must be
 %\end{problem}
 
 %==================
-%         Control Flow Tools
+%    Control Flow Tools
 %==================
 
 \section*{Control Flow Tools}
@@ -586,10 +576,16 @@ An alternative implementation of the previous \li{while} loop is the following:
 A \li{for} loop iterates over the items in any \emph{iterable}. Iterables include lists, sets, and dictionaries.  There are a few different ways to define a \li{for} loop.  The most common ways are demonstrated here. The method we choose solely depends on what we are trying to accomplish.
 
 \begin{lstlisting}
->>> for i in range(10):
-...     print i,
+# the xrange function is defined as xrange(start,stop,step)
+>>> for i in xrange(10):
+...    print i,
 ...     
 0 1 2 3 4 5 6 7 8 9
+
+>>> for i in xrange(50,100,10):
+...    print i,
+...
+50 60 70 80 90
 
 # When needing to access the elements of a list and the index
 # of the entry is not important, use this method.
@@ -600,7 +596,7 @@ A \li{for} loop iterates over the items in any \emph{iterable}. Iterables includ
 red green blue yellow
 
 # When keeping track of indices is important, use this method.
->>> for i in range(len(my_list)):
+>>> for i in xrange(len(my_list)):
 ...    print my_list[i] + str(i),
 ...
 red0 green1 blue2 yellow3
@@ -619,10 +615,10 @@ List Comprehension is a powerful, efficient way to build lists.  The code is mor
 
 \begin{lstlisting}
 >>> loop_output = []
->>> for i in range(5):
+>>> for i in xrange(5):
 ...    loop_output.append(i**2)
 ...
->>> list_output = [i**2 for i in range(5)]
+>>> list_output = [i**2 for i in xrange(5)]
 \end{lstlisting}
 
 \begin{problem}
