@@ -1,0 +1,348 @@
+\lab{UNIX Shell}{Shell}
+\label{lab:Shell}
+
+\objective{Introduce the basics of the UNIX Shell commands and integrate UNIX Shell commands with Python}
+
+TODO: History
+TODO: Mac and Linux
+TODO: Benefits of learning the Shell
+The more you learn about UNIX, you will find it is easy to learn but difficult to master. We will build a foundation of simple file system navigation, job control and basic system remote access. We will address some of the basics in detail and also include lists of commands that are worth learning.
+
+\section*{File System}
+\subsection*{Navigation}
+
+Begin by opening the Terminal. The text you see in the upper left of the Terminal window is called the \emph{prompt}. We will begin using three very basic commands: \li{pwd}, \li{ls}, and \li{cd}. The \li{pwd} command stands for print working directory. The \li{ls} command lists the files and subdirectories within the working directory. The \li{cd} command changes the working directory.
+
+TODO: Example box
+
+%The only reason this problem exists is to make sure it is VERY clear not to mess with the Shell-Lab directory
+
+\begin{problem}
+Using these commands, navigate to the \li{Shell-Lab} directory provided with this lab. We will use this directory for the remainder of the lab. Use the \li{ls} command to list the contents of this directory. NOTE: You will find a directory within this directory called \li{test} that is availabe for you to experiment with the concepts and commands found in this lab. The other files and directories are necessary for the exercises we will be doing, so take care not to modify them.
+\end{problem}
+
+\subsection*{Flags}
+Most commands can be customized using flags. The \li{ls} function has dozens of optional flags. Table \ref{table:ls_flags} contains some of the most common flags for the \li{ls} command.
+
+\begin{table}
+\begin{tabular}{l|l} 
+Flags & Description
+\\ \hline 
+\li{-a} & Do not ignore hidden files and folders \\ 
+\li{-l} & List files and folders in long format \\ 
+\li{-r} & reverse order while sorting \\
+\li{-s} & print item name and size \\
+\li{-t} & Sort output by last modified \\ 
+\li{-R} & Print files and subdirectories recursively \\ 
+\li{-S} & Sort by size \\ 
+\end{tabular} 
+\caption{Common flags of the \li{ls} command.}
+\label{table:ls_flags} 
+\end{table} 
+
+Multiple flags can be combined as one flag. For example, if we wanted to list all the files in a directory in long format sorted by last time modified, we would use \li{ls -alt}. To view the reference manual for any command, use \li{man}. For example, to view the reference manual for the \li{ls} command, use \li{ls man}.
+
+\subsection*{Other Useful Commands}
+Table \ref{table:other_commands} contains a list commonly-used commands and their uses. Many of these commands will be needed throughout this lab and in any typical session with the UNIX shell. After some of the commands are flags listed in square brackets that are worth exploring using \li{man}. We highly recommend experimenting with all these commands to become familiar with them. Remember you may freely experiment with these commands in the \li{test} directory.
+
+\begin{lstlisting}
+Shell-Lab $ cd test
+test $ touch data.txt
+test $ mkdir Other
+test $ ls
+ Other 	data.txt
+test $ cp data.txt Other/
+test $ cd Other/
+Other $ ls
+data.txt
+Other $ mv data.txt new_data.txt
+Other $ ls
+ new_data.txt
+Other $ cd ..
+test $ rm -rv Other/
+ removed 'Other/data.txt'
+ removed directory: 'Other/'
+test $ clear
+\end{lstlisting}
+
+\begin{table}
+\begin{tabular}{l|l} 
+Commands & Description
+\\ \hline 
+\li{clear} & Clear the terminal screen \\
+\li{cp file1 dir1} & Create a copy of \li{file1} in \li{dir1} \\
+\li{cp file1 file2} & Create a copy of file1 and name it file2 \\
+\li{du dir1} & Display disk usage within \li{dir1} [\li{-a}, \li{-h}] \\
+\li{df dir1} & Display available disk space in \li{dir1} \\
+\li{mkdir dir1} & Create a new directory named \li{dir1} \\
+\li{mv file1 dir1} & Move \li{file1} to \li{dir1} \\
+\li{mv file1 file2} & Rename \li{file1} as \li{file2} \\
+\li{rm file1} & Delete \li{file1} [\li{-i}, \li{-v}] \\
+\li{rm -r dir1} & Delete \li{dir1} and all items within \li{dir1} [\li{-i}, \li{-v}] \\
+\li{touch file1} & Create an empty file named \li{file1} \\
+\li{.} & Current directory \\
+\li{..} & Parent directory \\
+\li{\~} & Home directory \\
+\li{/} & Root directory \\
+\end{tabular} 
+\caption{Other useful commands dealing with the file system.}
+\label{table:other_commands} 
+\end{table} 
+
+\begin{problem}
+Inside the \li{Shell-Lab} directory, create a new directory called \li{Photos} and delete the \li{Audio} folder along with all its contents. TODO: add something else to do.
+\end{problem}
+
+\subsection*{Wildcards}
+As we are working in the file system, there will be times that we want to perform  the same command to a group of similar files. For example, if you needed to move   all text files within a directory to a new directory, the naive way to do this would be to move each text file individually. However, this same result can be achieved using \emph{wildcards}. We use wildcards as placeholder text.  The two wildcards we use most are \li{*} and \li{?}. The \li{*} wildcard represents any string and the \li{?} wildcard represents any character. Though these wildcards can be used in almost every UNIX command, they are particularly useful when dealing with files. See Table \ref{table:wildcards}
+
+\begin{table}
+\begin{tabular}{l|l} 
+Command & Description
+\\ \hline 
+\li{*.txt} & All files that end with \li{.txt}. \\
+\li{image*} & All files that have \li{"image"} as the first 5 characters. \\
+\li{*py*} & All files that contain \li{"py"} in the name. \\
+\li{doc*.txt} & All files of the form \li{doc1.txt}, \li{doc2.txt}, \li{docA.txt}, etc. \\
+\end{tabular} 
+\caption{Common uses for wildcards.}
+\label{table:wildcards} 
+\end{table} 
+
+\begin{problem}
+Within the \li{Shell-Lab} directory, there are multiple \li{.png} files. Using wildcards, move all the \li{.png} files to the \li{Photos} folder you created in Problem 1. Similarly, create a \li{Documents} folder and a \li{Python} folder and move all the \li{.txt} files and all the \li{.py} files to their respective folders. You will see a few other folders in the \li{Shell-Lab} directory. Do not move any of the files within these folders at this point.  TODO: add the .png, .txt, .py files to Shell-lab directory
+\end{problem}
+
+\section*{Searching the File System}
+There are two powerful commands we use for searching through our directories. The \li{find} command is used to find files or directories in a directory hierarchy. The \li{grep} command is used to find lines matching a string. More specifically, we can use \li{grep} to find words inside files. We will provide a basic template in Table \ref{table:find} for using these two commands and leave it to you to explore the uses of the other flags.
+
+\begin{table}
+\begin{tabular}{l|l} 
+Command & Description
+\\ \hline 
+\li{find dir1 -type f -name "word"} &  Find all files within \li{dir1} with the name \li{"word"} \\ 
+ & (\li{-type f} is for files \li{-type d} is for directories)\\
+\li{grep -nr "word" dir1} & Find all occurances of \li{"word"} within the files inside \li{dir1} \\ 
+ & (\li{-n} lists the line number and \li{-r} performs a recursive search)\\
+\end{tabular} 
+\caption{Commands using \li{find} and \li{grep}.}
+\label{table:find} 
+\end{table} 
+
+\begin{problem}
+In addition to the .png files you have already moved into the \li{Photots} folder, there are a few other .png files in a few other folders with the \li{Shell-Lab} directory. Find where these files are using the \li{find} command and move them to the \li{Photos} folder. TODO: hide some .png files deep in some directories
+\end{problem}
+
+\subsection*{Pipes and Redirects}
+Unix becomes even more versatile and powerful when you chain multiple commands together. This is accomplished using \emph{pipes}. Rather than printing the output of a command, the output is passed, or \emph{piped}, to the next function. Two commands are piped together using the \li{|} operator. To demonstrate the power of pipes, we will first introduce a few functions that allow us to view the contents of a file in Table \ref{table:print}
+
+In the first example below, the \li{cat} command output is piped to \li{wc -l}. The \li{wc} command stands for word count. The \li{-l} flag tells the \li{wc} command to count lines. Therefore, this first example counts the number of lines in <file>. In the second example below, the command lists the files in the current directory sorted by size in descending order. For details on what the flags in this command do, consult \li{man sort}.
+
+\begin{lstlisting}
+TODO: Finish this code example
+$ cat <some file> | wc -l
+<some output>
+$ ls -s | sort -nr
+<some output>
+\end{lstlisting}
+
+In the previous example, we pipe the contents of \li{<file>} using \li{cat}. When working with files specifically, it is better to use \emph{redirects}. The same output from the first example above can be achieved by running the following command:
+
+\begin{lstlisting}
+TODO: Finish this code example
+$ wc -l < <some file>
+<some output>
+\end{lstlisting}
+%$
+
+\begin{table}
+\begin{tabular}{l|l} 
+Command & Description
+\\ \hline 
+\li{cat} & Print the contents of a file in its entirety \\ 
+\li{less} & Print the contents of a file piece by piece \\
+\li{head} & Print just the first few lines of a file \\
+\li{tail} & Print just the last few lines of a file \\
+\end{tabular} 
+\caption{Commands for printing contents of a file}
+\label{table:print} 
+\end{table} 
+
+If you are wanting to save the resulting output of a command to a file, use \li{>} or \li{>>}.The \li{>} operator will overwrite anything that may exist in the output file whereas \li{>>} will append the output to the end of the output file. For example, if we want to append the number of lines in \li{<file>} to \li{<count file>}, we would run the following commmand:
+
+\begin{lstlisting}
+$ wc -l < <some file> >> <output file> 
+\end{lstlisting}
+%$
+
+Since \li{grep} is used to print lines matching a pattern, it is also very useful to use in conjunction with piping. For example, \li{ls -l | grep root} prints all files associated with the root user.
+
+\begin{problem}
+The \li{word_file} file contains a list of words that are not in alphabetical order. Write the number of words in \li{word_file} and an alphabetically sorted list of words to \li{output_file} using pipes and redirects. Try to accomplish this with a total of two commands or fewer.
+\end{problem}
+
+\section*{File Security}
+To begin, run the following command while inside the \li{Shell-Lab} directory:
+
+\begin{lstlisting}
+TODO: Finalize code example
+$ ls -l 
+<output>
+\end{lstlisting}
+%$
+
+TODO: Replace <file>
+Notice the first column of the output. The first character denotes the type of the item whether it be a normal file, a directory, a symbolic link, etc. The remaining nine characters denote the permissions associated with that file. Specifically, these permissions deal with reading, wrtiting, and executing files. There are three categories of people associated with permissions. These are the user (the owner), group, and others. For example, look at the output for <file>. The first character \li{-} denotes that \li{<file>} is a normal file. The next three characters, \li{rwx} tell us the owner can read, write, and execute the file. The next three characters \li{r-x} tell us members of the same group can read and execute the file. The final three characters \li{--x} tell us other users can execute the file and nothing more.
+
+Permissions can be modified using the \li{chmod} command. There are two different  ways to specify permissions, \emph{symbolic permissions} notation and \emph{octal permissions} notation. Symbolic permissions notation is easier to use when we want to make small modifications to a file's permissions.  See Table \ref{table:symbolic}.
+
+\begin{table}
+\begin{tabular}{l|l} 
+Command & Description
+\\ \hline 
+\li{chmod u+x file1} & Add executing permissions to user (owner) \\
+\li{chmod g-w file1} & Remove writing permissions from group \\
+\li{chmod o-r file1} & Remove reading permissions from other other users \\
+\li{chmod a+w file1} & Add writing permissions to everyone \\
+\end{tabular} 
+\caption{Symbolic permissions notation}
+\label{table:symbolic} 
+\end{table} 
+
+Octal permissions notation is easier to use when we want to set all the permissions as once. The number 4 corresponds to reading, 2 corresponds to writing, and 1 corresponds to executing. See Table \ref{table:octal}.
+
+\begin{table}
+\begin{tabular}{l|l} 
+Command & Description
+\\ \hline 
+\li{chmod 760 file1} & Sets \li{rwx} to user, \li{rw-} to group, and \li{---} to others \\
+\li{chmod 640 file1} & Sets \li{rw-} to user, \li{r--} to group, and \li{---} to others \\
+\li{chmod 775 file1} & Sets \li{rwx} to user, \li{rwx} to group, and \li{r-x} to others \\
+\li{chmod 500 file1} & Sets \li{r-x} to user, \li{---} to group, and \li{---} to others \\
+\end{tabular} 
+\caption{Octal permissions notation}
+\label{table:octal} 
+\end{table} 
+
+The commands in Table \ref{table:chown} are also helpful when working with permissions.
+
+\begin{table}
+\begin{tabular}{l|l} 
+Command & Description
+\\ \hline 
+\li{chown} & change owner \\
+\li{chgrp} & change group \\
+\li{getfacl} & view all permissions of a file in a readable format. \\
+\end{tabular} 
+\caption{Other commands when working with permissions}
+\label{table:chown} 
+\end{table} 
+
+\section*{Scripts}
+
+A shell script is a series of shell commands saved in a file. Scripts are useful when we have a process that we do over and over again. The following is a very simple script:
+
+\begin{lstlisting}
+#!/bin/bash
+echo "Hello World"
+\end{lstlisting}
+
+Save this script as \li{hello}. Note that no file type is necessary. The first line starts with \li{"#!"}. This is called the \emph{shebang} or \emph{hashbang} character sequence. It is followed by the absolute path to the \li{bash} interpreter. If we  were unsure where the \li{bash} interpreter is saved, we run \li{which bash}. To execute this script, run the following:
+
+\begin{lstlisting}
+$ ./hello
+bash: ./hello: Permission denied
+
+# Notice that you do not have permission to execute this file. This is by default
+$ ls -l hello
+-rw-rw-r-- 1 username groupname 31 Jul 30 14:34 hello
+
+$ chmod u+x hello
+$ ./hello     # We run a script by typing ./ then the script name
+Hello World
+\end{lstlisting}
+
+You can do this same thing with python scripts. All you have to do is change the path following the shebang. To see where the Python interpreter is stored, run \li{which python}.
+
+\begin{problem}
+In the \li{Python} directory you will find \li{count_files.py}. The \li{count_files.py} is a python script that counts all the files within the \li{Shell-Lab} directory. Modify this file so it can be run as a script and change the permissions of this script so the user and group can execute the script.
+\end{problem}
+
+If you would like to learn how to run scripts on a set schedule, consider researching \emph{cron jobs}.
+
+\section*{Job Control}
+Let's say we had a series of scripts we wanted to run. If we knew that these would take a while to execute, we may want to start them all at the same time and let them run while we are working on something else. In the Table \ref{table:jobs}, we have listed some of the most common commands used in job control. We strongly encourage you to experiment with these commands. In the \li{Scripts} directory, you will find a \li{five_secs} and a \li{ten_secs} script that takes five seconds and ten seconds to execute respectively. These will be particularly useful as you are experimenting with these commands.
+
+TODO: Example code box
+
+\begin{table}
+\begin{tabular}{l|l} 
+Command & Description
+\\ \hline 
+\li{COMMAND \&} & adding an ampersand to the end of a command runs the command in the background \\
+\li{bg \%n} & restarts an interrupted job in the background \\
+\li{fg \%n} & brings the nth job into the foreground \\
+\li{jobs} & lists all the jobs currently running \\
+\li{kill \%n} & terminates the nth job \\
+\li{ps} & lists all the current processes \\
+\li{Ctrl-C} & Terminates current job \\
+\li{Ctrl-Z} & Interrupts current job \\
+\end{tabular} 
+\caption{Job control commands}
+\label{table:jobs} 
+\end{table} 
+
+\begin{problem}
+In addition to the \li{five_secs} and \li{ten-secs} scripts, the \li{Scripts} folder contains three scripts that will each take about a forty-five seconds to execute. Execute each of these commands in the background so all three are executing at the same time. To verify all scripts are running at the same time, write the output of \li{jobs} to a new file \li{log.txt}.
+\end{problem}
+
+\section*{Python Integration}
+To this point, we have barely scratched the surface of all the functionality that UNIX has to offer. However, the tools and commands we have addressed so far provide us with a foundation of the basics. Using the \li{os} module in Python, we can call UNIX commands. By combining Python and the UNIX commands, our toolset is automatically broadened.
+
+There are two functions within the \li{os} module specifically we will use. When wanting to run a UNIX command, use \li{os.system()}. When wanting to run a UNIX command and be able to store and manipulate the output, use \li{os.popen()}. This function returns a \li{file} object that we can read and store.
+
+\begin{lstlisting}
+TODO: Finish code box
+>>> import os
+>>> os.system("ls -l")
+<output>
+>>> files = os.popen("ls -l").read().split('\n')
+>>> files
+<output>
+
+# Now that we have a list object, we can manipulate and analyze this data in Python.
+\end{lstlisting}
+
+\begin{problem}
+Create a \li{Shell} class. Write a \li{find_file} method that will search for a file starting in the current directory and prints the paths of all matches using the \li{find} command. Write a \li{find_word} method that finds a given word within the contents of the current directory using the \li{grep} command.
+\end{problem}
+
+\begin{problem}
+Write a method for the \li{Shell} class that recursively finds the \li{n} largest files within a directory. Have a keyword argument for the directory that defaults to the current directory. Be sure that your function only returns files. Hint: To view the size of a file \li{file1}, you can use \li{ls -s file1} or \li{du file1}
+\end{problem}
+
+\section*{Secure Shell}
+
+Let's say you are working for a company with a file server. Hundreds of people need to be able to access the content of this machine, but how is that possible? Or say you have a script to run that requires some serious computing power. How are you going to be able to access your company's super computer to run your script? We do this through \emph{Secure Shell} or \emph{SSH} for short.
+
+SSH is a network protocol encrypted using public-key cryptography. The system we are connecting \emph{to} is commonly referred to as the \emph{host} and the system we are connecting \emph{from} is commonly referred to as the \emph{client}. Once this connection is established, there is a secure tunnel through which commands and files can be exchanges between the client and host.
+
+CODEBOX
+logging into a remote computer using ssh
+
+\subsection*{Secure Copy}
+
+When we want to copy files between the client and the host, we use the  \emph{secure copy} command, \li{scp}.
+
+CODEBOX
+copy a file from client to host
+copy a file from host to client
+
+\begin{problem}
+TODO: Finish problem
+OPTIONAL
+Get with a partner and mess around with SSH. Using scp, copy files back and forth to each other.
+\end{problem}
+
+\subsection*{Generating SSH Keys (Optional)}
+If there is a host that we access on a regular basis, typing in our password over and over again can get tedious. By setting up SSH keys, the host can identify if a client is a trusted user without needing to type in a password. If you are interested in experimenting with this setup, a Google search of "How to set up SSH keys" will lead you to many quality tutorials on how to do so.
