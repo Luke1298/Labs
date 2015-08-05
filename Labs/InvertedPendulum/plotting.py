@@ -62,7 +62,7 @@ def rickshaw(tf,X0,A,B,Q,R_inv,P,plot_=True):
 
 
 def my_rickshaw(t,X0,A,B,Q,R_inv,P,plot_=True):
-	# t = np.linspace(0,tf,tf+1)
+	# t = np.linspace(0,tf,n)
 	dt = t[1]-t[0]
 	def Xdot_f(t,X):
 		return (A-B.dot(R_inv).dot(B.T).dot(P)).dot(X)
@@ -88,15 +88,15 @@ def my_rickshaw(t,X0,A,B,Q,R_inv,P,plot_=True):
 	
 	if plot_:
 		plt.rc("font", size=16)
-		plt.plot(t,X[:,0],'g',label='$x$')
-		plt.plot(t,X[:,1],'r',label='$\dot{x}$')
-		plt.plot(t,X[:,2],'k',label=r'$\theta$')
-		plt.plot(t,X[:,3],'b',label=r'$\dot{\theta}$')
-		plt.plot(t[1:],U[1:],'y',label='$u$')
+		plt.plot(t,X[:,0],'g',linewidth=1.8,label='$x$')
+		plt.plot(t,X[:,1],'r',linewidth=1.8,label='$\dot{x}$')
+		plt.plot(t,X[:,2],'k',linewidth=1.8,label=r'$\theta$')
+		plt.plot(t,X[:,3],'b',linewidth=1.8,label=r'$\dot{\theta}$')
+		plt.plot(t[1:],U[1:],'y',linewidth=1.8,label='$u$')
 		plt.xticks(size=12)
 		plt.yticks(size=12)
 		# plt.axis([0,t[-1],-15,5])
-		plt.legend(loc=5)
+		plt.legend(loc='best')
 		plt.savefig('mysol.pdf')
 		plt.show()
 		# print U[:5]
@@ -210,15 +210,30 @@ def prob1():
 	# Write the function linearized_init()
 	pass
 
+# def prob2():
+# 	# Write the function find_P
+# 	M = 10.
+# 	m = 5.
+# 	l = 7.
+# 	q1,q2,q3,q4 = 1.,1.7,.1,0.
+# 	r = 5.
+# 	tf = 5#30
+# 	X0 = np.array([5.,-.1,1.,-.4])
+#
+# 	A,B,Q,R = linearized_init(M,m,l,q1,q2,q3,q4,r)
+# 	R_inv = inv(R)
+# 	P = find_P(A,B,Q,R)
+# 	RHS = A-B.dot(R_inv).dot(B.T).dot(P)
+# 	print "The eigenvalues of $A - BR^{-1}B^TP are \n", la.eigvals(RHS)
+
 def prob2():
 	# Write the function find_P
-	M = 10.
-	m = 5.
-	l = 7.
-	q1,q2,q3,q4 = 1.,1.7,.1,0.
+	M, m = 23., 5.
+	l = 4.
+	q1, q2, q3, q4 = 1., 1., 1., 1.
 	r = 5.
-	tf = 5#30
-	X0 = np.array([5.,-.1,1.,-.4])
+	# tf = 5#30
+	# X0 = np.array([5.,-.1,1.,-.4])
 
 	A,B,Q,R = linearized_init(M,m,l,q1,q2,q3,q4,r)
 	R_inv = inv(R)
@@ -226,7 +241,9 @@ def prob2():
 	RHS = A-B.dot(R_inv).dot(B.T).dot(P)
 	print "The eigenvalues of $A - BR^{-1}B^TP are \n", la.eigvals(RHS)
 
-
+def prob3():
+	# Write the function rickshaw()
+	pass
 
 # def prob3():
 # 	M, m = 23., 5.
@@ -240,41 +257,44 @@ def prob2():
 # 	P = la.solve_continuous_are(A,B,Q,R)
 # 	R_inv = inv(R)
 # 	X,U = my_rickshaw(np.linspace(0,tf,400),X0,A,B,Q,inv(R),P)
-	
+
+def prob4():
+	# Write the function find_P
+	M, m = 23., 5.
+	l = 4.
+	q1, q2, q3, q4 = 1., 1., 1., 1.
+	r = 10.
+	tf = 60
+	X0 = np.array([-1, -1, .1, -.2])
+
+	A,B,Q,R = linearized_init(M,m,l,q1,q2,q3,q4,r)
+	R_inv = inv(R)
+	# P = find_P(A,B,Q,R)
+	# X,U = my_rickshaw(np.linspace(0,tf,400),X0,A,B,Q,inv(R),P)
+	P = la.solve_continuous_are(A,B,Q,R)
+	X,U = my_rickshaw(np.linspace(0,tf,400),X0,A,B,Q,inv(R),P)
 
 def prob5():
-	M, m = 10., 5. 
-	l = 7.
-	q1, q2, q3, q4 = .05,100.,.5,.05
-	r = 20.
-	tf = 100.
-	X0 = np.array([5.,-.1,.5,-.3])
-	
-	A,B,Q,R = linearized_init(M,m,l,q1,q2,q3,q4,r)
-	P = la.solve_continuous_are(A,B,Q,R)
-	R_inv = inv(R)
-	X,U = my_rickshaw(np.linspace(0,tf,400),X0,A,B,Q,inv(R),P)
-	
+	# Write the function find_P
+	M, m = 23., 5.
+	l = 4.
+	q1, q2, q3, q4 = 1., 1., 1., 1.
+	r = 10.
+	tf = 60
+	X0 = np.array([-1, -1, .1, -.2])
 
-def prob6():
-	M, m = 10., 5. 
-	l = 7.
-	q1, q2, q3, q4 = 6.,1.7,.1,0.
-	r = 5.
-	tf = 30.
-	X0 = np.array([5.,-.1,.5,-.3])
-	
 	A,B,Q,R = linearized_init(M,m,l,q1,q2,q3,q4,r)
-	P = la.solve_continuous_are(A,B,Q,R)
 	R_inv = inv(R)
+	P = la.solve_continuous_are(A,B,Q,R)
 	X,U = my_rickshaw(np.linspace(0,tf,400),X0,A,B,Q,inv(R),P)
+
+	
 
 if __name__ == "__main__":
 	# prob2()
 	# prob3()
+	prob4()
 	# prob5()
-	prob6()
-
 
 # M = 10.
 # m = 5.

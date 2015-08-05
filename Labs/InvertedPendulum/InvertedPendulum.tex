@@ -1,23 +1,27 @@
 \lab{The Inverted Pendulum}{The Inverted Pendulum}
 \label{lab:inverted_pendulum}
 
-\objective{We will set up the LQR optimal control problem for the inverted pendulum, compute the solution numerically. 
-We will add a stochastic component to the system.}
+\objective{We will set up the LQR optimal control problem for the inverted pendulum and compute the solution numerically. 
+% We will add a stochastic component to the system.
+}
 
 
-Think back to your childhood days when, for entertainment purposes, you’d balance objects: a book on your head, a spoon on your nose, or even a broom on your hand.
- Learning how to walk was likely your initial introduction to the practicality of the inverted pendulum problem.
+Think back to your childhood days when, for entertainment purposes, you'd balance objects: a book on your head, a spoon on your nose, or even a broom on your hand.
+ Learning how to walk was likely your initial introduction to the inverted pendulum problem.
 
-The inverted pendulum is a classic problem in dynamics and control theory. The inverted pendulum problem seeks to balance an object whose center of mass lies above the pivot point of the pendulum. 
-It has interesting distinctions from generic pendulum problems, like being inherently unstable. 
-It must be balanced relentlessly to keep the mass upright (the generic pendulum is stable at rest).
+A pendulum has two rest points: a stable rest point directly underneath the pivot point of the pendulum, and an unstable rest point directly above. 
+The generic pendulum problem is to simply describe the dynamics of the object on the pendulum (called the `bob').
+The inverted pendulum problem seeks to guide the bob toward the unstable fixed point at the top of the pendulum. 
+Since the fixed point is unstable, the bob must be balanced relentlessly to keep it upright. 
+
+The inverted pendulum is an important classical problem in dynamics and control theory, and is often used to test different control strategies. One application of the inverted pendulum is the guidance of rockets and missiles. Aerodynamic instability occurs because the center of mass of the rocket is not the same as the center of drag. Small gusts of wind or variations in thrust require constant attention to the orientation of the rocket. 
 
 
 \section*{The Simple Pendulum}
 We begin by studying the simple pendulum setting. 
 Suppose we have a pendulum consisting of a bob with mass $m$ rotating about a pivot point at the end of a (massless) rod of length $l$. 
-Let $\theta(t)$ represent the angular displacement of the bob. 
-By Hamilton's principle, the path $\theta$ that is taken by the bob minimizes the functional 
+Let $\theta(t)$ represent the angular displacement of the bob from its stable equilibrium.
+By Hamilton's Principle, the path $\theta$ that is taken by the bob minimizes the functional 
 \begin{align}
 J[\theta] = \int_{t_0}^{t_1}	L,
 \end{align}
@@ -43,6 +47,13 @@ From these expressions we can form the Euler-Lagrange equation, which determines
 \end{align}
 Since in this setting the energy of the pendulum is conserved, the equilibrium position $\theta = 0$ is only Lyapunov stable. When forces such as friction and air drag are considered $\theta = 0$ becomes an asymptotically stable equilibrium. 
 
+\begin{figure}
+\centering
+\includegraphics[width=8cm]{Simple_gravity_pendulum.png}
+\caption{The frame of reference for the simple pendulum problem.
+}
+\label{fig:inverted_pendulum:simple_gravity_pendulum}
+\end{figure}
 
 % Let us take into account friction as a force that resists the motion of the rod about its pivot point.
 % Suppose that friction is proportional to the square of the velocity of the bob: $F = -\frac{1}{2}cm(l\dot{\theta})^2$, $c > 0$.
@@ -60,40 +71,55 @@ Since in this setting the energy of the pendulum is conserved, the equilibrium p
 
 
 \section*{The Inverted Pendulum}
-
+\subsection*{The Control System}
 We consider a gift suspended above a rickshaw by a (massless) rod of length $l$. 
-Let $\theta $ represent the angle between the rod and its unstable equilibrium. 
-We suppose that our rickshaw, and the present above its seat, have masses $M$ and $m$ respectively, $M > m$.  
-We will restrict the rickshaw to travel in a straight line, along the $x$-axis.
+The rickshaw and its suspended gift will have masses $M$ and $m$ respectively, $M > m$.  
+Let $\theta $ represent the angle between the gift and its unstable equilibrium, with counterclockwise orientation. 
+Let $v_1$ and $v_2$ represent the velocities of the rickshaw and the gift, and $F$ the force exerted on the rickshaw. 
+The rickshaw will be restricted to traveling along a straight line (the $x$-axis). 
 
 By Hamilton's Principle, the path $(x,\theta)$ of the rickshaw and the present minimizes the functional 
 \begin{align}
 J[x,\theta] = \int_{t_0}^{t_1}	L,
 \end{align}
 where the Lagrangian $L = T - U$ is the difference between the kinetic energy of the present on the pendulum, and its potential energy.
-The total kinetic energy is described by 
-\[T = \frac{1}{2}Mv_1^2 +  \frac{1}{2}mv_2^2
-.\]
-The potential energy $U$ is composed of two parts: the first is the gravitational potential energy of the bob/present on the pendulum, and is given by $(mg)(l\cos \theta)$.
-The second part is the potential energy in the system due to any force $F$ exerted on the rickshaw. 
-Recalling that whenever a force field $\mathbf{F}$ has the form $\mathbf{F} = \nabla \phi(\mathbf{x})$, where $\phi(\mathbf{x})$ is a scalar field, the potential energy derived from that force is $ -\phi(\mathbf{x})$.
-Thus the total potential energy is 
+
+Since the position of the rickshaw and the present are $(x(t),0)$ and $(x-l\sin \theta, l\cos \theta)$ respectively, the total kinetic energy is 
+\begin{align}
+	\begin{split}
+	T &= \frac{1}{2}Mv_1^2 +  \frac{1}{2}mv_2^2,\\
+	&= \frac{1}{2}M\dot{x}^2 +  \frac{1}{2}m((\dot{x} - l\dot{\theta}\cos \theta)^2 + (- l\dot{\theta}\sin \theta)^2),\\
+	&= \dot{x}^2 + l^2\dot{\theta}^2-2l\dot{x}\dot{\theta}\cos \theta.
+	\end{split}
+\end{align}
+% The potential energy $U$ is composed of two parts: the first is the gravitational potential energy of the bob/present on the pendulum, and is given by $(mg)(l\cos \theta)$.
+% The second part is the potential energy in the system due to any force $F$ exerted on the rickshaw.
+% Recalling that whenever a force field $\mathbf{F}$ has the form $\mathbf{F} = \nabla \phi(\mathbf{x})$, where $\phi(\mathbf{x})$ is a scalar field, the potential energy derived from that force is $ -\phi(\mathbf{x})$.
+The total potential energy is 
 \begin{align*}
 U &= mgl\cos \theta - Fx.
 \end{align*}
 
-Pulling these expressions together, we see that the functional $J$ is given by 
-\begin{align}
-	J[x,\theta] = \int_{t_0}^{t_1} \frac{1}{2}Mv_1^2 +  \frac{1}{2}mv_2^2 - mgl\cos \theta + Fx,
-\end{align}	
-and that the path $(x,\theta)$ of the rickshaw and the present satisfy the Euler-Lagrange differential equations 
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{rickshaw_img.png}
+\caption{The inverted pendulum problem on a mobile rickshaw with a present suspended above.
+}
+\label{fig:inverted_pendulum:rickshaw_diagram}
+\end{figure}
+
+% Pulling these expressions together, we see that the functional $J$ is given by
+% \begin{align}
+% 	J[x,\theta] = \int_{t_0}^{t_1} \frac{1}{2}Mv_1^2 +  \frac{1}{2}mv_2^2 - mgl\cos \theta + Fx,
+% \end{align}
+Since the path $(x,\theta)$ of the rickshaw and the present satisfy the Euler-Lagrange differential equations 
 \begin{align}
 	\begin{split}
 \frac{\partial L}{\partial x} - \frac{d}{dt} \frac{\partial L}{\partial \dot{x}} &= 0,\\
-\frac{\partial L}{\partial \theta} - \frac{d}{dt} \frac{\partial L}{\partial \dot{\theta}} &= 0.
+\frac{\partial L}{\partial \theta} - \frac{d}{dt} \frac{\partial L}{\partial \dot{\theta}} &= 0,
 	\end{split}\label{inverted_pendulum:langrange_eqns}
 \end{align}
-After expanding \eqref{inverted_pendulum:langrange_eqns} we see that $x(t)$ and $\theta(t)$ satisfy
+after expanding \eqref{inverted_pendulum:langrange_eqns} we see that $x(t)$ and $\theta(t)$ satisfy
 \begin{align}
 	\begin{split}
 		F &= (M + m)\ddot{x} - ml\ddot{\theta} \cos \theta + ml \dot{\theta}^2 \sin \theta,\\
@@ -102,24 +128,19 @@ After expanding \eqref{inverted_pendulum:langrange_eqns} we see that $x(t)$ and 
 \end{align}
 
 
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{rickshaw_img.png}
-\caption{This here Remi made}
-\label{fig:inverted_pendulum:rickshaw_diagram}
-\end{figure}
-
 
 At this point we make a further simplifying assumption. 
 If $\theta$ starts close to $0$, we may assume that the corresponding force $F$ will keep $\theta$ small. 
 In this case, we linearize \eqref{inverted_pendulum:langrange_eqns_explicit} about $(\theta, \dot{\theta}) = (0,0)$, obtaining the equations 
-\begin{align}
+\begin{align*}
 	\begin{split}
 		F &= (M + m)\ddot{x} - ml\ddot{\theta},\\
 		l \ddot{\theta} &= g \theta + \ddot{x}.
-	\end{split}\label{inverted_pendulum:langrange_eqns_explicit2}
-\end{align}
-We can further manipulate \eqref{inverted_pendulum:langrange_eqns_explicit2} to obtain 
+	\end{split}%\label{inverted_pendulum:langrange_eqns_explicit2}
+\end{align*}
+These equations can be further manipulated 
+ % \eqref{inverted_pendulum:langrange_eqns_explicit2}
+to obtain 
 \begin{align}
 	\begin{split}
 		\ddot{x} &= \frac{1}{M}F - \frac{m}{M}g\theta,\\
@@ -188,7 +209,7 @@ def linearized_init(M, m, l, q1, q2, q3, q4, r):
 \end{problem}
 
 
-\section*{The infinite time horizon LQR problem}
+\subsection*{The infinite time horizon LQR problem}
 We consider the cost function
 \begin{align}
 \begin{split}
@@ -207,14 +228,14 @@ q_1 & 0 & 0 & 0 \\
 \end{bmatrix}, R = \begin{bmatrix} r \end{bmatrix}.
 \]
 The optimal control problem \eqref{inverted_pendulum:LQR} is an example of a Linear Quadratic Regulator (LQR), and is known to have an optimal control $\tilde{u}$ described by a linear state feedback law:
-\begin{align}
+\begin{align*}
 \tilde{u} &= -R^{-1}B^TP\tilde{z}.
-\end{align}
-Here $P$ is a matrix function that satisfies the riccati differential equation (RDE)
+\end{align*}
+Here $P$ is a matrix function that satisfies the Riccati differential equation (RDE)
 \[
 \dot{P}(t) = PA + A^TP + Q - PBR^{-1}B^T P.  
 \]
-Since this problem has an infinite time horizon, we have $\dot{P} = 0$. Thus $P$ is a constant matrix, and can be found by solving the algebraic riccati equation (ARE)
+Since this problem has an infinite time horizon, we have $\dot{P} = 0$. Thus $P$ is a constant matrix, and can be found by solving the algebraic Riccati equation (ARE)
 \begin{align}
  PA + A^TP + Q - PBR^{-1}B^T P = 0.  \label{inverted_pendulum:ARE}
 \end{align}
@@ -243,7 +264,15 @@ def find_P(A,B,Q,R):
 
 
 \end{lstlisting}
-Now compute the eigenvalues of $A - BR^{-1}B^TP$. Are any of the eigenvalues positive? 
+Using the values 
+\begin{lstlisting}
+M, m = 23., 5.
+l = 4.
+q1, q2, q3, q4 = 1., 1., 1., 1.
+r = 5.
+\end{lstlisting}
+compute the eigenvalues of $A - BR^{-1}B^TP$.
+Are any of the eigenvalues positive? 
 Consider differential equation \eqref{inverted_pendulum:optimal_state} governing the optimal state $\tilde{z}$. 
 Using this value of $P$, will we necessarily have $\dot{\tilde{z}} \to 0$?
 \end{problem}
@@ -251,7 +280,9 @@ Using this value of $P$, will we necessarily have $\dot{\tilde{z}} \to 0$?
 
 Notice that we have no information on how many solutions \eqref{inverted_pendulum:ARE} possesses. 
 In general there may be many solutions. 
-We hope to find a unique solution $P$ that is \textit{stabilizing}: the eigenvalues of $A - BR^{-1}B^TP$ have negative real part. To find this $P$, use the function \li{solve_continuous_are} from \li{scipy.linalg}. This function is designed to solve the continuous algebraic Riccati equation. 
+We hope to find a unique solution $P$ that is \textit{stabilizing}: the eigenvalues of $A - BR^{-1}B^TP$ have negative real part. 
+To find this $P$, use the function \li{solve_continuous_are} from \li{scipy.linalg}. 
+This function is designed to solve the continuous algebraic Riccati equation. 
 
 \begin{problem}
 	Write the following function.
@@ -282,12 +313,63 @@ M, m = 23., 5.
 l = 4.
 q1, q2, q3, q4 = 1., 1., 1., 1.
 r = 10.
-tf = 5.
-X0 = np.array([-1, -1, .1, .1])
+tf = 15
+X0 = np.array([-1, -1, .1, -.2])
 \end{lstlisting}
-Use the matrices $P$ found by using \li{scipy.optimize.root} and \li{solve_continuous_are.} 
-
+Use both \li{scipy.optimize.root} and \li{solve_continuous_are} to find the matrix $P$. Compare your results. The results are plotted in Figure \ref{fig:inverted_pendulum:4} 
+% and \ref{fig:inverted_pendulum:prob4_stable} respectively.
+\label{prob:inverted_pendulum:4}
 \end{problem}
 
 
 
+\begin{problem}
+Consider the following inputs: 
+\begin{lstlisting}
+M, m = 23., 5.
+l = 4.
+q1, q2, q3, q4 = 1., 1., 1., 1.
+r = 10.
+tf = 60
+X0 = np.array([-1, -1, .1, -.2])
+\end{lstlisting}
+Vary the entries of \li{X0} responsible for $\theta(0)$ and $\dot{\theta}(0)$ to determine the sensitivity of the control $u$ to the initial conditions.
+\end{problem}
+
+%
+% \begin{figure}
+% \centering
+% \includegraphics[width=7cm]{prob4_unstable.pdf}
+% \caption{The solution of Problem \ref{prob:inverted_pendulum:4} when $P$ is found using \li{scipy.optimize.root}.
+% }
+% \label{fig:inverted_pendulum:prob4_unstable}
+% \end{figure}
+%
+%
+%
+% \begin{figure}
+% \centering
+% \includegraphics[width=7cm]{prob4_stable.pdf}
+% \caption{The solution of Problem \ref{prob:inverted_pendulum:4} when $P$ is found using \li{solve_continuous_are}.
+% }
+% \label{fig:inverted_pendulum:prob4_stable}
+% \end{figure}
+%
+%
+
+
+\begin{figure}
+\begin{minipage}[b]{.47\linewidth}
+\centering
+\includegraphics[width=\textwidth]{prob4_unstable.pdf}
+\caption*{$P$ is found using \li{scipy.optimize.root}.}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.47\linewidth}
+\centering
+\includegraphics[width=\textwidth]{prob4_stable.pdf}
+\caption*{$P$ is found using \li{solve_continuous_are}.}
+\end{minipage}
+\caption{The solutions of Problem \ref{prob:inverted_pendulum:4}.}
+\label{fig:inverted_pendulum:4}
+\end{figure}
