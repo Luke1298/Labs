@@ -285,13 +285,13 @@ To find this $P$, use the function \li{solve_continuous_are} from \li{scipy.lina
 This function is designed to solve the continuous algebraic Riccati equation. 
 
 \begin{problem}
-	Write the following function.
+	Write the following function that implements the LQR solution described earlier.  For the IVP solver, you can use your own or you may use the function \li{ode} from \li{scipy.integrate}.
 \begin{lstlisting}
-def rickshaw(tf,X0,A, B, Q, R_inv, P):
+def rickshaw(tv,X0,A, B, Q, R_inv, P):
 	'''
 	Parameters:
 	----------
-	tf : int, the final time
+	tv : ndarray of time values, with shape (n+1,)
 	X0 : 
 	A, B, Q	: ndarrays of shape (4,4)
 	R_inv	: ndarray of shape (1,1), inverse of R
@@ -299,8 +299,8 @@ def rickshaw(tf,X0,A, B, Q, R_inv, P):
 	
 	Returns
 	-------
-	Z : ndarray of shape (tf+1,4), the state vector at each time
-	U : ndarray of shape (tf,), the control values
+	Z : ndarray of shape (n+1,4), the state vector at each time
+	U : ndarray of shape (n,), the control values
 	'''
 \end{lstlisting}
 \label{prob:inverted_pendulum3}
@@ -316,10 +316,27 @@ r = 10.
 tf = 15
 X0 = np.array([-1, -1, .1, -.2])
 \end{lstlisting}
-Use both \li{scipy.optimize.root} and \li{solve_continuous_are} to find the matrix $P$. Compare your results. The results are plotted in Figure \ref{fig:inverted_pendulum:4} 
+Use both \li{scipy.optimize.root} and \li{solve_continuous_are} to find the matrix $P$. Compare your results. The results are plotted in Figure \ref{fig:inverted_pendulum:4}.
 % and \ref{fig:inverted_pendulum:prob4_stable} respectively.
 \label{prob:inverted_pendulum:4}
 \end{problem}
+
+
+\begin{figure}
+\begin{minipage}[b]{.47\linewidth}
+\centering
+\includegraphics[width=\textwidth]{prob4_unstable.pdf}
+\caption*{$P$ is found using \li{scipy.optimize.root}.}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.47\linewidth}
+\centering
+\includegraphics[width=\textwidth]{prob4_stable.pdf}
+\caption*{$P$ is found using \li{solve_continuous_are}.}
+\end{minipage}
+\caption{The solutions of Problem \ref{prob:inverted_pendulum:4}.}
+\label{fig:inverted_pendulum:4}
+\end{figure}
 
 
 
@@ -333,7 +350,7 @@ r = 10.
 tf = 60
 X0 = np.array([-1, -1, .1, -.2])
 \end{lstlisting}
-Vary the entries of \li{X0} responsible for $\theta(0)$ and $\dot{\theta}(0)$ to determine the sensitivity of the control $u$ to the initial conditions.
+Vary the entries of \li{X0} responsible for $\theta(0)$ and $\dot{\theta}(0)$ to determine the sensitivity of the control $u$ to the initial conditions.  What initial conditions lead to a reasonable, physical control $u$?
 \end{problem}
 
 %
@@ -358,18 +375,4 @@ Vary the entries of \li{X0} responsible for $\theta(0)$ and $\dot{\theta}(0)$ to
 %
 
 
-\begin{figure}
-\begin{minipage}[b]{.47\linewidth}
-\centering
-\includegraphics[width=\textwidth]{prob4_unstable.pdf}
-\caption*{$P$ is found using \li{scipy.optimize.root}.}
-\end{minipage}
-\hspace{0.5cm}
-\begin{minipage}[b]{0.47\linewidth}
-\centering
-\includegraphics[width=\textwidth]{prob4_stable.pdf}
-\caption*{$P$ is found using \li{solve_continuous_are}.}
-\end{minipage}
-\caption{The solutions of Problem \ref{prob:inverted_pendulum:4}.}
-\label{fig:inverted_pendulum:4}
-\end{figure}
+
