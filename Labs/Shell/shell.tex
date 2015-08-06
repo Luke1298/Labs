@@ -1,19 +1,16 @@
-\lab{UNIX Shell}{Shell}
+\lab{Unix Shell}{Shell}
 \label{lab:Shell}
 
-\objective{Introduce the basics of the UNIX Shell commands and integrate UNIX Shell commands with Python}
+\objective{Introduce the basics of the Unix Shell commands and integrate Unix Shell commands with Python}
 
-TODO: History
-TODO: Mac and Linux
-TODO: Benefits of learning the Shell
-The more you learn about UNIX, you will find it is easy to learn but difficult to master. We will build a foundation of simple file system navigation, job control and basic system remote access. We will address some of the basics in detail and also include lists of commands that are worth learning.
+Unix was first developed by AT\&T Bell Labs in the 1970s. In the 1990s, Unix became the foundation of Linux and MacOSX. The majority of servers are written in Linux, so having a knowledge of Unix shell commands allows us to interact with these servers. 
+
+The more you learn about Unix, you will find it is easy to learn but difficult to master. We will build a foundation of simple file system navigation, job control, and basic system remote access. We will address some of the basics in detail and also include lists of commands that are worth learning.
 
 \section*{File System}
 \subsection*{Navigation}
 
 Begin by opening the Terminal. The text you see in the upper left of the Terminal window is called the \emph{prompt}. We will begin using three very basic commands: \li{pwd}, \li{ls}, and \li{cd}. The \li{pwd} command stands for print working directory. The \li{ls} command lists the files and subdirectories within the working directory. The \li{cd} command changes the working directory.
-
-TODO: Example box
 
 %The only reason this problem exists is to make sure it is VERY clear not to mess with the Shell-Lab directory
 
@@ -40,29 +37,29 @@ Flags & Description
 \label{table:ls_flags} 
 \end{table} 
 
-Multiple flags can be combined as one flag. For example, if we wanted to list all the files in a directory in long format sorted by last time modified, we would use \li{ls -alt}. To view the reference manual for any command, use \li{man}. For example, to view the reference manual for the \li{ls} command, use \li{ls man}.
+Multiple flags can be combined as one flag. For example, if we wanted to list all the files in a directory in long format sorted by last time modified, we would use \li{ls -a -l -t} or \li{ls -alt}. To view the reference manual for any command, use \li{man}. For example, to view the reference manual for the \li{ls} command, use \li{man ls}.
 
 \subsection*{Other Useful Commands}
-Table \ref{table:other_commands} contains a list commonly-used commands and their uses. Many of these commands will be needed throughout this lab and in any typical session with the UNIX shell. After some of the commands are flags listed in square brackets that are worth exploring using \li{man}. We highly recommend experimenting with all these commands to become familiar with them. Remember you may freely experiment with these commands in the \li{test} directory.
+Table \ref{table:other_commands} contains a list commonly-used commands and their uses. Many of these commands will be needed throughout this lab and in any typical session with the Unix shell. After some of the commands are flags listed in square brackets that are worth exploring using \li{man}. We highly recommend experimenting with all these commands to become familiar with them. Remember you may freely experiment with these commands in the \li{test} directory.
 
 \begin{lstlisting}
 Shell-Lab $ cd test
-test $ touch data.txt
-test $ mkdir Other
-test $ ls
+$ touch data.txt
+$ mkdir Other
+$ ls
  Other 	data.txt
-test $ cp data.txt Other/
-test $ cd Other/
-Other $ ls
+$ cp data.txt Other/
+$ cd Other/
+$ ls
 data.txt
-Other $ mv data.txt new_data.txt
-Other $ ls
+$ mv data.txt new_data.txt
+$ ls
  new_data.txt
-Other $ cd ..
-test $ rm -rv Other/
+$ cd ..
+$ rm -rv Other/
  removed 'Other/data.txt'
  removed directory: 'Other/'
-test $ clear
+$ clear
 \end{lstlisting}
 
 \begin{table}
@@ -72,9 +69,10 @@ Commands & Description
 \li{clear} & Clear the terminal screen \\
 \li{cp file1 dir1} & Create a copy of \li{file1} in \li{dir1} \\
 \li{cp file1 file2} & Create a copy of file1 and name it file2 \\
+\li{df dir1} & Display available disk space in file system containing \li{dir1} \\
 \li{du dir1} & Display disk usage within \li{dir1} [\li{-a}, \li{-h}] \\
-\li{df dir1} & Display available disk space in \li{dir1} \\
 \li{mkdir dir1} & Create a new directory named \li{dir1} \\
+\li{mkdir -p path/to/new/dir1} & Create \li{dir1} and all intermediate directories \\
 \li{mv file1 dir1} & Move \li{file1} to \li{dir1} \\
 \li{mv file1 file2} & Rename \li{file1} as \li{file2} \\
 \li{rm file1} & Delete \li{file1} [\li{-i}, \li{-v}] \\
@@ -90,11 +88,11 @@ Commands & Description
 \end{table} 
 
 \begin{problem}
-Inside the \li{Shell-Lab} directory, create a new directory called \li{Photos} and delete the \li{Audio} folder along with all its contents. TODO: add something else to do.
+Inside the \li{Shell-Lab} directory, delete the \li{Audio} folder along with all its contents. Create \li{Documents}, \li{Photos}, and \li{Python} directories.
 \end{problem}
 
 \subsection*{Wildcards}
-As we are working in the file system, there will be times that we want to perform  the same command to a group of similar files. For example, if you needed to move   all text files within a directory to a new directory, the naive way to do this would be to move each text file individually. However, this same result can be achieved using \emph{wildcards}. We use wildcards as placeholder text.  The two wildcards we use most are \li{*} and \li{?}. The \li{*} wildcard represents any string and the \li{?} wildcard represents any character. Though these wildcards can be used in almost every UNIX command, they are particularly useful when dealing with files. See Table \ref{table:wildcards}
+As we are working in the file system, there will be times that we want to perform  the same command to a group of similar files. For example, if you needed to move   all text files within a directory to a new directory, the naive way to do this would be to move each text file individually. However, this same result can be achieved using \emph{wildcards}. We use wildcards as placeholder text.  The two wildcards we use most are \li{*} and \li{?}. The \li{*} wildcard represents any string and the \li{?} wildcard represents any character. Though these wildcards can be used in almost every Unix command, they are particularly useful when dealing with files. See Table \ref{table:wildcards}
 
 \begin{table}
 \begin{tabular}{l|l} 
@@ -110,7 +108,7 @@ Command & Description
 \end{table} 
 
 \begin{problem}
-Within the \li{Shell-Lab} directory, there are multiple \li{.png} files. Using wildcards, move all the \li{.png} files to the \li{Photos} folder you created in Problem 1. Similarly, create a \li{Documents} folder and a \li{Python} folder and move all the \li{.txt} files and all the \li{.py} files to their respective folders. You will see a few other folders in the \li{Shell-Lab} directory. Do not move any of the files within these folders at this point.  TODO: add the .png, .txt, .py files to Shell-lab directory
+Within the \li{Shell-Lab} directory, there are many files. We will organize these files into directories. Using wildcards, move all the \li{.jpg} files to the \li{Photos} directory, all the \li{.txt} files to the \li{Documents} directory, and all the \li{.py} to the \li{Python} directory. You will see a few other folders in the \li{Shell-Lab} directory. Do not move any of the files within these folders at this point.  TODO: add the .jpg, .txt, .py files to Shell-lab directory
 \end{problem}
 
 \section*{Searching the File System}
@@ -178,7 +176,7 @@ $ wc -l < <some file> >> <output file>
 Since \li{grep} is used to print lines matching a pattern, it is also very useful to use in conjunction with piping. For example, \li{ls -l | grep root} prints all files associated with the root user.
 
 \begin{problem}
-The \li{word_file} file contains a list of words that are not in alphabetical order. Write the number of words in \li{word_file} and an alphabetically sorted list of words to \li{output_file} using pipes and redirects. Try to accomplish this with a total of two commands or fewer.
+The \li{words.txt} file contains a list of words that are not in alphabetical order. Write the number of words in \li{words.txt} and an alphabetically sorted list of words to \li{sortedwords.txt} using pipes and redirects. Try to accomplish this with a total of two commands or fewer.
 \end{problem}
 
 \section*{File Security}
@@ -279,12 +277,13 @@ TODO: Example code box
 \begin{tabular}{l|l} 
 Command & Description
 \\ \hline 
-\li{COMMAND \&} & adding an ampersand to the end of a command runs the command in the background \\
-\li{bg \%n} & restarts an interrupted job in the background \\
-\li{fg \%n} & brings the nth job into the foreground \\
-\li{jobs} & lists all the jobs currently running \\
-\li{kill \%n} & terminates the nth job \\
-\li{ps} & lists all the current processes \\
+\li{COMMAND \&} & Adding an ampersand to the end of a command \\
+& runs the command in the background \\
+\li{bg \%n} & Restarts an interrupted job in the background \\
+\li{fg \%n} & Brings the nth job into the foreground \\
+\li{jobs} & Lists all the jobs currently running \\
+\li{kill \%n} & Terminates the nth job \\
+\li{ps} & Lists all the current processes \\
 \li{Ctrl-C} & Terminates current job \\
 \li{Ctrl-Z} & Interrupts current job \\
 \end{tabular} 
@@ -293,28 +292,30 @@ Command & Description
 \end{table} 
 
 \begin{problem}
-In addition to the \li{five_secs} and \li{ten-secs} scripts, the \li{Scripts} folder contains three scripts that will each take about a forty-five seconds to execute. Execute each of these commands in the background so all three are executing at the same time. To verify all scripts are running at the same time, write the output of \li{jobs} to a new file \li{log.txt}.
+In addition to the \li{five_secs} and \li{ten-secs} scripts, the \li{Scripts} folder contains three scripts that will each take about a forty-five seconds to execute. Execute each of these commands in the background so all three are running at the same time. To verify all scripts are running at the same time, write the output of \li{jobs} to a new file \li{log.txt}.
 \end{problem}
 
 \section*{Python Integration}
-To this point, we have barely scratched the surface of all the functionality that UNIX has to offer. However, the tools and commands we have addressed so far provide us with a foundation of the basics. Using the \li{os} module in Python, we can call UNIX commands. By combining Python and the UNIX commands, our toolset is automatically broadened.
+To this point, we have barely scratched the surface of all the functionality that Unix has to offer. However, the tools and commands we have addressed so far provide us with a foundation of the basics. Using the \li{subprocess} module in Python, we can call Unix commands. By combining Python and the Unix commands, our toolset is automatically broadened.
 
-There are two functions within the \li{os} module specifically we will use. When wanting to run a UNIX command, use \li{os.system()}. When wanting to run a UNIX command and be able to store and manipulate the output, use \li{os.popen()}. This function returns a \li{file} object that we can read and store.
+There are two functions in particular within the \li{subprocess} module we will use. When wanting to run a Unix command, use \li{subprocess.call()}. When wanting to run a Unix command and be able to store and manipulate the output, use \li{subprocess.check_output()}. These functions have a keyword argument \li{shell} that defaults to \li{False}. We want to set this argument to \li{True} to run the command in the Unix shell.
 
 \begin{lstlisting}
 TODO: Finish code box
->>> import os
->>> os.system("ls -l")
+>>> import subprocess
+>>> subprocess.call("ls -l", shell=True)
 <output>
->>> files = os.popen("ls -l").read().split('\n')
+>>> files = subprocess.check_output("ls -l", shell=True)
 >>> files
+<output>
+>>> files.split('\n')
 <output>
 
 # Now that we have a list object, we can manipulate and analyze this data in Python.
 \end{lstlisting}
 
 \begin{problem}
-Create a \li{Shell} class. Write a \li{find_file} method that will search for a file starting in the current directory and prints the paths of all matches using the \li{find} command. Write a \li{find_word} method that finds a given word within the contents of the current directory using the \li{grep} command.
+Create a \li{Shell} class. Write a \li{find_file} method that will search for a file  name starting in the current directory using the \li{find} command. Write a \li{find_word} method that finds a given word within the contents of the current directory using the \li{grep} command. For both these functions, return a list of the filepaths.
 \end{problem}
 
 \begin{problem}
