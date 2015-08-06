@@ -575,14 +575,16 @@ Let's say we are given a large data set and we need to loop through data as we a
 
 When we want to produce a generator from a function, we use \li{yield} instead of \li{return}. Because \li{return} only gets called once, all the data that needs to be returned by a function must be processed before the return statement. When using \li{yield}, each piece of data can be processed and returned one and a time.
 
-See the following code box for an example of implementation:
+The important difference is that a generator computes the next value in the sequence and returns it. It never has to store all of the values in the sequence. A good way to think of the distinction between lists and generators is to remember: \emph{Iterators return their values while generators yield their values.}
+
+Python uses the \li{yield} keyword to define a generator. See the following code box for an example of implementation:
 
 \begin{lstlisting}
->>> def range_generator(n):
-...    i = 0
-...    while i < n:
+>>> def range_generator(start=0, stop, step=1):
+...    i = start
+...    while i < stop:
 ...        yield i 
-...        i += 1
+...        i += step
 ...
 
 >>> three = range_generator(3)
