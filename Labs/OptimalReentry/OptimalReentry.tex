@@ -5,15 +5,8 @@ We look at two problems related to space flight: The second problem is to choose
 }
 
 
-
-We consider the problem of choosing the path of reentry for a spacecraft, so as to minimize the total heating of the craft. 
-The functional describing the total heating is \[
-J[u] = \int_0^T 10v^3 \sqrt{\rho}
-,\]
-where $v$ is the velocity of the craft and $\rho$ is the atmospheric density. 
-
 We begin by giving the control system that describes the path of the vehicle through the atmosphere
-\footnote{This problem and its numerical solution are thoroughly described in 'Introduction to Numerical Analysis' by J. Stoer, R. Bulirsch (pg 524). 
+\footnote{This control problem and its numerical solution are thoroughly described in 'Introduction to Numerical Analysis' by J. Stoer, R. Bulirsch (pg 524). 
 We will mirror their presentation throughout this lab.}. 
 If $v$ is the velocity of the spacecraft, $\gamma$ is the angle of the flight path, $\xi$ is the normalized altitude above the Earth's surface ($\xi = h/R$, where $R$ is the radius of the Earth and $h$ the altitude of the spacecraft above the Earth), and $u$ is the control variable that represents the angle of attack of the spacecraft, the flight path can be described by 
 \begin{align}
@@ -41,8 +34,11 @@ The trajectory of the spacecraft must also satisfy the boundary conditions
 where $T$ represents the time at the end of the reentry maneuver. 
 
 
-
-
+We consider the problem of choosing the path of reentry for a spacecraft, so as to minimize the total heating of the craft. 
+The functional describing the total heating is 
+\[
+J[u] = \int_0^T 10v^3 \sqrt{\rho}.
+\]
 To simpify notation, we rewrite \eqref{eqn:reentry:control_system} in the form $y' = G(y)$, where $y = [y_0, y_1, y_2]^T=[v,\gamma, \xi]^T$ and $G$ has component functions $G = [G_0, G_1, G_2]^T$. The Hamiltonian for this control system is given by 
 \begin{align}
 H &=  10v^3 \sqrt{\rho} + p_0G_0 + p_1G_1 + p_2G_2,
@@ -54,13 +50,23 @@ The optimal state and adjoint equations are thus given by
 	\dot{p} &= -H_{y} \label{eqn:reentry:adjoint_system}
 \end{align}
 
-
+To our boundary conditions we add the terminal condition that $H = 0$ at $t = T$.
 % \footnote{BNDSCO - A program for the numerical solution of optimal control problems, H.J. Oberle and W. Grimm, 1989}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{solutions.pdf}
+\caption{The solution of ?%\eqref{reentry:solutions}.
+}
+\label{fig:reentry:solutions}
+\end{figure}
+
 
 
 \section*{Constructing an Initial Guess}
+Most BVP solvers require an equal number of differential equations and boundary conditions. Currently we have 6 ODEs and 7 boundary conditions. 
 
-
+Difficulties with the bvp include providing an initial guess that is sufficiently close to the solution.  Since this is a sensitive problem, we will use a heuristic method to help us find a good initial guess.
 
 
 
