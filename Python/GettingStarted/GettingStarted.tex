@@ -2,6 +2,10 @@
 \objective{Introduce basic coding procedures and objects usage in Python.}
 \label{lab:Essential_Python}
 
+% FUTURE EDITS
+%  - transition from ipython notebook to jupyter notebook
+%  - transition from Python 2.7 to Python 3.x
+
 \section*{Python}
 Python is a powerful general-purpose programming language. As an interpreted
 language, it can be used interactively.
@@ -22,7 +26,12 @@ It is quickly gaining momentum as a fundamental tool in scientific computing bec
 In addition to these, Python is freely available and can also be freely distributed.
 
 \section*{Installation}
-Python 2.7 is required for the labs in this text. We will download everything we need to get started using Anaconda. Anaconda is a free Python distribution that includes Python 2.7 and many of the commonly used libraries for scientific computing. Most of the libraries we will use in these labs are included in Anaconda. We will add more libraries in the future as needed. To download Anaconda, go to \url{http://continuum.io/downloads}, download the installer corresponding to your operating system, and follow the on-screen installation instructions. Make sure the installer you use corresponds to Python 2.7. Although later versions of Python are available, they do not yet have many of the features needed for scientific computing. For a detailed guide on initial installation, see Appendix \ref{win64install}. 
+Python 2.7 is required for the labs in this text. We will download everything we need to get started using Anaconda. 
+Anaconda is a free Python distribution that includes Python 2.7 and many of the commonly used libraries for scientific computing. 
+Most of the libraries we will use in these labs are included in Anaconda. We will add more libraries in the future as needed. 
+To download Anaconda, go to \url{http://continuum.io/downloads}, download the installer corresponding to your operating system, and follow the on-screen installation instructions. 
+Make sure the installer you use corresponds to Python 2.7. Although later versions of Python are available, they do not yet have many of the features needed for scientific computing. 
+For a detailed guide on initial installation, see Appendix \ref{pythoninstall}. 
 
 
 \section*{Running Python}
@@ -276,7 +285,7 @@ Keyword: {'apples': 3, 'oranges': 2}
 \end{lstlisting}
 
 \begin{problem}
-Write a function \li{sphere_volume} that accepts a parameter \li{r} and returns the volume of a sphere of radius \li{r}.
+Write a function \li{sphere_volume} that accepts a parameter \li{r} and returns the volume of a sphere of radius \li{r}. Use \pi=3.14159.
 \end{problem}
 
 %===========================
@@ -612,7 +621,7 @@ Python uses the \li{yield} keyword to define a generator. See the following code
 \end{lstlisting}
 
 \begin{problem}
-Write a function \li{squares} that accepts a parameter \li{n} and creates a generator of all squares less than \li{n}. For example, \li{squares(10)} would generate \li{0, 1, 2, 4,} and \li{9}.
+Write a function \li{squares} that accepts a parameter \li{n} and creates a generator of all squares less than \li{n}. For example, \li{squares(10)} would yield \li{0, 1, 2, 4,} and \li{9}.
 \end{problem}
 
 % ====================
