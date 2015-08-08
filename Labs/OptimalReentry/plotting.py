@@ -8,12 +8,13 @@ from scikits import bvp_solver
 import matplotlib.pyplot as plt
 
 ###################################################################
-# Code taken from the matplotlib gallery:
+# Code (import statements and the following function) are 
+# adapted from the matplotlib gallery:
 from mpl_toolkits.axes_grid1 import host_subplot
 import mpl_toolkits.axisartist as AA
 import matplotlib.pyplot as plt
 
-def matplotlib_example(vars):
+def plot_reentry_trajectory(vars):
 	if 1:
 		# plt.rc("font", size=16)
 		host = host_subplot(111, axes_class=AA.Axes)
@@ -35,13 +36,14 @@ def matplotlib_example(vars):
 		host.set_xlabel("time (sec)",fontsize=24)
 		host.set_ylabel("$v$",fontsize=24)
 		par1.set_ylabel(r"$\gamma$",fontsize=24)
-		par2.set_ylabel(r"$\xi$",fontsize=24)
+		par2.set_ylabel(r"$h$",fontsize=24)
 		p1, = host.plot(vars[0], vars[1], linewidth=2.0,label="velocity")
 		p2, = par1.plot(vars[0], vars[2], linewidth=2.0,label="angle of trajectory")
-		p3, = par2.plot(vars[0],vars[3], linewidth=2.0,label="altitude")
+		p3, = par2.plot(vars[0],209*vars[3], linewidth=2.0,label="altitude")
 
 		par1.set_ylim(-.15,.05)
-		par2.set_ylim(.008,.02)
+		# par2.set_ylim(.008,.02)
+		par2.set_ylim(1.5,4.5)
 		host.legend(loc='right')
 		
 		host.axis["left"].label.set_fontsize(18)
@@ -55,10 +57,8 @@ def matplotlib_example(vars):
 		plt.savefig("solutions.pdf")
 		plt.show()
 		plt.clf()
+	return 
 
-		
-###################################################################
-###################################################################
 ###################################################################
 
 
@@ -68,7 +68,7 @@ def reentry_init(plot=False):
 	beta = 4.26
 	rho0 = 2.704e-3
 	g = 3.2172e-4
-	s = 26600		# 53200;
+	s = 26600 
 	T_init = 230
 	
 	p1, p2, p3 = 1.6, 4, .5 # 1.09835, 6.48578, .347717
@@ -88,7 +88,7 @@ def reentry_init(plot=False):
 	def F(x,y):
 		u =	 arctan((6*y[4])/(9*y[0]*y[3] ))
 		rho = rho0*exp(-beta*R*y[2])
-		out = y[6]*array([
+		out = array([
 				 -s*rho*y[0]**2*C_d(u) - g*sin(y[1])/(1+y[2])**2,		 # G_0
 				( s*rho*y[0]*C_l(u) + y[0]*cos(y[1])/(R*(1 + y[2])) - 
 				  g*cos(y[1])/(y[0]*(1+y[2])**2) ),						 # G_1
@@ -111,7 +111,7 @@ def reentry_init(plot=False):
 						  ),											 # G_5
 					0 # T' = 0											 # G_6
 			   ])
-		return out
+		return y[6]*out
 
 	#############################################################
 	def F_auxiliary(x,y):
@@ -321,49 +321,6 @@ def reentry_init(plot=False):
 	return (xint,yint[0,:], yint[1,:], yint[2,:], yint[3,:], yint[4,:], yint[5,:], u)
 
 
-
-
-
-
-
-
-
-
-
-# def bvp_solver_example():
-# 	"""
-# 	Using scikits.bvp_solver to solve the bvp
-# 	"""
-# 	epsilon = .1
-# 	lbc, rbc = 0., 1.
-#
-# 	def function1(x , y):
-# 		return np.array([y[1] , (4./epsilon)*(pi-x**2.)*y[0] + 1./epsilon*np.cos(x) ])
-#
-#
-# 	def boundary_conditions(ya,yb):
-# 		return (np.array([ya[0] - lbc]),
-# 				np.array([yb[0] - rbc]))
-#
-# 	problem = bvp_solver.ProblemDefinition(num_ODE = 2,
-# 										  num_parameters = 0,
-# 										  num_left_boundary_conditions = 1,
-# 										  boundary_points = (0., pi/2.),
-# 										  function = function1,
-# 										  boundary_conditions = boundary_conditions)
-#
-# 	solution = bvp_solver.solve(problem,
-# 								solution_guess = (1.,
-# 												  0.))
-#
-# 	A = np.linspace(0.,pi/2., 200)
-# 	T = solution(A)
-# 	plt.plot(A, T[0,:],'-k',linewidth=2.0)
-# 	plt.show()
-# 	plt.clf()
-# 	return
-
-
 def reentry(x_guess,guess,N=240,plot=False):
 	R = 209
 	beta = 4.26
@@ -468,9 +425,8 @@ def reentry(x_guess,guess,N=240,plot=False):
 								initial_mesh = linspace(0,1,len(x_guess)),
 								max_subintervals=1000,
 								trace = 1)
-	# # For more info on the available options for these methods, run
-	# print bvp_solver.ProblemDefinition.__doc__
-	# print bvp_solver.solve.__doc__
+	# # For more info on the available options for bvp_solver, look at 
+	# the docstrings for bvp_solver.ProblemDefinition and bvp_solver.solve
 	
 	numerical_soln = solution(linspace(0,1,N+1))
 	u =	 arctan((6*numerical_soln[4,:])/(9*numerical_soln[0,:]*numerical_soln[3,:] )) 
@@ -478,21 +434,21 @@ def reentry(x_guess,guess,N=240,plot=False):
 	
 	if plot==True:
 		# Plot guess for v
-		plt.plot(x_guess,np.real(guess[0,:]),'-r',linewidth=2.0)
+		plt.plot(domain,np.real(guess[0,:]),'-r',linewidth=2.0)
 		plt.plot(domain,np.real(numerical_soln[0,:]),'-k',linewidth=2.0)
 		plt.xlabel('$t$',fontsize=18); plt.ylabel('$v$',fontsize=18)
 		plt.savefig('solution_v.pdf')
 		plt.show(); plt.clf()
 		
 		# Plot guess for gamma
-		plt.plot(x_guess,np.real(guess[1,:]),'-r',linewidth=2.0)
+		plt.plot(domain,np.real(guess[1,:]),'-r',linewidth=2.0)
 		plt.plot(domain,np.real(numerical_soln[1,:]),'-k',linewidth=2.0)
 		plt.xlabel('$t$',fontsize=18); plt.ylabel(r'$\gamma$',fontsize=18)
 		plt.savefig('solution_gamma.pdf')
 		plt.show(); plt.clf()
 		
 		# Plot guess for xi
-		plt.plot(x_guess,np.real(guess[2,:]),'-r',linewidth=2.0)
+		plt.plot(domain,np.real(guess[2,:]),'-r',linewidth=2.0)
 		plt.plot(domain,np.real(numerical_soln[2,:]),'-k',linewidth=2.0)
 		plt.xlabel('$t$',fontsize=18); plt.ylabel(r'$\xi$',fontsize=18)
 		plt.savefig('solution_xi.pdf')
@@ -500,7 +456,7 @@ def reentry(x_guess,guess,N=240,plot=False):
 		
 		# Plot guess for control u
 		p1, p2, p3 = guess[3,0], guess[4,0], guess[5,0]
-		plt.plot(x_guess,p1*erf( p2*(p3-x_guess/T_init) ) ,'-r',linewidth=2.0)
+		plt.plot(domain,p1*erf( p2*(p3-x_guess/T_init) ) ,'-r',linewidth=2.0)
 		plt.plot(domain,u,'-k',linewidth=2.0)
 		plt.xlabel('$t$',fontsize=18); plt.ylabel(r'$u$',fontsize=18)
 		plt.savefig('solution_u.pdf')
@@ -590,7 +546,7 @@ def reentry_auxiliary_problem(N=240,plot=True):
 		# Plot guess for gamma
 		plt.plot(xint_guess,np.real(yint_guess[1,:]),'-k',linewidth=2.0)
 		plt.xlabel('$t$',fontsize=18); plt.ylabel(r'$\gamma$',fontsize=18)
-		plt.savefig('guess_gamma.pdf')
+		plt.savefig('guess_gamma.pdf'); 
 		plt.show(); plt.clf()
 		
 		# Plot guess for xi
@@ -606,29 +562,26 @@ def reentry_auxiliary_problem(N=240,plot=True):
 		plt.savefig('guess_u.pdf')
 		plt.show(); plt.clf()
 	
-	
 	return xint_guess, yint_guess
 
 
 def plot_u_guess():
-	
 	a = pi/2.*(3./4)
 	b = -a
 	
-	plt.plot([0,.5],[a,a],'-k',linewidth=2.0)
-	plt.plot([.5,1],[b,b],'-k',linewidth=2.0)
-	plt.show(); plt.clf()
 	p1, p2, p3 = 1.3, 4.5, .5 # 1.09835, 6.48578, .347717
 	
 	# # Plot initial guess for control u in the auxiliary problem
-	T_guess = 230
-	x_array = linspace(0,T_guess,100)
-	plt.plot([0,.5*T_guess],[a,a],'-r',linewidth=2.0)
-	plt.plot([.5*T_guess,T_guess],[b,b],'-r',linewidth=2.0)
-	plt.plot(x_array,p1*erf( p2*(p3-x_array/T_guess) ),'-k',linewidth=2.0)
+	T0 = 230
+	X = linspace(0,T0,100)
+	plt.rc("font", size=22)
+	plt.plot([0,.5*T0],[a,a],'-r',linewidth=2.0)
+	plt.plot([.5*T0,T0],[b,b],'-r',linewidth=2.0)
+	# plt.plot(X,p1*erf( p2*(p3-X/T0) ),'-k',linewidth=2.0)
 	plt.yticks([-pi/2.,0, pi/2],
 	           [r'$-\frac{\pi}{2}$', '$0$', r'$-\frac{\pi}{2}$'])
-	plt.savefig('u_heuristic_smooth.pdf')
+	# plt.savefig('u_heuristic_smooth.pdf')
+	# plt.savefig('u_heuristic.pdf')
 	plt.show(); plt.clf()
 	
 	return
@@ -640,8 +593,8 @@ if __name__ == "__main__":
 	# soln = reentry_init(plot=True)
 	# matplotlib_example(soln)
 	
-	# x,y = reentry_auxiliary_problem(240)
-	# soln = reentry(x,y,plot=True)
-	# matplotlib_example(soln)
+	x,y = reentry_auxiliary_problem(240)
+	soln = reentry(x,y,plot=True)
+	plot_reentry_trajectory(soln)
 	
-	plot_u_guess()
+	# plot_u_guess()
