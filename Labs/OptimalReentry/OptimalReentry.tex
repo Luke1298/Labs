@@ -21,36 +21,52 @@ The atmospheric density is represented by $\rho = \rho_0e^{-R\beta\xi}$, where  
 Parameter $s = \frac{1}{2}S/m$, where $S$ is the frontal area of the craft and $m$ is its mass, and $g$ represents the force of gravity. 
 The numerical values we will use are $g = 3.2172\times10^{-4}$, $s = 26,600$, $R = 209$ $(209\times 10^5 \text{ ft})$, $\beta = 4.26$ and $\rho_0 = 2.704\times 10^{-3}$.
 The trajectory of the spacecraft must also satisfy the boundary conditions
-\begin{align}
-\begin{split}
-	v(0) &= 0.36 \quad (36000 \text{ ft/sec}),\\
-	\gamma(0) &= -8.1^\circ \frac{\pi}{180^\circ}, \\
-	\xi(0)&= \frac{4}{R}\quad (h = 400000 \text{ ft}), \\
-	v(T) &= 0.27,\\
-	\gamma(T) &= 0, \\
-	\xi(T)&= \frac{2.5}{R}, \\
-\end{split}
-\end{align}
+% \begin{align}
+% \begin{split}
+% 	v(0) &= 0.36 \quad (36000 \text{ ft/sec}),\\
+% 	\gamma(0) &= -8.1^\circ \frac{\pi}{180^\circ}, \\
+% 	\xi(0)&= \frac{4}{R}\quad (h = 400000 \text{ ft}), \\
+% 	v(T) &= 0.27,\\
+% 	\gamma(T) &= 0, \\
+% 	\xi(T)&= \frac{2.5}{R}, \\
+% \end{split}
+% \end{align}
+% 
+\begin{equation}
+  \begin{split}
+    v(0) &= 0.36 \quad (36000 \text{ ft/sec})\\
+    \gamma(0) &= -8.1^\circ \frac{\pi}{180^\circ}\\
+    \xi(0)&= \frac{4}{R}\quad (h = 400000 \text{ ft})
+  \end{split}
+\quad \quad \quad \quad \quad
+  \begin{split}
+    v(T) &= 0.27\\
+    \gamma(T) &= 0 \\
+	\xi(T)&= \frac{2.5}{R}
+  \end{split}
+\end{equation}
 where $T$ represents the time at the end of the reentry maneuver. 
-
+To simpify notation, we will also write \eqref{eqn:reentry:control_system} in the form $y' = G(y)$, where $y = [y_0, y_1, y_2]^T=[v,\gamma, \xi]^T$ and $G$ has component functions $G = [G_0, G_1, G_2]^T$. 
 
 We consider the problem of choosing the path of reentry for a spacecraft, so as to minimize the total heating of the craft. 
 The functional describing the total heating is 
 \[
-J[u] = \int_0^T 10v^3 \sqrt{\rho}.
+J[u] = \int_0^T 10y_0^3 \sqrt{\rho}.
 \]
-To simpify notation, we rewrite \eqref{eqn:reentry:control_system} in the form $y' = G(y)$, where $y = [y_0, y_1, y_2]^T=[v,\gamma, \xi]^T$ and $G$ has component functions $G = [G_0, G_1, G_2]^T$. The Hamiltonian for this control system is given by 
+The Hamiltonian for this control system is 
 \begin{align}
-H &=  10v^3 \sqrt{\rho} + p_0G_0 + p_1G_1 + p_2G_2,
+H &=  10y_0^3 \sqrt{\rho} + \lambda_0G_0 + \lambda_1G_1 + \lambda_2G_2,
 \end{align}
-where $p = [p_0,p_1,p_2]^T$ is the adjoint variable. 
+where $\lambda = [\lambda_0,\lambda_1,\lambda_2]^T$ is the adjoint variable. 
 The optimal state and adjoint equations are thus given by 
 \begin{align}
-	\dot{y} &= H_{p},\\
-	\dot{p} &= -H_{y} \label{eqn:reentry:adjoint_system}
+	\dot{y} &= H_{\lambda},\\
+	\dot{\lambda} &= -H_{y} \label{eqn:reentry:adjoint_system}
 \end{align}
-
-To our boundary conditions we add the terminal condition that $H = 0$ at $t = T$.
+To our boundary conditions we add the terminal condition that $H = 0$ at $t = T$.  From the condition $\frac{\partial H}{\partial u} = 0$ we find that the optimal control satisfies
+\begin{align}
+\tan u &= \frac{6\lambda_1}{9y_0\lambda_0}.
+\end{align}
 % \footnote{BNDSCO - A program for the numerical solution of optimal control problems, H.J. Oberle and W. Grimm, 1989}
 
 \begin{figure}
@@ -64,9 +80,122 @@ To our boundary conditions we add the terminal condition that $H = 0$ at $t = T$
 
 
 \section*{Constructing an Initial Guess}
-Most BVP solvers require an equal number of differential equations and boundary conditions. Currently we have 6 ODEs and 7 boundary conditions. 
+Most BVP solvers require an equal number of differential equations and boundary conditions. 
+Currently we have 6 ODEs and 7 boundary conditions. 
 
-Difficulties with the bvp include providing an initial guess that is sufficiently close to the solution.  Since this is a sensitive problem, we will use a heuristic method to help us find a good initial guess.
+This nonlinear BVP is very sensitive, and requires an initial guess that is quite close to the solution.  This is intuitively obvious: if the control 
+
+
+Since this is a sensitive problem, we will use a heuristic method to help us find a good initial guess.
+
+
+TODO: 
+\begin{enumerate}
+	\item Justify terminal condition $H = 0$. Check Jared's notes.
+	\item Transform the free boundary value problem so that there are 7 ODEs and 7 BCs. 
+	\item Use the control $u$ to help guess the adjoint trajectories
+	\item Turn scattering paper into a lab to replace lab on Poisson's equation. 
+	
+\end{enumerate}
+Guess that $u = p_0\erf(p_1(p_2-t/T))$, where $p_0, p_1,$ and $p_2$ are unknown constants. 
+We define an auxiliary problem to help us come up with a good initial guess for the original BVP. 
+\begin{align}
+\begin{split}
+y_0' &= -s\rho y_0^2C_D(u) - \frac{g\sin(y_1)}{(1+y_2)^2},\\
+y_1' &= s \rho y_0 C_L(u) + \frac{y_0 \cos(y_1)}{R(1+y_2)} - \frac{g \cos y_1}{y_0(1+y_2)^2},\\
+y_2' &= \frac{y_0 \sin y_1}{R} ,\\
+p_0' &= 0, \\
+p_1' &= 0, \\
+p_2' &= 0.
+\end{split} \label{eqn:reentry:control_system_auxiliary}
+\end{align}
+
+
+
+The following code includes import statements, defines the parameters of the BVP, and creates functions for the drag coefficients. 
+\begin{lstlisting}
+from __future__ import division
+from math import sin, cos
+from scipy.special import erf
+from scikits import bvp_solver 
+
+R = 209
+beta = 4.26
+rho0 = 2.704e-3
+g = 3.2172e-4
+s = 26600	
+T_init = 230
+
+def C_d(u): 
+	return 1.174 - 0.9*cos(u)
+
+def C_l(u): 
+	return 0.6*sin(u)
+	
+\end{lstlisting}
+
+For the auxiliary problem, we code functions for the ode and for the boundary conditions. 
+\begin{lstlisting}
+def ode_auxiliary(x,y):
+	u = y[3]*erf( y[4]*(y[5]-x/T_init) )
+	rho = rho0*exp(-beta*R*y[2])
+	out = array([-s*rho*y[0]**2*C_d(u) - g*sin(y[1])/(1+y[2])**2,
+				  ( s*rho*y[0]*C_l(u) + y[0]*cos(y[1])/(R*(1 + y[2])) - 
+				  g*cos(y[1])/(y[0]*(1+y[2])**2) ),
+				  y[0]*sin(y[1])/R,
+				  0,
+				  0,
+				  0		])
+	return out
+	
+def bcs_auxiliary(ya,yb):
+	# If the problem is defined on the interval [a,b], ya = y(a) and yb = y(b), 
+	# ya[0] = y_0(a), etc.
+	# bvp_solver will attempt to make each of the entries below zero in the 
+	# numerical solution.
+	
+	out1 = array([ya[0]-.36,
+				  ya[1]+8.1*pi/180,
+				  ya[2]-4/R
+				  ])
+	out2 = array([yb[0]-.27,
+				  yb[1],
+				  yb[2]-2.5/R
+				  ])
+	return out1, out2
+
+problem_auxiliary = bvp_solver.ProblemDefinition(num_ODE = 6,
+										  num_parameters = 0,
+										  num_left_boundary_conditions = 3,
+										  boundary_points = (0., T_init),
+										  function = ode_auxiliary,
+										  boundary_conditions = bcs_auxiliary)
+									
+solution_auxiliary = bvp_solver.solve(problem_auxiliary,
+								solution_guess = guess_auxiliary)
+								
+N = 240 # Number of subintervals
+x_array = linspace(0,T_init,N+1)
+y_array = solution_auxiliary(x_array)
+	
+\end{lstlisting}
+
+\begin{figure}
+\begin{minipage}[b]{.47\linewidth}
+\centering
+\includegraphics[width=\textwidth]{u_heuristic.pdf}
+\caption*{Heuristic for the control $u$, provided by engineers. }
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.47\linewidth}
+\centering
+\includegraphics[width=\textwidth]{u_heuristic_smooth.pdf}
+\caption*{Providing a smooth initial guess for the control $u$.}
+\end{minipage}
+\caption{We attempt to find a smooth estimate for the control $u$, by giving the control the form 
+$u = p_0\erf(p_1(p_2-t/T))$ and estimating parameters $p_0, p_1, p_2$.}
+\label{fig:reentry:estimate_u}
+\end{figure}
 
 
 
