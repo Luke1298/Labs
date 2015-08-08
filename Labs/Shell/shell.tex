@@ -1,5 +1,8 @@
 \lab{Unix Shell}{Shell}
 \label{lab:Shell}
+% Written by Tanner Christensen, Summer 2015
+% If more content in the Problems is needed, in Problem 6, we could add:
+%    "edit count_files.py to exclude the files in the test directory"
 
 \objective{Introduce the basics of the Unix Shell commands and integrate Unix Shell commands with Python}
 
@@ -182,7 +185,7 @@ $ wc -l < assignements.txt >> word_count.txt
 Since \li{grep} is used to print lines matching a pattern, it is also very useful to use in conjunction with piping. For example, \li{ls -l | grep root} prints all files associated with the root user.
 
 \begin{problem}
-The \li{words.txt} file contains a list of words that are not in alphabetical order. Write the number of words in \li{words.txt} and an alphabetically sorted list of words to \li{sortedwords.txt} using pipes and redirects. Try to accomplish this with a total of two commands or fewer.
+The \li{words.txt} file in the \li{Documents} directory contains a list of words that are not in alphabetical order. Write the number of words in \li{words.txt} and an alphabetically sorted list of words to \li{sortedwords.txt} using pipes and redirects. Save this file in the \li{Documents} directory. Try to accomplish this with a total of two commands or fewer.
 \end{problem}
 
 \section*{File Security}
@@ -312,7 +315,7 @@ Command & Description
 
 \begin{problem}
 In addition to the \li{five_secs} and \li{ten-secs} scripts, the \li{Scripts} folder contains three scripts that will each take about a forty-five seconds to execute. 
-Execute each of these commands in the background so all three are running at the same time. To verify all scripts are running at the same time, write the output of \li{jobs} to a new file \li{log.txt}.
+Execute each of these commands in the background so all three are running at the same time. To verify all scripts are running at the same time, write the output of \li{jobs} to a new file \li{log.txt} saved in the \li{Scripts} directory.
 \end{problem}
 
 \section*{Python Integration}
