@@ -17,7 +17,6 @@ That reduction can be accomplished either through the use of massive quantities 
 That heat must then be absorbed by the atmosphere and the spacecraft. 
 The question then is how to choose the optimal path for reentry into the atmosphere, where the total heating experienced by the craft is minimized. 
 
-
 We begin by giving a control system\footnote{This control problem and its numerical solution are thoroughly described in `Introduction to Numerical Analysis' by J. Stoer, R. Bulirsch (pg 524). 
 We will mirror their presentation throughout this lab.}
 describing the path of a spacecraft through the atmosphere 
@@ -74,19 +73,7 @@ We will require that the trajectory of the spacecraft satisfy the boundary condi
 where $T$ represents the time at the end of the (first) reentry maneuver. 
 These boundary conditions are similar to those encountered at the end of each Apollo mission to the moon. 
 
-
 To simpify notation, we will also write \eqref{eqn:reentry:control_system} in the form $y' = G(y)$, where $y = [y_0, y_1, y_2]^T=[v,\gamma, \xi]^T$ and $G$ has component functions $G = [G_0, G_1, G_2]^T$. 
-% \begin{align}
-% \begin{split}
-% 	v(0) &= 0.36 \quad (36000 \text{ ft/sec}),\\
-% 	\gamma(0) &= -8.1^\circ \frac{\pi}{180^\circ}, \\
-% 	\xi(0)&= \frac{4}{R}\quad (h = 400000 \text{ ft}), \\
-% 	v(T) &= 0.27,\\
-% 	\gamma(T) &= 0, \\
-% 	\xi(T)&= \frac{2.5}{R}, \\
-% \end{split}
-% \end{align}
-%
 The total heating is 
 \[
 J[u] = \int_0^T 10y_0^3 \sqrt{\rho}.
@@ -136,8 +123,6 @@ def ode(x,y):
 \end{lstlisting}
 \end{problem}
 
-
-
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{solutions.pdf}
@@ -145,7 +130,6 @@ def ode(x,y):
 }
 \label{fig:reentry:solutions}
 \end{figure}
-
 
 
 \section*{Constructing an Initial Guess}
@@ -251,63 +235,14 @@ $u = p_0\erf(p_1(p_2-t/T))$ and estimating parameters $p_0, p_1, p_2$.}
 \end{problem}
 
 
-
-
-
-
-\begin{problem}
-Incorporate this change into the function \li{ode} written earlier. 
-Also write a function \li{bcs} that implements the full set of boundary conditions. 
-\end{problem}
-
-Discuss how to construct an initial guess for the original BVP. Specifically, how should the adjoint variables be estimated?
+TODO: Discuss how to construct an initial guess for the original BVP.
+ Specifically, how should the adjoint variables be estimated?
+Add a sketch of the reference frame we use. 
+Add a plot of the solution of the adjoint variables?
+Reorganize the code, so that the code in the lab is part of the solution. 
 \begin{problem}
 	Adapt your previous code to solve the original, dimension seven BVP. 
+	Use the solution of the auxiliary BVP to construct a good initial guess.
 	Plot the control $u$. How long does the reentry maneuver take? 
 \end{problem}
-
-
-% \begin{figure}
-% \begin{minipage}[b]{.47\linewidth}
-% \centering
-% \includegraphics[width=\textwidth]{diffusion_denoised_baloons_resized_bw.jpg}
-% \caption*{Initial diffusion-based approach}
-% \end{minipage}
-% \hspace{0.5cm}
-% \begin{minipage}[b]{0.47\linewidth}
-% \centering
-% \includegraphics[width=\textwidth]{tv_denoised_baloons_resized_bw.jpg}
-% \caption*{Total variation based approach}
-% \end{minipage}
-% \caption{The solutions of \eqref{tv_images:diffusion_flow} and \eqref{tv_images:tv_flow}, found using a first order Euler step in time and centered differences in space.}
-% \label{fig:noise_compare_attempts}
-% \end{figure}
-
-
-
-% \begin{align}
-% \begin{split}
-% \end{split} \label{reentry:label}
-% \end{align}
-%
-%
-% \begin{problem}
-%
-% \begin{lstlisting}
-% \end{lstlisting}
-% \end{problem}
-
-
-% \begin{figure}
-% \centering
-% \includegraphics[width=6cm]{Apollo8_during_Launch.jpg}
-% \caption{The Apollo 8 during launch}
-% \label{fig:reentry:apollo8}
-% \end{figure}
-
-
-
-
-
-
 
