@@ -37,9 +37,9 @@ def plot_reentry_trajectory(vars):
 		host.set_ylabel("$v$",fontsize=24)
 		par1.set_ylabel(r"$\gamma$",fontsize=24)
 		par2.set_ylabel(r"$h$",fontsize=24)
-		p1, = host.plot(vars[0], vars[1], linewidth=2.0,label="velocity")
-		p2, = par1.plot(vars[0], vars[2], linewidth=2.0,label="angle of trajectory")
-		p3, = par2.plot(vars[0],209*vars[3], linewidth=2.0,label="altitude")
+		p1, = host.plot(vars[0], vars[1], '-',linewidth=2.0,label="velocity")
+		p2, = par1.plot(vars[0][::4], vars[2][::4], '*-',markersize=4.,linewidth=2.0,label="angle of trajectory")
+		p3, = par2.plot(vars[0][::6],209*vars[3][::6], '--',linewidth=2.0,label="altitude")
 
 		par1.set_ylim(-.15,.05)
 		# par2.set_ylim(.008,.02)
@@ -593,8 +593,8 @@ if __name__ == "__main__":
 	# soln = reentry_init(plot=True)
 	# matplotlib_example(soln)
 	
-	x,y = reentry_auxiliary_problem(240)
-	soln = reentry(x,y,plot=True)
+	x,y = reentry_auxiliary_problem(240,plot=False)
+	soln = reentry(x,y,plot=False)
 	plot_reentry_trajectory(soln)
 	
 	# plot_u_guess()
