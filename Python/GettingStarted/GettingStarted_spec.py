@@ -4,6 +4,10 @@ Volume 1, Lab 1: Getting Started
 Spec files
 '''
 
+# PROBLEM 1: Run Hello World script
+def completed_Problem1():
+	return False  # change this line to "return True" if you did Problem 1
+
 # PROBLEM 2: Write a function sphere_volume that accepts a parameter r 
 #            and returns the volume of a sphere of radius r.
 def sphere_volume(r):
