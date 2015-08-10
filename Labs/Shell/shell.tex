@@ -121,9 +121,9 @@ There are two powerful commands we use for searching through our directories. Th
 \begin{tabular}{l|l} 
 Command & Description
 \\ \hline 
-\li{find dir1 -type f -name "word"} &  Find all files within \li{dir1} with the name \li{"word"} \\ 
+\li{find dir1 -type f -name "word"} &  Find all files in \li{dir1} with the name \li{"word"} \\ 
  & (\li{-type f} is for files \li{-type d} is for directories)\\
-\li{grep -nr "word" dir1} & Find all occurances of \li{"word"} within the files inside \li{dir1} \\ 
+\li{grep -nr "word" dir1} & Find all occurances of \li{"word"} :in the files inside \li{dir1} \\ 
  & (\li{-n} lists the line number and \li{-r} performs a recursive search)\\
 \end{tabular} 
 \caption{Commands using \li{find} and \li{grep}.}
@@ -388,7 +388,7 @@ Now that you are logged in on the host computer, all the commands you execute ar
 
 \subsection*{Secure Copy}
 
-When we want to copy files between the client and the host, we use the  \emph{secure copy} command, \li{scp}. The following commands are run when logged into the client computer.
+When we want to copy files between the client and the host, we use the \emph{secure copy} command, \li{scp}. The following commands are run when logged into the client computer.
 
 \begin{lstlisting}
 # copy filename to the host's system at filepath
@@ -398,7 +398,7 @@ $ scp filename host_username@hostname:filepath
 $ scp host_username@hostname:filepath filename
 
 # you will be prompted to enter host_username's password in both these instances 
-\begin{lstlisting}
+\end{lstlisting}
 
 \begin{problem}
 \emph{This problem is optional depending on the circumstances of the student.}
