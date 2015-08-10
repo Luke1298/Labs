@@ -340,15 +340,15 @@ $ python
 -rw-rw-r-- 1 username groupname  920 Aug  5 23:50 words.txt
 >>> files = subprocess.check_output("ls -l", shell=True)
 >>> files
-'-rw-rw-r-- 1 tanner tanner  142 Aug  5 20:20 assignments.txt\n-rw-rw-r-- 1 tanner tanner  427 Aug  5 20:21 doc1.txt\n-rw-rw-r-- 1 tanner tanner  326 Aug  5 20:21 doc2.txt\n-rw-rw-r-- 1 tanner tanner  612 Aug  5 20:21 doc3.txt\n-rw-rw-r-- 1 tanner tanner  298 Aug  5 20:21 doc4.txt\n-rw-rw-r-- 1 tanner tanner 1027 Aug  5 20:23 review.txt\n-rw-rw-r-- 1 tanner tanner  920 Aug  5 23:50 words.txt\n'
+'-rw-rw-r-- 1 username groupname  142 Aug  5 20:20 assignments.txt\n-rw-rw-r-- 1 username groupname  427 Aug  5 20:21 doc1.txt\n-rw-rw-r-- 1 username groupname  326 Aug  5 20:21 doc2.txt\n-rw-rw-r-- 1 username groupname  612 Aug  5 20:21 doc3.txt\n-rw-rw-r-- 1 username groupname  298 Aug  5 20:21 doc4.txt\n-rw-rw-r-- 1 username groupname 1027 Aug  5 20:23 review.txt\n-rw-rw-r-- 1 username groupname  920 Aug  5 23:50 words.txt\n'
 >>> files.split('\n')
-['-rw-rw-r-- 1 tanner tanner  142 Aug  5 20:20 assignments.txt',
- '-rw-rw-r-- 1 tanner tanner  427 Aug  5 20:21 doc1.txt',
- '-rw-rw-r-- 1 tanner tanner  326 Aug  5 20:21 doc2.txt',
- '-rw-rw-r-- 1 tanner tanner  612 Aug  5 20:21 doc3.txt',
- '-rw-rw-r-- 1 tanner tanner  298 Aug  5 20:21 doc4.txt',
- '-rw-rw-r-- 1 tanner tanner 1027 Aug  5 20:23 review.txt',
- '-rw-rw-r-- 1 tanner tanner  920 Aug  5 23:50 words.txt',
+['-rw-rw-r-- 1 username groupname  142 Aug  5 20:20 assignments.txt',
+ '-rw-rw-r-- 1 username groupname  427 Aug  5 20:21 doc1.txt',
+ '-rw-rw-r-- 1 username groupname  326 Aug  5 20:21 doc2.txt',
+ '-rw-rw-r-- 1 username groupname  612 Aug  5 20:21 doc3.txt',
+ '-rw-rw-r-- 1 username groupname  298 Aug  5 20:21 doc4.txt',
+ '-rw-rw-r-- 1 username groupname 1027 Aug  5 20:23 review.txt',
+ '-rw-rw-r-- 1 username groupname  920 Aug  5 23:50 words.txt',
  '']
 # To get rid of the last empty string in the list
 >>> files.pop()
@@ -372,21 +372,37 @@ Let's say you are working for a company with a file server. Hundreds of people n
 
 SSH is a network protocol encrypted using public-key cryptography. The system we are connecting \emph{to} is commonly referred to as the \emph{host} and the system we are connecting \emph{from} is commonly referred to as the \emph{client}. Once this connection is established, there is a secure tunnel through which commands and files can be exchanged between the client and host.
 
-CODEBOX
-logging into a remote computer using ssh
+\begin{lstlisting}
+$ whoami    # use this to see what your current login is
+client_username
+$ ssh host_username@hostname
+
+# You will then be prompted to enter the password for host_username
+
+$ whoami    # use this to verify that you are logged into the host
+host_username
+\end{lstlisting}
+%$
+
+Now that you are logged in on the host computer, all the commands you execute are as though you were executing them on the host computer.
 
 \subsection*{Secure Copy}
 
-When we want to copy files between the client and the host, we use the  \emph{secure copy} command, \li{scp}.
+When we want to copy files between the client and the host, we use the  \emph{secure copy} command, \li{scp}. The following commands are run when logged into the client computer.
 
-CODEBOX
-copy a file from client to host
-copy a file from host to client
+\begin{lstlisting}
+# copy filename to the host's system at filepath
+$ scp filename host_username@hostname:filepath
+
+#copy a file found at filepath to the client's system as filename
+$ scp host_username@hostname:filepath filename
+
+# you will be prompted to enter host_username's password in both these instances 
+\begin{lstlisting}
 
 \begin{problem}
-TODO: Finish problem
-OPTIONAL
-Get with a partner and mess around with SSH. Using scp, copy files back and forth to each other.
+\emph{This problem is optional depending on the circumstances of the student.}
+You will either need a partner for this problem or have access to a username on another computer. Experiment with SSH. Verify that you can connect from a client to a host. Copy a few files between the host and the client.
 \end{problem}
 
 \subsection*{Generating SSH Keys (Optional)}
