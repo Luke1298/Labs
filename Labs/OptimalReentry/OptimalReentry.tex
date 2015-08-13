@@ -21,7 +21,10 @@ We begin by giving a control system\footnote{This control problem and its numeri
 We will mirror their presentation throughout this lab.}
 describing the path of a spacecraft through the atmosphere 
 (we assume the spacecraft is similar to the Apollo craft).
-Our dependent variables to consider are the velocity $v$ of the spacecraft,  the angle $\gamma$ of the flight path, and the normalized altitude $\xi$ above the Earth's surface. ($\xi = h/R$, where $R$ is the radius of the Earth and $h$ the altitude of the spacecraft above the Earth.) 
+Our dependent variables to consider are the velocity $v$ of the spacecraft,  
+the angle $\gamma$ of the flight path, 
+and the normalized altitude $\xi$ above the Earth's surface. 
+($\xi = h/R$, where $R$ is the radius of the Earth and $h$ the altitude of the spacecraft above the Earth.) 
 A control variable  $u$ will be used to represent the angle of attack of the spacecraft. 
 The flight path can then be described by 
 \begin{align}
@@ -36,22 +39,24 @@ The atmospheric density $\rho$ is a function of height, which we represent by $\
 Other parameters include the force of gravity $g$, and $s = \frac{1}{2}S/m$, where $S$ is the frontal area of the craft and $m$ is its mass.
 The numerical values we will use are coded below, along with the drag and lift functions. 
 \begin{lstlisting}
-from math import sin, cos, exp
-
-from numpy import array
+from __future__ import division
+from math import pi, sqrt, sin, cos, exp
+from numpy import linspace, array, tanh, cosh, ones, arctan
+import numpy as np
 from scipy.special import erf
+from scipy.optimize import root
 from scikits import bvp_solver
 
 R = 209
 beta = 4.26
 rho0 = 2.704e-3
 g = 3.2172e-4
-s = 26600 
+s = 26600
 
-def C_d(u): 
+def C_d(u):
 	return 1.174 - 0.9*cos(u)
 
-def C_l(u): 
+def C_l(u):
 	return 0.6*sin(u)
 \end{lstlisting}
 % $g = 3.2172\times10^{-4}$, $s = 26,600$, $R = 209$ $(209\times 10^5 \text{ ft})$, $\beta = 4.26$ and $\rho_0 = 2.704\times 10^{-3}$.
@@ -109,8 +114,22 @@ By making the transformation $x = t/T$, and treating $T$ as a dependent variable
 This BVP has 7 ODEs, and with the 7 boundary conditions introduced earlier it has the required form.
 % \footnote{BNDSCO - A program for the numerical solution of optimal control problems, H.J. Oberle and W. Grimm, 1989}
 
+
+\begin{figure}
+\centering
+\includegraphics[width=7cm]{The_Lunar_Farside.jpg}
+\caption{ The Apollo 8 mission was the first to orbit the moon and return to earth. 
+After a flight of three days from earth, they orbited the moon ten times in 20 hours before making the return trip. 
+This photograph  shows a portion of the far side of the moon, as seen by the Apollo 8.
+}
+\label{fig:reentry:Lunar_Farside}
+\end{figure}
+
+
+
 \begin{problem}
-	Write a function \li{ode} that implements the ODEs for the original control system along with the adjoint equations \eqref{eqn:reentry:full_system}. 
+Write a function \li{ode} that implements the ODEs for the original control system along with the adjoint equations \eqref{eqn:reentry:full_system}. 
+Notice that the adjoint variables and the final time are coordinates of $y:$ $y_3 = p_0$, $y_4 = p_1$, $y_5 = p_2$, and $y_6 = T$.
 \begin{lstlisting}
 def ode(x,y):
 	# Parameters:
@@ -126,7 +145,8 @@ def ode(x,y):
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{solutions.pdf}
-\caption{The optimal path for the reentry maneuver of a spacecraft. This path minimizes the heating of the spacecraft, and satisfies  \eqref{eqn:reentry:full_system},\eqref{eqn:reentry:BCs}, and the terminal condition $H(T) = 0$.
+\caption{The optimal path for the reentry maneuver of a spacecraft. 
+This path minimizes the heating of the spacecraft, and satisfies  \eqref{eqn:reentry:full_system},\eqref{eqn:reentry:BCs}, and the terminal condition $H(T) = 0$.
 }
 \label{fig:reentry:solutions}
 \end{figure}
@@ -136,7 +156,9 @@ def ode(x,y):
 We will use the BVP solver \li{scikits.bvp_solver}. 
 Like any solver capable of handling nonlinear problems, \li{bvp_solver} requires an initial guess to jump-start its Newton-like iteration process. 
 Our nonlinear BVP is very sensitive, and requires an initial guess that is quite close to the solution.  
-This sensitivity is physically meaningful. The spacecraft is traveling at a speed far greater than a typical aircraft. If the control is not aggressive, the spacecraft will fall/`bounce' back into space as it encounters the atmosphere at a high velocity. 
+This sensitivity is physically meaningful. 
+The spacecraft is traveling at a speed far greater than a typical aircraft. 
+If the control is not aggressive, the spacecraft will fall/`bounce' back into space as it encounters the atmosphere at a high velocity. 
 However, if the control lasts too long, the craft will overheat or crash.
 
 Since this is a sensitive problem, we will use a heuristic method to  construct a good initial guess.
@@ -158,53 +180,49 @@ This auxiliary BVP is defined on the interval $[0,T]$, where $T$ is unknown.
 We guess at $T$: the maneuver will occur quickly, so how about 230 seconds?
 Below we create functions for the ODE and for the boundary conditions. 
 \begin{lstlisting}
-T0 = 230.
-
+T0 = 230	
+	
 def ode_auxiliary(x,y):
-	u = y[3]*erf( y[4]*(y[5]-x/T0) )
+	u = y[3]*erf( y[4]*(y[5]-(1.*x)/T0) )
 	rho = rho0*exp(-beta*R*y[2])
 	out = array([-s*rho*y[0]**2*C_d(u) - g*sin(y[1])/(1+y[2])**2,
-				  ( s*rho*y[0]*C_l(u) + y[0]*cos(y[1])/(R*(1 + y[2])) - 
+				  ( s*rho*y[0]*C_l(u) + y[0]*cos(y[1])/(R*(1 + y[2])) -
 				  g*cos(y[1])/(y[0]*(1+y[2])**2) ),
 				  y[0]*sin(y[1])/R,
 				  0,
 				  0,
 				  0		])
 	return out
-	
+
 def bcs_auxiliary(ya,yb):
-	# If the problem is defined on the interval [a,b], ya = y(a) and yb = y(b), 
-	# ya[0] = y_0(a), etc.
-	# bvp_solver will attempt to make each of the entries below zero in the 
-	# numerical solution.
-	
-	out1 = array([ya[0]-.36,
+	out1 = array([ ya[0]-.36,
 				  ya[1]+8.1*pi/180,
 				  ya[2]-4/R
 				  ])
-	out2 = array([yb[0]-.27,
+	out2 = array([ yb[0]-.27,
 				  yb[1],
 				  yb[2]-2.5/R
 				  ])
 	return out1, out2
 \end{lstlisting}
 
-The two main methods used by \li{bvp_solver} are \li{ProblemDefinition} and \li{solve}. You will want to look at their docstrings to learn more about their functionality. \li{solve} requires an initial guess, which you will create in Problem \ref{prob:reentry:guess}.
+The two main methods used by \li{bvp_solver} are \li{ProblemDefinition} and \li{solve}. 
+You will want to look at their docstrings to learn more about their functionality. 
+\li{solve} requires an initial guess, which you will create in Problem \ref{prob:reentry:guess}.
 \begin{lstlisting}
 problem_auxiliary = bvp_solver.ProblemDefinition(num_ODE = 6,
 										  num_parameters = 0,
 										  num_left_boundary_conditions = 3,
-										  boundary_points = (0., T0),
+										  boundary_points = (0, T0),
 										  function = ode_auxiliary,
 										  boundary_conditions = bcs_auxiliary)
-									
+
 solution_auxiliary = bvp_solver.solve(problem_auxiliary,
-									  solution_guess = guess_auxiliary)
-								
-N = 240 # Number of subintervals
-x_array = linspace(0,T0,N+1)
-y_array = solution_auxiliary(x_array)
-	
+								solution_guess = guess_auxiliary)
+
+N = 240 
+x_guess = linspace(0,T0,N+1)
+guess = solution_auxiliary(x_guess)
 \end{lstlisting}
 
 \begin{figure}
@@ -234,12 +252,23 @@ $u = p_0\erf(p_1(p_2-t/T))$ and estimating parameters $p_0, p_1, p_2$.}
 	\label{prob:reentry:guess}
 \end{problem}
 
+At this point we have constructed good initial guesses for the dependent variables $y_0,y_1, y_2,$ and $y_6$ (representing the total time of the manuever) in the original BVP \eqref{eqn:reentry:full_system}. 
+We now need to construct initial guesses for the adjoint variables $y_3, y_4,$ and $y_5$. 
 
-TODO: Discuss how to construct an initial guess for the original BVP.
- Specifically, how should the adjoint variables be estimated?
-Add a sketch of the reference frame we use. 
-Add a plot of the solution of the adjoint variables?
-Reorganize the code, so that the code in the lab is part of the solution. 
+By reexamining the condition $H_u = 0$, we find that the optimal control $u$ satisfies 
+\[
+\sin u = \frac{-0.6 y_4}{\alpha} \qquad \cos u  = \frac{-0.9 y_0y_3}{\alpha}
+\]
+where $\alpha = \sqrt{(0.6y_4)^2 + (0.9y_0y_3)^2}$.
+From this we know that $y_3 <0$, since $\cos u >0$. A simple guess would be $y_3 = -1$. 
+(Recall that the adjoint variables are unique up to some scaling.) 
+We can then approximate $y_4$ from the relationship 
+\begin{align*}
+\tan u &= \frac{6y_4}{9y_0y_3}.
+\end{align*}
+To approximate $y_5$, we use the identity $H = 0$.
+
+
 \begin{problem}
 	Adapt your previous code to solve the original, dimension seven BVP. 
 	Use the solution of the auxiliary BVP to construct a good initial guess.
