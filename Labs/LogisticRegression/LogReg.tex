@@ -56,11 +56,11 @@ Have your function return the training set and the test set, in that order.
 \subsection*{Model Evaluation}
 Now that we have our training set, we can train a model, which can be used to obtain the probability of success for each data point.  The label chosen depends heavily on the probability cut-off value mentioned previously, which we represent as $\tau$.  In the simplest manner, we can simply pick a value of $\tau = 0.5$, which will then assign the label with the highest likelihood.  However, it is often beneficial to choose a different value of $\tau$.  In regards to the probability of infection for serious diseases, it might be best to give a patient medicine if they have even a $10$ percent chance of infection.  So how can we find the ``best" cut-off value?
 
-In order determine this, we need to discuss how to measure the accuracy of the labels predicted.  Say that we have picked a cut-off value $\tau$, and have assigned labels to the test set.  Using the predicted labels and the actual labels, we can obtain four important values: the number of \emph{true positives}, \emph{false positives}, \emph{true negatives}, and \emph{false positives}, which are abbreviated TP, FP, TN, and FP, respectively.  These values are integers which together sum to the number of labels predicted.  You can see the definition of these in Table ??? (until the figure is up, true positives are the points with predicted label 1 and true label 1, false positives have predicted label 1 true label 0, true negatives predicted label 0 true label 0, and false negatives true label 1 predicted label 0).  We can now use these to report our accuracy in various metrics:
+In order to determine this, we need to discuss how to measure the accuracy of the labels predicted.  Say that we have picked a cut-off value $\tau$, and have assigned labels to the test set.  Using the predicted labels and the actual labels, we can obtain four important values: the number of \emph{true positives}, \emph{false positives}, \emph{true negatives}, and \emph{false positives}, which are abbreviated TP, FP, TN, and FP, respectively.  These values are integers which together sum to the number of labels predicted.  You can see the definition of these in Table ??? (until the figure is up, true positives are the points with predicted label 1 and true label 1, false positives have predicted label 1 true label 0, true negatives predicted label 0 true label 0, and false negatives true label 1 predicted label 0).  We can now use these to report our accuracy in various metrics:
 \begin{itemize}
 \item \emph{Prediction accuracy} is defined as $\frac{TP+TN}{TP+FN+FP+TN}$, and is the percentage of correctly predicted cases.
 \item \emph{Sensitivity}, also known as the \emph{true positive rate} or $TPR$, is given by the fraction of correctly predicted cases where the actual outcome is $1$, $\frac{TP}{TP+FN}$.
-\item \emph{Specificity}, the \emph{true negative rate}, or $TNR$ is the porportion of correctly predicted cases where the true outcome is $0$, $\frac{TN}{FP+TN}$.
+\item \emph{Specificity}, the \emph{true negative rate}, or $TNR$ is the proportion of correctly predicted cases where the true outcome is $0$, $\frac{TN}{FP+TN}$.
 \item \emph{False Positive Rate}, or $FPR$, is the proportion of incorrectly predicted cases where the true outcome is $0$, and is given by $\frac{FP}{FP+TN}$.
 \end{itemize}
 All of these depend strongly on the value chosen for $\tau$.
@@ -77,7 +77,7 @@ def best_tau(predicted_labels, true_labels, n_tau=100, plot=True):
     """
     Parameters
     ----------
-   predicted_labels : ndarray of shape (n,)
+    predicted_labels : ndarray of shape (n,)
         The predicted labels for the data
     true_labels : ndarray of shape (n,)
         The actual labels for the data
