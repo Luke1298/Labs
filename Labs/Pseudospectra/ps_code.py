@@ -186,7 +186,9 @@ def gen_rand_matrix(n, epsilon):
     real_B = np.random.uniform(low=-1.0, high=1.0, size=(n,n))
     imag_B = np.random.uniform(low=-1.0, high=1.0, size=(n,n))
     B = real_B + imag_B*1.j
-    scale = epsilon/la.norm(B)
+    scale = epsilon/la.norm(B,2)
     B = B*scale
     return B
+
+
     
