@@ -19,7 +19,7 @@ The convention is to import NumPy as follows.
 
 \section*{Learning NumPy}
 The strategies discussed in the section ``Learning Python'' of Lab \ref{lab:Essential_Python} will also help you learn NumPy and SciPy. 
-The following online resources are specific to SciPy.
+The following online resources are specific to SciPy:
 \begin{itemize}
 \item Official SciPy Documentation (\url{http://docs.scipy.org/doc/})
 \item Sections 1.3 and 1.5 of the SciPy Lecture Notes (\url{http://scipy-lectures.github.io/})
@@ -76,10 +76,22 @@ Array objects also support the usual binary operators, including addition \li{+}
 NumPy arrays are drastically more efficient than nested Python lists for large computations. 
 In this section we will compare matrix multiplication in Python and NumPy.
 
-\begin{problem}\label{prob:multiply_problem}
-A matrix in NumPy is just a 2-D array. How can you multiply two 2-D NumPy arrays as matrices? 
-Hint: Use the strategies outlined in the section ``Learning NumPy''.
+\begin{problem}
+A matrix in NumPy is just a 2-D array. Given matrices $A$ and $B$, there are two different ways we can perform matrix multiplication. We can use \li{np.dot(A,B)} or \li{A.dot(B)}. 
+
+Perform matrix multiplication on the following matrices:
+\begin{center}
+$A = \begin{bmatrix} 2&4&0 \\ -3&1&-1 \\ 0&3&2 \end{bmatrix}$
+$B = \begin{bmatrix} 3&-1&2 \\ -2&-3&0 \\ 1&0&-2 \end{bmatrix}$
+\end{center}
 \end{problem}
+
+
+
+%\begin{problem}\label{prob:multiply_problem}
+%A matrix in NumPy is just a 2-D array. How can you multiply two 2-D NumPy arrays as matrices? 
+%Hint: Use the strategies outlined in the section ``Learning NumPy''.
+%\end{problem}
 
 After doing the previous problem, you should know how to implement matrix multiplication in NumPy. 
 On the other hand, a matrix in Python can be implemented as a list of lists. 
@@ -206,7 +218,7 @@ as well as \li{&=}, \li{|=}, and \li{^=}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Creating Arrays}
-In addition to \li{np.array()}, NumPy provides efficient ways to create special kinds of arrays. The function \li{np.arange([start], stop, [step])} is similar to the Python function \li{range()}.
+In addition to \li{np.array()}, NumPy provides efficient ways to create special kinds of arrays. The function \li{np.arange([start], stop, [step])} returns an array of numbers from \li{start} to, but not including, \li{stop}. Like other function that have similar parameters, \li{step} 
 
 \begin{lstlisting}
 >>> np.arange(10, 20, 2) 
@@ -738,7 +750,7 @@ Finally, the array method \li{flat} lets you iterate over the array as if it wer
 
 \subsection*{Iterating Through Arrays}
 
-Iterating through an array undoes most speed advantages of NumPy. 
+Iterating through an array negates most speed advantages of NumPy. 
 You should avoid doing this whenever possible.
 You can often avoid iterating through arrays by using \emph{array broadcasting} and \emph{universal functions}, discussed in the next section.
 
