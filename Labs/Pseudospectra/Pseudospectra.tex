@@ -6,9 +6,24 @@
 
 \section*{Pseudospectra Definition}
 
-The pseudospectrum of a matrix, $\sigma _{\epsilon}(A)$, is a generalization of the point spectrum, or set of eigenvalues, of a matrix. When the entries of a matrix are slightly altered, changes in the point spectrum also occur. The $\epsilon$-pseudospectrum of an $N\times N$ matrix $A$ is defined to be the set of complex numbers, $z$, such that $z$ is in the point spectrum of $A+E$, for some matrix $E$ of the same dimension as $A$ satisfying $\lVert E \rVert < \epsilon$.\\
-
+Let $\sigma(A)$ be point spectrum, of a matrix $A$, which can be defined by
+\begin{align}
+	\sigma(A)&=\{z \in \mathbb{C}: det(zI-A)=0\}\\
+	&=\{\text{points where }(zI-A)^{-1} \text{ is undefined}\}.
+\end{align}
+By convention, if $z$ is an eigenvalue of $A$, then $\|(zI-A)^{-1}\|=\infty$.
+The psuedospectrum of a matrix is a generalization of its point spectrum. The $\epsilon$-psuedospectrum of the matrix $A$ is defined as
+\begin{equation}
+	\sigma_{\epsilon}(A)=\{z \in \mathbb{C}:\|(zI-A)^{-1}\| > \epsilon^{-1}\}.
+\end{equation}
 Note that this definition requires the use of a matrix norm. Any matrix norm can be used, but in this Lab, we will use the norm induced by the 2-norm.\\
+
+In the case of the 2-norm, the psuedospectrum has an equivalent definition:
+\begin{equation}
+	\sigma_{\epsilon}(A)=\{z \in \mathbb{C}: z \in \sigma(A+E) \text{ for some $E$ with } \|E\|<\epsilon\}.
+\end{equation}
+When the entries of a matrix are slightly altered, changes in the point spectrum also occur. The pseudospectrum can then be thought of as the set of eigenvalues that can result from small changes in the entries of a matrix. The $\epsilon$-pseudospectrum of an $N\times N$ matrix $A$ is defined to be the set of complex numbers, $z$, such that $z$ is in the point spectrum of $A+E$, for some matrix $E$ of the same dimension as $A$ satisfying $\lVert E \rVert < \epsilon$.\\
+
 
 One means of plotting the $\epsilon$-pseudospectrum of a $A$ is by generating several random matrices, $E$, with norm $\epsilon$ and plotting the eigenvalues of all of them on the same plot.\\
 
@@ -46,7 +61,7 @@ def ps_scatter_plot(A, epsilon=.001, num_pts=20):
     '''
 \end{lstlisting}
 
-
+To get random matrices of the right norm generate random matrices than divide by the 2-norm and then multiply by epsilon.
 Have your code also plot the eigenvalues of $A$ in a different color. Test your code on the 120x120 matrix:
 \begin{equation}
 	\begin{pmatrix}
@@ -62,22 +77,20 @@ Have your code also plot the eigenvalues of $A$ in a different color. Test your 
 Your plot should resemble those in Figure \ref{fig:ps_scatter}.
 \end{problem}
 
-This method of plotting can only show the $\epsilon$-pseudospectrum of $A$ for one value of $\epsilon$ at a time, and even then it usually just provides a bound for the pseudospectrum. This kind of pseudospectrum plot has been called the poorman's pseudospectrum. In many cases it does not provide sufficient information, so we also plot using a more precise algorithm.
+This method of plotting, often called the poorman's pseudospectrum, can only show the $\epsilon$-pseudospectrum of $A$ for one value of $\epsilon$ at a time, and even then it just provides a bound for the pseudospectrum. In many cases it does not give sufficient information, so we also plot the $\epsilon$-pseudospectra using a more precise algorithm.
 
 \section*{An Equivalent Pseudospectrum Definition}
 
-One more accurate algorithm depends on a different definition of the $\epsilon$-pseudospectrum of $A$. The pseudospectrum, $\sigma _{\epsilon}(A)$, can also be expressed as 
+Recall the following definition:
 
 \begin{equation}
-\sigma _{\epsilon}(A) = \{ z \in \mathbb{C} \, | \, \lVert (zI_n-A)^{-1} \rVert > \epsilon ^{-1}\}	
+\sigma _{\epsilon}(A) = \{ z \in \mathbb{C} \, | \, \lVert (zI_n-A)^{-1} \rVert > \epsilon ^{-1}\}	.
 \end{equation}
 
-Note that if $z$ is an eigenvalue of $A$, $(zI_n-A)^{-1}$ does not exist. By convention, we say that its norm is $\infty$.
-
-When we are using the induced 2-norm, we get that $\lVert (zI_n-A)^{-1} \rVert$ is the largest eigenvalue of $(zI_n-A)^{-1}$. This is equal to $1/s_{min}(zI_n-A)$, where $s_{min}(zI_n-A)$ is the smallest eigenvalue of $(zI_n-A)$. Hence, we can write
+When we are using the induced 2-norm, we get that $\lVert (zI_n-A)^{-1} \rVert$ is the largest singular of $(zI_n-A)^{-1}$. This is equal to $1/s_{min}(zI_n-A)$, where $s_{min}(zI_n-A)$ is the smallest singular of $(zI_n-A)$. Hence, we can write
 
 \begin{equation}
-\sigma _{\epsilon}(A) = \{ z \in \mathbb{C} \, | \, s_{min}(A-zI_n) < \epsilon \}	
+\sigma _{\epsilon}(A) = \{ z \in \mathbb{C} \, | \, s_{min}(A-zI_n) < \epsilon \}.	
 \end{equation}
 
 
@@ -180,7 +193,7 @@ Figure \ref{fig:ps_normal} provides an example of this. The plots show the pseud
 		-1 & -1 & -1\\
 		0 & 1 & 1\\
 		0 & 0 & i
-	\end{pmatrix}
+	\end{pmatrix}.
 \end{equation}
 
 Note that these matrices have the same same set of eigenvalues, and that $B$ is normal, while $B'$ is not. The plot of the pseudospectrum of $B$ shows the expected circular regions, but the plot for $B'$ lacks such symmetry. Another example of this can be seen in Figure \ref{fig:ps_scatter}. The pseudospectrum does not expand out from all of the eigenvalues evenly. Most of the region contained in the pseudospectrum lies on the sides of the plot, and not close to the center.\\
@@ -203,6 +216,3 @@ Because the pseudospectra of normal matrices behave so consistently, the study o
 \end{figure}
 
 ~\cite{Tufte2005}
-
-
-
