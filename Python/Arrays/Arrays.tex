@@ -19,7 +19,7 @@ The convention is to import NumPy as follows.
 
 \section*{Learning NumPy}
 The strategies discussed in the section ``Learning Python'' of Lab \ref{lab:Essential_Python} will also help you learn NumPy and SciPy. 
-The following online resources are specific to SciPy.
+The following online resources are specific to SciPy:
 \begin{itemize}
 \item Official SciPy Documentation (\url{http://docs.scipy.org/doc/})
 \item Sections 1.3 and 1.5 of the SciPy Lecture Notes (\url{http://scipy-lectures.github.io/})
@@ -76,10 +76,22 @@ Array objects also support the usual binary operators, including addition \li{+}
 NumPy arrays are drastically more efficient than nested Python lists for large computations. 
 In this section we will compare matrix multiplication in Python and NumPy.
 
-\begin{problem}\label{prob:multiply_problem}
-A matrix in NumPy is just a 2-D array. How can you multiply two 2-D NumPy arrays as matrices? 
-Hint: Use the strategies outlined in the section ``Learning NumPy''.
+\begin{problem}
+A matrix in NumPy is just a 2-D array. Given matrices $A$ and $B$, there are two different ways we can perform matrix multiplication. We can use \li{np.dot(A,B)} or \li{A.dot(B)}. 
+
+Perform matrix multiplication on the following matrices:
+\begin{center}
+$A = \begin{bmatrix} 2&4&0 \\ -3&1&-1 \\ 0&3&2 \end{bmatrix}$
+$B = \begin{bmatrix} 3&-1&2 \\ -2&-3&0 \\ 1&0&-2 \end{bmatrix}$
+\end{center}
 \end{problem}
+
+
+
+%\begin{problem}\label{prob:multiply_problem}
+%A matrix in NumPy is just a 2-D array. How can you multiply two 2-D NumPy arrays as matrices? 
+%Hint: Use the strategies outlined in the section ``Learning NumPy''.
+%\end{problem}
 
 After doing the previous problem, you should know how to implement matrix multiplication in NumPy. 
 On the other hand, a matrix in Python can be implemented as a list of lists. 
@@ -206,14 +218,16 @@ as well as \li{&=}, \li{|=}, and \li{^=}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Creating Arrays}
-In addition to \li{np.array()}, NumPy provides efficient ways to create special kinds of arrays. The function \li{np.arange([start], stop, [step])} is similar to the Python function \li{range()}.
+In addition to \li{np.array()}, NumPy provides efficient ways to create special kinds of arrays. The function \li{np.arange([start], stop, [step])} returns an array of numbers from \li{start} up to, but not including, \li{stop}. Like other functions with similar parameters, \li{start} defaults to $0$ and \li{step} defaults to $1$. 
 
 \begin{lstlisting}
+>>> np.arange(5)
+array([0,1,2,3,4])
 >>> np.arange(10, 20, 2) 
 array([10, 12, 14, 16, 18])
 \end{lstlisting}
- 
-Use \li{np.linspace(start, stop, num=50)} to create an array of \li{num} numbers evenly spaced in the interval from \li{start} to \li{stop}.
+
+Use \li{np.linspace(start, stop, num=50)} to create an array of \li{num} numbers evenly spaced in the interval from \li{start} to \li{stop} inclusive.
 \begin{lstlisting}
 >>> np.linspace(0, 32, 4) 
 array([  0.        ,  10.66666667,  21.33333333,  32.        ])
@@ -226,7 +240,7 @@ in the submodule \li{np.random}.
 >>> np.random.rand(5) # uniformly distributed values in [0, 1)
 array([ 0.21845499,  0.73352537,  0.28064456,  0.66878454,  0.44138609])
 \end{lstlisting} 
-Some other commonly used functions are \li{np.random.normal}, which samples from the normal distribution, and \li{np.random.randint}, which randomly selects integers from a range.
+Some other commonly used functions are \li{np.random.normal}, which samples from the normal distribution, \li{np.random.randint}, which randomly selects integers from a range, and \li{np.random.random_integers} which returns an array of random integers in a given range.
 
 There are many functions for creating arrays besides these, some of which are described in Table \ref{table:numpycreate}. 
 See \url{http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html} for more details.
@@ -738,7 +752,7 @@ Finally, the array method \li{flat} lets you iterate over the array as if it wer
 
 \subsection*{Iterating Through Arrays}
 
-Iterating through an array undoes most speed advantages of NumPy. 
+Iterating through an array negates most speed advantages of NumPy. 
 You should avoid doing this whenever possible.
 You can often avoid iterating through arrays by using \emph{array broadcasting} and \emph{universal functions}, discussed in the next section.
 
@@ -804,7 +818,7 @@ For a more detailed description of array broadcasting rules, see
 
 \begin{problem}
 Create a $100\times100\times3$ array of random integers taking values in the range 
-[0, 256]. Such an array can represent an RGB image of $100\times100$ pixels, 
+[0, 255]. Such an array can represent an RGB image of $100\times100$ pixels, 
 where each pixel is associated with an array of three integers indicating the 
 amounts of red, green, and blue color present in that pixel.
 Use array broadcasting to multiply the red and green values by $0.5$. 
