@@ -137,7 +137,7 @@ In addition to the .jpg files you have already moved into the \li{Photots} folde
 \subsection*{Pipes and Redirects}
 Unix becomes even more versatile and powerful when you chain multiple commands together. This is accomplished using \emph{pipes}. Rather than printing the output of a command, the output is passed, or \emph{piped}, to the next command. Two commands are piped together using the \li{|} operator. To demonstrate the power of pipes, we will first introduce a few commands that allow us to view the contents of a file in Table \ref{table:print}
 
-In the first example below, the \li{cat} command output is piped to \li{wc -l}. The \li{wc} command stands for word count. The \li{-l} flag tells the \li{wc} command to count lines. Therefore, this first example counts the number of lines in \li{assignments.txt}. 
+In the first example below, the \li{cat} command output is piped to \li{wc -l}. The \li{wc} command stands for word count. This command can be used to count words or lines. The \li{-l} flag tells the \li{wc} command to count lines. Therefore, this first example counts the number of lines in \li{assignments.txt}. 
 In the second example below, the command lists the files in the current directory sorted by size in descending order. For details on what the flags in this command do, consult \li{man sort}.
 
 \begin{lstlisting}
@@ -167,9 +167,12 @@ $ wc -l < assignments.txt
 Command & Description
 \\ \hline 
 \li{cat} & Print the contents of a file in its entirety \\ 
-\li{less} & Print the contents of a file piece by piece \\
-\li{head} & Print just the first few lines of a file \\
-\li{tail} & Print just the last few lines of a file \\
+\li{more} & Print the contents of a file one page at a time \\
+\li{less} & Like more, but you can navigate forward and backward \\
+\li{head} & Print the first 10 lines of a file \\
+\li{head -nK} & Print the first K lines of a file \\ 
+\li{tail} & Print just the last 10 lines of a file \\
+\li{tail -nK} & Print the last K lines of a file \\
 \end{tabular} 
 \caption{Commands for printing contents of a file}
 \label{table:print} 
@@ -308,6 +311,7 @@ Command & Description
 \li{ps} & Lists all the current processes \\
 \li{Ctrl-C} & Terminates current job \\
 \li{Ctrl-Z} & Interrupts current job \\
+\li{nohup} & Run a command that will not be killed if the user logs out \\
 \end{tabular} 
 \caption{Job control commands}
 \label{table:jobs} 
