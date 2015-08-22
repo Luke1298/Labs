@@ -70,8 +70,9 @@ $ clear							# Clear terminal screen
 Commands & Description
 \\ \hline 
 \li{clear} & Clear the terminal screen \\
-\li{cp file1 dir1} & Create a copy of \li{file1} in \li{dir1} \\
+\li{cp file1 dir1} & Create a copy of \li{file1} and move it to \li{dir1} \\
 \li{cp file1 file2} & Create a copy of file1 and name it file2 \\
+\li{cp -r dir1 dir2} & Create a copy of dir1 and all its contents into \li{dir2}
 \li{df dir1} & Display available disk space in file system containing \li{dir1} \\
 \li{du dir1} & Display disk usage within \li{dir1} [\li{-a}, \li{-h}] \\
 \li{mkdir dir1} & Create a new directory named \li{dir1} \\
@@ -304,10 +305,10 @@ Command & Description
 \\ \hline 
 \li{COMMAND \&} & Adding an ampersand to the end of a command \\
 & runs the command in the background \\
-\li{bg \%n} & Restarts an interrupted job in the background \\
-\li{fg \%n} & Brings the nth job into the foreground \\
+\li{bg \%N} & Restarts the Nth interrupted job in the background \\
+\li{fg \%N} & Brings the Nth job into the foreground \\
 \li{jobs} & Lists all the jobs currently running \\
-\li{kill \%n} & Terminates the nth job \\
+\li{kill \%N} & Terminates the Nth job \\
 \li{ps} & Lists all the current processes \\
 \li{Ctrl-C} & Terminates current job \\
 \li{Ctrl-Z} & Interrupts current job \\
