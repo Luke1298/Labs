@@ -457,7 +457,7 @@ $ tar -zxvf <archive>
 In many of its applications, \li{wget} and \li{curl} perform the same tasks. Both of these commands are used to download content from the internet. Most the differences between \li{wget} and \li{curl} are beyond the scope of this book. 
 At its most basic, \li{curl} is the more robust tools of the two and \li{wget} can download recursively. Though we will provide examples using \li{wget}, know that much of the same functionality can be performed using \li{curl}.
 
-\subsection*{Downloading files using Wget
+\subsection*{Downloading files using Wget}
 
 When we want to download a single file, we just need the URL for the file we want to download. Running the command below will downlad a JPEG image of a person writing on a chalkboard. Similarly, you can download PDF files, HTML files, and other content simply by providing a different URL. 
 
@@ -467,6 +467,25 @@ $ wget http://acme.byu.edu/wp-content/uploads/2013/07/0906-13-00903.jpg
 \end{lstlisting}
 %$
 
-\subsection*{Other Common Uses}
-Like
+\begin{lstlisting}
+The following are also useful commands using \li{wget}.
+# Download files from URLs listed in urls.txt
+$ wget -i urls.txt
+<verbose output> 
+
+# Download in the background
+$ wget -b URL
+<verbose output>
+
+# Download something recursively
+$ wget -r --no-parent URL
+<verbose output>
+
+\end{lstlisting}
+%$
+
+\section*{sed and awk}
+\li{sed} and \li{awk} are two different scripting languages in their own right. Like Unix, these languages are easy to learn but difficult to master. It is very common to combine Unix commands and \li{sed} and \li{awk} commands. We will address the basics, but if you would like more information, see <url>
+
+\subsection*{Formatting output using awk}
 
