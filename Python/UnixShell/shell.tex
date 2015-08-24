@@ -72,7 +72,7 @@ Commands & Description
 \li{clear} & Clear the terminal screen \\
 \li{cp file1 dir1} & Create a copy of \li{file1} and move it to \li{dir1} \\
 \li{cp file1 file2} & Create a copy of file1 and name it file2 \\
-\li{cp -r dir1 dir2} & Create a copy of dir1 and all its contents into \li{dir2}
+\li{cp -r dir1 dir2} & Create a copy of dir1 and all its contents into \li{dir2} \\
 \li{df dir1} & Display available disk space in file system containing \li{dir1} \\
 \li{du dir1} & Display disk usage within \li{dir1} [\li{-a}, \li{-h}] \\
 \li{mkdir dir1} & Create a new directory named \li{dir1} \\
@@ -412,3 +412,61 @@ You will either need a partner for this problem or have access to a username on 
 
 \subsection*{Generating SSH Keys (Optional)}
 If there is a host that we access on a regular basis, typing in our password over and over again can get tedious. By setting up SSH keys, the host can identify if a client is a trusted user without needing to type in a password. If you are interested in experimenting with this setup, a Google search of "How to set up SSH keys" will lead you to many quality tutorials on how to do so.
+
+\section*{Archiving and Compression}
+In file management, the terms archiving and compressing are commonly used interchangeably. However, these are quite different. To archive is to combine a certain number of files into one file. The resulting file will be the same size as the group of files that were archived.
+To compress is to take a file or group of files and shrink the file size as much as possible. The resulting compressed file will need to be extracted before being used.
+
+The \li{ZIP} file format is the most popular for archiving and compressing files. If by chance the \li{zip} command is not installed on your system, you can download it by running \li{sudo apt-get install zip}. Note that you will need to have administrative rights to download this package. To unzip a file, use \li{unzip}.
+
+\begin{lstlisting}
+$ zip zipfile.zip directory
+<verbose output>
+
+# use -l to view contents of zip file
+$ unzip -l zipfile.zip
+<content output>
+
+$ unzip zipfile.zip
+<verbose output>
+\end{lstlisting}
+%$
+
+While the \li{ZIP} file format is more popular on the Windows platform, the \li{tar} utility is more common in the Unix environment. The following commands use \li{tar} to archive the files and \li{gzip} to compress the archive. 
+
+Notice that all the commands below have the \li{-z}, \li{-v}, and \li{-f} flags. The \li{-z} flag calls for the \li{gzip} compression tool, the \li{-v} flag calls for a verbose output, and \li{-f} indicates the next parameter will be the name of the archive file. 
+
+\begin{lstlisting}
+# use -c to create a new archive
+$ tar -zcvf <archive> <files/directory> 
+<create>
+
+# use -t to view contents
+$ tar -ztvf <archive>                    
+<view>
+
+# use -x to extract
+$ tar -zxvf <archive>                   
+<extract>
+\end{lstlisting}
+%$
+
+
+\section*{Web Related}
+
+In many of its applications, \li{wget} and \li{curl} perform the same tasks. Both of these commands are used to download content from the internet. Most the differences between \li{wget} and \li{curl} are beyond the scope of this book. 
+At its most basic, \li{curl} is the more robust tools of the two and \li{wget} can download recursively. Though we will provide examples using \li{wget}, know that much of the same functionality can be performed using \li{curl}.
+
+\subsection*{Downloading files using Wget
+
+When we want to download a single file, we just need the URL for the file we want to download. Running the command below will downlad a JPEG image of a person writing on a chalkboard. Similarly, you can download PDF files, HTML files, and other content simply by providing a different URL. 
+
+\begin{lstlisting}
+$ wget http://acme.byu.edu/wp-content/uploads/2013/07/0906-13-00903.jpg
+<output> 
+\end{lstlisting}
+%$
+
+\subsection*{Other Common Uses}
+Like
+
