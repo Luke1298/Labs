@@ -156,16 +156,11 @@ deque(['A', 'D', 'A', 'C'])
 
 We have arrived at a new problem.
 The nodes $A$ and $C$ were added to the queue to be visited, even though $C$ has already been visited and $A$ is next in line.
-We can prevent these nodes from being added to the queue again by keeping a running list of nodes that don't need to be added.
-However, not all such nodes are created equal.
-For example, $C$ has already been visited, while $A$ is in line to be visited, but hasn't actually been visited yet.
-We distinguish between these two types of nodes with two additional lists: \li{visited} and \li{marked}.
+We can prevent these nodes from being added to the queue again by creating a \li{set} of nodes to contain all nodes that have already been visited, or that are marked to be visited.
+Checking set membership is very fast, so this additional data strutcure has minimal impact on the program's speed (and is faster than checking the deque).
 
-Nodes that are in \li{visited} have already been visited by the algorithm.
-If we make it a Python \li{list}, \li{visited} will also keep track of the order in which we visited the nodes in the graph.
-Nodes that are in \li{marked} have been added to the queue, but have not been visited yet.
-Since the ordering doesn't matter for which nodes are marked, we make \li{marked} a Python \li{set}.
-If we check both of these groups at each step of the algorithm, the previous problems are avoided.
+In addition, we keep a \li{list} of the nodes that have actually been visited to track the order of the search.
+By checking the \li{set} at each step of the algorithm, the previous problems are avoided.
 
 \begin{lstlisting}
 >>> current = 'C'
@@ -175,12 +170,13 @@ If we check both of these groups at each step of the algorithm, the previous pro
 
 # Visit the start node C.
 >>> visited.append(current)
+>>> marked.add(current)
 
 # Add the neighbors of C to the queue.
 >>> for neighbor in adjacency_dictionary[current]:
 ...     visit_queue.append(neighbor)
 ...     # Since each neighbor will be visited, add them to marked as well.
-...     marked.add(neighbor) 
+...     marked.add(neighbor)
 ...
 # Move to the next node by removing from the front of the queue.
 >>> current = visit_queue.popleft()
@@ -193,7 +189,7 @@ B
 >>> visited.append(current)
 >>> for neighbor in adjacency_dictionary[current]:
 ...     visit_queue.append(neighbor)
-...     marked.add(neighbor) 
+...     marked.add(neighbor)
 ...
 
 # Since C is visited and A is in marked, the queue is unchanged.
@@ -203,7 +199,7 @@ deque(['A', 'D'])
 
 % Problem 2: general BFS
 \begin{problem}
-Implement the \li{search} method in the \li{Graph} class using a BFS.
+Implement the \li{traverse} method in the \li{Graph} class using a BFS.
 Start from a specified node and proceed until all nodes in the graph have been visited.
 Return the list of visited nodes.
 If the starting node is not in the adjacency dictionary, raise a \li{ValueError}.
@@ -212,7 +208,7 @@ If the starting node is not in the adjacency dictionary, raise a \li{ValueError}
 % Problem 3: general DFS (Optional)
 \begin{problem}
 (Optional) Create a new method called \li{DFS} in the \li{Graph} class
-that mimics the \li{search} method, but uses a DFS instead of a BFS.
+that mimics the \li{traverse} method, but uses a DFS instead of a BFS.
 
 (Hint: this can be done by changing a single line of the BFS code.)
 \end{problem}
@@ -234,7 +230,7 @@ When the target node is found, step back through the dictionary until arriving a
 \begin{problem}
 Implement the \li{shortest_path} method in the \li{Graph} class using a BFS.
 Begin at a specified starting node and proceed until a specified target is found.
-Return a list containing the node values in the shortest parth from the start to the target (including the endpoints).
+Return a list containing the node values in the shortest path from the start to the target (including the endpoints).
 If either of the inputs are not in the adjacency graph, raise a \li{ValueError}.
 \end{problem}
 
@@ -313,8 +309,8 @@ Set Kevin Bacon as the default target.
 If either of the inputs are not contained in the stored collection of dictionary values (if either input is not an actor's name), raise a \li{ValueError}.
 
 \begin{lstlisting}
->>> baconator = BaconSolver("movieData.txt")
->>> baconator.path_to_bacon("Jackson, Samuel L.")
+>>> movie_graph = BaconSolver("movieData.txt")
+>>> movie_graph.path_to_bacon("Jackson, Samuel L.")
 ['Jackson, Samuel L.', 'Captain America: The First Avenger', 'Stark,
 Peter', 'X-Men: First Class', 'Bacon, Kevin']
 \end{lstlisting}

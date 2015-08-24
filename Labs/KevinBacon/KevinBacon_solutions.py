@@ -54,10 +54,10 @@ class Graph(object):
         return out
 
     # Problem 2
-    def search(self, start):
+    def traverse(self, start):
         """Begin at 'start' and perform a breadth-first search until all
-        nodes in the graph have been searched. Return a list of values, in
-        the order that they were visited. If 'start' is not in the
+        nodes in the graph have been visited. Return a list of values,
+        in the order that they were visited. If 'start' is not in the
         adjacency dictionary, raise a ValueError.
 
         Inputs:
@@ -67,10 +67,9 @@ class Graph(object):
             the list of visited nodes (in order of visitation)
 
         Example:
-            >>> test = {'A':['B', 'D'], 'B':['A', 'C'],
-            ...         'C':['B', 'D'], 'D':['A', 'C']}
-            >>> Graph(test).search('A')
-            ['A', 'B', 'D', 'C']
+            >>> test = {'A':['B'], 'B':['A', 'C',], 'C':['B']}
+            >>> Graph(test).traverse('B')
+            ['B', 'A', 'C']
         """
 
         # Validate input
@@ -79,9 +78,8 @@ class Graph(object):
 
         # Set up the data structures
         visited = list()
-        marked = set()
-        visit_queue = deque()
-        visit_queue.append(start)
+        marked = set(start)
+        visit_queue = deque(start)
 
         # Search the graph until done:
         while len(visit_queue) > 0:
@@ -92,7 +90,7 @@ class Graph(object):
             # put any unvisited, unmarked neighbors of the
             # current node on the visiting queue
             for neighbor in self.dictionary[current]:
-                if neighbor not in marked and neighbor not in visited:
+                if neighbor not in marked:
                     visit_queue.append(neighbor)
                     marked.add(neighbor)
         return visited
@@ -113,22 +111,21 @@ class Graph(object):
         Example:
             >>> test = {'A':['B', 'D'], 'B':['A', 'C'],
             ...         'C':['B', 'D'], 'D':['A', 'C']}
-            >>> Graph(test).search('A')
+            >>> Graph(test).DFS('A')
             ['A', 'B', 'C', 'D']
         """
         if start not in self.dictionary:
             raise ValueError(str(start) + " is not in the graph.")
 
         visited = list()
-        marked = set()
-        visit_queue = deque()               # for DFS, use this as a stack
-        visit_queue.append(start)
+        marked = set(start)
+        visit_queue = deque(start)          # for DFS, use this as a stack
 
         while len(visit_queue) > 0:
             current = visit_queue.pop()     # This line is different from BFS
             visited.append(current)
             for neighbor in self.dictionary[current]:
-                if neighbor not in marked and neighbor not in visited:
+                if neighbor not in marked:
                     visit_queue.append(neighbor)
                     marked.add(neighbor)
         return visited
@@ -161,9 +158,8 @@ class Graph(object):
         # if target not in self.dictionary: raise ValueError
 
         visited = list()
-        marked = set()
-        visit_queue = deque()
-        visit_queue.append(start)
+        marked = set(start)
+        visit_queue = deque(start)
         all_paths = {}
         final_path = deque()
 
@@ -179,12 +175,13 @@ class Graph(object):
                     final_path.appendleft(all_paths[current])
                     current = all_paths[current]
                 return list(final_path)
-            else:   # otherwise continue as before
+            # Otherwise continue as before
+            else:
                 for neighbor in self.dictionary[current]:
-                    if neighbor not in marked and neighbor not in visited:
+                    if neighbor not in marked:
                         visit_queue.append(neighbor)
                         marked.add(neighbor)
-                        # track the path
+                        # Track the path
                         all_paths[neighbor] = current
 
         # If all neighbors have been checked, the target isn't in the graph.
@@ -401,17 +398,17 @@ def test(student_module, late=False):
     try:    # Problem 2: 10 points
         feedback += "\n\nTesting problem 2 (10 points):"
         points = 0
-        p,f = strTest(solution1.search('A'), student1.search('A'),
-                                    "\n\tGraph.search() failed")
+        p,f = strTest(solution1.traverse('A'), student1.traverse('A'),
+                                    "\n\tGraph.traverse() failed")
         points += (p * 2); feedback += f
-        p,f = strTest(solution2.search('A'), student2.search('A'),
-                                    "\n\tGraph.search() failed")
+        p,f = strTest(solution2.traverse('A'), student2.traverse('A'),
+                                    "\n\tGraph.traverse() failed")
         points += (p * 2); feedback += f
-        p,f = strTest(solution3.search('A'), student3.search('A'),
-                                    "\n\tGraph.search() failed")
+        p,f = strTest(solution3.traverse('A'), student3.traverse('A'),
+                                    "\n\tGraph.traverse() failed")
         points += (p * 2); feedback += f
-        p,f = strTest(solution4.search('A'), student4.search('A'),
-                                    "\n\tGraph.search() failed")
+        p,f = strTest(solution4.traverse('A'), student4.traverse('A'),
+                                    "\n\tGraph.traverse() failed")
         points += (p * 4); feedback += f
         
         score += points; feedback += "\nScore += " + str(points)
@@ -455,7 +452,7 @@ def test(student_module, late=False):
         points += (p * 5); feedback += f
 
         # Check for cheating
-        rawcode = inspect.getsource(Graph.shortest_path).splitlines()[21:]
+        rawcode = inspect.getsource(s.Graph.shortest_path).splitlines()[21:]
         code = ""
         for line in rawcode: code += line
         if len(code.partition('shortest_path(')[1]) > 0:

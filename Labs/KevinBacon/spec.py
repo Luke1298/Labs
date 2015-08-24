@@ -30,10 +30,10 @@ class Graph(object):
         return ""
 
     # Problem 2
-    def search(self, start):
+    def traverse(self, start):
         """Begin at 'start' and perform a breadth-first search until all
-        nodes in the graph have been searched. Return a list of values, in
-        the order that they were visited. If 'start' is not in the
+        nodes in the graph have been visited. Return a list of values,
+        in the order that they were visited. If 'start' is not in the
         adjacency dictionary, raise a ValueError.
 
         Inputs:
@@ -44,7 +44,7 @@ class Graph(object):
 
         Example:
             >>> test = {'A':['B'], 'B':['A', 'C',], 'C':['B']}
-            >>> Graph(test).search('B')
+            >>> Graph(test).traverse('B')
             ['B', 'A', 'C']
         """
         pass
