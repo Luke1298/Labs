@@ -1,4 +1,4 @@
-\lab{Unix Shell}{Shell}
+\lab{Unix Shell}{Unix Shell}
 \label{lab:Shell}
 % Written by Tanner Christensen, Summer 2015
 % If more content in the Problems is needed, in Problem 6, we could add:
@@ -73,8 +73,6 @@ Commands & Description
 \li{cp file1 dir1} & Create a copy of \li{file1} and move it to \li{dir1} \\
 \li{cp file1 file2} & Create a copy of file1 and name it file2 \\
 \li{cp -r dir1 dir2} & Create a copy of dir1 and all its contents into \li{dir2} \\
-\li{df dir1} & Display available disk space in file system containing \li{dir1} \\
-\li{du dir1} & Display disk usage within \li{dir1} [\li{-a}, \li{-h}] \\
 \li{mkdir dir1} & Create a new directory named \li{dir1} \\
 \li{mkdir -p path/to/new/dir1} & Create \li{dir1} and all intermediate directories \\
 \li{mv file1 dir1} & Move \li{file1} to \li{dir1} \\
@@ -283,6 +281,23 @@ In the \li{Python} directory you will find \li{count_files.py}. \li{count_files.
 
 If you would like to learn how to run scripts on a set schedule, consider researching \emph{cron jobs}.
 
+\section*{Resource Management}
+To be able to optimize performance, it is valuable to always be aware of the resources we are using. Hard drive space and computer memory are two resources we must constantly keep in mind. The commands found in table \ref{table:resource} are essential to managing resources.
+
+\begin{table}
+\begin{tabular}{l|l} 
+Command & Description
+\\ \hline 
+\li{df dir1} & Display available disk space in file system containing \li{dir1} \\
+\li{du dir1} & Display disk usage within \li{dir1} [\li{-a}, \li{-h}] \\
+\li{free} & Display amount of free and used memory in the system \\
+\li{ps} & Display a snapshot of current processes \\
+\li{top} & Display interactive list of current processes \\
+\end{tabular} 
+\caption{Commands for resource management}
+\label{table:resource} 
+\end{table} 
+
 \section*{Job Control}
 Let's say we had a series of scripts we wanted to run. If we knew that these would take a while to execute, we may want to start them all at the same time and let them run while we are working on something else. In the Table \ref{table:jobs}, we have listed some of the most common commands used in job control. We strongly encourage you to experiment with these commands. In the \li{Scripts} directory, you will find a \li{five_secs} and a \li{ten_secs} script that takes five seconds and ten seconds to execute respectively. These will be particularly useful as you are experimenting with these commands. 
 
@@ -371,7 +386,26 @@ Create a \li{Shell} class in Python. Write a \li{find_file} method that will sea
 Write a method for the \li{Shell} class that recursively finds the \li{n} largest files within a directory. Have a keyword argument for the directory that defaults to the current directory. Be sure that your function only returns files. Hint: To view the size of a file \li{file1}, you can use \li{ls -s file1} or \li{du file1}
 \end{problem}
 
-\section*{Secure Shell}
+\section*{System Management}
+
+In this section, we will address some of the basics of system management. As an introduction, the commands in table \ref{table:systemadmin} are used to learn more about the computer system.
+
+\begin{table}
+\begin{tabular}{l|l} 
+Command & Description
+\\ \hline 
+\li{passwd} & Change user password \\
+\li{uname} & View operating system name \\
+\li{uname -a} & Print all system information \\
+\li{uname -m} & Print machine hardware \\
+\li{w} & Show who is logged in and what they are doing \\
+\li{whoami} & Print userID of current user \\
+\end{tabular} 
+\caption{Commands for system administration.}
+\label{table:systemadmin} 
+\end{table} 
+
+\subsection*{Secure Shell}
 
 Let's say you are working for a company with a file server. Hundreds of people need to be able to access the content of this machine, but how is that possible? Or say you have a script to run that requires some serious computing power. How are you going to be able to access your company's super computer to run your script? We do this through \emph{Secure Shell} (SSH).
 
@@ -380,12 +414,15 @@ SSH is a network protocol encrypted using public-key cryptography. The system we
 \begin{lstlisting}
 $ whoami    # use this to see what your current login is
 client_username
-$ ssh host_username@hostname
+$ ssh my_host_username@my_hostname
 
-# You will then be prompted to enter the password for host_username
+# You will then be prompted to enter the password for my_host_username
 
 $ whoami    # use this to verify that you are logged into the host
-host_username
+my_host_username
+
+$ hostname
+my_hostname
 \end{lstlisting}
 %$
 
@@ -488,6 +525,71 @@ $ wget -r --no-parent URL
 \section*{sed and awk}
 \li{sed} and \li{awk} are two different scripting languages in their own right. Like Unix, these languages are easy to learn but difficult to master. It is very common to combine Unix commands and \li{sed} and \li{awk} commands. We will address the basics, but if you would like more information, see <url>
 
+\subsection*{Printing Specific Lines Using sed}
+We have already used the \li{head} and \li{tail} commands to print the beginning and end of a file respectively. What if we wanted to print lines $30$ to $40$, for example? We can accomplish this using \li{sed}. In the \li{Documents} folder, you will find the \li{lines.txt} file. We will use this file for the following examples.
+
+\begin{lstlisting}
+# Same output as head -n3
+$ sed -n 1,3p lines.txt
+line 1
+line 2
+line 3
+
+# Same output as tail -n3
+$ sed -n 3,5p lines.txt
+line 3
+line 4
+line 5
+
+# Print lines 2-4
+$ sed -n 3,5p lines.txt
+line 2
+line 3
+line 4
+
+# Print lines 1,3,5
+$ sed -n -e 1p -e 3p -e 5p lines.txt 
+line 1
+line 3
+line 5
+\end{lstlisting}  
+
+\subsection*{Find and Replace Using sed}
+
+Using \li{sed}, we can also perform find and replace. We can perform this function on the output of another commmand or we can perform this function in place on other files. The basic syntax of this \li{sed} command is the following.
+
+\begin{lstlisting}
+sed s/str1/str2/g
+\end{lstlisting} 
+
+This command will replace every instance of \li{str1} with \li{str2}. More specific examples follow.
+
+\begin{lstlisting}
+$ sed s/line/LINE/g lines.txt
+LINE 1
+LINE 2
+LINE 3
+LINE 4
+LINE 5
+
+# Notice the file didn't change at all
+$ cat lines.txt
+line 1
+line 2
+line 3
+line 4
+line 5
+
+# To save the changes, add the -i flag
+$ sed -i s/line/LINE/g lines.txt
+$ cat lines.txt
+LINE 1
+LINE 2
+LINE 3
+LINE 4
+LINE 5
+\end{lstlisting}
+
 \subsection*{Formatting output using awk}
 Earlier in this lab we mentioned \li{ls -l} and as we have seen, this outputs lots of information. Using \li{awk}, we can select which fields we wish to print. Suppose we only cared about the file name and the permissions. We can get this output by running the following command.
 
@@ -548,6 +650,6 @@ All this can be accomplished using one command.
 
 We have barely scratched the surface of what \li{awk} can do. Performing an internet search for ``awk one-liners'' will give you many additional examples of useful commands you can run using \li{awk}.
 
-\subsection*{Printing Specific Lines Using sed}
-
-\subsection*{Find and Replace Using sed}
+\section*{One Final Note}
+Though there are multiple Unix shells, one of the most popular is the \emph{bash} shell. The bash shell is highly customizeable. In your home directory, you will find a hidden file named \li{.bashrc}. All customization changes are saved in this file. If you are interested in customizing your shell, you can customize the prompt using the \li{PS1} environment variable.
+As you become more and more familiar with the Unix shell, you will come to find there are commands you run over and over again. You can save commands you use frequently using \li{alias}. If you would like more information on these and other ways to customize the shell, you can find many quality reference guides and tutorials on the internet.
