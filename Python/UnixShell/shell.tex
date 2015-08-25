@@ -467,8 +467,9 @@ $ wget http://acme.byu.edu/wp-content/uploads/2013/07/0906-13-00903.jpg
 \end{lstlisting}
 %$
 
-\begin{lstlisting}
 The following are also useful commands using \li{wget}.
+
+\begin{lstlisting}
 # Download files from URLs listed in urls.txt
 $ wget -i urls.txt
 <verbose output> 
@@ -488,4 +489,65 @@ $ wget -r --no-parent URL
 \li{sed} and \li{awk} are two different scripting languages in their own right. Like Unix, these languages are easy to learn but difficult to master. It is very common to combine Unix commands and \li{sed} and \li{awk} commands. We will address the basics, but if you would like more information, see <url>
 
 \subsection*{Formatting output using awk}
+Earlier in this lab we mentioned \li{ls -l} and as we have seen, this outputs lots of information. Using \li{awk}, we can select which fields we wish to print. Suppose we only cared about the file name and the permissions. We can get this output by running the following command.
 
+\begin{lstlisting}
+$ ls -l | awk ' {print $1, $9} '
+\end{lstlisting}
+%$
+
+Notice we pipe the output of \li{ls -l} to \li{awk}. Whenever we are wanting to call a command using \li{awk}, we always use quotation marks. Note it is a common mistake to forget to add these quotation marks. Inside these quotation marks, commands always take the same format.
+
+\begin{lstlisting}
+awk ' <options> {<actions>} '
+\end{lstlisting}
+
+In the examples we will be exploring in this lab, we will not be using any of the options, but we will address various actions. For those interested in learning what options are available see <url>. In our first example, we use the \li{print} action. The \li{\$1} and \li{\$9} mean that we are going to print the first and ninth fields.
+
+Beyond specifying which fields we wish to print, we can also choose how many characters to allocate for each field. In the \li{Documents} directory, you will find a \li{people.txt} file that we will use for the following examples.
+
+\begin{lstlisting}
+# contents of people.txt
+$ cat people.txt
+male,John,23
+female,Mary,31
+female,Sally,37
+male,Ted,19
+male,Jeff,41
+female,Cindy,25
+
+# Change the field separator (FS) to "," at the beginning of execution (BEGIN)
+# By printing each field individually proves we have successfully separated the fields
+$ awk ' BEGIN{ FS = "," }; {print $1,$2,$3} ' < people.txt
+male John 23
+female Mary 31
+female Sally 37
+male Ted 19
+male Jeff 41
+female Cindy 25
+
+# Format columns using printf so everything is in neat columns in order (gender,age,name)
+$ awk ' BEGIN{ FS = ","}; {printf "%-6s %2s %s\n", $1,$3,$2} ' < people.txt
+male   23 John
+female 31 Mary
+female 37 Sally
+male   19 Ted
+male   41 Jeff
+female 25 Cindy
+\end{lstlisting}
+
+The statement \li{"\%-6s \%2s \%s\\n"} formats the columns of the output. This says to set aside six characters left justied, then two characters right justified, then print the last field to its full length.
+
+\begin{problem}
+Inside the \li{Documents} directory, you should find a file named \li{files.txt}. This file contains details on approximately one hundred files. The different fields in the file are separated by tabs. Using \li{awk}, \li{sort}, pipes, and redirects, write a file named \li{date_modified.txt} with the following specifications:
+- in the first column, print the date the file was modified
+- in the second column, print the name of the file
+- sort the file from newest to oldest based on the date last modified
+All this can be accomplished using one command.
+\end{problem}
+
+We have barely scratched the surface of what \li{awk} can do. Performing an internet search for ``awk one-liners'' will give you many additional examples of useful commands you can run using \li{awk}.
+
+\subsection*{Printing Specific Lines Using sed}
+
+\subsection*{Find and Replace Using sed}
