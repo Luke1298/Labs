@@ -333,7 +333,7 @@ def test(student_module, late=False):
         late (bool, opt): if True, half credit is awarded.
     
     Returns:
-        score (int): the student's score, out of 'total'.
+        score (int): the student's score, out of 60.
         feedback (str): a printout of results for the student.
     """
     
