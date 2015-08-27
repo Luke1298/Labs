@@ -1,194 +1,10 @@
-\lab{Unix Shell}{Unix Shell}
+\lab{More on the Unix Shell}{More on the Unix Shell}
 \label{lab:Shell}
 % Written by Tanner Christensen, Summer 2015
-% If more content in the Problems is needed, in Problem 6, we could add:
-%    "edit count_files.py to exclude the files in the test directory"
 
-\objective{Introduce the basics of the Unix Shell commands and integrate Unix Shell commands with Python}
+\objective{Introduce system management, calling Unix Shell commands within Python, and other advanced topics.}
 
-Unix was first developed by AT\&T Bell Labs in the 1970s. In the 1990s, Unix became the foundation of Linux and MacOSX. The majority of servers are written in Linux, so having a knowledge of Unix shell commands allows us to interact with these servers. 
-
-The more you learn about Unix, you will find it is easy to learn but difficult to master. We will build a foundation of simple file system navigation, job control, and basic system remote access. We will address some of the basics in detail and also include lists of commands that are worth learning.
-
-\section*{File System}
-\subsection*{Navigation}
-
-Begin by opening the Terminal. The text you see in the upper left of the Terminal window is called the \emph{prompt}. We will begin using three very basic commands: \li{pwd}, \li{ls}, and \li{cd}. The \li{pwd} command stands for print working directory. The \li{ls} command lists the files and subdirectories within the working directory. The \li{cd} command changes the working directory.
-
-%The only reason this problem exists is to make sure it is VERY clear not to mess with the Shell-Lab directory
-
-\begin{problem}
-Using these commands, navigate to the \li{Shell-Lab} directory provided with this lab. We will use this directory for the remainder of the lab. Use the \li{ls} command to list the contents of this directory. NOTE: You will find a directory within this directory called \li{test} that is availabe for you to experiment with the concepts and commands found in this lab. The other files and directories are necessary for the exercises we will be doing, so take care not to modify them.
-\end{problem}
-
-\subsection*{Flags}
-Most commands can be customized using flags. The \li{ls} command has dozens of optional flags. Table \ref{table:ls_flags} contains some of the most common flags for the \li{ls} command.
-
-\begin{table}
-\begin{tabular}{l|l} 
-Flags & Description
-\\ \hline 
-\li{-a} & Do not ignore hidden files and folders \\ 
-\li{-l} & List files and folders in long format \\ 
-\li{-r} & reverse order while sorting \\
-\li{-s} & print item name and size \\
-\li{-t} & Sort output by last modified \\ 
-\li{-R} & Print files and subdirectories recursively \\ 
-\li{-S} & Sort by size \\ 
-\end{tabular} 
-\caption{Common flags of the \li{ls} command.}
-\label{table:ls_flags} 
-\end{table} 
-
-Multiple flags can be combined as one flag. For example, if we wanted to list all the files in a directory in long format sorted by last time modified, we would use \li{ls -a -l -t} or \li{ls -alt}. To view the reference manual for any command, use \li{man}. For example, to view the reference manual for the \li{ls} command, use \li{man ls}.
-
-\subsection*{Other Useful Commands}
-Table \ref{table:other_commands} contains a list commonly-used commands and their uses. Many of these commands will be needed throughout this lab and in any typical session with the Unix shell. After some of the commands are flags listed in square brackets that are worth exploring using \li{man}. We highly recommend experimenting with all these commands to become familiar with them. Remember you may freely experiment with these commands in the \li{test} directory.
-
-\begin{lstlisting}
-$ cd test
-$ touch data.txt				# create new file data.txt
-$ mkdir New						# create new directory New
-$ ls							# list items in test directory
-New 	data.txt
-$ cp data.txt New/				# copy data.txt to New directory
-$ cd New/						# enter the New directory
-$ ls							# list items in New directory
-data.txt
-$ mv data.txt new_data.txt		# rename data.txt new_data.txt
-$ ls							# list items in New directory
- new_data.txt
-$ cd ..							# Return to test directory
-$ rm -rv New/					# Remove New directory and its contents
- removed 'New/data.txt'
- removed directory: 'New/'
-$ clear							# Clear terminal screen
-\end{lstlisting}
-
-\begin{table}
-\begin{tabular}{l|l} 
-Commands & Description
-\\ \hline 
-\li{clear} & Clear the terminal screen \\
-\li{cp file1 dir1} & Create a copy of \li{file1} and move it to \li{dir1} \\
-\li{cp file1 file2} & Create a copy of file1 and name it file2 \\
-\li{cp -r dir1 dir2} & Create a copy of dir1 and all its contents into \li{dir2} \\
-\li{mkdir dir1} & Create a new directory named \li{dir1} \\
-\li{mkdir -p path/to/new/dir1} & Create \li{dir1} and all intermediate directories \\
-\li{mv file1 dir1} & Move \li{file1} to \li{dir1} \\
-\li{mv file1 file2} & Rename \li{file1} as \li{file2} \\
-\li{rm file1} & Delete \li{file1} [\li{-i}, \li{-v}] \\
-\li{rm -r dir1} & Delete \li{dir1} and all items within \li{dir1} [\li{-i}, \li{-v}] \\
-\li{touch file1} & Create an empty file named \li{file1} \\
-\li{.} & Current directory \\
-\li{..} & Parent directory \\
-\li{\~} & Home directory \\
-\li{/} & Root directory \\
-\end{tabular} 
-\caption{Other useful commands dealing with the file system.}
-\label{table:other_commands} 
-\end{table} 
-
-\begin{problem}
-Inside the \li{Shell-Lab} directory, delete the \li{Audio} folder along with all its contents. Create \li{Documents}, \li{Photos}, and \li{Python} directories.
-\end{problem}
-
-\subsection*{Wildcards}
-As we are working in the file system, there will be times that we want to perform  the same command to a group of similar files. For example, if you needed to move   all text files within a directory to a new directory, the naive way to do this would be to move each text file individually. However, this same result can be achieved using \emph{wildcards}. We use wildcards as placeholder text.  The two wildcards we use most are \li{*} and \li{?}. The \li{*} wildcard represents any string and the \li{?} wildcard represents any character. Though these wildcards can be used in almost every Unix command, they are particularly useful when dealing with files. See Table \ref{table:wildcards}
-
-\begin{table}
-\begin{tabular}{l|l} 
-Command & Description
-\\ \hline 
-\li{*.txt} & All files that end with \li{.txt}. \\
-\li{image*} & All files that have \li{"image"} as the first 5 characters. \\
-\li{*py*} & All files that contain \li{"py"} in the name. \\
-\li{doc*.txt} & All files of the form \li{doc1.txt}, \li{doc2.txt}, \li{docA.txt}, etc. \\
-\end{tabular} 
-\caption{Common uses for wildcards.}
-\label{table:wildcards} 
-\end{table} 
-
-\begin{problem}
-Within the \li{Shell-Lab} directory, there are many files. We will organize these files into directories. Using wildcards, move all the \li{.jpg} files to the \li{Photos} directory, all the \li{.txt} files to the \li{Documents} directory, and all the \li{.py} to the \li{Python} directory. You will see a few other folders in the \li{Shell-Lab} directory. Do not move any of the files within these folders at this point.
-\end{problem}
-
-\section*{Searching the File System}
-There are two powerful commands we use for searching through our directories. The \li{find} command is used to find files or directories in a directory hierarchy. The \li{grep} command is used to find lines matching a string. More specifically, we can use \li{grep} to find words inside files. We will provide a basic template in Table \ref{table:find} for using these two commands and leave it to you to explore the uses of the other flags.
-
-\begin{table}
-\begin{tabular}{l|l} 
-Command & Description
-\\ \hline 
-\li{find dir1 -type f -name "word"} &  Find all files in \li{dir1} with the name \li{"word"} \\ 
- & (\li{-type f} is for files \li{-type d} is for directories)\\
-\li{grep -nr "word" dir1} & Find all occurances of \li{"word"} within the files inside \li{dir1} \\ 
- & (\li{-n} lists the line number and \li{-r} performs a recursive search)\\
-\end{tabular} 
-\caption{Commands using \li{find} and \li{grep}.}
-\label{table:find} 
-\end{table} 
-
-\begin{problem}
-In addition to the .jpg files you have already moved into the \li{Photots} folder, there are a few other .jpg files in a few other folders within the \li{Shell-Lab} directory. Find where these files are using the \li{find} command and move them to the \li{Photos} folder.
-\end{problem}
-
-\subsection*{Pipes and Redirects}
-Unix becomes even more versatile and powerful when you chain multiple commands together. This is accomplished using \emph{pipes}. Rather than printing the output of a command, the output is passed, or \emph{piped}, to the next command. Two commands are piped together using the \li{|} operator. To demonstrate the power of pipes, we will first introduce a few commands that allow us to view the contents of a file in Table \ref{table:print}
-
-In the first example below, the \li{cat} command output is piped to \li{wc -l}. The \li{wc} command stands for word count. This command can be used to count words or lines. The \li{-l} flag tells the \li{wc} command to count lines. Therefore, this first example counts the number of lines in \li{assignments.txt}. 
-In the second example below, the command lists the files in the current directory sorted by size in descending order. For details on what the flags in this command do, consult \li{man sort}.
-
-\begin{lstlisting}
-$ cd Shell-Lab/Files/Feb
-$ cat assignments.txt | wc -l
-9
-
-$ ls -s | sort -nr
-12 project3.py
-12 project2.py
-12 assignments.txt
- 4 pics
-total 40
-\end{lstlisting}
-%$
-
-In the previous example, we pipe the contents of \li{assignments.txt} to \li{wc -l} using \li{cat}. When working with files specifically, it is better to use \emph{redirects}. The same output from the first example above can be achieved by running the following command:
-
-\begin{lstlisting}
-$ wc -l < assignments.txt
-9
-\end{lstlisting}
-%$
-
-\begin{table}
-\begin{tabular}{l|l} 
-Command & Description
-\\ \hline 
-\li{cat} & Print the contents of a file in its entirety \\ 
-\li{more} & Print the contents of a file one page at a time \\
-\li{less} & Like more, but you can navigate forward and backward \\
-\li{head} & Print the first 10 lines of a file \\
-\li{head -nK} & Print the first K lines of a file \\ 
-\li{tail} & Print just the last 10 lines of a file \\
-\li{tail -nK} & Print the last K lines of a file \\
-\end{tabular} 
-\caption{Commands for printing contents of a file}
-\label{table:print} 
-\end{table} 
-
-If you are wanting to save the resulting output of a command to a file, use \li{>} or \li{>>}. The \li{>} operator will overwrite anything that may exist in the output file whereas \li{>>} will append the output to the end of the output file. For example, if we want to append the number of lines in \li{assignments.txt} to \li{word_count.txt}, we would run the following commmand:
-
-\begin{lstlisting}
-$ wc -l < assignements.txt >> word_count.txt
-\end{lstlisting}
-%$
-
-Since \li{grep} is used to print lines matching a pattern, it is also very useful to use in conjunction with piping. For example, \li{ls -l | grep root} prints all files associated with the root user.
-
-\begin{problem}
-The \li{words.txt} file in the \li{Documents} directory contains a list of words that are not in alphabetical order. Write the number of words in \li{words.txt} and an alphabetically sorted list of words to \li{sortedwords.txt} using pipes and redirects. Save this file in the \li{Documents} directory. Try to accomplish this with a total of two commands or fewer.
-\end{problem}
+In this lab, we will build upon the foundation we built in the previous lab. As in the last lab, the majority of learning will not be had in finsihing the problems, but in following the examples. By the end of this lab, you will have a solid foundation in Unix. You will be able to understand enough to learn whatever else may be necessary to learn in the future.
 
 \section*{File Security}
 To begin, run the following command while inside the \li{Shell-Lab} directory:
@@ -203,7 +19,9 @@ $ ls -l
 
 \end{lstlisting}
 
-Notice the first column of the output. The first character denotes the type of the item whether it be a normal file, a directory, a symbolic link, etc. The remaining nine characters denote the permissions associated with that file. Specifically, these permissions deal with reading, wrtiting, and executing files. There are three categories of people associated with permissions. These are the user (the owner), group, and others. For example, look at the output for \li{mult.py}. The first character \li{-} denotes that \li{mult.py} is a normal file. The next three characters, \li{rwx} tell us the owner can read, write, and execute the file. The next three characters \li{r-x} tell us members of the same group can read and execute the file. The final three characters \li{--x} tell us other users can execute the file and nothing more.
+Notice the first column of the output. The first character denotes the type of the item whether it be a normal file, a directory, a symbolic link, etc. The remaining nine characters denote the permissions associated with that file. 
+Specifically, these permissions deal with reading, wrtiting, and executing files. There are three categories of people associated with permissions. These are the user (the owner), group, and others. For example, look at the output for \li{mult.py}. The first character \li{-} denotes that \li{mult.py} is a normal file. 
+The next three characters, \li{rwx} tell us the owner can read, write, and execute the file. The next three characters \li{r-x} tell us members of the same group can read and execute the file. The final three characters \li{--x} tell us other users can execute the file and nothing more.
 
 Permissions can be modified using the \li{chmod} command. There are two different  ways to specify permissions, \emph{symbolic permissions} notation and \emph{octal permissions} notation. Symbolic permissions notation is easier to use when we want to make small modifications to a file's permissions.  See Table \ref{table:symbolic}.
 
@@ -443,51 +261,11 @@ $ scp host_username@hostname:filepath filename
 \end{lstlisting}
 
 \begin{problem}
-\emph{This problem is optional depending on the circumstances of the student.}
 You will either need a partner for this problem or have access to a username on another computer. Experiment with SSH. Verify that you can connect from a client to a host. Copy a few files between the host and the client.
 \end{problem}
 
 \subsection*{Generating SSH Keys (Optional)}
 If there is a host that we access on a regular basis, typing in our password over and over again can get tedious. By setting up SSH keys, the host can identify if a client is a trusted user without needing to type in a password. If you are interested in experimenting with this setup, a Google search of "How to set up SSH keys" will lead you to many quality tutorials on how to do so.
-
-\section*{Archiving and Compression}
-In file management, the terms archiving and compressing are commonly used interchangeably. However, these are quite different. To archive is to combine a certain number of files into one file. The resulting file will be the same size as the group of files that were archived.
-To compress is to take a file or group of files and shrink the file size as much as possible. The resulting compressed file will need to be extracted before being used.
-
-The \li{ZIP} file format is the most popular for archiving and compressing files. If by chance the \li{zip} command is not installed on your system, you can download it by running \li{sudo apt-get install zip}. Note that you will need to have administrative rights to download this package. To unzip a file, use \li{unzip}.
-
-\begin{lstlisting}
-$ zip zipfile.zip directory
-<verbose output>
-
-# use -l to view contents of zip file
-$ unzip -l zipfile.zip
-<content output>
-
-$ unzip zipfile.zip
-<verbose output>
-\end{lstlisting}
-%$
-
-While the \li{ZIP} file format is more popular on the Windows platform, the \li{tar} utility is more common in the Unix environment. The following commands use \li{tar} to archive the files and \li{gzip} to compress the archive. 
-
-Notice that all the commands below have the \li{-z}, \li{-v}, and \li{-f} flags. The \li{-z} flag calls for the \li{gzip} compression tool, the \li{-v} flag calls for a verbose output, and \li{-f} indicates the next parameter will be the name of the archive file. 
-
-\begin{lstlisting}
-# use -c to create a new archive
-$ tar -zcvf <archive> <files/directory> 
-<create>
-
-# use -t to view contents
-$ tar -ztvf <archive>                    
-<view>
-
-# use -x to extract
-$ tar -zxvf <archive>                   
-<extract>
-\end{lstlisting}
-%$
-
 
 \section*{Web Related}
 
@@ -500,7 +278,6 @@ When we want to download a single file, we just need the URL for the file we wan
 
 \begin{lstlisting}
 $ wget http://acme.byu.edu/wp-content/uploads/2013/07/0906-13-00903.jpg
-<output> 
 \end{lstlisting}
 %$
 
@@ -508,19 +285,19 @@ The following are also useful commands using \li{wget}.
 
 \begin{lstlisting}
 # Download files from URLs listed in urls.txt
-$ wget -i urls.txt
-<verbose output> 
+$ wget -i list_of_urls.txt
 
 # Download in the background
 $ wget -b URL
-<verbose output>
 
 # Download something recursively
 $ wget -r --no-parent URL
-<verbose output>
-
 \end{lstlisting}
 %$
+
+\begin{problem}
+In the \li{Documents} directory, you will find a file named \li{urls.txt} with a list of URLs. Download the files in this list using \li{wget}. Move the pictures that will be downloaded to the \li{Photos} directory.
+\end{problem}
 
 \section*{sed and awk}
 \li{sed} and \li{awk} are two different scripting languages in their own right. Like Unix, these languages are easy to learn but difficult to master. It is very common to combine Unix commands and \li{sed} and \li{awk} commands. We will address the basics, but if you would like more information, see <url>
@@ -642,14 +419,18 @@ The statement \li{"\%-6s \%2s \%s\\n"} formats the columns of the output. This s
 
 \begin{problem}
 Inside the \li{Documents} directory, you should find a file named \li{files.txt}. This file contains details on approximately one hundred files. The different fields in the file are separated by tabs. Using \li{awk}, \li{sort}, pipes, and redirects, write a file named \li{date_modified.txt} with the following specifications:
-- in the first column, print the date the file was modified
-- in the second column, print the name of the file
-- sort the file from newest to oldest based on the date last modified
+\begin{itemize}
+\item in the first column, print the date the file was modified
+\item in the second column, print the name of the file
+\item sort the file from newest to oldest based on the date last modified
+\end{itemize}
 All this can be accomplished using one command.
 \end{problem}
 
-We have barely scratched the surface of what \li{awk} can do. Performing an internet search for ``awk one-liners'' will give you many additional examples of useful commands you can run using \li{awk}.
+We have barely scratched the surface of what \li{awk} can do. Performing an internet search for ``awk one-liners'' will give you many additional examples of useful commands you can run using \li{awk}. 
 
 \section*{One Final Note}
 Though there are multiple Unix shells, one of the most popular is the \emph{bash} shell. The bash shell is highly customizeable. In your home directory, you will find a hidden file named \li{.bashrc}. All customization changes are saved in this file. If you are interested in customizing your shell, you can customize the prompt using the \li{PS1} environment variable.
 As you become more and more familiar with the Unix shell, you will come to find there are commands you run over and over again. You can save commands you use frequently using \li{alias}. If you would like more information on these and other ways to customize the shell, you can find many quality reference guides and tutorials on the internet.
+
+ 
