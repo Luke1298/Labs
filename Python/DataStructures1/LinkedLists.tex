@@ -63,6 +63,12 @@ Also implement the \li{__lt__}, \li{__eq__}, and \li{__gt__} comparison magic me
 For example, a Node \li{x} is less than a Node \li{y} if and only if the data contained in \li{x} is less than the data contained in \li{y}.
 \end{problem}
 
+\begin{info}
+Often the data stored in a node is actually a \emph{key} value.
+The key could be a pointer, a dictionary key, or the index of an array where the true desired information resides.
+However, for simplicity, in this and the following lab we store actual data in node objects, not references to data located elsewhere.
+\end{info}
+
 \section*{Linked Lists}
 
 \begin{figure}
@@ -96,8 +102,8 @@ class LinkedListNode(Node):
 	Contains a reference to the next node in the list.
     """
     def __init__(self, data):
-        """Construct a Node and initialize an attribute for the next
-        node in the list.
+        """Construct a Node and initialize an attribute for
+        the next node in the list.
         """
         Node.__init__(self, data)
         self.next = None
@@ -237,7 +243,7 @@ Na{\"i}vely, this might be done by finding the previous node to the one being re
 \end{figure}
 
 \begin{lstlisting}
-# A naive node removal method - Does not work.
+# A naive node removal method that does not work
 
 def remove(self, data):
 	"""Remove the Node containing 'data'."""
@@ -247,7 +253,7 @@ def remove(self, data):
 	while current_node.next.data != data:
 		current_node = current_node.next
 
-	# Remove the next reference to the target node.
+	# Remove the next reference to the target node
 	current_node.next = None
 \end{lstlisting}
 
@@ -358,12 +364,12 @@ Note that since \li{insert} inserts a node before a specified node that is alrea
   \draw[black!20!blue] (T) edge (4.north);
 \end{tikzpicture}
 \caption{A Doubly-linked List. The tail attribute tracks the last node.}
-\label{fig:doubly_linked}
+\label{fig:doublyLinked}
 \end{figure}
 
 A doubly-linked list is a linked list where each node keeps track the node that precedes it as well as the node that follows.
 The end of the list is also typically kept track of with a \li{tail} attribute.
-See Figure \ref{fig:doubly_linked} for an illustration.
+See Figure \ref{fig:doublyLinked} for an illustration.
 
 
 \begin{lstlisting}
@@ -485,7 +491,7 @@ class DoublyLinkedListNode(LinkedListNode):
 \end{figure}
 
 All of the methods for linked lists can be implemented for doubly-linked lists.
-See Figure \ref{fig:double_operations} for illustrations of the insert and remove methods.
+See Figures \ref{fig:double_insertion} and \ref{fig:double_removal} for illustrations of the insert and remove methods.
 
 % Problem 5: doubly-linked list
 \begin{problem}
@@ -528,22 +534,20 @@ Python has many quick sorting methods.
 Even on the seemingly large data set of over 58,000 words used in the preceding problem, the \li{sort} method for Python lists is almost instantaneous.
 In the next lab we will turn our attention to \emph{trees}, special kinds of linked lists that allow for much quicker sorting and data retrieval.
 
-\section*{Restricted-Access Lists (Optional)}
+\section*{Restricted-Access Lists}
 Often it is wise to restrict the user's access to the some of the data within a structure.
 The three most common and basic restricted-access structures are stacks, queues, and deques.
 Each structure restricts the user's access differently, making them ideal for different situations.
 These structures will reappear in many future labs and applications.
 
 \begin{itemize}
-\item A \emph{stack} is a ``last in, first out'' structure (LIFO): only the last item that was inserted can be accessed.
-A stack is like a pile of plates.
-The last plate put on the pile is the first one to be taken off.
+\item A \emph{stack} is a \emph{Last In, First Out} structure (LIFO): only the last item that was inserted can be accessed.
+A stack is like a pile of plates: the last plate put on the pile is the first one to be taken off.
 Stacks usually have two main methods: \li{push}, to insert new data, and \li{pop}, to remove and return the last piece of data inserted.
 
-\item A \emph{queue} (pronounced ``cue'') is a ``first in, first out'' structures (FIFO): new nodes are added to the end of the queue, but an existing node can only be removed or accessed if it is at the front of the queue.
-A queue is like a line at the bank.
-The person at the front of the line is served next, while newcomers add themselves to the back of the line.
-Queues also usually have a \li{push} and a \li{pop} method, but \li{push} inserts data to the end of the queue while \li{pop} removes and returns the data at the front of the queue.
+\item A \emph{queue} (pronounced ``cue'') is a \emph{First In, First Out} structure (FIFO): new nodes are added to the end of the queue, but an existing node can only be removed or accessed if it is at the front of the queue.
+A queue is like a line at the bank: the person at the front of the line is served next, while newcomers add themselves to the back of the line.
+Queues also usually have a \li{push} and a \li{pop} method, but \li{push} inserts data to the end of the queue while \li{pop} removes and returns the data at the front of the queue (\li{push} and \li{pop} for queues are sometimes called \li{enqueue} and \li{dequeue}, respectively).
 
 \item A \emph{deque} (pronounced ``deck'') is a double-ended queue: data can be inserted or removed from either end, but data in the middle is inaccessible.
 A deque is like a deck of cards, where only the top and bottom cards are readily accessible.
@@ -555,13 +559,13 @@ Similarly, if we are restricted to \li{append} and \li{popleft} (or to \li{appen
 \end{itemize}
 
 The \li{collections} module in the Python standard library has a \li{deque} object, implemented as a doubly-linked list.
-This is an excellent object to use in practice instead of a Python \li{list} when speed is of the essence.
+This is an excellent object to use in practice instead of a Python \li{list} when speed is of the essence and data only needs to be accessed from the ends of the list.
 
 \begin{problem}
 (Optional) Write \li{Stack}, \li{Queue}, and \li{Deque} classes.
 
 The \li{Deque} class should inherit from the \li{DoublyLinkedList} class.
-Use inheritance to implement \li{append}, \li{appendleft}, \li{pop}, and \li{popleft} methods as described in the preceding section.
+Use inheritance to implement the \li{append}, \li{appendleft}, \li{pop}, and \li{popleft} methods as described in the preceding section.
 The \li{append} and \li{appendleft} methods should accept a single parameter (the data to be added) and return nothing, while the \li{pop} and \li{popleft} methods should accept no parameters and return a single value (the data removed).
 Disable all other methods to restrict data access.
 
@@ -569,4 +573,3 @@ The \li{Stack} and \li{Queue} classes should inherit from the \li{Deque} class.
 Add a \li{push} method and overload the \li{pop} method in each class to match the behaviors described in the preceding section.
 Disable any other methods.
 \end{problem}
-

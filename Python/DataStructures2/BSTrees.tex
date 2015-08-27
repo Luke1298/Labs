@@ -150,26 +150,77 @@ That child node also has one child node, which in turn has one child.
 This continues until the end of the list, with the last node as the only leaf node.
 
 Other kinds of trees may be more complicated.
-See Figure \ref{fig:tree}.
+See Figure \ref{fig:trees}.
 
 \begin{figure}
-\caption{Examples of trees, some of which are binary search trees.}
+\begin{tikzpicture}[
+    level 1/.style={sibling distance=2cm},
+    level 2/.style={sibling distance=20mm}]
+
+    \node [circle,draw] (4){4}
+        child {node[draw, circle] (5) {5} edge from parent[draw=none]}
+        child {node[circle,draw] (3) {3}edge from parent[draw=none]
+        child{node[draw,circle](2){2}edge from parent[draw=none]}
+        child{node[circle, draw](7){7}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (4a)[above of=4]{}
+        child {node[draw=none] (5a) {} edge from parent[draw=none]}
+        child {node[draw=none] (3a) {}edge from parent[draw=none]
+        child{node[draw=none](2a){}edge from parent[draw=none]}
+        child{node[draw=none](7a){}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (4b)[below of=4]{}
+        child {node[draw=none] (5b) {} edge from parent[draw=none]}
+        child {node[draw=none] (3b) {}edge from parent[draw=none]
+        child{node[draw=none](2b){}edge from parent[draw=none]}
+        child{node[draw=none](7b){}edge from parent[draw=none]}
+        };
+\foreach \s/\t in {4a/5a, 4a/3a, 5a/2a, 3a/7a} 
+    {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
+
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[
+    auto,
+    level 1/.style={sibling distance=2cm},
+    level 2/.style={sibling distance=20mm}]
+
+    \node [circle,draw] (5a){5}
+        child {node[circle,draw] (2a) {2}edge from parent[draw=none]
+            child { node[circle,draw] (1a) {1}edge from parent[draw=none]}
+            child {node[draw = none] (invisble){} edge from parent[draw=none]}     
+        }
+        child {node[circle,draw] (7a) {7}edge from parent[draw=none]
+        child{node[circle, draw](6a){6}edge from parent[draw=none]}
+        child{node[circle, draw](8a){8}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (i5a)[above of=5a]{}
+        child {node[draw=none] (i2a) {}edge from parent[draw=none]
+            child { node[draw=none] (i1a) {}edge from parent[draw=none]}
+            child {node[draw = none] (invisbleA){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (i7a) {}edge from parent[draw=none]
+        child{node[draw=none](i6a){}edge from parent[draw=none]}
+        child{node[draw=none](i8a){}edge from parent[draw=none]}
+        };
+\foreach \s/\t in {i5a/i2a, i5a/i7a} 
+    {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
+\foreach \s/\t in {i2a/i1a, i7a/i6a, i7a/i8a}
+    {\draw[->, >=stealth', shorten <=.27cm, shorten >=.1cm](\s)--(\t);}
+\end{tikzpicture}
+\caption{Both of these graphs are trees, but only the tree on the right is a binary search tree. How could the graph on the left be altered to make it a BST?}
 \label{fig:trees}
 \end{figure}
 
 \section*{Binary Search Trees}
 
-A \emph{binary search tree} (BST) data structure is a tree that allows each node to have up to two children, called \li{left} and \li{right}.
+A \emph{binary search tree} (BST) data structure is a tree that allows each node to have up to two children, usually called \li{left} and \li{right}.
 The left child of a node contains data that is less than its parent node's data.
 The right child's data is greater.
-Conceptually, each level of a BST partitions the dataset into two halves.
-For any given node, each node in the left subtree contains data that is less than the data in the top node, and each node in the right subtree contains data that is greater than the original node's data.
 
-% TODO: make sure this statement is consistent with the figure
-The far right tree in Figure \ref{fig:trees} is an example of a binary search tree.
-In practice, binary search tree nodes have attributes that keep track of their data, children, and (in doubly-linked trees) their parent.
+The tree on the right in Figure \ref{fig:trees} is an example of a of binary search tree.
+In practice, binary search tree nodes have attributes that keep track of their data, their children, and (in doubly-linked trees) their parent.
 
-% self.prev instead of self.parent for consistency
 \begin{lstlisting}
 # BST.py
 
@@ -213,7 +264,6 @@ Starting at the root, we check if the data we are looking for matches the curren
 If it does not, then if the data is less than the current node's data we search again on the left child.
 If the data is greater, we search on the right child.
 This process continues until the data is found or, if the data is not in the tree, an empty child is searched.
-See Figure \ref{fig:BST.find} for an example.
 Carefully read the following code; similar techniques will be used for subsequent methods.
 
 \begin{lstlisting}
@@ -245,12 +295,10 @@ def find(self, data):
     return _step(self.root, data)
 \end{lstlisting}
 
-\begin{figure}
-% I want a picture of how descending through a tree partitions a number line.
-% This will help when they get to K-D trees in the next lab.
-\caption{Examples of finding in a BST, including the conceptual partitioning of the number line.}
-\label{fig:BST.find}
-\end{figure}
+\begin{info}
+Conceptually, each node of a BST partitions the data of its subtree into two halves: the data that is less than the parent, and the data that is greater.
+We will extend this concept to multiple dimensions in the next lab.
+\end{info}
 
 \subsection*{Inserting to a Binary Search Tree}
 
@@ -261,7 +309,90 @@ Once the correct parent is found, the new node is added as the left or right chi
 See Figure \ref{fig:BST.insertion} for an example.
 
 \begin{figure}
-\caption{Examples of inserting to a BST.}
+\begin{tikzpicture}[
+    auto,
+    level 1/.style={sibling distance=2cm},
+    level 2/.style={sibling distance=20mm}]
+
+    \node [circle,draw] (5a){5}
+        child {node[circle,draw] (2a) {2}edge from parent[draw=none]
+            child { node[circle,draw] (1a) {1}edge from parent[draw=none]}
+            child {node[draw = none] (invisble){} edge from parent[draw=none]}     
+        }
+        child {node[circle,draw] (7a) {7}edge from parent[draw=none]
+        child{node[circle, draw](3a){3}edge from parent[draw=none]}
+        child{node[circle, draw](8a){8}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (i5a)[above of=5a]{}
+        child {node[draw=none] (i2a) {}edge from parent[draw=none]
+            child { node[draw=none] (i1a) {}edge from parent[draw=none]}
+            child {node[draw = none] (invisbleA){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (i7a) {}edge from parent[draw=none]
+        child{node[draw=none](i3a){}edge from parent[draw=none]}
+        child{node[draw=none](i8a){}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (i5b)[below of=5a]{}
+        child {node[draw=none] (i2b) {}edge from parent[draw=none]
+            child { node[draw=none] (i1b) {}edge from parent[draw=none]}
+            child {node[draw = none] (invisbleB){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (i7b) {}edge from parent[draw=none]
+        child{node[draw=none](i3b){}edge from parent[draw=none]}
+        child{node[draw=none](i8b){}edge from parent[draw=none]}
+        };
+\node [draw=none, node distance=1.5cm](root)[above right of=5a]{root};
+\draw[->, >=stealth', shorten >= .1cm](root)--(5a);
+\node [draw=none, node distance=1.5cm](current)[above left of=5a]{current};
+\draw[->, >=stealth', shorten >= .1cm](current)--(5a);
+\foreach \s/\t in {i5a/i2a, i2b/i5b, i5a/i7a, i7b/i5b} 
+    {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
+\foreach \s/\t in {i2a/i1a, i1b/i2b, i7a/i8a, i8b/i7b}
+    {\draw[->, >=stealth', shorten <=.27cm, shorten >=.1cm](\s)--(\t);}
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[
+    auto,
+    level 1/.style={sibling distance=2cm},
+    level 2/.style={sibling distance=20mm}]
+
+    \node [circle,draw] (5a){5}
+        child {node[circle,draw] (2a) {2}edge from parent[draw=none]
+            child { node[circle,draw] (1a) {1}edge from parent[draw=none]}
+            child {node[draw = none] (invisble){} edge from parent[draw=none]}     
+        }
+        child {node[circle,draw] (7a) {7}edge from parent[draw=none]
+        child{node[circle, draw](3a){3}edge from parent[draw=none]}
+        child{node[circle, draw](8a){8}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (i5a)[above of=5a]{}
+        child {node[draw=none] (i2a) {}edge from parent[draw=none]
+            child { node[draw=none] (i1a) {}edge from parent[draw=none]}
+            child {node[draw = none] (invisbleA){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (i7a) {}edge from parent[draw=none]
+        child{node[draw=none](i3a){}edge from parent[draw=none]}
+        child{node[draw=none](i8a){}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (i5b)[below of=5a]{}
+        child {node[draw=none] (i2b) {}edge from parent[draw=none]
+            child { node[draw=none] (i1b) {}edge from parent[draw=none]}
+            child {node[draw = none] (invisbleB){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (i7b) {}edge from parent[draw=none]
+        child{node[draw=none](i3b){}edge from parent[draw=none]}
+        child{node[draw=none](i8b){}edge from parent[draw=none]}
+        };
+\node [draw=none, node distance=1.5cm](root)[above right of=5a]{root};
+\draw[->, >=stealth', shorten >= .1cm](root)--(5a);
+\node [draw=none, node distance=1.5cm](current)[above left of=2a]{current};
+\draw[->, >=stealth', shorten >= .1cm](current)--(2a);
+\foreach \s/\t in {i5a/i2a, i2b/i5b, i5a/i7a, i7b/i5b} 
+    {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
+\foreach \s/\t in {i2a/i1a, i1b/i2b, i2a/i3a, i3b/i2b, i7a/i8a, i8b/i7b}
+    {\draw[->, >=stealth', shorten <=.27cm, shorten >=.1cm](\s)--(\t);}
+\end{tikzpicture}
+\caption{To insert a node containing 3 to the BST on the left, start `current' at the root and recurse down the tree until it points to the node that should be 3's parent. Connect that parent to the child, then the child to its new parent.}
 \label{fig:BST.insertion}
 \end{figure}
 
@@ -286,7 +417,7 @@ find the parent of node, data
 \end{lstlisting}
 \end{comment}
 
-% Problem 2: BST.insert
+% Problem 2: BST.insert()
 \begin{problem}
 Implement the \li{insert} method in the \li{BST} class.
 To accomplish this, write a recursive \li{_find_parent} method within \li{insert}.
@@ -310,12 +441,7 @@ In Python, an object is automatically deleted if there are no references to it.
 Call the node to be removed the \emph{target node}, and suppose it has no children.
 To remove the target, find the target's parent, then delete the parent's reference to the target.
 Then there are no references to the target, so the target node is deleted.
-Since the target is a leaf node, removing it does not affect the rest of the tree structure. See Figure \ref{fig:BST.remove_leaf}.
-
-\begin{figure}
-\caption{Examples of removing a leaf node.}
-\label{fig:BST.remove_leaf}
-\end{figure}
+Since the target is a leaf node, removing it does not affect the rest of the tree structure.
 
 \begin{comment}
 \begin{lstlisting}
@@ -337,13 +463,197 @@ Simply removing the target as if it were a leaf node would delete the entire sub
 To avoid deleting all of the target's descendents, we point the target's parent to an appropriate successor.
 If the target has only one child, then that child is the successor.
 Connect the target's parent to the successor, and double-link by setting the successor's parent to be the target node's parent.
-Then, the target has no references pointing to it, so it is deleted.
+Then, since the target has no references pointing to it, it is deleted.
 The target's successor, however, is pointed to by the target's parent, and so it remains in the tree.
-See Figure \ref{fig:BST.remove_oneChild}.
 
 \begin{figure}
-\caption{Examples of removing a leaf node with one child. Include a bad example (losing a subtree) and a good example (proper deletion).}
-\label{fig:BST.remove_oneChild}
+\begin{tikzpicture}[
+    auto,
+    level 1/.style={sibling distance=2cm},
+    level 2/.style={sibling distance=20mm}]
+
+    \node [circle,draw] (5){5}
+        child {node[circle,draw] (2) {2}edge from parent[draw=none]
+            child { node[circle,draw] (1) {1}edge from parent[draw=none]
+            child{node[draw=none](invisible){} edge from parent[draw=none]}
+            child{node[draw,circle](3){3} edge from parent[draw=none]}
+       }
+            child {node[draw, circle] (4){4} edge from parent[draw=none]}     
+        }
+    child {node[circle,draw] (9a) {9}edge from parent[draw=none]
+        child{node[draw=none](8){}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (5a)[above of=5]{}
+        child {node[draw=none] (2a) {}edge from parent[draw=none]
+            child { node[draw=none] (1a) {}edge from parent[draw=none]
+            child{node[draw=none](invisibleA){} edge from parent[draw=none]}
+            child{node[draw=none](3a){} edge from parent[draw=none]}
+        }
+            child {node[draw = none] (4a){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (9a) {}edge from parent[draw=none]
+        child{node[draw=none](8a){}edge from parent[draw=none]}
+        };
+
+    \node [draw=none, node distance=.1cm] (5b)[below of=5]{}
+        child {node[draw=none] (2b) {}edge from parent[draw=none]
+            child { node[draw=none] (1b) {}edge from parent[draw=none]
+            child{node[draw=none](invisibleB){} edge from parent[draw=none]}
+            child{node[draw=none](3b){} edge from parent[draw=none]}
+        }
+            child {node[draw = none] (4b){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (9b) {}edge from parent[draw=none]
+        child{node[draw=none](8b){}edge from parent[draw=none]}
+        };
+\node [draw=none, node distance=2cm](current)[left of=5a]{current};
+\draw[->, >=stealth', shorten >= .2cm](current)--(5a);
+\foreach \s/\t in {2a/1a, 1b/2b, 2a/4a, 4b/2b, 5a/2a, 2b/5b, 5a/9a, 9b/5b, 4a/3a, 3b/4b} 
+    {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[
+    auto,
+    level 1/.style={sibling distance=2cm},
+    level 2/.style={sibling distance=20mm}]
+
+    \node [circle,draw] (5){5}
+        child {node[circle,draw] (2) {2}edge from parent[draw=none]
+            child { node[circle,draw] (1) {1}edge from parent[draw=none]
+            child{node[draw=none](invisible){} edge from parent[draw=none]}
+            child{node[draw,circle](3){3} edge from parent[draw=none]}
+       }
+            child {node[draw, circle] (4){4} edge from parent[draw=none]}     
+        }
+    child {node[circle,draw] (9a) {9}edge from parent[draw=none]
+        child{node[draw=none](8){}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (5a)[above of=5]{}
+        child {node[draw=none] (2a) {}edge from parent[draw=none]
+            child { node[draw=none] (1a) {}edge from parent[draw=none]
+            child{node[draw=none](invisibleA){} edge from parent[draw=none]}
+            child{node[draw=none](3a){} edge from parent[draw=none]}
+        }
+            child {node[draw = none] (4a){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (9a) {}edge from parent[draw=none]
+        child{node[draw=none](8a){}edge from parent[draw=none]}
+        };
+
+    \node [draw=none, node distance=.1cm] (5b)[below of=5]{}
+        child {node[draw=none] (2b) {}edge from parent[draw=none]
+            child { node[draw=none] (1b) {}edge from parent[draw=none]
+            child{node[draw=none](invisibleB){} edge from parent[draw=none]}
+            child{node[draw=none](3b){} edge from parent[draw=none]}
+        }
+            child {node[draw = none] (4b){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (9b) {}edge from parent[draw=none]
+        child{node[draw=none](8b){}edge from parent[draw=none]}
+        };
+\node [draw=none, node distance=2cm](current)[left of=2a]{current};
+\draw[->, >=stealth', shorten >= .2cm](current)--(2a);
+\node [draw=none, node distance=2cm](successor)[right of=3a]{successor};
+\draw[->, >=stealth', shorten >= .2cm](successor)--(3a);
+\foreach \s/\t in {2a/1a, 1b/2b, 2a/4a, 4b/2b, 5a/2a, 2b/5b, 5a/9a, 9b/5b, 4a/3a, 3b/4b} 
+    {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[
+    auto,
+    level 1/.style={sibling distance=2cm},
+    level 2/.style={sibling distance=20mm}]
+
+    \node [circle,draw] (5){5}
+        child {node[circle,draw] (2) {2}edge from parent[draw=none]
+            child { node[circle,draw] (1) {1}edge from parent[draw=none]
+            child{node[draw=none](invisible){} edge from parent[draw=none]}
+            child{node[draw,circle](3){3} edge from parent[draw=none]}
+       }
+            child {node[draw, circle] (4){4} edge from parent[draw=none]}     
+        }
+    child {node[circle,draw] (9a) {9}edge from parent[draw=none]
+        child{node[draw=none](8){}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (5a)[above of=5]{}
+        child {node[draw=none] (2a) {}edge from parent[draw=none]
+            child { node[draw=none] (1a) {}edge from parent[draw=none]
+            child{node[draw=none](invisibleA){} edge from parent[draw=none]}
+            child{node[draw=none](3a){} edge from parent[draw=none]}
+        }
+            child {node[draw = none] (4a){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (9a) {}edge from parent[draw=none]
+        child{node[draw=none](8a){}edge from parent[draw=none]}
+        };
+
+    \node [draw=none, node distance=.1cm] (5b)[below of=5]{}
+        child {node[draw=none] (2b) {}edge from parent[draw=none]
+            child { node[draw=none] (1b) {}edge from parent[draw=none]
+            child{node[draw=none](invisibleB){} edge from parent[draw=none]}
+            child{node[draw=none](3b){} edge from parent[draw=none]}
+        }
+            child {node[draw = none] (4b){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (9b) {}edge from parent[draw=none]
+        child{node[draw=none](8b){}edge from parent[draw=none]}
+        };
+\node [draw=none, node distance= 2cm](current)[left of=2a]{current};
+\draw[->, >=stealth', shorten >= .2cm](current)--(2a);
+\node [draw=none, node distance=2cm](successor)[right of=3a]{successor};
+\draw[->, >=stealth', shorten >= .2cm](successor)--(3a);
+\foreach \s/\t in {2a/1a, 1b/2b, 2a/4a, 4b/2b, 5a/2a, 2b/5b, 5a/9a, 9b/5b} 
+    {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[
+    auto,
+    level 1/.style={sibling distance=2cm},
+    level 2/.style={sibling distance=20mm}]
+
+    \node [circle,draw] (5){5}
+        child {node[circle,draw] (2) {3}edge from parent[draw=none]
+            child { node[circle,draw] (1) {1}edge from parent[draw=none]
+            child{node[draw=none](invisible){} edge from parent[draw=none]}
+            child{node[draw,circle](3){2} edge from parent[draw=none]}
+       }
+            child {node[draw, circle] (4){4} edge from parent[draw=none]}     
+        }
+    child {node[circle,draw] (9a) {9}edge from parent[draw=none]
+        child{node[draw=none](8){}edge from parent[draw=none]}
+        };
+    \node [draw=none, node distance=.1cm] (5a)[above of=5]{}
+        child {node[draw=none] (2a) {}edge from parent[draw=none]
+            child { node[draw=none] (1a) {}edge from parent[draw=none]
+            child{node[draw=none](invisibleA){} edge from parent[draw=none]}
+            child{node[draw=none](3a){} edge from parent[draw=none]}
+        }
+            child {node[draw = none] (4a){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (9a) {}edge from parent[draw=none]
+        child{node[draw=none](8a){}edge from parent[draw=none]}
+        };
+
+    \node [draw=none, node distance=.1cm] (5b)[below of=5]{}
+        child {node[draw=none] (2b) {}edge from parent[draw=none]
+            child { node[draw=none] (1b) {}edge from parent[draw=none]
+            child{node[draw=none](invisibleB){} edge from parent[draw=none]}
+            child{node[draw=none](3b){} edge from parent[draw=none]}
+        }
+            child {node[draw = none] (4b){} edge from parent[draw=none]}     
+        }
+        child {node[draw=none] (9b) {}edge from parent[draw=none]
+        child{node[draw=none](8b){}edge from parent[draw=none]}
+        };
+\node [draw=none, node distance=2cm](current)[left of=2a]{current};
+\draw[->, >=stealth', shorten >= .2cm](current)--(2a);
+\node [draw=none, node distance=2cm](successor)[right of=3a]{successor};
+\draw[->, >=stealth', shorten >= .2cm](successor)--(3a);
+\foreach \s/\t in {2a/1a, 1b/2b, 2a/4a, 4b/2b, 5a/2a, 2b/5b, 5a/9a, 9b/5b} 
+    {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
+\end{tikzpicture}
+\caption{To remove the node containing 2 from the top left BST, start `current' at the root and recurse down the tree until it points to the target. Then locate the in-order successor and delete it, recording its data. Finally, swap the data in the target with the data that was in the successor.}
+\label{fig:BST.remove_twoChild}
 \end{figure}
 
 \begin{comment}
@@ -361,37 +671,32 @@ if the target node has one child:
 \subsubsection*{Removing a node with two children}
 
 Removal is more complicated if the target node has two children.
-To delete this kind of node, first we find it's immediate in-order predecessor.
-The predecessor is the node with the largest data that is smaller than the target's data.
-It may be found by moving to the left child of the target (so that it's value is less than the target's value), and then to the right for as long as possible (so that it has the largest such value).
-Note that because of how the predecessor is chosen, any predecessor can only have at most one child.
+To delete this kind of node, first we find it's immediate in-order successor.
+This successor is the node with the smallest data that is larger than the target's data.
+It may be found by moving to the right child of the target (so that it's value is greater than the target's value), and then to the left for as long as possible (so that it has the smallest such value).
+Note that because of how the successor is chosen, any in-order successor can only have at most one child.
 
-Once the predecessor is found, the target and its predecessor must switch places in the graph, and then the target must be removed.
-This can be done by simply switching the data values for the target and its predecessor.
+Once the successor is found, the target and its successor must switch places in the graph, and then the target must be removed.
+This can be done by simply switching the data values for the target and its successor.
 Then the node with the target data has at most one child, and may be deleted accordingly.
-If the predecessor was chosen appropriately, then the binary search tree structure and ordering will be maintained once the deletion is finished.
+If the successor was chosen appropriately, then the binary search tree structure and ordering will be maintained once the deletion is finished.
 
 The easiest way to implement this is to use recursion.
-First, because the predecessor has at most one child, we may recursivley remove the predecessor node by calling \li{remove} on the predecessor's data.
-Then set the data stored in the target node as the predecessor's data.
+First, because the successor has at most one child, we may recursivley remove the successor node by calling \li{remove} on the successor's data.
+Then set the data stored in the target node as the successor's data.
 See Figure \ref{fig:BST.remove_twoChild}.
-
-\begin{figure}
-\caption{Examples of removing a leaf node with two children.}
-\label{fig:BST.remove_twoChild}
-\end{figure}
 
 \begin{comment}
 \begin{lstlisting}
 """Pseudocode for removing a node with two children.
 
-find the predecessor:
+find the successor:
 	set the current node to be target.left
 	set current to be current.right until there is no right child
 	return current.
 
-Remove the node that has the predecessor's data (it will only have one child).
-Change the target's data to the predecessor's data.
+Remove the node that has the successor's data (it will only have one child).
+Change the target's data to the successor's data.
 """
 \end{lstlisting}
 \end{comment}
@@ -437,8 +742,120 @@ However, pathologies may arise when certain data sets are stored using a basic b
 This is best demonstrated by inserting ordered data into a binary search tree.
 Since the data is already ordered, each node will only have one child, and we essentially end up with a linked list.
 
+\begin{figure}
+\begin{tikzpicture}[
+    auto,
+    level 1/.style={sibling distance=.5cm},
+    level 2/.style={sibling distance=.5cm}]
+
+    \node [circle,draw] (1){1}
+    child{node[draw=none](invisible){} edge from parent[draw=none]}
+    child{node[draw, circle](2){2} edge from parent[draw=none]
+        child{node[draw=none](invisible2){}edge from parent[draw=none]}
+        child{node[draw, circle](3){3}edge from parent[draw=none]
+            child{node[draw=none](invisible3){}edge from parent[draw=none]}
+            child{node[draw, circle](4){4}edge from parent[draw=none]
+                child{node[draw=none](invisible4){}edge from parent[draw=none]}
+                child{node[draw, circle](5){5}edge from parent[draw=none]
+                    child{node[draw=none](invisible5){}edge from parent[draw=none]}
+                    child{node[draw, circle](6){6}edge from parent[draw=none]}
+                }
+            }
+        }
+    };
+
+    \node [draw = none, node distance=.1cm] (1a)[above of=1]{}
+    child{node[draw=none](invisibleA){} edge from parent[draw=none]}
+    child{node[draw=none](2a){} edge from parent[draw=none]
+        child{node[draw=none](invisible2A){}edge from parent[draw=none]}
+        child{node[draw=none](3a){}edge from parent[draw=none]
+            child{node[draw=none](invisible3A){}edge from parent[draw=none]}
+            child{node[draw=none](4a){}edge from parent[draw=none]
+                child{node[draw=none](invisible4A){}edge from parent[draw=none]}
+                child{node[draw=none](5a){}edge from parent[draw=none]
+                    child{node[draw=none](invisible5A){}edge from parent[draw=none]}
+                    child{node[draw=none](6a){}edge from parent[draw=none]}
+                }
+            }
+        }
+    };
+
+    \node [draw = none, node distance=.1cm] (1b)[below of=1]{}
+    child{node[draw=none](invisibleB){} edge from parent[draw=none]}
+    child{node[draw=none](2b){} edge from parent[draw=none]
+        child{node[draw=none](invisible2B){}edge from parent[draw=none]}
+        child{node[draw=none](3b){}edge from parent[draw=none]
+            child{node[draw=none](invisible3B){}edge from parent[draw=none]}
+            child{node[draw=none](4b){}edge from parent[draw=none]
+                child{node[draw=none](invisible4B){}edge from parent[draw=none]}
+                child{node[draw=none](5b){}edge from parent[draw=none]
+                    child{node[draw=none](invisible5B){}edge from parent[draw=none]}
+                    child{node[draw=none](6b){}edge from parent[draw=none]}
+                }
+            }
+        }
+    };
+
+\foreach \s/\t in {1a/2a, 2a/3a, 3a/4a, 4a/5a, 5a/6a} 
+    {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
+%\foreach \s/\t in {6b/5b, 5b/4b, 4b/3b, 3b/2b, 2b/1b}
+%    {\draw[->, >=stealth', shorten <=.27cm, shorten >=.1cm](\s)--(\t);}
+
+\node [draw=none, node distance=1.5cm](root)[above right of=1a]{root};
+\draw[->, >=stealth', shorten >= .1cm](root)--(1);
+
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[
+    auto,
+    level 1/.style={sibling distance=2cm},
+    level 2/.style={sibling distance=20mm}]
+
+    \node [circle,draw] (4){4}
+    child{node[draw, circle](2){2}edge from parent[draw=none]
+        child{node[draw, circle](1){1}edge from parent[draw=none]}
+        child{node[draw, circle](3){3}edge from parent[draw=none]}
+    }
+    child{node[draw,circle](5){5}edge from parent[draw=none]
+        child{node[draw=none](invisible){}edge from parent[draw=none]}
+        child{node[draw, circle](6){6}edge from parent[draw=none]}
+    };
+
+    \node [draw=none, node distance=.1cm] (4a)[above of=4]{}
+    child{node[draw=none](2a){}edge from parent[draw=none]
+        child{node[draw=none](1a){}edge from parent[draw=none]}
+        child{node[draw=none](3a){}edge from parent[draw=none]}
+    }
+    child{node[draw=none](5a){}edge from parent[draw=none]
+        child{node[draw=none](invisibleA){}edge from parent[draw=none]}
+        child{node[draw=none](6a){}edge from parent[draw=none]}
+    };
+
+    \node [draw=none, node distance=.1cm] (4b)[below of=4]{}
+    child{node[draw=none](2b){}edge from parent[draw=none]
+        child{node[draw=none](1b){}edge from parent[draw=none]}
+        child{node[draw=none](3b){}edge from parent[draw=none]}
+    }
+    child{node[draw=none](5b){}edge from parent[draw=none]
+        child{node[draw=none](invisibleB){}edge from parent[draw=none]}
+        child{node[draw=none](6b){}edge from parent[draw=none]}
+    };
+
+\foreach \s/\t in {4a/2a, 2a/1a, 2a/3a, 4a/5a, 5a/6a} 
+    {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
+%\foreach \s/\t in {6b/5b, 5b/4b, 1b/2b, 3b/2b, 2b/4b}
+%    {\draw[->, >=stealth', shorten <=.27cm, shorten >=.1cm](\s)--(\t);}
+
+\node [draw=none, node distance=1.5cm](root)[above right of=4a]{root};
+\draw[->, >=stealth', shorten >= .1cm](root)--(4);
+
+\end{tikzpicture}
+\caption{On the left, the BST resulting from inserting 1, 2, 3, 4, 5, and 6, in that order. On the right, the balanced AVL tree equivalent.}
+\label{fig:avl_balance}
+\end{figure}
+
 \begin{lstlisting}
-# Adding ordered integers sequentially destroys the efficiency of a BST.
+# Sequentially adding ordered integers destroys the efficiency of a BST.
 >>> unbalanced_tree = BST()
 >>> for i in xrange(10):
 ...     unbalanced_tree.insert(i)
@@ -459,10 +876,10 @@ Since the data is already ordered, each node will only have one child, and we es
 
 Problems also arise when one branch of the tree becomes much longer than the others, leading to longer search times.
 
-An AVL tree is a tree that prevents any one branch from getting longer than the others.
+An AVL tree (named after Georgy Adelson-Velsky and Evgenii Landis) is a tree that prevents any one branch from getting longer than the others.
 It accomplishes this by periodically ``balancing'' the branches as nodes are added.
 See Figure \ref{fig:avl_balance}
-The AVL's balancing algorithm is beyond the scope of this text, but details and exercises on the algorithm can be found in Chapter 2 of the Volume II text.
+The AVL's balancing algorithm is beyond the scope of this project, but details and exercises on the algorithm can be found in Chapter 2 of the Volume II text.
 
 \begin{lstlisting}
 >>> balanced_tree = AVL()
@@ -476,11 +893,6 @@ The AVL's balancing algorithm is beyond the scope of this text, but details and 
 [0, 2, 5, 8]
 [4, 6, 9]
 \end{lstlisting}
-
-\begin{figure}
-\caption{Example of an AVL rebalancing.}
-\label{fig:avl_balance}
-\end{figure}
 
 % Problem 4: compare build and search speeds
 \begin{problem}
@@ -506,24 +918,4 @@ Your plot should look similar to Figure \ref{fig:times}.
 \end{figure}
 
 \end{problem}
-
-
-\begin{comment}
-
-% Nixed
-\begin{problem}
-The \li{lab5_data} module has a method called \li{load_data}.
-This method returns two objects: a linked list and a binary search tree of a random permutation of the numbers from 1 to 100000.
-Each object has a \li{find} method that returns the node that contains the data that the \li{find} method receives as an argument.
-Write a method that generates 50 random numbers between 1 and 100000, finds them in the given data structures, and returns the average search time for each.
-\end{problem}
-
-\begin{problem}
-The \li{Lab5_data} module has a method called \li{load_words} that returns a list of several thousand english words.
-The \li{Lab5_spec} module has an implementation of an AVL tree that inherits from a working \li{BST} class.
-Insert each word into an instances of the \li{BST} and \li{AVL} classes.
-Write a method called \li{test_words} that searches for 50 random words in each object and returns their average search times.
-\end{problem}
-
-\end{comment}
 

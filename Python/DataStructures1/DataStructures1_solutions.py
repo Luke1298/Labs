@@ -306,6 +306,8 @@ def sort_words(filename = "English.txt"):
 
 # =========================== END OF SOLUTIONS =========================== #
 
+from numpy.random import permutation # numpy is not required for this lab
+
 def test(student_module, late=False):
     """Test script. You must import the student's 'solutions.py' and 'Node.py'
     files as modules.
@@ -361,7 +363,6 @@ def test(student_module, late=False):
         if part == p: return p,""
         else: return part,m
     
-    from numpy.random import permutation # numpy is not required for this lab
     def shrink_file(infile, outfile):
         """Shrink the dataset in problem 6 so it can be tested quickly."""
         try:

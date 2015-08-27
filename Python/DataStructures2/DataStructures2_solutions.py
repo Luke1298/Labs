@@ -47,7 +47,7 @@ class BST(object):
             """
             if current is None:                     # Base case 1: dead end
                 raise ValueError(str(data) + " is not in the tree.")
-            if item == current.data:                # Base case 2: the data matches.
+            if item == current.data:                # Base case 2: data matches
                 return current
             if item < current.data:                 # Step to the left
                 return _step(current.left,item)
@@ -128,14 +128,14 @@ class BST(object):
         """
         
         def _predecessor(node):
-            """Find the next-smallest node in the tree by traversing left once,
-            then right as far as possible.
+            """Find the next-smallest node in the tree by travelling
+            right once, then left as far as possible.
             """
-            if node.left is None:                   # Function called inappropriately.
+            if node.right is None:          # Function called inappropriately
                 raise ValueError("IOP problem")
-            node = node.left                        # Step left once
-            while node.right:
-                node = node.right                   # Step right until done
+            node = node.right               # Step right once
+            while node.left:
+                node = node.left            # Step right until done
             return node
         
         # Case 1: the tree is empty
@@ -231,9 +231,10 @@ class BST(object):
         return out
 
 class AVL(BST):
-    """AVL Binary Search Tree data structure class. Inherits from the BST class.
-    Includes methods for rebalancing upon insertion. If your BST.insert() method
-    works correctly, this class will work correctly. Do not modify.
+    """AVL Binary Search Tree data structure class. Inherits from the BST
+    class. Includes methods for rebalancing upon insertion. If your
+    BST.insert() method works correctly, this class will work correctly.
+    Do not modify.
     """
     def _checkBalance(self, n):
         if abs(_height(n.left) - _height(n.right)) >= 2:

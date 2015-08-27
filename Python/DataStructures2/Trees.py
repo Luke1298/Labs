@@ -46,9 +46,9 @@ class BST(object):
             """Recursively step through the tree until the node containing
             'item' is found. If there is no such node, raise a Value Error.
             """
-            if current is None:                     # Base case 1: dead end.
+            if current is None:                     # Base case 1: dead end
                 raise ValueError(str(data) + " is not in the tree.")
-            if item == current.data:                # Base case 2: the data matches.
+            if item == current.data:                # Base case 2: data matches
                 return current
             if item < current.data:                 # Step to the left
                 return _step(current.left,item)
@@ -133,9 +133,10 @@ class BST(object):
         return out
 
 class AVL(BST):
-    """AVL Binary Search Tree data structure class. Inherits from the BST class.
-    Includes methods for rebalancing upon insertion. If your BST.insert() method
-    works correctly, this class will work correctly. Do not modify.
+    """AVL Binary Search Tree data structure class. Inherits from the BST
+    class. Includes methods for rebalancing upon insertion. If your
+    BST.insert() method works correctly, this class will work correctly.
+    Do not modify.
     """
     def _checkBalance(self, n):
         if abs(_height(n.left) - _height(n.right)) >= 2:
