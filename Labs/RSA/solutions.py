@@ -1,4 +1,4 @@
-# RSA_solutions.py
+# solutions.py
 """Volume II Lab 3: Public Key Encryption (RSA)
 Solutions file. Written by Shane A. McQuarrie.
 """

@@ -1,4 +1,4 @@
-# StandardLibrary_solutions.py
+# solutions.py
 """Volume II Lab 1: The Standard Library
 Solutions file. Written by Shane McQuarrie, Summer 2015.
 """

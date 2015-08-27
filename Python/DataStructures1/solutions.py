@@ -1,12 +1,10 @@
-# DataStructures_solutions.py
+# solutions.py
 """Volume II Lab 4: Data Structures 1 (Linked Lists)
 Solutions file. Written by Shane A. McQuarrie.
 """
 
-
 # ================================= Node.py ================================= #
 # Provided to students and modified for problem 1.
-
 
 # Problem 1: Add the magic methods __str__, __lt__, __eq__, and __gt__.
 class Node(object):

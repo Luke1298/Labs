@@ -1,4 +1,4 @@
-# DataStructures2_solutions.py
+# solutions.py
 """Volume II Lab 5: Data Structures II (Trees)
 Solutions file. Written by Shane A. McQuarrie.
 """
