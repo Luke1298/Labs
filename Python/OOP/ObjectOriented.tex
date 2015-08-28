@@ -229,9 +229,9 @@ Finally, overload the \li{dump} method so that both the contents and the fuel ta
 
 \section*{Magic Methods}
 
-Python magic methods can be used to make objects behave like built-in data types.
-All magic methods begin and end with two underscores, like \li{__init__}.
-Every Python object is automatically endowed with several magic methods, but they are hidden from the user because they begin with an underscore (this is a way of hiding attributes or methods from the user; for example, try hiding the \li{closed} attribute in the \li{Knapsack} class by changing it to \li{_closed}).
+Python \emph{magic methods} can be used to make objects behave like built-in data types.
+A magic methods begins and ends with two underscores, like \li{__init__}.
+Every Python object is automatically endowed with several magic methods, but they are hidden because they begin with an underscore (this is a way of hiding attributes or methods from the user; for example, try hiding the \li{closed} attribute in the \li{Knapsack} class by changing it to \li{_closed}).
 You can see all of the available magic methods for a \li{Backpack} object in IPython with the following code:
 
 \begin{lstlisting}
@@ -242,11 +242,17 @@ b.__add__     b.__eq__      b.__lt__      b.__str__
 b.__doc__     b.__init__    b.__module__  
 \end{lstlisting}
 
-In all of our preceding examples, the comments enclosed by sets of three double quotes are the object's \emph{docstring}, stored as \li{__doc__}.
+\begin{info}
+In all of the preceding examples, the comments enclosed by sets of three double quotes are the object's \emph{docstring}, stored as the \li{__doc__} attribute.
 It is important to write good docstrings so that others can utilize your code correctly.
+\end{info}
 
-Now, suppose we wanted an operation for adding two backpacks together.
-In the following class, adding two backpacks combines their contents.
+Now, suppose we wanted to add two backpacks together.
+How should addition be defined for backpacks?
+A simple option is to add the number of contents.
+Then if backpack $A$ has $3$ items and backpack $B$ has $5$ items, $A + B$ return $8$.
+Magic methods can also potentially alter the objects themselves.
+In the following example, addition copies over the contents from the backpack on the right-hand side of the $+$ operator into the contents of the backpack on the left-hand side of the $+$.
 
 \begin{lstlisting}
 # Backpack class
@@ -283,6 +289,8 @@ To demonstrate the addition method, create two instances of the \li{Backpack} cl
 \end{lstlisting}
 
 Subtraction, division, or multiplication may be similary defined with the magic methods \li{__sub__}, \li{__div__}, and \li{__mul__}.
+What each of these operations do, or should do, is up to the programmer and should be carefully documented.
+
 Magic methods also allow for comparisons.
 The methods \li{__lt__}, \li{__le__}, \li{__gt__}, and \li{__ge__} methods correspond to $<$, $<=$, $>$, and $>=$ respectively.
 For example, one backpack might be less than another if it has fewer items in contents.
@@ -299,6 +307,7 @@ For example, one backpack might be less than another if it has fewer items in co
             other (Backpack): The backpack on the right-hand side of the
                 '<' comparison operator.
         """
+
         if len(self.contents) < len(other.contents):
             return True
         else:
@@ -321,13 +330,15 @@ False
 True
 \end{lstlisting}
 
-A complete list of available magic methods can be found \href{https://docs.python.org/2/reference/datamodel.html#special-method-names}{here}.
+A complete list of magic methods can be found \href{https://docs.python.org/2/reference/datamodel.html#special-method-names}{here}.
 
 % Problem 3: __str__ and __eq__ magic methods
 \begin{problem}
-Endow the \li{Backpack} class with additional magic methods:
+Endow the \li{Backpack} class with two additional magic methods:
 \begin{enumerate}
-\item The \li{__str__} magic method is used to give the string representation of an object. When the object is used with the \li{print} command, the \li{__str__} method is called. Add the \li{__str__} method to the \li{Backpack} class so that printing a \li{Backpack} object yields:
+\item The \li{__str__} magic method is used to produce the string representation of an object.
+When an object is used as an argument for the \li{print} function, the object's \li{__str__} method is called and the results are displayed.
+Implement the \li{__str__} method in the \li{Backpack} class so that printing a \li{Backpack} object yields the following output:
 \begin{lstlisting}
  Name:		<name>
  Color:		<color>
@@ -349,10 +360,10 @@ Contents:	Empty
 
 % Problem 4: ComplexNumber class
 \begin{problem}
-Create a \li{ComplexNumber} class that supports the basic operations of complex numbers. Implement a \li{conjugate} method that returns a \li{ComplexNumber} object that is the complex conjugate, and a \li{norm} method that returns the magnitude of the complex number.
+Create your own \li{ComplexNumber} class that supports the basic operations of complex numbers. Implement a \li{conjugate} method that returns a \li{ComplexNumber} object that is the object's complex conjugate, and a \li{norm} method that returns the magnitude of the complex number.
 Neither method should receive any arguments.
 
-Also implement the following magic methods:
+Also implement the following magic methods appropriately:
 \begin{enumerate}
 \item \li{__add__(self, other)}
 \item \li{__sub__(self, other)}

@@ -89,7 +89,6 @@ For example, in the following code block we create several names.
 
 The equal sign assigns an object to a name.
 In the previous code the equal sign assigned 13 to the name \li{x}.
-%If the object on the right hand side of the equal sign is a name, then the name on the left hand side refers to the same object as the name on the right hand side.
 If a name is assigned to another name, that new name refers to the same object that the orignal name refers to.
 For example, if as above the name \li{students} is assigned a list of names, and then the name \li{band\_members} is assigned \li{students}, then both \li{band\_members} and \li{students} refer to the same object.
 
@@ -196,11 +195,20 @@ dictionaries & dic1[1] = `a' \\
 \end{center}
 \end{problem}
 
+\begin{info}
+Many programming languages distinguish between \emph{variables} and \emph{pointers}.
+A pointer typically holds a memory location where the value of some other variable is stored.
+Pointer arithmetic and manipulation is delicate, occasionaly very useful, but often cumbersome.
+
+Python names are essentially pointers, but typical pointer operations are done automatically, and objects in memory that have nothing pointing to them are automatically deleted.
+Understanding how Python handles memory access via names is important for implementing reference-based data structures, such as linked lists and trees.
+\end{info}
+
 \subsection*{Modules}
 
-In general, a module is a file that contains Python statements.
-The Python \li{import} operation loads the statements from a Python file.
-When writing scripts and modules, all \li{import} statements occur at the top of the file.
+In general, a module is a file that contains Python code.
+The \li{import} statement loads the code from a specified Python file.
+In scripts and modules, all \li{import} statements should occur at the top of the file.
 
 The \li{import} statement first tries to find the Python file specified.
 Once found, every statement in the Python file is executed.
@@ -434,4 +442,3 @@ Write a function that will do the following:
 \item Finally, time how long each method takes to multiply the two matrices together. Print the results to the terminal.
 \end{enumerate}
 \end{problem}
-
