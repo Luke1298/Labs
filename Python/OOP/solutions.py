@@ -12,7 +12,7 @@
 # Problem 1: Modify this class. Add 'name' and max_size' attributes, modify
 #   the put() method, and add a dump() method. Remember to update docstrings.
 class Backpack(object):
-    """Backpack object. Has a color, name, maximum size, and a list of contents.
+    """Backpack object. Has a color, name, maximum size, and a list of contents
     
     Attributes:
         color (str): the color of the backpack.
@@ -23,8 +23,8 @@ class Backpack(object):
     """
 
     def __init__(self,color='black',name='backpack',max_size=5):
-        """Constructor for a backpack object. Set the color, name, and max size
-        of the backpack. Also initialize the contents list.
+        """Constructor for a backpack object. Set the color, name, and
+        max size of the backpack. Also initialize the contents list.
         
         Inputs:
             color (str, opt): the color of the backpack. Defaults to 'black'.
@@ -62,22 +62,22 @@ class Backpack(object):
         Note that the contents of 'other' are unchanged.
         
         Inputs:
-            self (Backpack): the backpack on the left-hand side of the
-                '+' addition operator.
-            other (Backpack): The backpack on the right-hand side of the
-                '+' addition operator.
+            self (Backpack): the backpack on the left-hand side
+                of the '+' addition operator.
+            other (Backpack): The backpack on the right-hand side
+                of the '+' addition operator.
         """
         self.contents = self.contents + other.contents
     
     def __lt__(self,other):
-        """Compare two backpacks. If 'self' has fewer contents than 'other',
-        return True. Otherwise, return False.
+        """Compare two backpacks. If 'self' has fewer contents
+        than 'other', return True. Otherwise, return False.
         
         Inputs:
-            self (Backpack): the backpack on the left-hand side of the
-                '<' comparison operator.
-            other (Backpack): The backpack on the right-hand side of the
-                '<' comparison operator.
+            self (Backpack): the backpack on the left-hand side
+                of the '<' comparison operator.
+            other (Backpack): The backpack on the right-hand side
+                of the '<' comparison operator.
         """
         return len(self.contents) < len(other.contents)
     
@@ -134,16 +134,16 @@ class Knapsack(Backpack):
     Attributes:
         color (str): the color of the knapsack.
         name (str): the name of the knapsack.
-        max_size (int): the maximum number of items that can fit in the
-            knapsack.
+        max_size (int): the maximum number of items that can fit
+            in the knapsack.
         contents (list): the contents of the backpack.
         closed (bool): whether or not the knapsack is tied shut.
     """
     
     def __init__(self, color='brown', name='knapsack', max_size=3):
-        """Constructor for a knapsack object. A knapsack only holds 3 item by
-        default instead of 5. Use the Backpack constructor to initialize the
-        name and max_size attributes.
+        """Constructor for a knapsack object. A knapsack only holds 3 item
+        by default instead of 5. Use the Backpack constructor to initialize
+        the name and max_size attributes.
         
         Inputs:
             color (str, opt): the color of the knapsack. Defaults to 'brown'.
@@ -185,8 +185,8 @@ class Knapsack(Backpack):
 # Problem 2: Write a 'Jetpack' class that inherits from the 'Backpack' class.
 class Jetpack(Backpack):
     """A Jetpack object class. Inherits from the Backpack class.
-    In addition to storing items like a backpack, a jetpack has fuel
-    that is used to fly.
+    In addition to storing items like a backpack, a jetpack has
+    fuel that is used to fly.
     
     Attributes:
         color (str): the color of the jetpack.
@@ -198,8 +198,8 @@ class Jetpack(Backpack):
     """
 
     def __init__(self,color='silver',name='jetpack',max_size=2,fuel=10):
-        """Constructor for a jetpack object. A jetpack only holds 2 items by
-        default instead of 5, and has an additional attribute for fuel.
+        """Constructor for a jetpack object. A jetpack only holds 2 items
+        by default instead of 5, and has an additional attribute for fuel.
         
         Inputs:
             color (str, opt): the color of the knapsack. Defaults to 'brown'.
@@ -327,10 +327,10 @@ def test(student_module, late=False):
     s = student_module
     score = 0
     total = 55
-    feedback = s.__doc__
+    feedback = ""
     
     try:    # Problem 1: 10 points
-        feedback += "\n\nTesting problem 1 (10 points):"
+        feedback += "\n\nProblem 1 (10 points):"
         points = 0
         # Test default name and max_size attributes
         b1 =   Backpack()
@@ -378,7 +378,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 2: 15 points
-        feedback += "\n\nTesting problem 2 (15 points):"
+        feedback += "\n\nProblem 2 (15 points):"
         points = 0
         # Test default name, and max_size attributes
         b1 =   Jetpack()
@@ -444,7 +444,7 @@ def test(student_module, late=False):
         
     try:    # Problem 3: 15 points
         points = 0
-        feedback += "\n\nTesting problem 3 (15 points):"
+        feedback += "\n\nProblem 3 (15 points):"
         # Test __str__ on an empty, default backpack
         b1 =   Backpack()
         b2 = s.Backpack()
@@ -510,7 +510,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 4: 20 points
-        feedback += "\n\nTesting problem 4 (15 points):"
+        feedback += "\n\nProblem 4 (15 points):"
         points = 0
         x1 =   ComplexNumber(3392,-493)
         y1 = s.ComplexNumber(3392,-493)
@@ -573,7 +573,8 @@ def test(student_module, late=False):
         score += points; feedback += "\nScore += " + str(points)
     except Exception as e: feedback += "\nError: " + e.message
     
-    if late:    # Late submission penalty
+    # Late submission penalty
+    if late:
         feedback += "\n\nHalf credit for late submission."
         feedback += "\nRaw score: " + str(score) + "/" + str(total)
         score *= .5
@@ -584,6 +585,7 @@ def test(student_module, late=False):
     feedback += " = " + str(percentage) + "%"
     if   percentage >=  98.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
+    feedback += "\n\n-------------------------------------------------------\n"
     return score, feedback
 
 # =============================== END OF FILE =============================== #

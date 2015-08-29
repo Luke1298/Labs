@@ -48,28 +48,24 @@ class Backpack:
         Note that the contents of 'other' are unchanged.
         
         Inputs:
-            self (Backpack): the backpack on the left-hand side of the
-                '+' addition operator.
-            other (Backpack): The backpack on the right-hand side of the
-                '+' addition operator.
+            self (Backpack): the backpack on the left-hand side
+                of the '+' addition operator.
+            other (Backpack): The backpack on the right-hand side
+                of the '+' addition operator.
         """
         self.contents = self.contents + other.contents
     
     def __lt__(self, other):
-        """Compare two backpacks. If 'self' has fewer contents than
-        'other', return True. Otherwise, return False.
+        """Compare two backpacks. If 'self' has fewer contents
+        than 'other', return True. Otherwise, return False.
         
         Inputs:
-            self (Backpack): the backpack on the left-hand side of the
-                '<' comparison operator.
-            other (Backpack): The backpack on the right-hand side of the
-                '<' comparison operator.
-        """
-        
-        if len(self.contents) < len(other.contents):
-            return True
-        else:
-            return False
+            self (Backpack): the backpack on the left-hand side
+                of the '<' comparison operator.
+            other (Backpack): The backpack on the right-hand side
+                of the '<' comparison operator.
+        """    
+        return len(self.contents) < len(other.contents)
     
     # Problem 3: write the __str__ and __eq__ magic methods for the Backpack.
     def __str__(self):

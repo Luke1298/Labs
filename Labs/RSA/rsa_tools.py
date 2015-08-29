@@ -8,8 +8,6 @@ from itertools import izip_longest
 def partition(iterable, n, fillvalue=None):
     """Partition data into blocks of length 'n', padding with 'fillvalue'
     if needed. Return a list of the partitions.
-    Example:
-    >>> partition('ABCDEFG, 3, 'x')
     """
     args = [iter(iterable)] * n
     pieces = izip_longest(fillvalue=fillvalue, *args)

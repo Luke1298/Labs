@@ -360,7 +360,7 @@ def test(student_module, late=False):
     s = student_module
     score = 0
     total = 60
-    feedback = s.__doc__
+    feedback = ""
 
     # Test cases
     graph1 = {'A':['B'], 'B':['A', 'C',], 'C':['B']}
@@ -380,7 +380,7 @@ def test(student_module, late=False):
     solution4 = Graph(graph4); student4 = s.Graph(graph4)
     
     try:    # Problem 1: 5 points
-        feedback += "\n\nTesting problem 1 (5 points):"
+        feedback += "\n\nProblem 1 (5 points):"
         points = 0
 
         p,f = strTest(solution1, student1, "\n\tGraph.__str__ failed")
@@ -396,7 +396,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
     
     try:    # Problem 2: 10 points
-        feedback += "\n\nTesting problem 2 (10 points):"
+        feedback += "\n\nProblem 2 (10 points):"
         points = 0
         p,f = strTest(solution1.traverse('A'), student1.traverse('A'),
                                     "\n\tGraph.traverse() failed")
@@ -416,7 +416,7 @@ def test(student_module, late=False):
     
     if hasattr(student1, 'DFS'):
         try:    # Problem 3: 3 points, Extra Credit
-            feedback += "\n\nTesting problem 3 (3 points, Extra Credit):"
+            feedback += "\n\nProblem 3 (3 points, Extra Credit):"
             points = 0
             p,f = strTest(solution2.DFS('A'), student2.DFS('A'),
                                         "\n\tGraph.DFS() failed")
@@ -432,7 +432,7 @@ def test(student_module, late=False):
         except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 4: 15 points
-        feedback += "\n\nTesting problem 4 (15 points):"
+        feedback += "\n\nProblem 4 (15 points):"
         points = 0
         p,f = strTest(solution1.shortest_path('A', 'C'),
                        student1.shortest_path('A', 'C'),
@@ -465,7 +465,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
 
     try:    # Problem 5: 10 points
-        feedback += "\n\nTesting problem 5 (10 points):"
+        feedback += "\n\nProblem 5 (10 points):"
         points = 0
 
         solution1 = convert_to_networkx(solution1.dictionary)
@@ -500,7 +500,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
 
     try:    # Problem 6: 10 points
-        feedback += "\n\nTesting problem 6 (10 points):"
+        feedback += "\n\nProblem 6 (10 points):"
         points = 0
         sBacon = s.BaconSolver()
         
@@ -537,7 +537,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
 
     try:    # Problem 7: 10 points
-        feedback += "\n\nTesting problem 7 (10 points):"
+        feedback += "\n\nProblem 7 (10 points):"
         points = 0
         sBacon = s.BaconSolver()
         
@@ -579,7 +579,7 @@ def test(student_module, late=False):
 
     if hasattr(sBacon, 'plot_bacon'):
         try:    # Problem 8: 3 points
-            feedback += "\n\nTesting problem 8 (3 points):"
+            feedback += "\n\nProblem 8 (3 points):"
             points = 0
             sBacon.plot_bacon()
             p,f = grade(3, "\n\tBaconSolver.plot_bacon() failed")
@@ -599,4 +599,5 @@ def test(student_module, late=False):
     feedback += " = " + str(percentage) + "%"
     if   percentage >=  98.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
+    feedback += "\n\n-------------------------------------------------------\n"
     return score, feedback

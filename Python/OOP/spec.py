@@ -23,7 +23,7 @@ class Jetpack(Backpack):
     pass
 
 
-# Problem 3: write __str__ and __eq__ for the 'Backpack' class in 'Backpack.py'.
+# Problem 3: write __str__ and __eq__ for the 'Backpack' class in 'Backpack.py'
 
 
 # Problem 4: Write a ComplexNumber class.

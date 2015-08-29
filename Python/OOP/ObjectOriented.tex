@@ -132,8 +132,8 @@ class Knapsack(Backpack):
     Attributes:
         color (str): the color of the knapsack.
         name (str): the name of the knapsack.
-        max_size (int): the maximum number of items that can fit in the
-            knapsack.
+        max_size (int): the maximum number of items that can fit
+            in the knapsack.
         contents (list): the contents of the backpack.
         closed (bool): whether or not the knapsack is tied shut.
     """
@@ -232,6 +232,8 @@ Finally, overload the \li{dump} method so that both the contents and the fuel ta
 Python \emph{magic methods} can be used to make objects behave like built-in data types.
 A magic methods begins and ends with two underscores, like \li{__init__}.
 Every Python object is automatically endowed with several magic methods, but they are hidden because they begin with an underscore (this is a way of hiding attributes or methods from the user; for example, try hiding the \li{closed} attribute in the \li{Knapsack} class by changing it to \li{_closed}).
+A complete list of magic methods can be found \href{https://docs.python.org/2/reference/datamodel.html#special-method-names}{here}.
+
 You can see all of the available magic methods for a \li{Backpack} object in IPython with the following code:
 
 \begin{lstlisting}
@@ -261,10 +263,10 @@ In the following example, addition copies over the contents from the backpack on
         Note that the contents of 'other' are unchanged.
         
         Inputs:
-            self (Backpack): the backpack on the left-hand side of the
-                '+' addition operator.
-            other (Backpack): The backpack on the right-hand side of the
-                '+' addition operator.
+            self (Backpack): the backpack on the left-hand side
+                of the '+' addition operator.
+            other (Backpack): The backpack on the right-hand side
+                of the '+' addition operator.
         """
         self.contents = self.contents + other.contents
 \end{lstlisting}
@@ -302,19 +304,18 @@ For example, one backpack might be less than another if it has fewer items in co
         return True. Otherwise, return False.
         
         Inputs:
-            self (Backpack): the backpack on the left-hand side of the
-                '<' comparison operator.
-            other (Backpack): The backpack on the right-hand side of the
-                '<' comparison operator.
+            self (Backpack): the backpack on the left-hand side
+                of the '<' comparison operator.
+            other (Backpack): The backpack on the right-hand side
+                of the '<' comparison operator.
         """
-
-        if len(self.contents) < len(other.contents):
-            return True
-        else:
-            return False
+        return len(self.contents) < len(other.contents)
 \end{lstlisting}
 
-To test this, create two backpacks and use the $<$ operator.
+Since $<$ is a logical operator, it makes sense for \li{__lt__} to return a boolean value.
+The comparison in the above line of code evaluates to \li{True} or \li{False}, so a boolean value will be returned when $<$ is used with backpacks.
+
+Again to test this, create two backpacks and use the $<$ operator.
 \begin{lstlisting}
 >>> from Backpack import Backpack
 >>> backpack1 = Backpack()
@@ -330,7 +331,10 @@ False
 True
 \end{lstlisting}
 
-A complete list of magic methods can be found \href{https://docs.python.org/2/reference/datamodel.html#special-method-names}{here}.
+\begin{info}
+The \li{__hash__} magic method brands an object with a nearly unique ID for quick comparison and indexing.
+Hash functions are important in many fast data structures and will be discussed in Chapter 3 of the Volume II text.
+\end{info}
 
 % Problem 3: __str__ and __eq__ magic methods
 \begin{problem}

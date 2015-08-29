@@ -31,8 +31,6 @@ from itertools import izip_longest
 def partition(iterable, n, fillvalue=None):
     """Partition data into blocks of length 'n', padding with 'fillvalue'
     if needed. Return a list of the partitions.
-    Example:
-    >>> partition('ABCDEFG, 3, 'x')
     """
     args = [iter(iterable)] * n
     pieces = izip_longest(fillvalue=fillvalue, *args)
@@ -370,14 +368,13 @@ def test(student_module, late=False):
         if part == p: return p, ""
         else: return part, m
         
-    
     s = student_module
     score = 0
     total = 50
-    feedback = s.__doc__
+    feedback = ""
     
     try:    # Problem 1: 20 points
-        feedback += "\n\nTesting problem 1 (20 points):"
+        feedback += "\n\nProblem 1 (20 points):"
         points = 0
         r1 =   myRSA()
         r2 = s.myRSA()
@@ -428,7 +425,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
     
     try:    # Problem 2: 10 points
-        feedback += "\n\nTesting problem 2 (10 points):"
+        feedback += "\n\nProblem 2 (10 points):"
         points = 0
         print("\nCorrect response:\tmessage must be a string.")
         print("Student response:\t"),
@@ -468,7 +465,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
     
     try:    # Problem 3: 10 points
-        feedback += "\n\nTesting problem 3 (10 points):"
+        feedback += "\n\nProblem 3 (10 points):"
         points = 0
         # Feedback messages
         prime = "\n\tis_prime() failed (prime marked as nonprime: "
@@ -500,7 +497,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
     
     try:    # Problem 4: 10 points
-        feedback += "\n\nTesting problem 4 (10 points):"
+        feedback += "\n\nProblem 4 (10 points):"
         points = 0
         # Test encrypt() and decrypt together(), default key
         r2 = s.PyCrypto()
@@ -537,7 +534,8 @@ def test(student_module, late=False):
         score += points; feedback += "\n  Score += " + str(points)
     except Exception as e: feedback += "\nError: " + e.message
     
-    if late:    # Late submission penalty
+    # Late submission penalty
+    if late:
         feedback += "\n\nHalf credit for late submission."
         feedback += "\nRaw score: " + str(score) + "/" + str(total)
         score *= .5
@@ -548,8 +546,7 @@ def test(student_module, late=False):
     feedback += " = " + str(percentage) + "%"
     if   percentage >=  98.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
-    return score, feedback
-    
+    feedback += "\n\n-------------------------------------------------------\n"
     return score,feedback
 
 # =============================== END OF FILE =============================== #

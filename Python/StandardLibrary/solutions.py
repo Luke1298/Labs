@@ -238,53 +238,72 @@ def test(student_module, late=False):
 
     score = 0
     total = 20
-    feedback = s.__doc__
+    feedback = ""
+
+    def strTest(x,y,m):
+        """Test to see if x and y have the same string representation. If
+        correct, award a points and return no message. If incorrect, return
+        0 and return 'm' as feedback.
+        """
+        if str(x) == str(y): return 1, ""
+        else:
+            m += "\n\t\tCorrect response: " + str(x)
+            m += "\n\t\tStudent response: " + str(y)
+            return 0, m
+    
+    def grade(p,m):
+        """Manually grade a problem worth 'p' points with error message 'm'."""
+        part = -1
+        while part > p or part < 0:
+            part = int(input("\nScore out of " + str(p) + ": "))
+        if part == p: return p,""
+        else: return part,m
     
     try:    # Problem 1: 3 points
-        feedback += "\n\nTesting problem 1 (3 points):"
+        feedback += "\n\nProblem 1 (3 points):"
         points = 0
         l = [192102312,-234892,9423,1220002,82,3432,23892,100000,-123812]
-        [min1,max1,ave1] =   prob1(l)
-        [min2,max2,ave2] = s.prob1(l)
-        if max1 == max2: points += 1
-        else: feedback += "\n\tincorrect maximum"
-        if min1 == min2: points += 1
-        else: feedback += "\n\tincorrect minimum"
-        if ave1 == ave2: points += 1
-        else: feedback += "\n\tincorrect average"
-        
+        ans =   prob1(l)
+        std = s.prob1(l)
+        if not std: raise NotImplementedError("Problem 1 incomplete")
+        p,f = strTest(ans[0], std[0], "\n\tincorrect maximum")
+        points += p; feedback += f
+        p,f = strTest(ans[1], std[1], "\n\tincorrect minimum")
+        points += p; feedback += f
+        p,f = strTest(ans[2], std[2], "\n\tincorrect average")
+        points += p; feedback += f
+
         score += points; feedback += "\nScore += " + str(points)
     except Exception as e: feedback += "\nError: " + e.message
 
     try:    # Problem 2: 5 points
-        feedback += "\n\nTesting problem 2 (5 points):"
+        feedback += "\n\nProblem 2 (5 points):"
+        points = 0
         print"\nCorrect output:";   prob2()
         print"\nStudent output:"; s.prob2()
-        points = -1
-        while points > 5 or points < 0:
-            points = int(input("\nScore out of 5: "))
-        if points < 5:
-            feedback += "\n\t" + str(5 - points) + " incorrect response(s)"
+        p,f = grade(5, "\n\tincorrect response(s)"
+            + "\n\t\t(Hint: 3 are immutable and 2 are mutable)")
+        points += p; feedback += f
         
         score += points; feedback += "\nScore += " + str(points)
     except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 3: 5 points
-        feedback += "\n\nTesting problem 3 (5 points):"
+        feedback += "\n\nProblem 3 (5 points):"
         points = 0
-        if s.prob3(5,12) == prob3(5,12): points += 1
-        else: feedback += "\n\tincorrect hypotenuse length"
-        if s.prob3(6,7) == prob3(6,7): points += 2
-        else: feedback += "\n\tincorrect hypotenuse length"
-        c = s.calculator
-        if prob3(2,7) == c.sqrt(c.add(c.mult(2,2),c.mult(7,7))): points += 2
-        else: feedback += "\n\t'calculator' module operations failed"
+        p,f = strTest(s.prob3(5,12), prob3(5,12),
+                                "\n\tincorrect hypotenuse length")
+        points += (p * 2); feedback += f
+        p,f = strTest(s.prob3(6,7), prob3(6,7),
+                                "\n\tincorrect hypotenuse length")
+        points += (p * 3); feedback += f
         
         score += points; feedback += "\nScore += " + str(points)
     except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 4: 7 points
-        feedback += "\n\nTesting problem 4 (7 points):"
+        feedback += "\n\nProblem 4 (7 points):"
+        points = 0
         print("\nCorrect output:")
         os.system("python " + __file__)
         os.system("python " + __file__ + " Wrong Name")
@@ -293,15 +312,14 @@ def test(student_module, late=False):
         os.system('python ' + sFile)
         os.system('python ' + sFile + ' "Wrong Name"')
         os.system('python ' + sFile + ' "matrices.npz"')
-        points = -1
-        while points > 7 or points < 0:
-            points = int(input("\nScore out of 7: "))
-        if points < 7: feedback += "\n\tincorrect outputs"
+        p,f = grade(7, "\n\tincorrect outputs")
+        points += p; feedback += f
         
         score += points; feedback += "\nScore += " + str(points)
     except Exception as e: feedback += "\nError: " + e.message
     
-    if late:    # Late submission penalty
+    # Late submission penalty
+    if late:
         feedback += "\n\nHalf credit for late submission."
         feedback += "\nRaw score: " + str(score) + "/" + str(total)
         score *= .5
@@ -312,6 +330,7 @@ def test(student_module, late=False):
     feedback += " = " + str(percentage) + "%"
     if   percentage >= 100.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
+    feedback += "\n\n-------------------------------------------------------\n"
     return score, feedback
 
 # ============================== END OF FILE ================================ #

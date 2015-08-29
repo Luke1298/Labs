@@ -329,7 +329,7 @@ def test(student_module, late=False):
     SNode = s.LinkedListNode
     score = 0
     total = 80
-    feedback = s.__doc__
+    feedback = ""
 
     def strTest(x,y,m):
         """Test to see if x and y have the same string representation. If
@@ -377,7 +377,7 @@ def test(student_module, late=False):
             raise IOError(str(infile) + " not found!")
     
     try:    # Problem 1: 5 points
-        feedback += "\n\nTesting problem 1 (5 points):"
+        feedback += "\n\nProblem 1 (5 points):"
         points = 0
         # Comparison magic methods
         n1 = SNode(5)
@@ -399,7 +399,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
     
     try:    # Problem 2: 10 points
-        feedback += "\n\nTesting problem 2 (10 points):"
+        feedback += "\n\nProblem 2 (10 points):"
         points = 0
         # Empty list
         l1 = list()
@@ -430,7 +430,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 3: 10 points
-        feedback += "\n\nTesting problem 3 (10 points):"
+        feedback += "\n\nProblem 3 (10 points):"
         points = 0
         l1 =   LinkedList()
         l2 = s.LinkedList()
@@ -484,7 +484,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 4: 15 Points
-        feedback += "\n\nTesting problem 4 (15 points):"
+        feedback += "\n\nProblem 4 (15 points):"
         points = 0
         l1 =   LinkedList()
         l2 = s.LinkedList()
@@ -528,7 +528,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 5: 20 points
-        feedback += "\n\nTesting problem 5 (20 points):"
+        feedback += "\n\nProblem 5 (20 points):"
         points = 0
         l1 =   DoublyLinkedList()
         l2 = s.DoublyLinkedList()
@@ -642,7 +642,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 6: 20 points
-        feedback += "\n\nTesting problem 6 (20 points):"
+        feedback += "\n\nProblem 6 (20 points):"
         points = 0
         l1 =   SortedLinkedList()
         l2 = s.SortedLinkedList()
@@ -717,5 +717,5 @@ def test(student_module, late=False):
         feedback += " the order that they are mentioned in this feedback file."
     if   percentage >=  98.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
-    
+    feedback += "\n\n-------------------------------------------------------\n"
     return score, feedback

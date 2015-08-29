@@ -586,10 +586,10 @@ def test(student_module, late=False):
     s = student_module
     score = 0
     total = 60
-    feedback = s.__doc__
+    feedback = ""
     
     try:    # Problem 1: 5 points
-        feedback += "\n\nTesting problem 1 (5 points):"
+        feedback += "\n\nProblem 1 (5 points):"
         points = 0
         lls = LinkedList()
         # Check recursive_search on empty list
@@ -625,7 +625,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
     
     try:    # Problem 2: 15 points
-        feedback += "\n\nTesting problem 2 (15 points):"
+        feedback += "\n\nProblem 2 (15 points):"
         points = 0
         # Empty tree (0 pts)
         tree1 =   BST()
@@ -685,7 +685,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 3: 30 points
-        feedback += "\n\nTesting problem 3 (30 points):"
+        feedback += "\n\nProblem 3 (30 points):"
         points = 0
         # Remove non-existant (5 pts)
         try:
@@ -749,7 +749,7 @@ def test(student_module, late=False):
     except Exception as e: feedback += "\nError: " + e.message
         
     try:    # Problem 4: 10 points
-        feedback += "\n\nTesting problem 4 (10 points):"
+        feedback += "\n\nProblem 4 (10 points):"
         s.plot_times()
         p,f = grade(10, "\n\tSee instructor for feedback")
         points = p; feedback += f
@@ -772,4 +772,5 @@ def test(student_module, late=False):
         feedback += " the order that they are mentioned in this feedback file."
     if   percentage >=  98.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
+    feedback += "\n\n-------------------------------------------------------\n"
     return score, feedback
