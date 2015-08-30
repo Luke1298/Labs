@@ -242,13 +242,13 @@ Ringo
 
 If the module is changed after it is imported, use the \li{reload} command to access those changes.
 Using the \li{import} command again will not change the module.
-For example, if a method called \li{subtract\_numbers} is added to \li{example\_module}, then \li{reload} is used instead of \li{import}.
+For example, if a method called \li{subtract\_numbers} is added to \li{example\_module}, use \li{reload} instead of \li{import}.
 
 \begin{lstlisting}
 # Add this function to example_module.py and save it.
 
 def subtract_numbers(a,b):
-	return a - b
+    return a - b
 \end{lstlisting}
 
 \begin{lstlisting}
@@ -348,7 +348,7 @@ The module has a name \li{argv} that is a list of arguments passed to the interp
 Consider the following script.
 
 \begin{lstlisting}
-# Save this as test_script.py
+# Call this file test_script.py
 import sys
 
 print(sys.argv)
@@ -363,25 +363,36 @@ $ python test_script.py I am the walrus
 
 Note that command line arguments are parsed as strings.
 This method can be used to point a Python script to a file to be analyzed.
-It can also be used to control a script's behavior.
-For example, the following script has two methods, but which one is called depends on the command line arguments.
+It can also be used to control a script's behavior, as in the following example.
 
 \begin{lstlisting}
+# Call this file test_script2.py
 import sys
 
-arg = "an input for a method"
+if len(sys.argv) < 3:
+    print("Three arguments are required")
+    sys.exit(1)             # manually quit the program early
 
-def method1(arg):
-	print("-".join(arg))
+arg = sys.argv[2]
 
-def method2(arg):
-	print(arg.split())
+if sys.argv[1] == '1':
+    print("-".join(arg))
 
-if sys.argv[1] == 1:
-	method1(arg)
+elif sys.argv[1] == '2':
+    print(arg.upper())
+\end{lstlisting}
 
-elif sys.argv[1] == 2:
-	method2(arg)
+Now provide command line arguments to specify the behavior of the script.
+
+\begin{lstlisting}
+$ python test_script2.py 1
+Three arguments are required
+
+$ python test_script2.py 1 first
+f-i-r-s-t
+
+$ python test_script2.py 2 second
+SECOND
 \end{lstlisting}
 
 \subsection*{The \li{time} module}
@@ -407,11 +418,11 @@ Subtracting the first measurement from the second gives the amount of time in se
 
 \begin{lstlisting}
 def time_for_loop():
-	# Time how long it takes to go through 10000 iterations using 'range'.
-	start = time.time()				# clock the starting time
-	for i in range(10000): pass		# perform the operation
-	end = time.time()				# clock the ending time
-	return end - start				# report the difference
+    # Time how long it takes to go through 10000 iterations using 'range'.
+    start = time.time()             # clock the starting time
+    for i in range(10000): pass     # perform the operation
+    end = time.time()               # clock the ending time
+    return end - start              # report the difference
 \end{lstlisting}
 
 The standard library also has a module called \li{timeit}.
