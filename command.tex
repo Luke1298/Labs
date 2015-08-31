@@ -137,7 +137,7 @@
         backgroundcolor=\color[RGB]{250, 245, 182},
         tabsize=4,
         basewidth=.5em,
-        rulecolor=,
+        rulecolor=\color{black},
         basicstyle=\footnotesize\ttfamily,
         upquote=true,
         columns=fixed,
@@ -157,7 +157,8 @@
         title=\lstname,
         captionpos=b,
         abovecaptionskip=-5pt,
-        belowcaptionskip=-5pt
+        belowcaptionskip=-5pt,
+        moredelim=[is][\color{green}]{<<}{>>}
 }
 
 % \surroundwithmdframed[
@@ -177,7 +178,8 @@
                           numbersep=7pt,
                           numberfirstline=true,
                           abovecaptionskip=2pt,
-                          belowcaptionskip=2pt}
+                          belowcaptionskip=2pt
+                          }
 
 % Shell I/O.  Avoids syntax highlighting
 \lstdefinestyle{ShellOutput}{language=}
