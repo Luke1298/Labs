@@ -214,8 +214,7 @@ in the submodule \li{np.random}.
 >>> np.random.rand(5) # uniformly distributed values in [0, 1)
 array([ 0.21845499,  0.73352537,  0.28064456,  0.66878454,  0.44138609])
 \end{lstlisting} 
-Some other commonly used functions are \li{np.random.normal}, which samples from the normal distribution, \li{np.random.randint}, which randomly selects integers from a range, and \li{np.random.random_integers} which returns an array of random integers in a given range.
-
+Some other commonly used functions are \li{np.random.randn}, which samples from the normal distribution, \li{np.random.randint}, which randomly selects integers from a range, and \li{np.random.random_integers} which returns an array of random integers in a given range.  
 There are many functions for creating arrays besides these, some of which are described in Table \ref{table:numpycreate}. 
 See \url{http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html} for more details.
 
@@ -408,7 +407,6 @@ html}.
     \li{max} & max element of the array \\
     \li{mean} & average of the array \\
     \li{min} & minimum element of the array \\
-    \li{vstack}
     \li{prod} & product of elements of the array \\
     \li{ravel} & make a flattened version of an array, return a view if
     possible \\
@@ -421,6 +419,7 @@ html}.
     \li{tolist} & return the array represented as a list or nested list\\
     \li{trace} & return the sum of the elements along the main diagonal\\
     \li{var} & return the variance of the array \\
+    \li{vstack} & stack arrays in sequence vertically \\
     \hline
     \end{tabular} \caption{A few of the methods of NumPy arrays.}
     \label{table:ndarraymethods} \end{table}
@@ -573,6 +572,9 @@ amounts of red, green, and blue color present in that pixel.
 Use array broadcasting to multiply the red and green values by $0.5$. 
 (Such an operation would tone down the red and green colors and make the 
 image appear more blue.) 
+
+To visualize your solutions, you may use the following function.
+\lstinputlisting[style=fromfile]{blue_shift_plot.py} 
 \end{problem}
 
 \subsection*{Universal Functions}
