@@ -56,7 +56,7 @@ array([[1, 1, 2],
 
 You can view the length of each dimension with the \li{shape} command, and change the shape of an array with the \li{np.reshape()} function. 
 The number of arguments passed to \li{reshape} tells NumPy the dimension of the new array, and the arguments specify the length of each dimension. 
-An argument of \li{-1} tells NumPy to make that dimension as long a necessary.
+An argument of \li{-1} tells NumPy to make that dimension as long as necessary.
 \begin{lstlisting}
 # The 0-axis of ex1 has length 2
 >>> ex1.shape
@@ -87,24 +87,22 @@ array([5,7,9])
 array([4, 10, 18])
 \end{lstlisting}
 
-% TODO Provide a quick example of addition and element-wise multiplication
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Why Use Arrays?}
 NumPy arrays are drastically more efficient than nested Python lists for large computations. 
-In this section we will compare matrix multiplication in Python and NumPy.
+In this section we will compare matrix multiplication in Python and in NumPy.
 
 \begin{problem}
 A matrix in NumPy is just a 2-D array. Given matrices $A$ and $B$, there are two different ways we can perform matrix multiplication. We can use \li{np.dot(A,B)} or \li{A.dot(B)}. 
 
-Perform matrix multiplication on the following matrices:
+Perform the matrix multiplication $A * B$ on the following matrices:
 \begin{center}
 $A = \begin{bmatrix} 2&4&0 \\ -3&1&-1 \\ 0&3&2 \end{bmatrix}$
 $B = \begin{bmatrix} 3&-1&2 \\ -2&-3&0 \\ 1&0&-2 \end{bmatrix}$
 \end{center}
-Remember to be able to use \li{np.dot}, we must first define $A$ an $B$ as NumPy arrays.
+Remember that to be able to use \li{np.dot}, we must first define $A$ and $B$ as NumPy arrays.
+\label{prob:multiply_problem}
 \end{problem}
 
 
@@ -115,8 +113,8 @@ Remember to be able to use \li{np.dot}, we must first define $A$ an $B$ as NumPy
 %\end{problem}
 
 After doing the previous problem, you should know how to implement matrix multiplication in NumPy. 
-On the other hand, a matrix in Python can be implemented as a list of lists. 
-The following function will multiply two such matrices.
+On the other hand, a matrix in Python can be represented as a list of lists.  We can perform matrix multiplication using lists by using numerical multiplication and addition. 
+The following function will multiply two such matrices in this manner in Python without using NumPy.
 
 \lstinputlisting[style=fromfile]{arr_mult.py}
 
@@ -124,10 +122,10 @@ Table \ref{table:square_times} documents how long\footnote{You can replicate thi
 If you aren't using IPython, you will need
 to use the timeit function documented here: \url{https://docs.python.org/2/library/timeit.html}.} 
 one computer took to square a $k \times k$ matrix in both Python (using the function \li{arr_mult}) and NumPy (using the method you found in Problem \ref{prob:multiply_problem}) for various values of $k$. 
-As you can see, NumPy is much faster. One reason for this is that algorithms in NumPy are usually implemented in C or Fortran. 
+As you can see, NumPy is much faster. One reason for this is that algorithms in NumPy are usually implemented in C or in Fortran. 
 
 \begin{table}
- \begin{tabular}{|c|l|l|} \hline Data Structure & $k$ & Time (s) \\ \hline 
+ \begin{tabular}{|c|l|l|} \hline Data Structure & $k\times k$ & Time (s) \\ \hline 
  Python List  	& $10\times10$ 	& 0.0002758503 \\ 
  \cline{2-3} 	& $100\times100$ 	& 0.1336028576 \\ 
  \cline{2-3} 	& $1000\times1000$ & 200.4009799957 \\ 
@@ -149,7 +147,7 @@ As you can see, NumPy is much faster. One reason for this is that algorithms in 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection*{Data Types}
-Unlike Python containers, a NumPy array requires all its elements to have the same data type. 
+Unlike Python containers, a NumPy array requires that all of its elements have the same data type. 
 The data types used by NumPy arrays are machine-native and avoid the overhead of Python objects, meaning that they are faster to compute with. 
 A NumPy \li{int} and a Python \li{int} are not the same; the former has been optimized to speed up numerical computations. 
 Datatypes supported by NumPy are shown in Table \ref{table:numpytypes}.
@@ -168,17 +166,17 @@ Data type & Description
 \li{uint16} & Unsigned 16-bit integer \\ 
 \li{uint32} & Unsigned 32-bit integer \\
 \li{uint64} & Unsigned 64-bit integer \\ 
-\li{float16} & Half precision float \\ 
-\li{float32} & Single precision float \\ 
-\li{float64} & Double precision float (also \li{float}) \\ 
-\li{complex64} & Complex number represented by two single precision floats \\ 
-\li{complex128} & Complex number represented by two double precision floats (also \li{complex})
+\li{float16} & Half-precision float \\ 
+\li{float32} & Single-precision float \\ 
+\li{float64} & Double-precision float (also \li{float}) \\ 
+\li{complex64} & Complex number represented by two single-precision floats \\ 
+\li{complex128} & Complex number represented by two double-precision floats (also \li{complex})
 \end{tabular} 
 \caption{Native numerical data types available in NumPy.}
 \label{table:numpytypes} 
 \end{table} 
 
-Here are some examples of how to manipulate data types in NumPy.
+Here is an example of how to manipulate data types in NumPy:
 \begin{lstlisting}
 # Access the data type of an array
 >>> ex2 = np.array(range(5))
@@ -215,7 +213,7 @@ in the submodule \li{np.random}.
 >>> np.random.rand(5) # uniformly distributed values in [0, 1)
 array([ 0.21845499,  0.73352537,  0.28064456,  0.66878454,  0.44138609])
 \end{lstlisting} 
-Some other commonly used functions are \li{np.random.randn}, which samples from the normal distribution, \li{np.random.randint}, which randomly selects integers from a range, and \li{np.random.random_integers} which returns an array of random integers in a given range.  
+Some other commonly-used functions are \li{np.random.randn}, which samples from the normal distribution, \li{np.random.randint}, which randomly selects integers from a range, and \li{np.random.random_integers} which returns an array of random integers in a given range.  
 There are many functions for creating arrays besides these, some of which are described in Table \ref{table:numpycreate}. 
 See \url{http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html} for more details.
 
@@ -230,7 +228,7 @@ Function & Description
 \li{identity} & Return the identity array. \\ 
 \li{meshgrid} & Return coordinate matrices from two coordinate vectors.\\ 
 \li{ones} & Return a new array of given shape and type, filled with ones. \\ 
-\li{ones_like} & Returns an array of ones with the same shape and type as a given array. \\ 
+\li{ones_like} & Return an array of ones with the same shape and type as a given array. \\ 
 \li{zeros} & Return a new array of given shape and type, filled with zeros. \\ 
 \li{zeros_like} & Return an array of zeros with the same shape and type as a given array. \\ 
 \end{tabular} 
@@ -282,6 +280,7 @@ determine which elements of the array to take.
 
 %np.argsort
 \begin{lstlisting}
+>>> my_array = np.array([0, 10, 20, 30, 40])
 >>> bool_mask = np.array([1,0,1,1,0], dtype=bool)
 >>> my_array[bool_mask]
 array([0,20,30])
@@ -337,11 +336,11 @@ Thus, when you change elements in a view, you also change the array it reference
 \begin{lstlisting}
 >>> ex5 = np.arange(5)
 
-# Slicing produces a view of k. 
+# Slicing produces a view of ex5. 
 >>> view_ex5 = ex5[:]
 >>> view_ex5
 
-# Check that m and k are distinct objects in Python.
+# Check that ex5 and view_ex5 are distinct objects in Python.
 >>> id(view_ex5) == id(ex5) 
 False
 
@@ -354,22 +353,22 @@ array([  0,   1, 500,   3,   4])
 array([  0,   1, 500,   3,   4])
 \end{lstlisting} 
 
-A copy of an array is a separate array with its own memory. 
+A copy of an array is a separate array with its own place in memory. 
 Thus, when you change a copy of an array, you do not affect the original array. 
 Because copying an array uses more memory and also more time, it should only be done when necessary. 
 An array can be copied using the \li{np.copy()} function (also available as a method of 
-the array object). 
+the array object, for example \li{my_array.copy()} returns a copy of \li{my_array}). 
 
 \begin{lstlisting}
 >>> copy_ex5 = np.copy(ex5) 
 
-# Check that j and n are distinct objects in Python.
+# Check that ex5 and copy_ex5 are distinct objects in Python.
 >>> id(copy_ex5) == id(ex5) 
 False
 
 # Change the third element of copy_ex5 to 1000
 # Changing copy_ex5 does not affect ex5.
->>> copy_ex5[2] = 500 
+>>> copy_ex5[2] = 1000 
 >>> copy_ex5
 array([  0,   1, 1000,   3,   4])
 >>> ex5
@@ -454,8 +453,8 @@ array([2, 5, 8])
 % include this one here for now though.
 Write a function which accepts an integer $n$ as input and does the following:
 \begin{enumerate}
-\item Creates an $n\times n$ array of \li{floats} randomly chosen from a normal distribution
-\item Computes the mean of each row (use a built-in command)
+\item Creates an $n\times n$ array of \li{floats} randomly chosen from a normal distribution.
+\item Computes the mean of each row (use a built-in command).
 \item Computes the variance of these means (use a built-in command).
 \end{enumerate}
 As you increase $n$, what happens to the output of 
@@ -468,7 +467,7 @@ One good application of array slicing is the Jacobi
 method for solving Laplace's equation, which is used to model
 steady-state heat flow on a square. This problem will help you implement the Jacobi method.
 
-Make a function that accepts an array and a tolerance as input and does the
+Make a function that accepts an array and a float (which represents a tolerance) as input and does the
 following: 
 \begin{enumerate}
 \item Makes a copy of the array. 
@@ -605,7 +604,7 @@ Although universal functions also accept scalar inputs, they can be much slower 
 Thus, use standard library functions on scalars and universal functions on arrays.
 
 \subsection*{Linear Algebra}
-Both NumPy and SciPy have a linear algebra library, but the SciPy library is larger. The SciPy linear algebra library is typically imported as follows.
+Both NumPy and SciPy have a linear algebra library, but the SciPy library is larger. The SciPy linear algebra library is typically imported as follows:
 
 \begin{lstlisting}
 from scipy import linalg as la
@@ -615,7 +614,7 @@ The linear algebra library contains several functions to construct special
 matrices, located in 
 \li{linalg.special_matrices}. There are also functions that will invert matrices, find determinants and norms, solve linear systems and least squares problems, and find special matrix decompositions. You can read more about the linear algebra capabilities of SciPy in the 
 documentation for the \li{linalg} module found at
-(\url{http://docs.scipy.org/doc/scipy/reference/linalg.html}).
+\url{http://docs.scipy.org/doc/scipy/reference/linalg.html}.
 
 Finally, the \li{scipy.linalg} library has a \li{matrix} class that is very 
 similar to a 2-D NumPy array. The matrix class can be convenient when doing matrix 
