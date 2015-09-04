@@ -14,6 +14,11 @@ from matplotlib import pyplot as plt
 The function call \li{plt.plot(x, y)} takes two 1-D NumPy arrays, \li{x} and \li{y}, and plots the points \li{(x[i], y[i])}, connecting them with straight lines.
 
 For example, this code plots $y=e^x$ on the interval $[-2,3]$. The output is in Figure \ref{fig:exp_plot}.
+
+\begin{info}
+If you are executing these matplotlib commands in an IPython shell, executing the \li{plt.show} method will open a new window with the plot. If you are using IPython Notebook, you have the option to display the plots within your notebook. You may opt into this feature by running \li{\%matplotlib inline} or \li{\%matplotlib notebook} in your IPython Notebook. The \li{inline} option shows the plot, whereas the \li{notebook} option shows the plot and provides controls to interact with your plot. Additionally, when using this option, the plot is displayed after running the \li{plt.plot} command; the \li{plt.show} command is not necessary. 
+\end{info}
+
 \begin{lstlisting}
 import numpy as np
 # Create an array of 501 evenly spaced points in [-2,3].
@@ -22,7 +27,6 @@ y = np.exp(x)
 plt.plot(x, y)
 plt.show()
 \end{lstlisting}
-
 
 \begin{figure}
 \centering
