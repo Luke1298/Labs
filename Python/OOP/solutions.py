@@ -5,7 +5,7 @@
 
 # Students should import their 'Backpack' class from a 'Backpack.py'
 # from Backpack import Backpack
-
+from math import sqrt
 
 # =============================== Backpack.py =============================== #
 
@@ -103,7 +103,7 @@ class Backpack(object):
         out += "\nSize:\t\t" + str(len(self.contents))
         out += "\nMax Size:\t" + str(self.max_size)
         out += "\nContents:"
-        if len(self.contents) == 0: out += "\tNone"     # Empty list
+        if len(self.contents) == 0: out += "\tEmpty"     # Empty list
         else:                                           # Nonempty list
             for i in xrange(len(self.contents)):
                 out += "\n\t\t" + str(self.contents[i])
@@ -255,7 +255,7 @@ class ComplexNumber(object):
     
     def norm(self):
         """Return the magnitude of the complex number."""
-        return self.real**2 + self.imag**2
+        return sqrt(self.real**2 + self.imag**2)
     
     def __add__(self, other):
         return ComplexNumber(self.real + other.real, self.imag + other.imag)
