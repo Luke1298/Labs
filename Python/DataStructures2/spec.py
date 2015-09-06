@@ -56,8 +56,8 @@ def recursive_search(linkedlist, data):
 
 
 # Problem 4: Test build and search speeds for LinkedList, BST, and AVL objects.
-def plot_times(filename="English.txt"):
-    """Vary n from 500 to 5000, inclusive, incrementing by 500. At each
+def plot_times(filename="English.txt", start=500, stop=5500, step=500):
+    """Vary n from 'start' to 'stop', incrementing by 'step'. At each
     iteration, use the create_word_list() from the 'WordList' module to
     generate a list of n randomized words from the specified file.
     
@@ -75,6 +75,9 @@ def plot_times(filename="English.txt"):
     
     Inputs:
         filename (str): the file to use in creating the data sets.
+        start (int): the lower bound on the sample interval.
+        stop (int): the upper bound on the sample interval.
+        step (int): the space between points in the sample interval.
     
     Returns:
         Show the plot, but do not return any values.

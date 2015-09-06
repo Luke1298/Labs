@@ -415,8 +415,8 @@ def recursive_search(linkedlist, data):
 
 
 # Problem 4: Test build and search speeds for LinkedList, BST, and AVL objects.
-def plot_times(filename="English.txt"):
-    """Vary n from 500 to 5000, inclusive, incrementing by 500. At each
+def plot_times(filename="English.txt", start=500, stop=5500, step=500):
+    """Vary n from 'start' to 'stop', incrementing by 'step'. At each
     iteration, use the create_word_list() from the 'WordList' module to
     generate a list of n randomized words from the specified file.
     
@@ -444,9 +444,9 @@ def plot_times(filename="English.txt"):
     bst_build, bst_search = list(), list()
     avl_build, avl_search = list(), list()
     
-    # Get the values [500, 1000, 1500, ..., 5000]
+    # Get the values [start, start + step, ..., stop - step]
     domain = list()
-    for n in xrange(500,5500,500):
+    for n in xrange(start,stop,step):
     
         # Initialize wordlist and data structures
         word_list = create_word_list(filename)[:n]
@@ -750,7 +750,7 @@ def test(student_module, late=False):
         
     try:    # Problem 4: 10 points
         feedback += "\n\nProblem 4 (10 points):"
-        s.plot_times()
+        s.plot_times("English.txt", 1000, 4000, 1000)
         p,f = grade(10, "\n\tSee instructor for feedback")
         points = p; feedback += f
         
@@ -772,5 +772,4 @@ def test(student_module, late=False):
         feedback += " the order that they are mentioned in this feedback file."
     if   percentage >=  98.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
-    feedback += "\n\n-------------------------------------------------------\n"
     return score, feedback
