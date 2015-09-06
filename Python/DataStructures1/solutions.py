@@ -3,8 +3,8 @@
 Solutions file. Written by Shane A. McQuarrie.
 """
 
-# ================================= Node.py ================================= #
-# Provided to students and modified for problem 1.
+# ============================== LinkedLists.py ============================= #
+# Provided to students and modified for problems 1-6.
 
 # Problem 1: Add the magic methods __str__, __lt__, __eq__, and __gt__.
 class Node(object):
@@ -28,27 +28,7 @@ class LinkedListNode(Node):
         Node.__init__(self, data)
         self.next = None
 
-
-class DoublyLinkedListNode(LinkedListNode):
-    """A Node class for doubly-linked lists. Inherits from the 'Node' class.
-    Contains references to the next and previous nodes in the list.
-    """
-    def __init__(self,data):
-        """Set the next and prev attributes."""
-        Node.__init__(self,data)
-        self.next = None
-        self.prev = None
-
-# ============================== List classes ============================== #
-
-# from Node import LinkedListNode
-# from Node import DoublyLinkedListNode
-from WordList import create_word_list
-
-
-# Problem 1: in Node.py, add magic methods to the Node class.
-
-# Problems 2, 3, 4: Complete the implementation of the LinkedList class.
+# Problems 2-4: Finish implementing this class.
 class LinkedList(object):
     """Singly-linked list data structure class.
     The first node in the list is referenced to by 'head'.
@@ -180,7 +160,17 @@ class LinkedList(object):
             curr.next = n                   # point curr to n
 
 
-# Problem 5: Implement this class for creating doubly-linked lists.
+class DoublyLinkedListNode(LinkedListNode):
+    """A Node class for doubly-linked lists. Inherits from the 'Node' class.
+    Contains references to the next and previous nodes in the list.
+    """
+    def __init__(self,data):
+        """Set the next and prev attributes."""
+        Node.__init__(self,data)
+        self.next = None
+        self.prev = None
+
+# Problem 5: Implement this class.
 class DoublyLinkedList(LinkedList):
     """Doubly-linked list data structure class. Inherits from the 'LinkedList'
     class. Has a 'head' for the front of the list and a 'tail' for the end.
@@ -290,11 +280,25 @@ class SortedLinkedList(DoublyLinkedList):
         """Disable insert() so the user is forced to use add()."""
         raise NotImplementedError("insert() has been disabled for this class.")
 
+
+# =============================== solutions.py ============================== #
+
+# from LinkedLists import LinkListNode, LinkedList
+# from LinkedLists import DoublyLinkedList, SortedLinkedList
+from WordList import create_word_list
+
 # Conclude problem 6 by implementing this function.
 def sort_words(filename = "English.txt"):
     """Use the 'create_word_list' method from the 'WordList' module to generate
-    a scrambled list of words from the specified file. The use an instance of
-    the SortedLinkedList class to sort the list.
+    a scrambled list of words from the specified file. Use an instance of
+    the SortedLinkedList class to sort the list. Then return the list.
+    
+    Inputs:
+        filename (str, opt): the file to be parsed and sorted.
+            Defaults to 'English.txt'.
+    
+    Returns:
+        A SortedLinkedList object containing the sorted list of words.
     """
     s = SortedLinkedList()                  # Create the Sorted List object
     word_list = create_word_list(filename)  # Generate the word list
@@ -302,7 +306,9 @@ def sort_words(filename = "English.txt"):
         s.add(word)
     return s                                # Return the Sorted Linked List.
 
+
 # =========================== END OF SOLUTIONS =========================== #
+
 
 from numpy.random import permutation # numpy is not required for this lab
 

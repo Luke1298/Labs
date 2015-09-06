@@ -34,7 +34,7 @@ Other attributes may be added (or inherited) specific to a particular data struc
 The data structure links the nodes together in a way that is efficient for its particular application.
 
 \begin{lstlisting}
-# Node.py
+# LinkedLists.py
 class Node(object):
 	"""A Node class for storing data."""
 	def __init__(self, data):
@@ -43,8 +43,8 @@ class Node(object):
 \end{lstlisting}
 
 \begin{lstlisting}
-# Import the Node class from Node.py
->>> from Node import Node
+# Import the Node class from LinkedLists.py
+>>> from LinkedLists import Node
 
 # Create some nodes. Note that any data type may be stored.
 >>> int_node = Node(1)
@@ -96,14 +96,13 @@ A linked list class also stores a reference to the first node in the chain, call
 See Figure \ref{fig:singly_linked}.
 
 \begin{lstlisting}
-# Node.py
 class LinkedListNode(Node):
 	"""A Node class for linked lists. Inherits from the 'Node' class.
 	Contains a reference to the next node in the list.
     """
     def __init__(self, data):
-        """Construct a Node and initialize an attribute for
-        the next node in the list.
+        """Construct a Node and initialize an
+        attribute for the next node in the list.
         """
         Node.__init__(self, data)
         self.next = None
@@ -148,14 +147,10 @@ This is done in the following class.
 See Figure \ref{fig:add} for an illustration.
 
 \begin{lstlisting}
-# solutions.py
-from Node import LinkedListNode
-
 class LinkedList(object):
 	"""Singly-linked list data structure class.
 	The first node in the list is referenced to by 'head'.
 	"""
-	
 	def __init__(self):
 		"""Create a new empty linked list. Create the head
 		attribute and set it to None since the list is empty.
@@ -163,10 +158,7 @@ class LinkedList(object):
 		self.head = None
 
 	def add(self, data):
-		"""Create a new Node containing 'data' and add it to
-		the end of the list.
-		"""
-
+		"""Add a new Node containing 'data' to the end of the list."""
 		new_node = LinkedListNode(data)
 		if self.head is None:
 			# If the list is empty, point the head attribute to the new node.
@@ -176,11 +168,9 @@ class LinkedList(object):
 			# and place the new_node at the end.
 			current_node = self.head
 			while current_node.next is not None:
-				# This moves the current node to the next node if it is not
-				# empty. Then when we break out of the loop, current_node
-				# points to the last node in the list.
+				# Move current_node to the next node if it is nonempty.
 				current_node = current_node.next
-
+			# current_node now points to the last node in the list.
 			current_node.next = new_node
 \end{lstlisting}
 
@@ -243,18 +233,22 @@ Na{\"i}vely, this might be done by finding the previous node to the one being re
 \end{figure}
 
 \begin{lstlisting}
-# A naive node removal method that does not work
+class LinkedList(object):
+	def __init__(self):
+		# ...
+	def add(self, data):
+		# ...
 
-def remove(self, data):
-	"""Remove the Node containing 'data'."""
+	def remove(self, data):
+		"""Remove the Node containing 'data'."""
 
-	# Find the node whose next node contains data
-	current_node = self.head
-	while current_node.next.data != data:
-		current_node = current_node.next
+		# Find the node whose next node contains data
+		current_node = self.head
+		while current_node.next.data != data:
+			current_node = current_node.next
 
-	# Remove the next reference to the target node
-	current_node.next = None
+		# Remove the next reference to the target node
+		current_node.next = None
 \end{lstlisting}
 
 Since the only reference to the node that is deleted is the previous node's next attribute, this will delete the node.
@@ -266,24 +260,29 @@ Then there will be no reference to the removed node and it will be deleted.
 See Figure \ref{fig:remove} for an illustration.
 
 \begin{lstlisting}
-# A node removal method that works
-def remove(self, data):
-	"""Remove the Node containing 'data'."""
-	# First, check if the head is the node to be removed. If so, set the
-	# new head to be the first node after the old head. This removes
-	# the only reference to the old head, so it is then deleted.
-	if self.head.data == data:
-		self.head = self.head.next
-	else:
-		current_node = self.head
-		# Move current_node through the list until it points to the node that
-		# precedes the target node.
-		while current_node.next.data != data:
-			current_node = current_node.next
+class LinkedList(object):
+	def __init__(self):
+		# ...
+	def add(self, data):
+		# ...
+
+	def remove(self, data):
+		"""Remove the Node containing 'data'."""
+		# First, check if the head is the node to be removed. If so, set the
+		# new head to be the first node after the old head. This removes
+		# the only reference to the old head, so it is then deleted.
+		if self.head.data == data:
+			self.head = self.head.next
+		else:
+			current_node = self.head
+			# Move current_node through the list until it points
+			# to the node that precedes the target node.
+			while current_node.next.data != data:
+				current_node = current_node.next
 	
-		# Point current_node to the node after the target node.
-		new_next_node = current_node.next.next
-		current_node.next = new_next_node
+			# Point current_node to the node after the target node.
+			new_next_node = current_node.next.next
+			current_node.next = new_next_node
 \end{lstlisting}
 
 \begin{warn}
@@ -373,7 +372,7 @@ See Figure \ref{fig:doublyLinked} for an illustration.
 
 
 \begin{lstlisting}
-# Node.py
+# LinkedLists.py
 
 class DoublyLinkedListNode(LinkedListNode):
 	"""A Node class for doubly-linked lists. Inherits from the 'Node' class.

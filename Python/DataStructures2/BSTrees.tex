@@ -108,7 +108,7 @@ The key to recursion is understanding the base cases correctly and making correc
 % Problem 1: simple recursion for linked lists traversal
 \begin{problem}
 Rewrite the following iterative function for finding data in a linked list using recursion.
-Use a \li{LinkedList} object from the previous lab to test the function.
+Use the basic linked list object from the previous lab to test the function (copy \li{LinkedLists.py} into your folder and import the \li{LinkedList} class).
 \begin{lstlisting}
 # solutions.py
 
@@ -222,7 +222,7 @@ The tree on the right in Figure \ref{fig:trees} is an example of a of binary sea
 In practice, binary search tree nodes have attributes that keep track of their data, their children, and (in doubly-linked trees) their parent.
 
 \begin{lstlisting}
-# BST.py
+# Trees.py
 
 class BSTNode(object):
     """A Node class for Binary Search Trees. Contains some data, a
@@ -245,7 +245,7 @@ class BSTNode(object):
 The actual binary search tree class has an attribute pointing to its root.
 
 \begin{lstlisting}
-# BST.py
+# Trees.py
 
 class BST(object):
     """Binary Search Tree data structure class.
@@ -267,37 +267,38 @@ This process continues until the data is found or, if the data is not in the tre
 Carefully read the following code; similar techniques will be used for subsequent methods.
 
 \begin{lstlisting}
-# BST.py
+class BST(object):
+    # ...
 
-def find(self, data):
-    """Return the node containing 'data'. If there is no such node in the
-    tree, raise a ValueError with error message "<data> is not in the tree."
-    """
-    # First, check to see if the tree is empty.
-    if self.root is None:
-        raise ValueError(str(data) + " is not in the tree.")
-    
-    # Define a recursive function to traverse the tree.
-    def _step(current, item):
-        """Recursively step through the tree until the node containing
-        'item' is found. If there is no such node, raise a Value Error.
+    def find(self, data):
+        """Return the node containing 'data'. If there is no such node in the
+        tree, raise a ValueError with error message "<data> is not in the tree."
         """
-        if current is None:                     # Base case 1: dead end.
+        # First, check to see if the tree is empty.
+        if self.root is None:
             raise ValueError(str(data) + " is not in the tree.")
-        if item == current.data:                # Base case 2: the data matches.
-            return current
-        if item < current.data:                 # Step to the left
-            return _step(current.left,item)
-        else:                                   # Step to the right
-            return _step(current.right,item)
-    
-    # Start the recursion on the root of the tree.
-    return _step(self.root, data)
+        
+        # Define a recursive function to traverse the tree.
+        def _step(current, item):
+            """Recursively step through the tree until the node containing
+            'item' is found. If there is no such node, raise a Value Error.
+            """
+            if current is None:                 # Base case 1: dead end.
+                raise ValueError(str(data) + " is not in the tree.")
+            if item == current.data:            # Base case 2: the data matches.
+                return current
+            if item < current.data:             # Step to the left
+                return _step(current.left,item)
+            else:                               # Step to the right
+                return _step(current.right,item)
+        
+        # Start the recursion on the root of the tree.
+        return _step(self.root, data)
 \end{lstlisting}
 
 \begin{info}
 Conceptually, each node of a BST partitions the data of its subtree into two halves: the data that is less than the parent, and the data that is greater.
-We will extend this concept to multiple dimensions in the next lab.
+We can extend this concept to multiple dimensions (see the K-D Trees lab).
 \end{info}
 
 \subsection*{Inserting to a Binary Search Tree}
@@ -652,7 +653,7 @@ The target's successor, however, is pointed to by the target's parent, and so it
 \foreach \s/\t in {2a/1a, 1b/2b, 2a/4a, 4b/2b, 5a/2a, 2b/5b, 5a/9a, 9b/5b} 
     {\draw[->, >=stealth', shorten <=.23cm, shorten >=.1cm](\s)--(\t);}
 \end{tikzpicture}
-\caption{To remove the node containing 2 from the top left BST, start `current' at the root and recurse down the tree until it points to the target. Then locate the in-order successor and delete it, recording its data. Finally, swap the data in the target with the data that was in the successor.}
+\caption{To remove the node containing 2 from the top left BST, start `current' at the root (upper left) and recurse down the tree until it points to the target. Then locate the in-order successor (upper right) and delete it (lower left, recording its data. Finally, swap the data in the target with the data that was in the successor (lower right.}
 \label{fig:BST.remove_twoChild}
 \end{figure}
 
@@ -734,6 +735,10 @@ Test your solution thoroughly with each case.
 
 (Hint: use \li{find} wherever appropriate.)
 \end{problem}
+
+There are many variations on the binary search tree, each with their own particular advantages and disadvantages.
+The reader is encouraged to research \href{https://en.wikipedia.org/wiki/B-tree}{B-trees}, \href{https://en.wikipedia.org/wiki/Red%E2%80%93black_tree}{red-black trees}, and \href{https://en.wikipedia.org/wiki/Splay_tree}{splay trees}.
+We conclude with a discussion of one of the most famous BST variants: the AVL.
 
 \section*{AVL Trees}
 
@@ -877,8 +882,8 @@ Since the data is already ordered, each node will only have one child, and we es
 Problems also arise when one branch of the tree becomes much longer than the others, leading to longer search times.
 
 An AVL tree (named after Georgy Adelson-Velsky and Evgenii Landis) is a tree that prevents any one branch from getting longer than the others.
-It accomplishes this by periodically ``balancing'' the branches as nodes are added.
-See Figure \ref{fig:avl_balance}
+It accomplishes this by recursively ``balancing'' the branches as nodes are added.
+See Figure \ref{fig:avl_balance}.
 The AVL's balancing algorithm is beyond the scope of this project, but details and exercises on the algorithm can be found in Chapter 2 of the Volume II text.
 
 \begin{lstlisting}
