@@ -42,11 +42,11 @@ When a 2-D array is printed to the screen, the 0-axis indexes the rows and the 1
 The NumPy array class is called \li{ndarray}. 
 The simplest way to create an \li{ndarray} is to define it explicitly using nested lists.
 \begin{lstlisting}
-# Create a 1-D array
+# Create a 1-D array.
 >>> np.array([0, 3, 8, 6, 3.14])
 array([0, 3, 8, 6, 3.14]) 
 
-# Create a 2-D array
+# Create a 2-D array.
 >>> ex1 = np.array([[1, 1, 2], [3, 3, 4]])
 >>> ex1
 array([[1, 1, 2],
@@ -58,7 +58,7 @@ You can view the length of each dimension with the \li{shape} command, and chang
 The number of arguments passed to \li{reshape} tells NumPy the dimension of the new array, and the arguments specify the length of each dimension. 
 An argument of \li{-1} tells NumPy to make that dimension as long as necessary.
 \begin{lstlisting}
-# The 0-axis of ex1 has length 2
+# The 0-axis of ex1 has length 2.
 >>> ex1.shape
 (2, 3)
 >>> ex1.reshape(3, 2)
@@ -185,12 +185,12 @@ Data type & Description
 
 Here is an example of how to manipulate data types in NumPy:
 \begin{lstlisting}
-# Access the data type of an array
+# Access the data type of an array.
 >>> ex2 = np.array(range(5))
 >>> ex2.dtype
 dtype('int64')
 
-# Specify the data type of an array
+# Specify the data type of an array.
 >>> ex3 = np.array(range(5), dtype=np.float)
 >>> ex3.dtype
 dtype('float64')
@@ -217,7 +217,7 @@ We can even create arrays of random values chosen
 from probability distributions. These probability distributions are stored
 in the submodule \li{np.random}. 
 \begin{lstlisting}
->>> np.random.rand(5) # uniformly distributed values in [0, 1)
+>>> np.random.rand(5) # Returns uniformly distributed values in [0, 1).
 array([ 0.21845499,  0.73352537,  0.28064456,  0.66878454,  0.44138609])
 \end{lstlisting} 
 Some other commonly-used functions are \li{np.random.randn}, which samples from the normal distribution, \li{np.random.randint}, which randomly selects integers from a range, and \li{np.random.random_integers} which returns an array of random integers in a given range.  
@@ -249,7 +249,7 @@ Function & Description
 Indexing for a 1-D NumPy array works exactly like indexing for a Python list. 
 To access a single entry of a multi-dimenional array, say a 3-D array, you should use the syntax \li{f[i, j, k]}. 
 While the syntax \li{f[i][j][k]} will also work, it is significantly slower because each bracket returns an array slice. 
-Similarly, slicing an array works just like slicing a list, but with more dimensions.
+Similarly, slicing an array works just like slicing a list, but with more dimensions.  When dealing with multi-dimensional arrays, a single \li{:} as an argument extracts everything in the specified axis.
 \begin{lstlisting}
 >>> ex4 = np.arange(25).reshape((5,5)) 
 >>> ex4
@@ -292,18 +292,18 @@ determine which elements of the array to take.
 >>> my_array[bool_mask]
 array([0,20,30])
 
-# Return only the values larger than 25
+# Return only the values larger than 25.
 >>> comparision_mask = my_array > 25
 >>> comparision_mask
 array([False, False, False, True, True], dtype=bool)
->>> my_array[comp_mask]
+>>> my_array[comparison_mask]
 array([30, 40])
 
 # If we do not need to save the mask for other uses, we can achieve the same result by doing the following:
 >>> my_array[my_array>25]
 array([30, 40])
 
-# np.argsort returns a list of indices that would sort an array
+# np.argsort returns a list of indices that would sort an array.
 >>> my_array = np.array([4,1,6,3,7,2,5])
 >>> mask = np.argsort(my_array)
 >>> my_array[mask]
