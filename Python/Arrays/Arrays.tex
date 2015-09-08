@@ -65,8 +65,15 @@ An argument of \li{-1} tells NumPy to make that dimension as long as necessary.
 array([[1, 1],
        [2, 3],
        [3, 4]])
+
+# Fill the 0-axis
 >>> ex1.reshape(-1)
 array([1, 1, 2, 3, 3, 4])
+# If we knew we wanted two columns, but didn't know how many rows would result.
+>>> ex1.reshape(-1, 2)
+array([[1, 1],
+      [2, 3],
+      [3, 4]])
 \end{lstlisting}
 
 Array objects also support the usual binary operators, including addition \li{+} and element-wise multiplication \li{*}. For Python lists, the \li{+} operator performs concantenation and the \li{*} operator is not defined.
