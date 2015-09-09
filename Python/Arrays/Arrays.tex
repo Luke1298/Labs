@@ -249,7 +249,7 @@ Function & Description
 Indexing for a 1-D NumPy array works exactly like indexing for a Python list. 
 To access a single entry of a multi-dimenional array, say a 3-D array, you should use the syntax \li{f[i, j, k]}. 
 While the syntax \li{f[i][j][k]} will also work, it is significantly slower because each bracket returns an array slice. 
-Similarly, slicing an array works just like slicing a list, but with more dimensions.  When dealing with multi-dimensional arrays, a single \li{:} as an argument extracts everything in the specified axis.
+Similarly, slicing an array works just like slicing a list, but with more dimensions. Using a single colon as an argument extracts everything in the specified axis.
 \begin{lstlisting}
 >>> ex4 = np.arange(25).reshape((5,5)) 
 >>> ex4
