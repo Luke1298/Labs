@@ -546,7 +546,6 @@ def test(student_module, late=False):
     feedback += " = " + str(percentage) + "%"
     if   percentage >=  98.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
-    feedback += "\n\n-------------------------------------------------------\n"
     return score,feedback
 
 # =============================== END OF FILE =============================== #
