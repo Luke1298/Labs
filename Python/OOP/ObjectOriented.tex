@@ -1,27 +1,17 @@
 \lab{Object-Oriented Programming}{Object Oriented Programming}
 \label{lab:OOP}
-\objective{Teach object-oriented programming in Python.}
-
-\section*{Introduction}
-
-Writing readable code is an important skill for computer programmers.
-Well-written code is easy to understand and modify.
-An important part of readable code is how it is organized.
-Object-oriented programming is one way to accomplish good code organization.
-
+\objective{
 Python is a class-based language.
-A class is a sort of blueprint for an object.
-Calling a class constructs an object.
-Once constructed, the user has access to an object's methods and attributes.
-An object created by a class is called an \emph{instance} of the class.
-It is also said that a class \emph{instantiates} objects.
+A class is a blueprint for an object.
+In this lab we learn how to define Python classes to create customized objects for use in algorithms.}
 
 \section*{Python Classes}
 
-A Python class is code that determines an object's behavior.
+A Python class is code that defines an object and determines its behavior.
 A class is defined using the the \li{class} command to name the class.
 Other statements follow the \li{class} command to determine the behavior of objects instantiated by the class.
-Finally, a class needs a method called a constructor that is called when the class instantiates a new object.
+
+A class needs a method called a constructor that is called when the class instantiates a new object.
 The constructor specifies the initial state of the object.
 In Python, a class's constructor is always named \li{__init__}.
 For example, the following is a class that created backpack objects.
@@ -36,7 +26,6 @@ class Backpack(object):
         color (str): the color of the backpack.
         contents (list): the contents of the backpack.
     """
-    
     
     def __init__(self, color = 'black'):
         """Constructor for a backpack object.
@@ -74,6 +63,10 @@ Classes may be imported in the same way as modules.
 If the above module is saved as \li{Backpack.py}, it is possible to import the \li{Backpack} class from it.
 Once imported, the \li{Backpack} class can be called to construct backpack objects.
 
+Calling a class constructs an object.
+Once constructed, the user has access to an object's methods and attributes.
+An object created by a class is called an \emph{instance} of the class.
+It is also said that a class \emph{instantiates} objects.
 \begin{lstlisting}
 # From the file Backpack.py import the Backpack class. Then create a backpack.
 >>> from Backpack import Backpack
