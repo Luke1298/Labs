@@ -1,11 +1,7 @@
 # solutions.py
 """Volume II Lab 2: Object Oriented Programming
-    Solutions file. Written by Shane McQuarrie, Spring 2015.
+Solutions file. Written by Shane McQuarrie, Spring 2015.
 """
-
-# Students should import their 'Backpack' class from a 'Backpack.py'
-# from Backpack import Backpack
-from math import sqrt
 
 # =============================== Backpack.py =============================== #
 
@@ -90,13 +86,13 @@ class Backpack(object):
             >>> b.put('something')          |
             >>> b.put('something else')     |   >>> c = Backpack('red','Bob',3)
             >>> print(b)                    |   >>> print(c)
-            Name:       backpack            |   Name:       Bob
-            Color:      black               |   Color:      red
-            Size:       2                   |   Size:       0
-            Max Size:   5                   |   Max Size:   3
-            Contents:                       |   Contents:   Empty
-                        something           |
-                        something else      |
+            Name:           backpack        |   Name:           Bob
+            Color:          black           |   Color:          red
+            Size:           2               |   Size:           0
+            Max Size:       5               |   Max Size:       3
+            Contents:                       |   Contents:       Empty
+                            something       |
+                            something else  |
         """
         out = "Name:\t\t" + self.name
         out += "\nColor:\t\t" + self.color
@@ -114,73 +110,25 @@ class Backpack(object):
         name, color, and contents. Note that the contents do not need to be
         in the same order for the contents to be the same.
         """
-        if self.name != other.name: return False        # Check name
-        if self.color != other.color: return False      # Check color
-        if len(self.contents) != len(other.contents): return False
-        l1 = self.contents                              # Check contents:
-        l2 = other.contents                             #  first list size, then
-        l1.sort()                                       #  sort for comparison
+        if self.name != other.name or self.color != other.color:
+            return False                                # Check name and color
+        if len(self.contents) != len(other.contents):
+            return False                                # Check contents size
+        l1 = list(self.contents)
+        l2 = list(other.contents)
+        l1.sort()                                       # Sort for comparison
         l2.sort()
         for i in xrange(len(l1)):
-            if l1[i] != l2[i]: return False
-        return True                     # If nothing is unequal, return True.
+            if l1[i] != l2[i]:                          # Check each entry
+                return False
+        return True
 
-
-# An example class of inheritance. Students do not need to modify this class.
-class Knapsack(Backpack):
-    """A Knapsack object class. Inherits from the Backpack class.
-    A knapsack is smaller than a backpack and can be tied closed.
-    
-    Attributes:
-        color (str): the color of the knapsack.
-        name (str): the name of the knapsack.
-        max_size (int): the maximum number of items that can fit
-            in the knapsack.
-        contents (list): the contents of the backpack.
-        closed (bool): whether or not the knapsack is tied shut.
-    """
-    
-    def __init__(self, color='brown', name='knapsack', max_size=3):
-        """Constructor for a knapsack object. A knapsack only holds 3 item
-        by default instead of 5. Use the Backpack constructor to initialize
-        the name and max_size attributes.
-        
-        Inputs:
-            color (str, opt): the color of the knapsack. Defaults to 'brown'.
-            name (str, opt): the name of the knapsack. Defaults to 'knapsack'.
-            max_size (int, opt): the maximum number of items that can be
-                stored in the knapsack. Defaults to 3.
-        
-        Returns:
-            A knapsack object with no contents.
-        """
-        
-        Backpack.__init__(self, color, name, max_size)
-        self.closed = True
-    
-    def put(self, item):
-        """If the knapsack is untied, use the Backpack put() method."""
-        if self.closed:
-            print "Knapsack closed!"
-        else:
-            Backpack.put(self, item)
-    
-    def take(self, item):
-        """If the knapsack is untied, use the Backpack take() method."""
-        if self.closed:
-            print "Knapsack closed!"
-        else:
-            Backpack.take(self, item)
-    
-    def untie(self):
-        """Untie the knapsack."""
-        self.closed = False
-    
-    def tie(self):
-        """Tie the knapsack."""
-        self.closed = True
 
 # ============================== Solutions.py =============================== #
+
+# Students should import their Backpack class from Backpack.py:
+# from Backpack import Backpack
+from math import sqrt
 
 # Problem 2: Write a 'Jetpack' class that inherits from the 'Backpack' class.
 class Jetpack(Backpack):
@@ -218,7 +166,7 @@ class Jetpack(Backpack):
     
     def fly(self,amount):
         """Fly by using 'amount' units of fuel."""
-        if self.fuel - amount < 0:                  # Check current fuel
+        if amount > self.fuel:                      # Check current fuel
             print "Not enough fuel!"
         else:
             self.fuel -= amount
@@ -228,9 +176,6 @@ class Jetpack(Backpack):
         Backpack.dump(self)
         # Or self.contents = []
         self.fuel = 0                               # Reset fuel to 0
-
-
-# Problem 3: See the 'Backpack' class above.
 
 
 # Problem 4: Write a ComplexNumber class.
@@ -245,7 +190,8 @@ class ComplexNumber(object):
         """Initialize (separately) the real and imaginary components.
         Inputs:
             a (float): the real part.
-            b (float): the imaginary part."""
+            b (float): the imaginary part.
+        """
         self.real = a
         self.imag = b
     
@@ -264,28 +210,20 @@ class ComplexNumber(object):
         return ComplexNumber(self.real - other.real, self.imag - other.imag)
     
     def __mul__(self, other):
-        r = (self.real * other.real) - (self.imag * other.imag)
-        i = (self.real * other.imag) + (self.imag * other.real)
-        return ComplexNumber(r, i)
-        # Or,
-        # return ComplexNumber(self.real*other.real - self.imag*other.imag,
-        #    self.real*other.imag + self.imag*other.real)
+        real = (self.real * other.real) - (self.imag * other.imag)
+        imag = (self.real * other.imag) + (self.imag * other.real)
+        return ComplexNumber(real, imag)
     
     def __div__(self,other):
-        """(a + bj)/(c + dj)
-            = (a + bj)(c - dj)/(c + dj)(c - dj)         # Multiply by conjugate
-            = ((ac + bd) + (bc - ad)j)/(c**2 + d**2)    # Distribute
-            = ((ac + bd)/other.norm()) + ((bc - ad)j/other.norm())
+        """Do a little algebra before implementing:
+        (a + bj)/(c + dj)
+        = (a + bj)(c - dj)/(c + dj)(c - dj)         # Multiply by conjugate
+        = ((ac + bd) + (bc - ad)j)/(c**2 + d**2)    # Distribute
         """
-        r = ((self.real * other.real) + (self.imag * other.imag))/other.norm()
-        i = ((self.imag * other.real) - (self.real * other.imag))/other.norm()
-        return ComplexNumber(r,i)
-        # Or
-        # conj = other.conjugate()
-        # numer = self*conj
-        # denom = float((other*conj).real)
-        # return ComplexNumber(numer.real/denom, numer.imag/denom)
-
+        denom = other.real**2 + other.imag**2
+        real = ((self.real * other.real) + (self.imag * other.imag))/denom
+        imag = ((self.imag * other.real) - (self.real * other.imag))/denom
+        return ComplexNumber(real, imag)
 
 # ============================ END OF SOLUTIONS ============================= #
 
