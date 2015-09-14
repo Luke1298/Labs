@@ -77,14 +77,10 @@ def method3(A,B):
 
 # Problem 1: Implement this function.
 def prob1(l):
-    """Accept a list 'l' of numbers as input and return a list with the minimum,
-    maximum, and average of the original list.
+    """Accept a list 'l' of numbers as input and return a list with the
+    minimum, maximum, and average of the original list (in that order).
     """
-    ans = []
-    ans.append(min(l))
-    ans.append(max(l))
-    ans.append(float(sum(l))/len(l))
-    return ans
+    return [min(l), max(l), float(sum(l))/len(l)]
 
 
 # Problem 2: Implement this function.
@@ -179,9 +175,9 @@ def prob4():
     # Students should use matrix_multiply.method() instead of method()
     # m = matrix_multiply     # or "import matrix_multiply as m" at the top
     if len(sys.argv) == 1:
-        print("No input")
+        print("No Input.")
     elif sys.argv[1] != "matrices.npz":
-        print("Incorrect Input")
+        print("Incorrect Input.")
     else:   # If the correct filename is given,
         # load the matrices
         A,B = load_matrices(sys.argv[1])
@@ -330,7 +326,6 @@ def test(student_module, late=False):
     feedback += " = " + str(percentage) + "%"
     if   percentage >= 100.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
-    feedback += "\n\n-------------------------------------------------------\n"
     return score, feedback
 
 # ============================== END OF FILE ================================ #
