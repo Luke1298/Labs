@@ -8,7 +8,7 @@ Modify this file for problems 1 and 3.
 
 # Problem 1: Modify this class. Add 'name' and max_size' attributes, modify
 #   the put() method, and add a dump() method. Remember to update docstrings.
-class Backpack:
+class Backpack(object):
     """A Backpack object class. Has a color and a list of contents.
     
     Attributes:

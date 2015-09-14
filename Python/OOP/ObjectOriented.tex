@@ -2,14 +2,14 @@
 \label{lab:OOP}
 \objective{
 Python is a class-based language.
-A class is a blueprint for an object.
+A class is a blueprint for an object, defining attributes and methods.
 In this lab we learn how to define Python classes to create customized objects for use in algorithms.}
 
 \section*{Python Classes}
 
-A Python class is code that defines an object and determines its behavior.
-A class is defined using the the \li{class} command to name the class.
-Other statements follow the \li{class} command to determine the behavior of objects instantiated by the class.
+A Python class is code that defines a custom object and determines its behavior.
+A class is defined with the \li{class} command to name the class.
+Other statements follow, indented below the class name, to determine the behavior of objects instantiated by the class.
 
 A class needs a method called a constructor that is called when the class instantiates a new object.
 The constructor specifies the initial state of the object.
@@ -210,7 +210,7 @@ Knapsack closed!
 
 % Problem 2: create an inheritance class.
 \begin{problem}
-Create a jetpack class that inherits from the backpack class.
+Create a \li{Jetpack} class that inherits from the \li{Backpack} class.
 Overwrite the constructor so that the \li{color} attribute defaults to `silver', the \li{name} defaults to `jetpack', and the \li{max_size} defaults to 2.
 Also in the constructor initialize a \li{fuel} attribute that keeps track of how much fuel is left in the jetpack.
 Set the default amount of \li{fuel} to 10.
@@ -357,8 +357,12 @@ Contents:	Empty
 
 % Problem 4: ComplexNumber class
 \begin{problem}
-Create your own \li{ComplexNumber} class that supports the basic operations of complex numbers. Implement a \li{conjugate} method that returns a \li{ComplexNumber} object that is the object's complex conjugate, and a \li{norm} method that returns the magnitude of the complex number.
-Neither method should receive any arguments.
+Create your own \li{ComplexNumber} class that supports the basic operations of complex numbers.
+The constructor should accept two numbers:
+store the first as \li{self.real} and the second as \li{self.imag}.
+
+Implement a \li{conjugate} method that returns a \li{ComplexNumber} object that is the object's complex conjugate, and a \li{norm} method that returns the magnitude of the complex number (as a \li{float}).
+Neither of these methods should receive any arguments.
 
 Also implement the following magic methods appropriately:
 \begin{enumerate}
@@ -367,4 +371,6 @@ Also implement the following magic methods appropriately:
 \item \li{__mul__(self, other)}
 \item \li{__div__(self, other)} (Use the complex conjugate to implement division)
 \end{enumerate}
+Each of these should return a new \li{ComplexNumber} object.
+
 \end{problem}

@@ -220,7 +220,7 @@ class ComplexNumber(object):
         = (a + bj)(c - dj)/(c + dj)(c - dj)         # Multiply by conjugate
         = ((ac + bd) + (bc - ad)j)/(c**2 + d**2)    # Distribute
         """
-        denom = other.real**2 + other.imag**2
+        denom = float(other.real**2 + other.imag**2)
         real = ((self.real * other.real) + (self.imag * other.imag))/denom
         imag = ((self.imag * other.real) - (self.real * other.imag))/denom
         return ComplexNumber(real, imag)
