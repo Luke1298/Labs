@@ -270,7 +270,7 @@ Now we can evaluate $f(x,y)$ at each point in the grid and plot the result.
 \begin{lstlisting}
 f = np.sin(X) * np.sin(Y)
 plt.pcolormesh(X, Y, f)
-plt.pcolorbar()    # Show scale
+plt.colorbar()    # Show scale
 plt.show()
 \end{lstlisting}
 This plot is shown in Figure \ref{fig:pcmexample}
@@ -393,7 +393,7 @@ As an example, the code below produces Figure \ref{fig:scatter}.
 
 \begin{lstlisting}
 t = np.linspace(1,20,20)
-# The argument 's' specifies the marker size
+# The argument 's' specifies the marker size.
 plt.scatter(t, x, s=100)
 plt.show()
 \end{lstlisting}
@@ -413,14 +413,14 @@ plt.show()
 \caption{A scatter plot.}
 \label{fig:scatter}
 \end{subfigure}
-\caption{A scatter plot produced with \li{plt.scatter()} and a histogram produced with \li{plt.hist()}.}
+\caption{A histogram produced with \li{plt.hist()}and a scatter plot produced with \li{plt.scatter()}.}
 \label{fig:otherplots}
 \end{figure}
 
 
 \subsection*{Subplots}
 \emph{Subplots} are nonoverlapping plots arranged in a grid within a single figure (see Figure \ref{fig:subplots}).
-In \li{matplotlib}, specify which subplot you wish to modify with with command \li{plt.subplot(numrows, numcols, fignum)}.
+In \li{matplotlib}, specify which subplot you wish to modify with command \li{plt.subplot(numrows, numcols, fignum)}.
 Here, \li{numrows} is the number of rows of subplots in the figure, \li{numcols} is the number of columns of subplots in the figure, and \li{fignum} is the index of the subplot you wish to modify.
 This index starts at 1 and increments across rows first.
 
@@ -430,11 +430,11 @@ x = np.linspace(-np.pi, np.pi, 400)
 y1 = np.sin(x)
 y2 = np.cos(x)
 
-# Draw the first subplot
+# Draw the first subplot.
 plt.subplot(2, 1, 1)
 plt.plot(x, y1)
 
-# Draw the second subplot
+# Draw the second subplot.
 plt.subplot(2, 1, 2)
 plt.plot(x, y2)
 
@@ -448,7 +448,7 @@ plt.show()
 \end{figure}
 
 \begin{problem}\label{prob:subplot}
-Follow these steps to generate a plot similar to that in Figure \ref{fig:subplotProb}.
+Follow these steps to generate a plot similar to that in Figure \ref{fig:subplotProb}:
 \begin{enumerate}
 \item Generate 50 random numbers in the interval $[0,1)$ with the function \li{np.random.rand()}.
 \item Create a plot with two subplots. 
@@ -538,7 +538,7 @@ Title each graph accordingly and title the entire figure ``My Different Plots."
 
     \end{comment}
 
-\section*{3-D plotting with Mayavi (Optional)}
+\section*{3-D plotting with Mayavi}
 
 Although \li{matplotlib} is capable of creating 3-D plots, Mayavi does it better. 
 We will use Mayavi for all 3-D plots in these labs.
@@ -639,7 +639,7 @@ x = np.sin(2 * pts)
 y = np.cos(pts)
 z = np.cos(2 * pts)
 s = 2+np.sin(pts)
-# Adjust the keyword argument 'scale_factor' so all points are visible
+# Adjust the keyword argument 'scale_factor' so all points are visible.
 mlab.points3d(x, y, z, s, scale_factor=.15)
 mlab.show()
 \end{lstlisting}
@@ -678,6 +678,11 @@ mlab.show()
 The plotting functions in Mayavi allow you to specify the color of a plot, either as a solid color or with a varying colormap.
 For example, the plot in Figure \ref{fig:surf_example} uses the colormap \li{'RdYlGn'}.
 For a list of all colormaps in Mayavi, see \url{http://docs.enthought.com/mayavi/mayavi/mlab_changing_object_looks.html}.
+
+\begin{problem}
+Plot the function $z = \sin(10(x^2+y^2))/10$ on $[-1,1] \times [-1,1]$ using Mayavi.
+\end{problem}
+
 
 
 %TODO: this problem is copied from https://github.com/enthought/mayavi/blob/master/examples/mayavi/mlab/canyon.py.
