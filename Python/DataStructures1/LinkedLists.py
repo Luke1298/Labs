@@ -13,7 +13,9 @@ class Node(object):
     def __init__(self, data):
         """Construct a new node that stores some data."""
         self.data = data
-
+    
+    def __str__(self):
+        return str(self.data)
 
 class LinkedListNode(Node):
     """A Node class for linked lists. Inherits from the 'Node' class.

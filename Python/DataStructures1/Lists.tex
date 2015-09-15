@@ -295,10 +295,10 @@ See \href{https://docs.python.org/2/library/gc.html}{here} for more information 
 % Problem 3: Complete LinkedList.remove()
 \begin{problem}
 Though the above code works to remove specified nodes, it is not quite complete.
-Modify the \li{remove} method to account for possible errors: if the list is empty, or if the target node is not in the list, raise a \li{ValueError} with error message ``\li{data} is not in the list.''
+Modify the \li{remove} method to account for possible errors: if the list is empty, or if the target node is not in the list, raise a \li{ValueError} with error message ``\li{<data>} is not in the list.''
 \end{problem}
 
-\begin{figure}
+\begin{figure>}
 \centering
 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto, node distance=1.5cm,thick,main node/.style={rectangle,draw}, minimum size=.5cm]
 \tikzset{rect node/.style={rectangle, draw, minimum height = .5cm, minimum width=.2cm}}
@@ -334,7 +334,7 @@ Modify the \li{remove} method to account for possible errors: if the list is emp
 \begin{problem}
 Add an \li{insert} method to the \li{LinkedList} class that inserts a new node before the first node in the list that contains the data specified by the user.
 Accept data for the new node (\li{data}) and data for the node before which the new node will be inserted (\li{place}).
-If the list is empty, or there is no node containing \li{place} in the list, raise a \li{ValueError} with error message ``\li{place} is not in the list.''
+If the list is empty, or there is no node containing \li{place} in the list, raise a \li{ValueError} with error message ``\li{<place>} is not in the list.''
 
 See Figure \ref{fig:insert} for an illustration of the \li{insert} method.
 Note that since \li{insert} inserts a node before a specified node that is already in the list, it is not possible to \li{insert} at the end of the list or to an empty list.
