@@ -28,7 +28,7 @@ As such, temporal complexity is a precise way to describe how the execution time
 
 Often, we do not care about the exact definition of $f(n)$ so much as its behavior when $n$ gets large. 
 This leads to the notion of an \emph{asymptotic upper bound}. 
-An asymptotic upper bound is another function $g(n)$ such that eventually, $f(n)$ is less than some constant multiple of $g(n)$. 
+An asymptotic upper bound is another function $g(n)$ such that, eventually, $f(n)$ is less than some constant multiple of $g(n)$. 
 In the above example, $n^3$ is an asymptotic upper bound for $f(n)$ (see Figure \ref{fig:asymp_upper_bound}). 
 If $g(n)$ is an asymptotic upper bound for $f(n)$, we say $f(n)$ is $O(g(n))$. 
 So in the example above, $f(n)$ is $O(n^3)$ (spoken ``Big O of n cubed'' or ``order of n cubed").
@@ -43,7 +43,7 @@ So in the example above, $f(n)$ is $O(n^3)$ (spoken ``Big O of n cubed'' or ``or
 For example, adding two $n \times n$ matrices is $O(n^2)$. 
 This is because it takes 1 step to add each pair of elements in two $n \times n$ arrays, and there are $n^2$ such pairs.
 By comparison, calculating the inverse of a $n \times n$ matrix using Gaussian row reduction is $O(n^3)$. 
-(There are more efficient algorithms for matrix inversion.)
+(More efficient algorithms for matrix inversion exist as well.)
 
 \begin{comment}
 How do we determine the temporal complexity of a piece of code?
@@ -140,7 +140,7 @@ Your graph should look something like this.
 
 
 \subsection*{Spatial Complexity}
-Analogous to temporal complexity, the spatial complexity of an algorithm is a function that describes how the algorithm's memory use increases as input sizes to the algorithm increase. For example, if your algorithm needs to store an $n \times n$ matrix, its memory use will increase at least as fast as $n^2$. Spatial complexity is important because  the spatial complexity of an algorithm can affect its speed in several ways. The most important way is that when the memory usage exceeds the amount of available RAM, the machine must use the hard disk or some other slower storage method.
+Analogous to temporal complexity, the spatial complexity of an algorithm is a function that describes how the algorithm's memory use increases as input sizes to the algorithm increase. For example, if your algorithm needs to store an $n \times n$ matrix, its memory use will increase at least as fast as $n^2$. Spatial complexity is important because  the spatial complexity of an algorithm can affect its speed in several ways. The most important way is that when the memory usage exceeds the amount of available RAM, the machine must use either the hard disk or some other slower method of storage.
 
 This vocabulary allows us to discuss the question at the start of this section: ``How long will a computer take to execute this algorithm?". The amount of time a computer takes to execute an algorithm depends on both the algorithm's temporal complexity and on its spatial complexity. 
 
