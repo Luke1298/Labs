@@ -2,7 +2,7 @@
 \objective{Introduce some of the basic plotting functions available in matplotlib and Mayavi.}
 \label{lab:Matplotlib_and_Mayavi}
 
-\section*{2-D plotting with \li{matplotlib}}
+\section*{2-D plotting with matplotlib}
 The Python library \li{matplotlib} will be our primary tool for creating 2-D graphs in this text. This lab introduces the basic features of \li{matplotlib}; for more information, visit the documentation at \url{http://matplotlib.org}.
 
 To begin, import \li{pyplot} from \li{matplotlib}.
@@ -16,7 +16,7 @@ The function call \li{plt.plot(x, y)} takes two 1-D NumPy arrays, \li{x} and \li
 For example, this code plots $y=e^x$ on the interval $[-2,3]$. The output is in Figure \ref{fig:exp_plot}.
 
 \begin{info}
-If you are executing these matplotlib commands in an IPython shell, executing the \li{plt.show} method will open a new window with the plot. If you are using IPython Notebook, you have the option to display the plots within your notebook. You may opt into this feature by running \li{\%matplotlib inline} or \li{\%matplotlib notebook} in your IPython Notebook. The \li{inline} option shows the plot, whereas the \li{notebook} option shows the plot and provides controls to interact with the plot. Additionally, when using this option, the plot is displayed after running the \li{plt.plot} command; the \li{plt.show} command is not necessary. 
+If you are executing these matplotlib commands in an IPython shell, executing the \li{plt.show} method will open a new window with the plot. If you are using IPython Notebook, you have the option to display the plots within your notebook. You may opt into this feature by running \li{\%matplotlib inline} or \li{\%matplotlib notebook} in your IPython Notebook. The \li{inline} option shows the plot, whereas the \li{notebook} option shows the plot and provides controls to interact with the plot. Additionally, when using this option, the plot is displayed after running the \li{plt.plot} command; the \li{plt.show} command is not necessary.
 \end{info}
 
 \begin{lstlisting}
@@ -46,11 +46,11 @@ plt.show()
 \label{fig:lineplots}
 \end{figure}
 
-All calls to \li{plt} functions will modify the same figure until you call \li{plt.show()}. 
-The function \li{plt.show()} displays the current figure and resets the system, so that the next call to a \li{plt} function modifies a new figure. 
+All calls to \li{plt} functions will modify the same figure until you call \li{plt.show()}.
+The function \li{plt.show()} displays the current figure and resets the system, so that the next call to a \li{plt} function modifies a new figure.
 
 We can take advantage of this system to plot multiple lines on the same axes.
-For example, the following code plots ten lines, each with random values at integers from 1 to 10. 
+For example, the following code plots ten lines, each with random values at integers from 1 to 10.
 The output is in Figure \ref{fig:statemachine}.
 \begin{lstlisting}
 x = np.linspace(1, 10, 10)
@@ -150,13 +150,13 @@ the plotting environment. A few examples are shown in Table
     \end{table}
 
 	\end{comment}
-	
+
 \begin{problem}\label{prob:lineplot}
 Plot the curve $1/(x-1)$ on [-2,6].
 Do the following to your plot:
 
 \begin{enumerate}
-\item The function \li{plt.plot()} will make the curve look continuous at $x=1$. 
+\item The function \li{plt.plot()} will make the curve look continuous at $x=1$.
 Plot the two sides of the curve separately (still with a single call to \li{plt.plot()}) so that the graph looks discontinuous at $x=1$.
 \item Plot the curve with a line that is magenta, dashed, and thick (see Appendix \ref{mpltables}).
 \item Change the range of the $y$-axis to be $[-6, 6]$.
@@ -212,17 +212,17 @@ We do this with the function \li{np.meshgrid()}, which is explained in Figure \r
 \begin{tikzpicture}[>=stealth', shorten <= .1cm,shorten >=.1cm, dot/.style=
 	{circle,fill=black,minimum size=3pt,inner sep=0pt, outer sep=-1pt} ]
 
-\foreach \x/\y in {0/0, 0/2, 0/4, 2/0, 2/2, 2/4, 4/0, 4/2, 4/4} 
+\foreach \x/\y in {0/0, 0/2, 0/4, 2/0, 2/2, 2/4, 4/0, 4/2, 4/4}
 	\node[draw, dot]at(\x,\y){};
-\foreach \x/\y in {0/0, 0/1, 0/2, 1/0, 1/1, 1/2, 2/0, 2/1, 2/2} 
+\foreach \x/\y in {0/0, 0/1, 0/2, 1/0, 1/1, 1/2, 2/0, 2/1, 2/2}
 	\node[draw=none]at(\x*2-.5, \y*2+.3){(\x,\y)};
 
-\foreach \x/\y in {0/0, 0/1, 0/2, 1/0, 1/1, 1/2, 2/0, 2/1, 2/2} 
+\foreach \x/\y in {0/0, 0/1, 0/2, 1/0, 1/1, 1/2, 2/0, 2/1, 2/2}
 	\node[draw=none]at(\x*.75+7, \y*.75+.1){\y};
-\foreach \x/\y in {0/0, 0/1, 0/2, 1/0, 1/1, 1/2, 2/0, 2/1, 2/2} 
+\foreach \x/\y in {0/0, 0/1, 0/2, 1/0, 1/1, 1/2, 2/0, 2/1, 2/2}
 	\node[draw=none]at(\x*.75+7, \y*-.75+3.9){\x};
 
-\draw[-, thick](6.7,-.25)--(6.7,1.95); 
+\draw[-, thick](6.7,-.25)--(6.7,1.95);
 \draw[-, thick](8.8,-.25)--(8.8,1.95);
 \draw[-, thick](6.7,2.05)--(6.7,4.25);
 \draw[-, thick](8.8,2.05)--(8.8,4.25);
@@ -254,12 +254,13 @@ We do this with the function \li{np.meshgrid()}, which is explained in Figure \r
 
 \end{tikzpicture}
 
-\caption{This figure illustrates the function call \li{np.meshgrid(x, y)}, which returns the arrays \li{X} and \li{Y}. 
+\caption{This figure illustrates the function call \li{np.meshgrid(x, y)}, which returns the arrays \li{X} and \li{Y}.
 The returned arrays give the $x$- and $y$-coordinates of the points in the grid formed by \li{x} and \li{y}.}
 \label{fig:meshgrid}
 \end{figure}
 
 \begin{lstlisting}
+# Create an XY meshgrid
 x = np.linspace(-6, 6, 401)
 y = np.linspace(-6, 6, 401)
 X, Y = np.meshgrid(x, y)
@@ -297,9 +298,9 @@ Your plot should look like Figure \ref{fig:pcolormesh}.
 \begin{problem}\label{prob:heatmap}
 \leavevmode
 \begin{enumerate}
-\item Plot the function $f(x,y) = \sin(x)\sin(y)/(xy)$ on $[-2\pi,2\pi] \times [-2\pi,2\pi]$. 
+\item Plot the function $f(x,y) = \sin(x)\sin(y)/(xy)$ on $[-2\pi,2\pi] \times [-2\pi,2\pi]$.
 Include the scale bar in your plot.
-\item Change the color scheme of your plot with the keyword argument \li{cmap='seismic'} in the call to \li{plt.pcolormesh()}. 
+\item Change the color scheme of your plot with the keyword argument \li{cmap='seismic'} in the call to \li{plt.pcolormesh()}.
 You can see a list of all possible color schemes at \url{http://matplotlib.org/examples/color/colormaps_reference.html}.
 \item Change the limits on the $x$- and $y$-axes so that the plot is only over the domain $[-2\pi,2\pi] \times [-2\pi,2\pi]$.
 \item Fix the aspect ratio of your plot so that it is a square using the line \li{plt.gca().set_aspect('equal')}.
@@ -367,7 +368,7 @@ and set the default value to zero. \end{problem}
 \end{comment}
 
 \subsection*{Other plots}
-A \emph{histogram} is a way to visualize a 1-D data set, or list of values. 
+A \emph{histogram} is a way to visualize a 1-D data set, or list of values.
 A histogram is created by dividing up the range of the values into a finite number of intervals, or \emph{bins}.
 Then, the number of values in each bin is added up.
 Graphically, these totals are represented by bars whose length is equal to the number of values in the bin.
@@ -387,7 +388,7 @@ We created 10 bins in the range [.5, 10.5] so that each bin contains exactly one
 
 The function \li{plt.hist()} also returns some arrays, the first of which is a list of the total number of values in each bin.
 
-We could also use a \emph{scatter plot} to visualize the random integers \li{x} that we generated in the previous example. 
+We could also use a \emph{scatter plot} to visualize the random integers \li{x} that we generated in the previous example.
 The \li{matplotlib} function call \li{plt.scatter(x,y)} draws a scatter plot from two 1-D arrays \li{x} and \li{y} by plotting the points \li{(x[i], y[i])}.
 As an example, the code below produces Figure \ref{fig:scatter}.
 
@@ -413,7 +414,7 @@ plt.show()
 \caption{A scatter plot.}
 \label{fig:scatter}
 \end{subfigure}
-\caption{A histogram produced with \li{plt.hist()}and a scatter plot produced with \li{plt.scatter()}.}
+\caption{A histogram produced with \li{plt.hist()} and a scatter plot produced with \li{plt.scatter()}.}
 \label{fig:otherplots}
 \end{figure}
 
@@ -451,11 +452,11 @@ plt.show()
 Follow these steps to generate a plot similar to that in Figure \ref{fig:subplotProb}:
 \begin{enumerate}
 \item Generate 50 random numbers in the interval $[0,1)$ with the function \li{np.random.rand()}.
-\item Create a plot with two subplots. 
+\item Create a plot with two subplots.
 In the first subplot, draw a histogram of your data with 5 equally-sized bins.
-\item In the second subplot, 
+\item In the second subplot,
 \begin{enumerate}
-\item Draw a scatter plot of your data. 
+\item Draw a scatter plot of your data.
 Use the integers 1-50 for the $x$-coordinates and use your data for the $y$-coordinates.
 \item Plot a red horizontal line whose height is equal to the mean of your data.
 \end{enumerate}
@@ -540,13 +541,25 @@ Title each graph accordingly and title the entire figure ``My Different Plots."
 
 \section*{3-D plotting with Mayavi}
 
-Although \li{matplotlib} is capable of creating 3-D plots, Mayavi does it better. 
+Although \li{matplotlib} is capable of creating 3-D plots, Mayavi does it better.
 We will use Mayavi for all 3-D plots in these labs.
 For information beyond what is found in this tutorial, see \url{http://docs.enthought.com/mayavi/mayavi/}.
 To get started, import \li{mlab} from \li{mayavi}.
 \begin{lstlisting}
 from mayavi import mlab
 \end{lstlisting}
+
+\begin{info}
+If you do not have the \li{Mayavi} package installed on your system, you may download it by running the following commands from the command line:
+\begin{lstlisting}
+$ conda install conda     # downloads the most recent installer.
+$ conda install anaconda  # updates all packages.
+$ conda install mayavi    # installs mayavi.
+\end{lstlisting}
+
+For more information regarding installing Python packages, see Appendix \ref{updateinstall}.
+\end{info}
+%$
 
 The module \li{mlab} has many plotting functions.
 We will introduce a few in this lab; for more see \url{http://docs.enthought.com/mayavi/mayavi/auto/mlab_helper_functions.html}.
@@ -629,7 +642,7 @@ mlab.show()
 
 
 \subsection*{Points}
-The function call \li{mlab.points3d(x,y,z)} plots the points \li{(x[i], y[i], z[i])}, but does not connect them. 
+The function call \li{mlab.points3d(x,y,z)} plots the points \li{(x[i], y[i], z[i])}, but does not connect them.
 In the code below, the optional input array \li{s} defines a scalar for each point that modifies the color and size of the point.
 The output is in Figure \ref{fig:points3d}.
 
@@ -658,7 +671,7 @@ The array \li{Z} gives the height of the surface at each of these points.
 
 The output of \li{np.meshgrid()} is the transpose of what \li{mlab.surf()} expects.
 To avoid confusion, use the function \li{np.mgrid()} instead.
-This function uses the slicing syntax \li{[start:stop:step]} 
+This function uses the slicing syntax \li{[start:stop:step]}
 The code below produces the hyperbolic paraboloid in Figure \ref{fig:surf_example}.
 
 \begin{lstlisting}
@@ -682,7 +695,6 @@ For a list of all colormaps in Mayavi, see \url{http://docs.enthought.com/mayavi
 \begin{problem}
 Plot the function $z = \sin(10(x^2+y^2))/10$ on $[-1,1] \times [-1,1]$ using Mayavi.
 \end{problem}
-
 
 
 %TODO: this problem is copied from https://github.com/enthought/mayavi/blob/master/examples/mayavi/mlab/canyon.py.
