@@ -1,142 +1,206 @@
-import numpy as np
 from matplotlib import pyplot as plt
-from matplotlib import widgets as wg
-from mpl_toolkits.mplot3d import Axes3D
 from mayavi import mlab
+import numpy as np
 
-import os
-import zipfile
-import urllib
-
-def problem1():
-    X = np.linspace(0, 2*np.pi, 400)
-    Y1 = np.sin(X)
-    Y2 = np.cos(X)
-    plt.plot(X, Y1, "r--", X, Y2, "b:")
+# Problem 1
+def curve():
+    """Plot the curve 1/(x-1) on [-2,6]. Plot the two sides of the curve separately
+    (still with a single call to plt.plot()) so that the graph looks discontinuous 
+    at x = 1.
+    """
+    x1 = np.linspace(-2,.999,100)
+    y1 = 1./(x1-1)
+    x2 = np.linspace(1.001,6,100)
+    y2 = 1./(x2-1)
+    plt.plot(x1,y1,'m--',x2,y2,'m--',linewidth=5)
+    plt.axis([-2,6,-6,6])
     plt.show()
 
-def problem2():
-    X1 = np.linspace(-2, 1-.01, 300)
-    X2 = np.linspace(1.01, 6, 500)
-    f = lambda X: 1./(X - 1)
-    Y1 = f(X1)
-    Y2 = f(X2)
-    plt.plot(X1, Y1, 'm--', X2, Y2, 'm--', linewidth=5.0)
-    plt.ylim((-6,6))
-    plt.show()
-
-def problem3():
-    X = np.linspace(0, 10, 1001)
-    Y = np.sin(X) / (X + 1)
-    plt.plot(X, Y, ":")
-    plt.fill_between(X, Y, where=Y>0, color='b')
-    plt.fill_between(X, Y, where=Y<=0, color='r')
-    plt.xlabel("x-axis")
-    plt.ylabel("y-axis")
-    plt.title("My Plot")
-    plt.grid()
-    indices = np.zeros_like(X, dtype=bool)
-    for i in xrange(1, Y.size-1):
-        if (Y[i-1]-Y[i])*(Y[i]-Y[i+1])<0:
-            indices[i]=True
-    plt.scatter(X[indices], .5*Y[indices], marker='^')
-    plt.xlim((0,10))
-    plt.show()
-
-def problem4():
-    R = np.linspace(0, 2, 401)
-    I = R.copy()
-    R, I = np.meshgrid(R, I)
-    X = R + complex(0,1)*I
-    f = np.poly1d([1, 2, -1, 3])
-    Y = np.absolute(f(X))
-    plt.pcolormesh(R, I, Y)
-    plt.show()
-    
-def heatmap():
-    x = y = np.linspace(-2*np.pi, 2*np.pi, 402)
-    X, Y = np.meshgrid(x, y)
-    Z = np.sin(X)*np.sin(Y)/(X*Y)
-    plt.pcolormesh(X, Y, Z, cmap='seismic')
-    plt.pcolorbar()
+# Problem 2
+def colormesh():
+    """Plot the function f(x,y) = sin(x)sin(y)/(xy) on [-2*pi, 2*pi]x[-2*pi, 2*pi].
+    Include the scale bar in your plot. 
+    """
+    x = np.linspace(-2*np.pi,2*np.pi,300)
+    y = np.linspace(-2*np.pi,2*np.pi,300)
+    X, Y = np.meshgrid(x,y)
+    f = (np.sin(X)*np.sin(Y))/(X*Y)
+    plt.pcolormesh(X,Y,f,cmap='seismic')
+    plt.colorbar()
+    plt.axis([-2*np.pi,2*np.pi,-2*np.pi,2*np.pi])
     plt.gca().set_aspect('equal')
-    plt.xlim([-2*np.pi, 2*np.pi])
-    plt.ylim([-2*np.pi, 2*np.pi])
     plt.show()
 
-def problem5():
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
-    x = np.linspace(-10, 10, 501)
-    y = np.linspace(-10, 10, 501)
-    x, y = np.meshgrid(x, y)
-    d = np.sqrt(x**2 + y**2)
-    z = np.cos(d) / (.1 * d**2 + 1)
-    ax.plot_surface(x, y, z)
-    plt.show()
-
-def problem6():
-    ax = plt.subplot(111)
-    plt.subplots_adjust(bottom=.25)
-    t = np.arange(0, 1.01, .01)
-    a = 5.
-    f = 3.
-    p = 0.
-    fc = lambda a, f, p, t: a * np.sin(2*np.pi*f*(t-p))
-    l = plt.plot(t, fc(a, f, p, t))[0]
-    axfreq = plt.axes([.25, .05, .65, .03])
-    axamp = plt.axes([.25, .1, .65, .03])
-    axph = plt.axes([.25, .15, .65, .03])
-    sfreq = wg.Slider(axfreq, "Freq", .1, 30., valinit=f)
-    samp = wg.Slider(axamp, "Amp", .1, 10., valinit=a)
-    sph = wg.Slider(axph, "Phase", 0, 2*np.pi, valinit=p)
-    def update(val):
-        a = samp.val
-        f = sfreq.val
-        p = sph.val
-        l.set_ydata(fc(a,f,p,t))
-        plt.draw()
-    sfreq.on_changed(update)
-    samp.on_changed(update)
-    sph.on_changed(update)
-    plt.show()
-
-def problem7():
-    x = np.linspace(-3,3)
-    plt.subplot(221)
-    plt.plot(x, np.exp(x))
-    plt.subplot(222)
-    plt.plot(x, np.sin(x))
-    plt.subplot(223)
-    plt.plot(x, np.cos(x))
-    plt.subplot(224)
-    plt.plot(x, x**2)
-    plt.suptitle("My Different Plots")
-    plt.show()
-    
-def subplot():
-    x = np.random.rand(50)
-    plt.subplot(1, 2, 1)
-    plt.hist(x, bins=5, range=[0,1])
-    
+# Problem 3
+def histogram():
+    """Plot a histogram and a scatter plot of 50 random numbers chosen in the
+    interval [0,1)
+    """
+    y = np.random.rand(50)
+    plt.subplot(1,2,1)
+    plt.hist(y,bins=5)
+    x = np.linspace(1,50,num=50)
     plt.subplot(1,2,2)
-    t = np.linspace(1,50,50)
-    plt.scatter(t, x)
-    
-    tnew = np.linspace(0,51,2)
-    y = x.mean()*np.ones(2)
-    plt.plot(tnew, y, 'r', )
-    
-    plt.xlim([0,51])
+    plt.scatter(x,y)
+    plt.axis([0,50,-.2,1.2])
+    z = np.mean(y)
+    z = np.ones(len(x))*z
+    plt.plot(x,z,color='r')
     plt.show()
+    
+# Problem 4
+def ripple():
+    """Plot z = sin(10(x^2 + y^2))/10 on [-1,1]x[-1,1] using Mayavi."""
+    X, Y = np.mgrid[-1:1:.025,-1:1:.025]
+    Z = np.sin(10*(X**2+Y**2))/10.
+    mlab.surf(X,Y,Z)
+    mlab.show()
+    
+# ============= END OF SOLUTIONS =================== #
+import inspect
+import os
 
-def problem8():
-    opener = urllib.URLopener()
-    opener.retrieve('https://s3.amazonaws.com/storage.enthought.com/www/sample_data/N36W113.hgt.zip', 'N36W113.hgt.zip')
-    data = np.fromstring(zipfile.ZipFile('N36W113.hgt.zip').read('N36W113.hgt'), '>i2').reshape((3601, 3601)).astype('float32')
-    data = data[:1000, 900:1900]
-    data[data == -32768] = data[data>0].min()
-    mlab.figure(size=(400, 320), bgcolor = (.16, .28, .46))
-    mlab.surf(data, colormap="gist_earth", warp_scale=.2, vmin=1200, vmax=1610)
-    mlab.view(-5.9, 83, 570, [5.3, 20, 238])
-    return mlab.gcf()
+# Test script
+def test(student_module, late=False):
+
+
+    """Test script. You must import the students file as a module.
+    
+    10 points for problem 1
+    10 points for problem 2
+    10 points for problem 3
+    10 points for problem 4
+    
+    Parameters:
+        student_module: the imported module for the student's file.
+        late (bool, opt): if True, half credit is awarded.
+    
+    Returns:
+        score (int): the student's score, out of 20
+        feedback (str): a printout of test results for the student.
+    """
+
+    s = student_module
+    sFile = s.__file__    
+    if os.system('ls ' + sFile):
+        return
+
+    score = 0
+    total = 40
+    feedback = ""
+
+    def strTest(x,y,m):
+        """Test to see if x and y have the same string representation. If
+        correct, award a points and return no message. If incorrect, return
+        0 and return 'm' as feedback.
+        """
+        if str(x) == str(y): return 1, ""
+        else:
+            m += "\n\t\tCorrect response: " + str(x)
+            m += "\n\t\tStudent response: " + str(y)
+            return 0, m
+    
+    def grade(p,m):
+        """Manually grade a problem worth 'p' points with error message 'm'."""
+        part = -1
+        while part > p or part < 0:
+            part = int(input("\nScore out of " + str(p) + ": "))
+        if part == p: return p,""
+        else: return part,m
+    
+    try:    # Problem 1: 10 points
+        feedback += "\n\nProblem 1 (10 points):"
+        points = 0
+
+        # check that they only used 1 plot command.
+        lines = inspect.getsourcelines(s.curve)[0]
+        print "\nOnly use plt.plot() once. \nStudent Code:"
+        for i in lines:
+            print i[:-1]
+        p,f = grade(5, "Only call plt.plot() once.")
+        points += p; feedback += f
+        
+        # check the plot output.
+        print """
+        Specifications:
+        - Discontinuous
+        - think, magenta, dotted line
+        - window should be [-2,6]x[-6,6]
+        """
+        plt.ion()   # turn on interactive plotting
+        s.curve()
+        p,f = grade(5, "Plot does not match specifications")
+        points += p; feedback += f
+
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message
+
+    try:    # Problem 2: 10 points
+        feedback += "\n\nProblem 2 (10 points):"
+        points = 0
+        
+        plt.close('all')
+        s.colormesh()
+        print "\nOverall appearance."
+        p,f = grade(8, "Plot does not match specifications")
+        points += p; feedback += f
+        print "\nNot pixelated."
+        p,f = grade(2, "adjust plot so it is not pixelated.")
+        points += p; feedback += f
+        
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message
+        
+    try:    # Problem 3: 10 points
+        feedback += "\n\nProblem 3 (10 points):"
+        points = 0
+        
+        plt.close('all')
+        s.histogram()
+        # histogram
+        print "\nHistogram with 5 bins"
+        p,f = grade(4, "Histogram does not match specifications")
+        points += p; feedback += f
+        
+        # scatterplot
+        print "\nScatter plot"
+        p,f = grade(4, "Scatter plot does not match specifications.")
+        points += p; feedback += f
+        
+        # average
+        print "\nAverage"
+        p,f = grade(2, "Average not displayed on scatter plot correctly.")
+        points += p; feedback += f
+        plt.close('all')
+        
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message
+        
+    try:    # Problem 4: 10 points
+        feedback += "\n\nProblem 4 (10 points):"
+        points = 0
+        
+        s.ripple()
+        p,f = grade(10, "Ripple plot does not match specifications.")
+        points += p; feedback += f
+        
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message
+    
+    # Late submission penalty
+    if late:
+        feedback += "\n\nHalf credit for late submission."
+        feedback += "\nRaw score: " + str(score) + "/" + str(total)
+        score *= .5
+    
+    # Report final score
+    feedback += "\n\nTotal score: " + str(score) + "/" + str(total)
+    percentage = (100.0 * score) / total
+    feedback += " = " + str(percentage) + "%"
+    if   percentage >= 100.0: feedback += "\n\nExcellent!"
+    elif percentage >=  90.0: feedback += "\n\nGreat job!"
+    feedback += "\n\n-------------------------------------------------------\n"
+    return score, feedback
+
+# ============================== END OF FILE ================================ #
+
