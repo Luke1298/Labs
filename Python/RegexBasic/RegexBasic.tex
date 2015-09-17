@@ -211,9 +211,10 @@ True
 Parentheses help give regular expressions higher precedence.
 For example, \li{"^one|two fish$"} gives precedence to the invisible string concatenation between \li{"two"} and \li{"fish"} while \li{"^(one|two) fish$"} gives precedence to the \li{'\|'} metacharacter.
 
-\begin{problem}
-Give a description of \emph{every} string that the pattern \li{"^one|two fish\$"} matches. Hint: Consider the strings \li{"one more"} and \li{"thirty-two fish"}.
-\end{problem}
+%
+%\begin{problem}
+%Give a description of \emph{every} string that the pattern \li{"^one|two fish\$"} matches. Hint: Consider the strings \li{"one more"} and \li{"thirty-two fish"}.
+%\end{problem}
 
 \begin{problem}
 Define the variable \li{pattern_string} using the metacharacter \li{'|'} and parentheses in such a way that the following python program prints \li{True}:
@@ -514,6 +515,7 @@ Define a variable \li{parameter_pattern_string} that defines a regular expressio
 For example, each element of \li{["max=4.2", "string= ''", "num_guesses", "msg ='\\\\'", "volume_fn=_CALC_VOLUME"]} is a valid python parameter definition, while each element of \li{["300", "no spaces", "is_4=(value==4)", "pattern = r'^one|two fish$'", 'string="these last two are actually valid in python, but they should not be matched by your pattern"']} is not. % TODO add more negative examples maybe?
 \end{problem}
 
+\begin{comment}
 \begin{problem*}
 A \emph{valid python function definition} is defined as the concatenation of the following strings:
 \begin{itemize}
@@ -584,3 +586,65 @@ For reference, I used about ten lines to define \li{function_pattern_string} and
 
 \label{prob:match_function_definition}
 \end{problem*}
+\end{comment}
+
+\section*{Regular Expressions in the Unix Shell}
+As we have seen thusfar, regular expressions are very useful when we want to match patterns. Regular expressions can be used when matching patterns in the Unix Shell. Though there are many Unix commands that take advantage of regular expressions, we will focus on \li{grep} and \li{awk}.
+
+\subsection*{Regular Expressions and grep}
+Recall from Lab 1 that \li{grep} is used to match patterns in files or output. It turns out we can use regular expressions to define the pattern we wish to match.
+
+In general, we use the following syntax:
+\begin{lstlisting}
+$ grep 'regexp' filename
+\end{lstlisting}
+%$
+
+We can also use regular expressions when piping output to \li{grep}.
+\begin{lstlisting}
+# List details of directories within current directory.
+$ ls -l | grep ^d
+\end{lstlisting} 
+%$
+
+\subsection*{Regular Expressions and awk}
+As in Lab 2, we will be using \li{awk} to format output. By incorporating regular expressions, \li{awk} becomes much more robust. Before GUI spreedsheet programs like Microsoft Excel, \li{awk} was commonly used to visualize and query data from a file.  
+
+Including \li{if} statements inside \li{awk} commands gives us the ability to perform actions on lines that match a given pattern. The following example prints the filenames of all files that are owned by \li{freddy}.
+\begin{lstlisting}
+$ ls -l | awk ' {if ($3 ~ /freddy/) print $9} '
+\end{lstlisting}
+%$
+
+Because there is a lot going on in this command, we will break it down piece-by-piece. The output of \li{ls -l} is getting piped to \li{awk}. Then we have an \li{if} statement. The syntax here means if the condition inside the parenthesis holds, print field $9$ (the field with the filename). The condition is where we use regular expressions. The \li{\~} checks to see if the contents of field $3$ (the field with the username) matches the regular expression found inside the forward slashes. To clarify, \li{freddy} is the regular expression in this example and the expression must be surrounded by forward slashes.  
+
+Consider a similar example. In this example, we will list the names of the directories inside the current directory. (This replicates the behavior of the Unix command \li{ls -d */})
+
+\begin{lstlisting}
+$ ls -l | awk ' {if ($1 ~ /^d/) print $9} '
+\end{lstlisting}
+%$
+
+Notice in this example, we printed the names of the directories, whereas in one of the example using \li{grep}, we printed all the details of the directories as well. 
+
+\begin{warn}
+Some of the definitions for character classes we used earlier in this lab will not work in the Unix Shell. For example, \li{\\w} and \li{\\d} are not defined. Instead of \li{\\w}, use \li{[[:alnum:]]}. Instead of \li{\\d}, use \li{[[:digit:]]}. For a complete list of similar character classes, search the internet for ``POSIX Character Classes'' or ``Bracket Character Classes.''
+\end{warn}
+
+\begin{problem}
+You have been given a list of transactions from a fictional start-up company. In the \li{transactions.txt} file, each line represents a transaction. Transactions are represented as follows:
+\begin{lstlisting}
+# Notice the semicolons delimiting the fields. Also, notice that in between the last and first name, that is a comma, not a semicolon.
+<ORDER_ID>;<YEAR><MONTH><DAY>;<LAST>,<FIRST>;<ITEM_ID> 
+\end{lstlisting}
+
+Using this set of transactions, produce the following information using regular expressions and the given command: 
+\begin{itemize}
+    \item Using \li{grep}, print all transactions by either Nicholas Ross or Zoey Ross.
+    \item Using \li{awk}, print a sorted list of the names of individuls that bought item $3298$.
+    \item Using \li{awk}, print a sorted list of items purchased between June 13 and June 15 of 2014 (inclusive).
+\end{itemize}
+These queries can be produced using one command each.
+\end{problem}
+
+We encourage the interested reader to research more about how regular expressions can be used with \li{sed}.
