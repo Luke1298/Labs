@@ -23,7 +23,7 @@ def colormesh():
 
 # Problem 3
 def histogram():
-    """Plot a histogram and a scatter plot of 50 random numbers chosen in the
+    """Plot a histogram and a scatter plot of 50 random numbers chosen from the
     interval [0,1).
     """
     pass
