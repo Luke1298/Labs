@@ -62,7 +62,7 @@ One useful aspect of the IPython interfaces is \emph{object introspection}, whic
 
 # To see the methods associated to an object, type the object name followed
 #  by a period, and press tab.
-In [1]: list.   # press 'tab'
+In [1]: list.   # Press 'tab'.
 list.append   list.extend   list.insert   list.pop      list.reverse  
 list.count    list.index    list.mro      list.remove   list.sort
 
@@ -93,7 +93,7 @@ To execute the script using IPython, run the following in the command prompt:
 \begin{lstlisting}
 $ ipython
 
-In [1]: run hello.py    # or simply 'run hello'
+In [1]: run hello.py    # You could also simply type 'run hello'.
 \end{lstlisting}
 \end{problem}
 
@@ -143,7 +143,7 @@ An incredibly common programming mistake is using integer division when float di
 \begin{lstlisting}
 >>> 9 / 3
 3
->>> 15 / 4	# Notice the expected result is 3.75
+>>> 15 / 4	# Notice the expected result is 3.75.
 3
 
 # If either the dividend or divisor is a float, float division
@@ -163,17 +163,17 @@ Like all programming languages, Python uses variables to store data.
 >>> y = 2 * 6
 
 # Type cast to change the default type that Python assigns to the variable.
->>> y = float(y)	# y is now a float instead of an int
+>>> y = float(y)	# y is now a float instead of an int.
 
 # Use a DOUBLE equals sign to check equality of variable values.
 >>> x == y  
 True
 
 # The 'is' operator checks for object equality. For two variables a and b,
-# a 'is' b if and only if a and b refer to the same data at the same location
+# a 'is' b if a and b refer to the same data at the same location
 # in memory. For example, even though x and y have the same numerical value,
-# they are not the same object because x is an integer and y is a float, and
-# are therefore stored at different locations in memory.
+# they are not the same object because x is an integer and y is a float,
+# meaning they're stored at different locations in memory.
 >>> x is y
 False                   
 \end{lstlisting}
@@ -182,7 +182,7 @@ We can also create and manipulate complex numbers.
 \begin{lstlisting}
 # There are two different ways to create complex numbers.
 >>> x = complex(2,3)
->>> y = 2 + 3j	# Note that Python uses the letter j, not i
+>>> y = 2 + 3j	# Note that Python uses the letter j, not i.
 
 # Access the real and imaginary parts separately as follows:
 >>> x.real
@@ -213,7 +213,7 @@ Many text editors will allow you to set the indentation type to spaces so you ca
 Because Python uses whitespace indentation, the interpreter will assume the code following a function definition to be indented and part of the code block.
 If you wish to have an empty code block, use \li{pass} as a placeholder.
 \begin{lstlisting}
-# No indentation
+# No indentation.
 >>> def add(x, y):
 ...return x + y
 ...
@@ -225,7 +225,7 @@ IndentationError: expected an indented block
 ...
 
 >>> def add(x, y):
-...    pass		# do nothing
+...    pass		# Does nothing.
 ...
 
 # For multi-line functions, indent all lines that should
@@ -239,7 +239,7 @@ IndentationError: expected an indented block
 We define a function with \emph{parameters} and call it with \emph{arguments}. In the example below, \li{width} and \li{height} are parameters for the function \li{area}. The values \li{2} and \li{5} are the arguments that we pass when calling the function. In practice, the terms \emph{parameter} and \emph{argument} are often used interchangeably.
 
 \begin{lstlisting}
-# Compute the area of a rectangle
+# Computes the area of a rectangle.
 >>> def area(width, height):
 ...     return width*height
 ...         
@@ -255,15 +255,15 @@ It is also possible to specify default values for formal parameters.
 The function \li{fn} has three formal parameters, and the value of \li{c} defaults to 0.
 We can pass arguments to \li{fn} based on position (positional arguments) or name (named arguments or keyword arguments). We must define positional arguments before keyword arguments (\li{a} and \li{b} must come before \li{c} in the function definition).
 \begin{lstlisting}
-# Call fn with 2 positional arguments (c=0 by default)
+# Call fn with 2 positional arguments (c=0 by default).
 >>> fn(1, 2)
 1 2 0
 
-# Call fn with 3 positional arguments
+# Call fn with 3 positional arguments.
 >>> fn(4, 5, 6)
 4 5 6
 
-# Call fn with 1 positional argument and 2 named arguments
+# Call fn with 1 positional argument and 2 named arguments.
 >>> fn(1, c=2, b=3)
 1 3 2
 \end{lstlisting}
@@ -316,11 +316,11 @@ They can be concatenated with the \li{+} operator.
 >>> my_string
 'Hello World!'
 
-# Count the number of characters in a string
+# Count the number of characters in a string.
 >>> len(my_string)
 12
 
-# Type cast a number to a string using str()
+# Type cast a number to a string using str().
 >>> str(5)
 '5'
 \end{lstlisting}
@@ -351,7 +351,7 @@ The parameter \li{step} defaults to 1.
 'lo Wo'
 
 # Pick out every other character in a string.
->>> my_string[::2]	# string[start:stop:step]
+>>> my_string[::2]	# my_string[start:stop:step]
 'HloWrd'
 \end{lstlisting}
 
@@ -389,7 +389,7 @@ Common methods of the \li{list} data type include \li{append}, \li{insert}, \li{
 >>> my_list
 [1, 2, 3, 4]
 >>> my_list.remove(3)       # remove(value)
->>> my_list.pop()           # remove and return last value in my_list
+>>> my_list.pop()           # Remove and return last value in my_list.
 4
 >>> my_list
 [1, 2]
@@ -460,12 +460,12 @@ Initialize a set using the keyword \li{set} or by using curly braces.
 >>> print(gym_members)
 set(['Brown, Bob', 'Doe, John', 'Smith, Jane'])
 
-# Delete an object from a set
+# Delete an object from a set.
 >>> gym_members.discard("Doe, John");
 >>> print(gym_members)
 set(['Brown, Bob', 'Smith, Jane'])
 
-# Add an object to a set
+# Add an object to a set.
 >>> gym_members.add("Lytle, Josh")
 >>> print(gym_members)
 set(['Brown, Bob', 'Lytle, Josh', 'Smith, Jane'])
@@ -501,7 +501,7 @@ The values of a dictionary are indexed by its keys.
 >>> print(my_dictionary)
 {'visual arts': 7321, 'math': 2016, 'science': 6284}
 
-# Display the keys and values
+# Display the keys and values.
 >>> my_dictionary.keys()
 ['visual arts', 'math', 'science']
 >>> my_dictionary.values()
@@ -579,7 +579,7 @@ There are two additional useful statements to use in loops:
 ...    print(i),
 ...    i += 1
 ...    if i >= 10:
-...        break        # exit the loop
+...        break        # Exit the loop.
 ...
 0 1 2 3 4 5 6 7 8 9
 
@@ -587,7 +587,7 @@ There are two additional useful statements to use in loops:
 >>> while i < 10:
 ...     i += 1
 ...     if i % 3 == 0:
-...         continue    # skip multiples of 3
+...         continue    # Skip multiples of 3.
 ...     print(i),
 1 2 4 5 7 8 10
 
@@ -664,7 +664,7 @@ Python uses the \li{yield} keyword to define a generator. See the following code
 >>> next(three)
 2
 
-# Generators can be used as iterators in for loops
+# Generators can be used as iterators in for loops.
 >>> six = range_generator(3, 6)
 >>> for i in six:
 ...     print i,
