@@ -20,24 +20,32 @@ The top image was stretched by a factor of $1.5$ in all directions, producing th
 \begin{problem}\label{prob:dilation}
 Write a function that accepts an array of points and an array giving the stretching factors in each direction. 
 Your function should return the dilated points. 
-Hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined below.
+
+Included with this lab is a dataset of points saved as a NumPy array. To import this array, use \li{np.load("pi.npy")}. This function will return an array of size $(2, 368)$. This array represents $368$ points in $\mathbb{R}^2$ stored as columns.
+
+To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined below.
 \begin{lstlisting}
 import numpy as np
 from matplotlib import pyplot as plt
 
-def plotOldNew(old, new):
+def plot_transform(original, new):
     '''Inputs:
-    new -- a (2,n) numpy array containing x-coordinates on the 
-            first row and y-coordinates on the second row.
-    old -- a (2,n) numpy array containing x-coordinates on the first
-            row and y-coordinates on the second row.
+    original -- a (2,n) numpy array containing x-coordinates on the first 
+                row and y-coordinates on the second row.
+    new -- a (2,n) numpy array containing x-coordinates on the first row 
+           and y-coordinates on the second row.
     '''
-            
-    plt.subplot(2, 1, 1)
-    plt.scatter(old[0], old[1])
-    plt.axis('equal')
-    plt.subplot(2, 1, 2)
+    v = [-5,5,-5,5]
+    plt.subplot(1, 2, 1)
+    plt.title('Before')
+    plt.gca().set_aspect('equal')
+    plt.scatter(original[0], original[1])
+    plt.axis(v)
+    plt.subplot(1, 2, 2)
+    plt.title('After')
+    plt.gca().set_aspect('equal')
     plt.scatter(new[0], new[1])
+    plt.axis(v)
     plt.show()
 \end{lstlisting}
 \end{problem}
