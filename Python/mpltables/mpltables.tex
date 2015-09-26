@@ -7,8 +7,8 @@ The documentation for matplotlib can be frustrating to maneuver and relevant inf
 For a more general introduction to matplotlib, see lab \ref{lab:Matplotlib_and_Mayavi}.
 
 
-\section*{Colours}
-By default, every plot is assigned a different color specified by a ''color cycle". It can be overwritten by specifying what color is desired. \li{matplotlib} recognizes some basic built-in colours. 
+\section*{Colors}
+By default, every plot is assigned a different color specified by a ''color cycle". It can be overwritten by specifying what color is desired. \li{matplotlib} recognizes some basic built-in colors. 
 
 \begin{tabular}
 {|l||l|}
@@ -28,17 +28,17 @@ white & w\\
 \end{tabular}
 
 
-The following displays how these colours can be  implemented. All the built-in colours are displayed for your convenience in Figure \ref{colours}
-\lstinputlisting[style=fromfile]{colours.py}
+The following displays how these colors can be implemented. All the built-in colors are displayed for your convenience in Figure \ref{colors}
+\lstinputlisting[style=fromfile]{colors.py}
 
 \begin{figure} 
-\includegraphics[width=\textwidth]{colours.pdf}
-\caption{A display of all the built-in colours.}
-\label{colours} 
+\includegraphics[width=\textwidth]{colors.pdf}
+\caption{A display of all the built-in colors.}
+\label{colors} 
 \end{figure}
 
 
-There are many other ways to specific colours. A popular method to access colours that are not built-in is to use a \li{RGB} tuple. Another way is to specify the color using an html hex string or its associated html color name like \li{DarkOliveGreen, FireBrick, LemonChiffon, MidnightBle, PapayaWhip,}, or \li{SeaGreen}. 
+There are many other ways to specific colors. A popular method to access colors that are not built-in is to use a \li{RGB} tuple. Another way is to specify the color using an html hex string or its associated html color name like \li{DarkOliveGreen, FireBrick, LemonChiffon, MidnightBle, PapayaWhip,}, or \li{SeaGreen}. 
 
 \section*{Axes}
 You may have noticed the use of \li{plt.ylim([ymin, ymax])} in the previous code. This explicitly sets the boundary of the y-axis. Similarily, \li{plt.xlim([xmin, xmax])} can be used to set the boundary of the x-axis. 
@@ -47,9 +47,9 @@ Remember that these commands must be executed after the plot.
 
 Another popular command is \li{plt.axis("tight")} which adjusts the axes so all data is visible and centered. 
 
-\section*{lines}
-\subsection*{width}
-You may have noticed that the width of the lines above seemed thin considering we wanted to inspect the line colour. \li{linewidth} is a keyword argument that is defaulted to be \li{None} but can be given any real number to adjust the line width. 
+\section*{Lines}
+\subsection*{Width}
+You may have noticed that the width of the lines above seemed thin considering we wanted to inspect the line color. \li{linewidth} is a keyword argument that is defaulted to be \li{None} but can be given any real number to adjust the line width. 
 
 The following displays how \li{linewidth} is implemented. It is displayed in Figure \ref{linewidth}
 \lstinputlisting[style=fromfile]{linewidth.py}
@@ -60,7 +60,7 @@ The following displays how \li{linewidth} is implemented. It is displayed in Fig
 \label{linewidth} 
 \end{figure}
 
-\subsection*{style}
+\subsection*{Style}
 By default, plots are executed with a solid line style. We can easily change that. The following are accepted format string characters to indicate line style. 
 
 \begin{tabular}
@@ -98,7 +98,7 @@ $|$ & vline marker \\
 \end{tabular}
 
 
-The following displays how \li{linestyle} can be  implemented. 
+The following displays how \li{linestyle} can be implemented. 
 
 It is displayed in Figure \ref{linestyle}
 \lstinputlisting[style=fromfile]{linestyle.py}
