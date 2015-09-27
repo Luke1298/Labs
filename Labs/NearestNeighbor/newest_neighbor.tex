@@ -138,7 +138,14 @@ Here we simply insert the data in the order that it is given.
 The major difference between a $k$-d tree and a binary search tree is how the data is compared at each depth level.
 This is simplified by using the magic methods in the \li{KDTnode} class.
 Though we don't need to use a \li{find} function in solving the nearest neighbor problem, we provide the $k$-d tree version of \li{find} as an instructive example.
-
+%    """A k-dimensional binary search tree object.
+%    Used to solve the nearest neighbor problem efficiently.
+%
+%    Attributes:
+%        root (KDTNode): the root node of the tree. Like all other
+%            nodes in the tree, the root houses data as a numpy array.
+%        k (int): the dimension of the tree (the 'k' of the k-d tree).
+%    """
 \begin{lstlisting}
 class KDT(BST):
     """A k-dimensional binary search tree object."""
@@ -293,7 +300,7 @@ To test your function, use Scipy's built-in \li{KDTree} structure.
 >>> tree =  KDTree(data)
 
 # Query the tree and print the minimum distance.
->>> min_distance, node_index = tree.query(random(20))
+>>> min_distance, node_index = tree.query(target)
 >>> print(min_distance)
 1.1769198641683098
 
