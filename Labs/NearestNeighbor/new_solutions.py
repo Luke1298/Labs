@@ -14,104 +14,9 @@ class BSTNode(object):
     def __str__(self):
         return str(self.data)
 
-class BST(object):
+class BST(object): 
     def __init__(self):
         self.root = None
-    
-    def find(self, data):
-        if self.root is None:
-            raise ValueError(str(data) + " is not in the tree.")
-        
-        def _step(current, item):
-            if current is None:
-                raise ValueError(str(data) + " is not in the tree.")
-            if item == current.data:
-                return current
-            if item < current.data:
-                return _step(current.left,item)
-            else:
-                return _step(current.right,item)
-        
-        return _step(self.root, data)
-    
-    def insert(self, data):
-        def _find_parent(current, item):
-            if item == current.data:
-                raise ValueError(str(item) + " is already in the tree.")
-            if current is None:
-                raise ValueError("_find_parent() failed for " + str(item))
-            if item < current.data:
-                if current.left:
-                    return _find_parent(current.left,item)
-                else:
-                    return current
-            else:
-                if current.right:
-                    return _find_parent(current.right,item)
-                else:
-                    return current
-        
-        n = BSTNode(data)
-        if self.root is None:
-            self.root = n
-        else:
-            parent = _find_parent(self.root, data)
-            if data < parent.data:
-                parent.left = n
-            else:
-                parent.right = n
-            n.prev = parent
-    
-    def remove(self, data):
-        def _predecessor(node):
-            if node.right is None:
-                raise ValueError("IOP problem")
-            node = node.right
-            while node.left:
-                node = node.left
-            return node
-        
-        if self.root is None:
-            raise ValueError("The tree is empty.")
-        target = self.find(data)
-        if target == self.root:
-            if not self.root.left and not self.root.right:
-                self.__init__()
-            if not target.right:
-                self.root = target.left
-            elif not target.left:
-                self.root = target.right
-            else:
-                pred = _predecessor(target)
-                self.remove(pred.data)
-                target.data = pred.data
-            if self.root:
-                self.root.prev = None
-        else:
-            if not target.left and not target.right:
-                parent = target.prev
-                if target.data < parent.data:
-                    parent.left = None
-                elif target.data > parent.data:
-                    parent.right = None
-            elif not target.right:
-                parent = target.prev
-                if parent.right == target:
-                    parent.right = target.left
-                elif parent.left == target:
-                    parent.left = target.left
-                target.left.prev = parent
-            elif not target.left:
-                parent = target.prev
-                if parent.right == target:
-                    parent.right = target.right
-                elif parent.left == target:
-                    parent.left = target.right
-                target.right.prev = parent
-            else:
-                pred = _predecessor(target)
-                self.remove(pred.data)
-                target.data = pred.data
     
     def __str__(self):
         if self.root is None:
@@ -152,17 +57,20 @@ from scipy.spatial import KDTree
 # Problem 1: Implement this function.
 def euclidean_metric(x, y):
     """Return the euclidean distance between the vectors 'x' and 'y'.
-    Raise a ValueError if the two vectors are of different lengths.
+
+    Raises:
+        ValueError: the two vectors 'x' and 'y' are of different lengths.
     
     Example:
         >>> print(euclidean_metric([1,2],[2,2]))
         1.0
         >>> print(euclidean_metric([1,2,1],[2,2]))
-        ValueError: <Message>
+        ValueError: Incompatible dimensions.
     """
     if len(x) != len(y):
-        raise ValueError("Incompatible sizes")
+        raise ValueError("Incompatible dimensions.")
     return np.linalg.norm(x - y)
+    
     # Or a slightly longer way:
     return np.sqrt(np.sum(np.subtract(x, y)**2))
     # Or the longest/worst way:
@@ -190,17 +98,6 @@ def exhaustive_search(data_set, target):
         The distance from the nearest neighbor to 'target' (float).
     """
 
-    # Validate the inputs (not required but always a good idea)
-    '''
-    if not isinstance(data_set, np.ndarray):
-        raise TypeError("Both arguments must by numpy arrays.")
-    if not isinstance(target, np.ndarray):
-        raise TypeError("Both arguments must by numpy arrays.")
-    if data_set.shape[1] != target.shape[1] or target.shape[0] != 1:
-        raise ValueError("Mismatched dimensions: data_set must be mxk "
-                                            + "and target must be 1xk")
-    '''
-
     # Initialize the outputs
     minimum_distance = float("inf")
     nearest_neighbor = None
@@ -216,20 +113,27 @@ def exhaustive_search(data_set, target):
 
 # Problem 3: Add magic methods to this class.
 class KDTNode(BSTNode):
-    """Node class for K-D Trees. Has a left child, a right child, a parent,
-    a dimension, and contains data. The data must be of type 'tuple' or 'list'.
-    Has a dimension."""
+    """Node class for K-D Trees. Inherits from BSTNode.
+
+    Attributes:
+        left (KDTNode): a reference to this node's left child.
+        right (KDTNode): a reference to this node's right child.
+        parent (KDTNode): a reference to this node's parent node.
+        data (ndarray): a coordinate in k-dimensional space.
+        axis (int): the 'dimension' of the node to make comparisons on.
+    """
+
     def __init__(self, data):
         """Construct a K-D Tree node containing 'data'. The left, right,
         and prev attributes are set in the constructor of BSTNode.
 
-        If 'data' is not a numpy array (of type np.ndarray) or a list,
-        raise a TypeError.
+        Raises:
+            TypeError: 'data' is not a a numpy array (of type np.ndarray).
         """
-        if type(data) not in [list, np.ndarray]:
-            raise ValueError("A numpy array or a list is required.")
-        BSTNode.__init__(self,data)
-        self.axis  = 0          # K-D dimension
+        if type(data) != np.ndarray:
+            raise TypeError("A numpy array or a list is required.")
+        BSTNode.__init__(self, data)
+        self.axis  = 0
     
     def __sub__(self, other):
         return euclidean_metric(self.data, other.data)
@@ -258,7 +162,8 @@ class KDT(BST):
 
     def __init__(self, data_set):
         """Set the k attribute and fill the tree with the points
-        in 'data_set'.
+        in 'data_set'. Raise a TypeError if the input is not a numpy
+        array.
         """
         BST.__init__(self)
         if not isinstance(data_set, np.ndarray):
@@ -268,8 +173,11 @@ class KDT(BST):
             self.insert(point)
     
     def find(self, data):
-        """Return the node containing 'data'. Raise a ValueError if
-        there is no such node in the tree or if the tree is empty.
+        """Return the node containing 'data'.
+
+        Raises:
+            ValueError: there is node containing 'data' in the tree,
+                or the tree is empty.
         """
         
         def _step(current, target):
@@ -279,20 +187,20 @@ class KDT(BST):
                 return current
             if current == other:            # Base case: target found!
                 return current
-            if target < current:            # Recursively search to the left
+            if target < current:            # Recursively search to the left.
                 return _step(current.left, target)
-            else:                           # Recursively search to the right
+            else:                           # Recursively search to the right.
                 return _step(current.right, target)
         
-        if self.root is None:               # Check for empty tree
+        if self.root is None:               # Check for empty tree.
             raise ValueError(str(data) + " is not in the tree.")
             
-        # Create a new node to use the KDTNode comparison operators
+        # Create a new node to use the KDTNode comparison operators.
         n = KDTNode(data)
         found = _step(self.root, n)
-        if found is None:                   # Report the data was not found
+        if found is None:                   # Report the data was not found.
             raise ValueError(str(data) + " is not in the tree.")
-        return found                        # Return the node containing 'data'
+        return found                        # Return the target node.
     
     def insert(self, data):
         """Insert a new node at the appropriate location. Return the new
@@ -460,8 +368,9 @@ if __name__ == '__main__':
     makeplots()
 '''
 
+import inspect
 
-def test(student_module, late=False):
+def test(student_module):
     """Test script. You must import the students file as a module.
     
      5 points for problem 1
@@ -473,7 +382,6 @@ def test(student_module, late=False):
     
     Parameters:
         student_module: the imported module for the student's file.
-        late (bool, opt): if True, half credit is awarded.
     
     Returns:
         score (int): the student's score, out of 60.
@@ -502,6 +410,10 @@ def test(student_module, late=False):
                 part = -1
         if part == p: return p,""
         else: return part,m
+
+    def getCode(func):
+        rawcode = inspect.getsource(func).splitlines()[len(func.__doc__.splitlines())+1:]
+        for line in rawcode: print line
 
     s = student_module
     score = 0
@@ -536,49 +448,93 @@ def test(student_module, late=False):
             points += 2
         
         score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
+    except BaseException as e: feedback += "\nError: " + e.message
     
     try:    # Problem 2: 5 points
         feedback += "\n\nProblem 2 (5 points):"
         points = 0
+
+        def neighbor(m, k):
+            """Do a single nearest neighbor search trial."""
+            data = np.random.random((m, k))
+            target = np.random.random(k)
+            tree = KDTree(data)
+            dist, index = tree.query(target)
+            point = tree.data[index]
+            spoint, sdist = s.exhaustive_search(data, target)
+            p1, f1 = numTest(point, spoint, "\n\tIncorrect nearest neighbor")
+            p2, f2 = numTest(dist, sdist, "\n\tIncorrect minimum distance")
+            return p1 + p2, f1 + f2
         
-        # under construction
+        p,f = neighbor(100, 10)
+        points += p; feedback += f
+        p,f = neighbor(10, 100)
+        points += p; feedback += f
 
-        data = np.random.random((10, 10))
-        target = np.random.random(10)
-        tree = KDTree(data)
-        dist, index = tree.query(target)
-        point = tree.data[index]
-        spoint, sdist = s.exhaustive_search(data, target)
-        p,f = numTest(point, spoint, "err")
-        p,f = numTest(dist, sdist, "err")
+        getCode(s.exhaustive_search)
+        print "\n(Check for cheating)"
+        p,f = grade(1, "\n\tNo cheating! You must use the naive method here.")
+        points += 1; feedback += f
+        points *= p
 
-        data = np.random.random((100, 10))
-
-        data = np.random.random((10, 100))
-
-        data = np.random.random((100, 100))
-
-        
-        
         score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
+    except BaseException as e: feedback += "\nError: " + e.message
         
-    try:    # Problem 3: X points
+    try:    # Problem 3: 10 points
         feedback += "\n\nProblem 3 (10 points):"
         points = 0
-        # Test problem 3 here
-        
+
+        # Test KDTNode.__init__ (can only hold np.ndarrays)
+        try:
+            s.KDTNode([10, "apple", 1.0])
+            feedback += "\n\t__init__ failed to report TypeError"
+        except:
+            points += 2
+
+        # Test KDTNode.__sub__ (euclidean distance)
+        x = np.random.random(10); y = np.random.random(10)
+        A =   KDTNode(x); B =   KDTNode(y)
+        C = s.KDTNode(x); D = s.KDTNode(y)
+        p,f = numTest(A-B, C-D, "\n\tKDTNode.__sub__ failed")
+        points += (p * 2); feedback += f
+
+        # Test KDTNode.__eq__
+        D = s.KDTNode(1.5*x)
+        if C != D: points += 1
+        else: feedback += "\n\tKDTNode.__eq__ failed on nonequal"
+        D = s.KDTNode(x)
+        if C == D: points += 1
+        else: feedback += "\n\tKDTNode.__eq__ failed on equal"
+
+        # Test KDTNode.__lt__ and KDTNode.__gt__
+        x = s.KDTNode(np.array([3,1,0,5], dtype=np.int)); x.axis = 0
+        y = s.KDTNode(np.array([1,2,4,3], dtype=np.int)); y.axis = 1
+        if x < y: points += 1
+        else: feedback += "\n\tKDTNode.__lt__ failed"
+        if y < x: points += 1
+        else: feedback += "\n\tKDTNode.__lt__ failed"
+        x.axis = 2; y.axis = 3
+        if x > y: points += 1
+        else: feedback += "\n\tKDTNode.__gt__ failed"
+        if y > x: points += 1
+        else: feedback += "\n\tKDTNode.__gt__ failed"
+
         score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
+    except BaseException as e: feedback += "\nError: " + e.message
         
-    try:    # Problem 4: X points
+    try:    # Problem 4: 15 points
         feedback += "\n\nProblem 4 (15 points):"
         points = 0
+        # Test KDT.insert
+        key = KDT()
+
+        # Test KDT.remove
+        try:
+            K
         # Test problem 4 here
         
         score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
+    except BaseException as e: feedback += "\nError: " + e.message
 
     try:    # Problem 5: 15 points
         feedback += "\n\nProblem 5 (15 points):"
@@ -586,7 +542,7 @@ def test(student_module, late=False):
         # Test problem 5 here
         
         score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
+    except BaseException as e: feedback += "\nError: " + e.message
 
     try:    # Problem 6: 10 points
         feedback += "\n\nProblem 6 (10 points):"
@@ -594,12 +550,8 @@ def test(student_module, late=False):
         # Test problem 6 here
         
         score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
+    except BaseException as e: feedback += "\nError: " + e.message
     
-    if late:    # Late submission penalty
-        feedback += "\n\nHalf credit for late submission."
-        feedback += "\nRaw score: " + str(score) + "/" + str(total)
-        score *= .5
     
     # Report final score.
     feedback += "\n\nTotal score: " + str(score) + "/" + str(total)
@@ -607,6 +559,12 @@ def test(student_module, late=False):
     feedback += " = " + str(percentage) + "%"
     if   percentage >=  98.0: feedback += "\n\nExcellent!"
     elif percentage >=  90.0: feedback += "\n\nGreat job!"
+
+    # Add comments (optionally).
+    print feedback
+    comments = str(raw_input("Comments: "))
+    if len(comments) > 0: feedback += '\n\n\nComments:\n\t' + comments
+
     return score, feedback
 
 # =============================== END OF FILE =============================== #
