@@ -68,7 +68,8 @@ The top image was rotated by $\pi/3$, producing the bottom image.}
 \begin{problem}
  Write a function that accepts an array of points and the angle of rotation (in radians). 
  Your function should return the rotated points. 
- Hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined in Problem \ref{prob:dilation}.
+ 
+ To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined in Problem \ref{prob:dilation}.
 \end{problem}
 
 \subsection*{Shears}
@@ -98,12 +99,13 @@ The horizontal shear in Figure \ref{fig:shear} corresponds to the matrix $\begin
 \end{pmatrix}
 $.
 
-
+\begin{comment}
 \begin{problem}[Optional]
 Write a function that accepts an array of points, a floating point argument that indicates the shearing amount, and an integer argument that indicates the direction of the shear (0 for horizontal, 1 for vertical). 
 Your function should return the sheared points. 
 Hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined in Problem \ref{prob:dilation}.
 \end{problem}
+\end{comment}
 
 \subsection*{Reflections}
 
@@ -133,11 +135,13 @@ As another example, the reflection in Figure \ref{fig:reflection} about the line
 2\sqrt{3} & -2
 \end{pmatrix}$.
 
+\begin{comment}
 \begin{problem}[Optional]
 Write a function that accepts an array of points and a 1-D array describing the axis of reflection (in the notation above, this argument is $(l_1, l_2)$. 
 Your function should return the reflected points. 
 Hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined in Problem \ref{prob:dilation}.
 \end{problem}
+\end{comment}
 
 \subsection*{Composition of linear transformations}
 Recall that composition of linear transformations corresponds to matrix multiplication. 
@@ -199,7 +203,7 @@ The location of $p_1$ at time $t$ can be computed as follows:
 \end{itemize}
 \end{itemize}
 \end{enumerate}
-\item Plot the trajectory of $p_1$ on the time interval $(0, 10)$ assuming $\omega=\pi$, $v=(1, 1)$, and $s=3$. 
+\item Plot the trajectory of $p_1$ on the time interval $(0, 10)$ assuming $\omega=\pi$, $v=(1, 1)$, and $s=2$. 
 Your graph should look something like Figure \ref{fig:trajectory}.
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{trajectory.pdf}
@@ -344,11 +348,11 @@ We have the following algorithm for the LU decomposition, assuming it exists.
 \State $m, n \gets \shape{A}$ 
 \State $U \gets \makecopy{A}$
 \State $L \gets \Id{n}$
-\For{$j=0 \ldots n-1$}
-    \For{$i=j+1 \ldots m-1$}
+\For{$i=1 \ldots n-1$}
+    \For{$j=0 \ldots i-1$}
     \State $L[i,j] \gets U[i, j]/U[j, j]$
     \State $U[i,j:] \gets U[i,j:] - L[i,j]U[j, j:]$
-	\EndFor
+    \EndFor
 \EndFor
 \State \pseudoli{return} $L, U$
 \EndProcedure
@@ -366,11 +370,11 @@ You may assume that the matrix has an LU decomposition.
 The LU decomposition can be performed in-place by storing $U$ on and above the main diagonal of the array and storing $L$ below it.
 The main diagonal of $L$ does not need to be stored since all its entries are ones.
 
-
+\begin{comment}
 \begin{problem}[Optional]
 Modify your solution to Problem \ref{prob:LU_copy} so that the function computes the LU decomposition in place.
 \end{problem}
-
+\end{comment}
 
 
 \subsection*{Applications of the LU decomposition}
@@ -388,7 +392,7 @@ This technique is significantly faster than storing $A^{-1}$ and then computing 
 \begin{problem}\label{prob:solve}
 In this problem you will solve the system $Ax = b$ for fixed $A$ and many different values of $b$. 
 You will do this in two ways. 
-For a random $1000 \times 1000$ array $A$ and a random $1000 \times 500$ array $B$ do the following.
+For a random $1000 \times 1000$ array $A$ and a random $1000 \times 500$ array $B$ do the following:
 \begin{enumerate}
 \item Time \li{la.lu_factor(A)}.
 \item Time \li{la.inv(A)}.
@@ -397,7 +401,6 @@ For a random $1000 \times 1000$ array $A$ and a random $1000 \times 500$ array $
 \item What can you conclude about the more efficient way to solve linear systems?
 \end{enumerate}
 \end{problem}
-
 
 Our technique for solving linear equations can also be used to invert matrices. 
 We can compute $A^{-1}$ by solving $LUx_i = P_i$ for every $P_i$ that is a column of $P$. 
@@ -416,7 +419,7 @@ So if $U$ has diagonal entries $u_{ii}$ for $i=1, \ldots, n$, then
 where $S$ is the number of row-swaps.
 
 
-
+\begin{comment}
 %\begin{problem}
 %\label{prob:lusolve}
 %Write a function that takes the LU decomposition computed by the second function you made in Problem \ref{prob:LU} and another array representing the right hand side of a linear system and modifies the second array in place so that it represents the solution to the linear system.
@@ -430,6 +433,7 @@ Write a function that finds the determinant of a matrix using \li{la.lu_factor()
 Read the documentation to learn about the output of \li{la.lu_factor()}.
 Hint: If the $i^{th}$ entry of the output \li{piv} does not equal $i$, this means that a row swap occurred.
 \end{problem}
+
 
 \subsection*{The Cholesky decomposition (Optional)}
 The Cholesky decomposition requires half the calculations and memory of the LU decomposition. 
@@ -518,3 +522,4 @@ As with the LU decomposition, SciPy has the methods \li{la.cho_factor} and \li{l
 \begin{problem}[Optional]
 Repeat problem \ref{prob:solve}, this time using the methods \li{la.cho_factor} and \li{la.cho_solve}.
 \end{problem} 
+\end{comment}
