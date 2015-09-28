@@ -103,7 +103,7 @@ $.
 \begin{problem}[Optional]
 Write a function that accepts an array of points, a floating point argument that indicates the shearing amount, and an integer argument that indicates the direction of the shear (0 for horizontal, 1 for vertical). 
 Your function should return the sheared points. 
-Hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined in Problem \ref{prob:dilation}.
+Hint: To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined in Problem \ref{prob:dilation}.
 \end{problem}
 \end{comment}
 
@@ -139,7 +139,7 @@ As another example, the reflection in Figure \ref{fig:reflection} about the line
 \begin{problem}[Optional]
 Write a function that accepts an array of points and a 1-D array describing the axis of reflection (in the notation above, this argument is $(l_1, l_2)$. 
 Your function should return the reflected points. 
-Hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined in Problem \ref{prob:dilation}.
+Hint: To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined in Problem \ref{prob:dilation}.
 \end{problem}
 \end{comment}
 
@@ -174,7 +174,7 @@ Write a function that accepts an array of points and an array indicating how muc
 The function should return the translated points. 
 Hint: You can construct a $2 \times 1$ array using the syntax \li{np.array([[a], [b]])}. 
 This may be more convenient for broadcasting. 
-Another hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined in Problem \ref{prob:dilation}.
+Another hint: To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined in Problem \ref{prob:dilation}.
 \end{problem}
 
 \subsection*{Affine transformations}
@@ -398,7 +398,7 @@ For a random $1000 \times 1000$ array $A$ and a random $1000 \times 500$ array $
 \item Time \li{la.inv(A)}.
 \item Store the output of \li{la.lu_factor()}. Time \li{la.lu_solve()} on this stored output and $B$.
 \item Store the inverse of $A$. Time how long it takes to multiply $A^{-1}$ by $B$.
-\item What can you conclude about the more efficient way to solve linear systems?
+Print each of these times. What can you conclude about the more efficient way to solve linear systems?
 \end{enumerate}
 \end{problem}
 
