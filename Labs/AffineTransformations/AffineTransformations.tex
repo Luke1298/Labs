@@ -21,7 +21,7 @@ The top image was stretched by a factor of $1.5$ in all directions, producing th
 Write a function that accepts an array of points and an array giving the stretching factors in each direction. 
 Your function should return the dilated points. 
 
-Included with this lab is a dataset of points saved as a NumPy array. To import this array, use \li{np.load("pi.npy")}. This function will return an array of size $(2, 368)$. This array represents $368$ points in $\mathbb{R}^2$ stored as columns.
+Included with this lab is a dataset of points saved as a numpy array. To import this array, use \li{np.load("pi.npy")}. This function will return an array of size $(2, 368)$. This array represents $368$ points in $\mathbb{R}^2$ stored as columns.
 
 To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined below.
 \begin{lstlisting}
@@ -29,12 +29,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 def plot_transform(original, new):
-    '''Inputs:
-    original -- a (2,n) numpy array containing x-coordinates on the first 
-                row and y-coordinates on the second row.
-    new -- a (2,n) numpy array containing x-coordinates on the first row 
-           and y-coordinates on the second row.
-    '''
+    """Display a plot of points before and after a transform.
+    
+    Inputs:
+        original (array) - Array of size (2,n) containing points in R2 
+            as columns.
+        new (array) - Array of size (2,n) containing points in R2 
+            as columns.
+    """
     v = [-5,5,-5,5]
     plt.subplot(1, 2, 1)
     plt.title('Before')
@@ -172,17 +174,16 @@ Therefore, they cannot be represented as matrix multiplication.
 \begin{problem}
 Write a function that accepts an array of points and an array indicating how much to shift them in each direction. 
 The function should return the translated points. 
-Hint: You can construct a $2 \times 1$ array using the syntax \li{np.array([[a], [b]])}. 
+Hint: You can construct a $2 \times 1$ array using the syntax \li{np.vstack([a,b])}.
 This may be more convenient for broadcasting. 
 Another hint: To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined in Problem \ref{prob:dilation}.
 \end{problem}
 
 \subsection*{Affine transformations}
-Translations, together, with linear transformations, make up the broader class of transformations called ``affine transformations." 
+Translations, together with linear transformations, make up the broader class of transformations called ``affine transformations." 
 These are transformations of the form $T: \mathbb{R}^2 \to \mathbb{R}^2$, $T(X) = AX + b$ where $A$ is an $n\times n$ matrix and $b \in \mathbb{R}^n$. 
 Affine transformations include all compositions of scalings, rotations, dilations, reflections, and translations. 
 For example, if $S$ represents a shear and $R$ a rotation, and if $\mathbf{b}$ is a vector in $\mathbb{R}^2$, then $T(\mathbf{x}) = RS\mathbf{x} + \mathbf{b}$ first shears $\mathbf{x}$, then rotates it, and finally translates it by $\mathbf{b}$. 
-
 
 \begin{problem}
 Imagine a particle $p_1$ rotating around a second particle $p_2$ which is moving through $\mathbb{R}^2$ in a straight line. 
