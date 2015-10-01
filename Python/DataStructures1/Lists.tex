@@ -511,7 +511,7 @@ Also override the \li{insert} method with the following:
 
 \begin{lstlisting}
 def insert(self, *args):
-	raise ValueError("insert() has been disabled for this class.")
+    raise NotImplementedError("insert() has been disabled for this class.")
 \end{lstlisting}
 
 This effectively disables \li{insert} for the \li{SortedLinkedList} class and prevents the user from accidentally inserting a node in a location that would disrupt the ordering.
