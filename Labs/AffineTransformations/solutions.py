@@ -162,3 +162,176 @@ def time_LU():
     
     # What can you conclude about the more efficient way to solve linear systems?
     print "For matrices of this size, LU decomposition is measureably faster."
+    
+    
+# ======= TEST DRIVER ===========
+# Test script
+def test(student_module, late=False):
+    """Test script. You must import the students file as a module.
+    
+    10 points for problem 1
+    10 points for problem 2
+    10 points for problem 3
+    10 points for problem 4
+    10 points for problem 5
+    10 points for problem 6
+    10 points for problem 7
+    
+    Parameters:
+        student_module: the imported module for the student's file.
+        late (bool, opt): if True, half credit is awarded.
+    
+    Returns:
+        score (int): the student's score, out of 55.
+        feedback (str): a printout of results for the student.
+    """
+
+    def strTest(x,y,m):
+        """Test to see if x and y have the same string representation. If
+        correct, award a points and return no message. If incorrect, return
+        0 and return 'm' as feedback.
+        """
+        if str(x) == str(y): return 1, ""
+        else:
+            m += "\n\t\tCorrect response: " + str(x)
+            m += "\n\t\tStudent response: " + str(y)
+            return 0, m
+
+    def grade(p,m):
+        """Manually grade a problem worth 'p' points with error message 'm'."""
+        part = -1
+        while part > p or part < 0:
+            part = int(input("\nScore out of " + str(p) + ": "))
+        if part == p: return p,""
+        else: return part,m
+
+    s = student_module
+    score = 0
+    total = 70
+    feedback = s.__doc__
+    PI = np.load('pi.npy')
+    try:    # Problem 1: 10 points
+        feedback += "\n\nProblem 1 (10 points):"
+        points = 0
+        
+        print "x_facter = 1, y_factor = 1.5"
+        plot_transform(PI, s.dilation2D(PI, 1, 1.5))
+        p,f = grade(3, "Failed when scaling x")
+        points += p; feedback += f
+        
+        print "x_facter = 1.5, y_factor = 1"
+        plot_transform(PI, s.dilation2D(PI, 1.5, 1))
+        p,f = grade(3, "Failed when scaling y")
+        points += p; feedback += f
+        
+        print "x_factor = 0.5, y_factor = 0.5"
+        plot_transform(PI, s.dilation2D(PI, .5, .5))
+        p,f = grade(4, "Failed when scaling x and y")
+        points += p; feedback += f
+        
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message
+    
+    try:    # Problem 2: 10 points
+        feedback += "\n\nProblem 2 (10 points):"
+        points = 0
+        
+        print "theta = pi/4"
+        plot_transform(PI, s.rotate2D(PI, np.pi/4))
+        p,f = grade(5, "Failed when rotating pi/4")
+        points += p; feedback += f
+        
+        print "theta = 3pi/4"
+        plot_transform(PI, s.rotate2D(PI, 3*np.pi/4))
+        p,f = grade(5, "Failed when rotating 3pi/4")
+        points += p; feedback += f
+        
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message
+    
+    try:    # Problem 3: 10 points
+        feedback += "\n\nProblem 3 (10 points):"
+        points = 0
+        
+        print "b = (1,0)"
+        plot_transform(PI, s.translate2D(PI, np.vstack([1,0])))
+        p,f = grade(3, "Failed when translating (1,0)")
+        points += p; feedback += f
+        
+        print "b = (0,1)"
+        plot_transform(PI, s.translate2D(PI, np.vstack([0,1])))
+        p,f = grade(3, "Failed when translating (0,1)")
+        points += p; feedback += f
+        
+        print "b = (1,1)"
+        plot_transform(PI, s.translate2D(PI, np.vstack([1,1])))
+        p,f = grade(4, "Failed when translating (1,1)")
+        points += p; feedback += f
+        
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message
+    
+    
+    try:    # Problem 4: 10 points
+        feedback += "\n\nProblem 5 (10 points):"
+        points = 0
+        
+        s.rotatingParticle((0,10), np.pi, (1,1), 2)
+        
+        p,f = grade(10, "Incorrect answer")
+        points += p; feedback += f
+        
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message    
+    
+    try:    # Problem 5: 10 points
+        feedback += "\n\nProblem 5 (10 points):"
+        points = 0
+        
+        A = np.array([[1,2,3],[4,5,6],[7,8,9]])
+        print "Correct Response"
+        print REF(A)
+        
+        print "Student Response"
+        print s.REF(A)
+        
+        p,f = grade(10, "Incorrect answer")
+        points += p; feedback += f
+        
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message
+
+    
+    try:    # Problem 6: 10 points
+        feedback += "\n\nProblem 6 (10 points):"
+        points = 10 # if you decide to change this, this should be changed to 0
+               
+        # Not sure what you want to do here.
+
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message
+
+    try:    # Problem 7: 10 points
+        feedback += "\n\nProblem 7 (10 points):"
+        points = 0
+        
+        s.time_LU()
+
+        p,f = grade(10, "Incorrect output") 
+        points += p; feedback += f
+
+        score += points; feedback += "\nScore += " + str(points)
+    except Exception as e: feedback += "\nError: " + e.message
+
+    if late:    # Late submission penalty
+        feedback += "\n\nHalf credit for late submission."
+        feedback += "\nRaw score: " + str(score) + "/" + str(total)
+        score *= .5
+    
+    # Report final score.
+    feedback += "\n\nTotal score: " + str(score) + "/" + str(total)
+    percentage = (100.0 * score) / total
+    feedback += " = " + str(percentage) + "%"
+    if   percentage >=  98.0: feedback += "\n\nExcellent!"
+    elif percentage >=  90.0: feedback += "\n\nGreat job!"
+    return score, feedback
