@@ -112,7 +112,7 @@ def REF(A):
     modify any entries that you know will be zero before and after the
     operation."""
     
-    A1 = np.copy(A)
+    A1 = np.array(np.copy(A), dtype=float)
     
     step = 1
     for j in xrange(1,len(A1[0])):
@@ -124,7 +124,7 @@ def REF(A):
 # Problem 6
 def LU(A):
     """Returns the LU decomposition of a square matrix."""
-    U = np.copy(A)
+    U = np.array(np.copy(A), dtype=float)
     L = np.identity(np.sqrt(A.size))
     
     for i in xrange(1,A.shape[0]):
@@ -295,7 +295,17 @@ def test(student_module, late=False):
         print "Student Response"
         print s.REF(A)
         
-        p,f = grade(10, "Incorrect answer")
+        p,f = grade(5, "Incorrect answer")
+        points += p; feedback += f
+        
+        A = np.array([[2, 7, 9], [9, 9, 4],[7, 5, 5]])
+        print "Correct Response"
+        print REF(A)
+        
+        print "Student Response"
+        print s.REF(A)
+        
+        p,f = grade(5, "Incorrect answer")
         points += p; feedback += f
         
         score += points; feedback += "\nScore += " + str(points)
@@ -304,10 +314,22 @@ def test(student_module, late=False):
     
     try:    # Problem 6: 10 points
         feedback += "\n\nProblem 6 (10 points):"
-        points = 10 # if you decide to change this, this should be changed to 0
-               
-        # Not sure what you want to do here.
-
+        points = 0
+        
+        A = np.array([[2, 8, 9], [1, 2, 9], [2, 7, 5]])
+        L,U = s.LU(A)
+        print "\nLower Triangular:"
+        print L
+        p,f = grade(3, "L was not lower triangular") 
+        points += p; feedback += f
+        
+        print "\nUpper Triangular:"
+        print U
+        p,f = grade(3, "U was not upper triangular")
+        points += p; feedback += f
+        
+        points += 4*np.allclose(L.dot(U), A)
+        
         score += points; feedback += "\nScore += " + str(points)
     except Exception as e: feedback += "\nError: " + e.message
 
