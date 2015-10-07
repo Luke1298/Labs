@@ -1,5 +1,5 @@
 for i in xrange(8):
-	plt.plot(x, i*y, colours[i]+ls[i])
+	plt.plot(x, i*y, colors[i]+ls[i])
 	
 plt.title("My Plot of Varying Linestyles", fontsize = 20, color = "gold")
 plt.xlabel("x-axis", fontsize = 10, color = "darkcyan") 
