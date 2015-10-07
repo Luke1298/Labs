@@ -1,5 +1,3 @@
-.. image:: https://travis-ci.org/byuimpact/numerical_computing.png?branch=develop
-   :target: https://travis-ci.org/byuimpact/numerical_computing
 
 This project contains the labs for the Foundations of Applied Mathematics curriculum and
 are being developed as part of BYU's Applied and Computational Mathematics degree program.
