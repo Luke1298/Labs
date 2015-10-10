@@ -1,48 +1,66 @@
-# solutions.py
+# spec.py
 """Volume I Lab 1: Getting Started
-Written by Tanner Christensen, Summer 2015
+<Name>
+<Class>
+<Date>
 """
 
-
-# Problem 1: Write and run a "Hello World" script.
+# Problem 1: Modify this file so that it prints out "Hello, world!"
+#  when it is run from the terminal or from a Python interpreter.
 
 
 # Problem 2: Implement this function.
 def sphere_volume(r):
-    """Return the volume of the sphere of radius 'r'."""
+    """Return the volume of the sphere of radius 'r'.
+    Use 3.14159 for pi in your computation.
+    """
     pass
 
 
 # Problem 3: Implement the first_half() and reverse() functions.
 def first_half(my_string):
-    """Return the first half of the string 'my_string'.
+    """Return the first half of the string 'my_string'. Exclude the
+    middle character if there are an odd number of characters.
 
-    Example:
+    Examples:
         >>> first_half("python")
         'pyt'
+        >>> first_half("ipython")
+        'ipy'
     """
     pass
     
 def reverse(my_string):
     """Return the reverse of the string 'my_string'.
     
-    Example:
+    Examples:
         >>> reverse("python")
         'nohtyp'
+        >>> reverse("ipython")
+        'nohtypi'
     """
     pass
 
     
 # Problem 4: Perform list operations
-# For the grader, do not change the name of 'my_list'.
-my_list =  ["ant", "baboon", "cat", "dog"] 
+def list_ops(my_list):
+    """Perform the following operations on the list 'my_list':
+        - Append "elephant".
+        - Remove "ant"
+        - Remove the entry at index 1.
+        - Replace the entry at index 2 with "eagle".
+        - Append "fox".
 
-# Put your code here
+    Examples:
+        >>> list_ops(["ant", "bear", "cat", "dog"])
+        ['bear', 'dog', 'eagle', 'fox']
+    """
+    pass
 
     
 # Problem 5: Implement this function.
 def pig_latin(word):
-    """Translate the string 'word' into Pig Latin
+    """Translate the string 'word' into Pig Latin.
     
     Examples:
         >>> pig_latin("apple")
@@ -55,7 +73,7 @@ def pig_latin(word):
         
 # Problem 6: Implement this function.
 def int_to_string(my_list):
-    """Use a dictionary to translate a list of numbers 1-26 to corresponding
+    """Translate 'my_list', a list of numbers 1-26, to corresponding
     lowercase letters of the alphabet. 1 -> a, 2 -> b, 3 -> c, and so on.
     
     Example:
@@ -71,12 +89,9 @@ def squares(n):
 
     Example:
         >>> for i in squares(10):
-        ...     print(i)
+        ...     print(i),
         ... 
-        0
-        1
-        4
-        9
+        0 1 4 9
     """
     pass
 
@@ -95,9 +110,8 @@ def stringify(my_list):
 
 # Problem 9: Implement this function and use it to approximate ln(2).
 def alt_harmonic(n):
-    """Return the partial sum of the first n terms of the alternating
-    harmonic series. Use this function to approximae ln(2).
+    """Use a list comprehension to calculate the sum of the
+    first n terms of the alternating harmonic series.
     """
     pass
 
-ln2 = None # put your approximation for ln(2) here
