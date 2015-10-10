@@ -36,7 +36,7 @@ and $\p_0 = 0$.
 
 Let $Q$ be the matrix with columns $\{\q_i\}_{i=1}^n$. 
 Let $R$ be the upper triangular matrix with entries $r_{jk}$ where $r_{kk} = \|\x_k-\p_{k-1}\|$ and $r_{j k} = \langle \q_j, \x_k\rangle$ when $j < k$. 
-Then $QR=A$ and $R$ is nonsingular (see [ref:textbook] for a proof).
+Then $QR=A$ and $R$ is nonsingular (see Chapter 3 of Volume 1 for a proof).
 Thus, if $A$ is square, the matrices $Q$ and $R$ are its QR decomposition.
 
 
@@ -81,7 +81,7 @@ The entire modified Gram-Schmidt algorithm is described in Algorithm \ref{Alg:gr
 
 
 %TODO: put this section after the next? What algorithm does SciPy use?
-\section*{QR decomposition in SciPy}
+\section*{QR Decomposition in SciPy}
 The linear algebra library in SciPy calculates the QR decomposition using a software package called LAPACK (Linear Algebra PACKage), which is incredibly efficient.
 Here is an example of using SciPy to compute the QR decomposition of a matrix.
 
@@ -126,11 +126,11 @@ Use the QR decomposition of $A$ to perform this calculation.
 Hint: What is the determinant of an orthonormal matrix?
 \end{problem}
 
-\section*{Householder triangularization}
+\section*{Householder Triangularization}
 Another way to compute the QR decomposition of a matrix is with a series of orthonormal transformations. 
 Like the Modified Gram-Schmidt algorithm, orthonormal transformations are numerically stable, meaning that they are less susceptible to rounding errors.
 
-\subsection*{Householder transformations}
+\subsection*{Householder Transformations}
 The \emph{hyperplane} in $\mathbb{R}^n$ with normal vector $\mathbf{v}$ is the set $\{ \x \in \mathbb{R}^n \mid \langle \x, \mathbf{v} \rangle = 0 \}$. 
 Equivalently, the hyperplane defined by $\mathbf{v}$ is just the orthogonal complement $\mathbf{v}^{\perp}$. 
 See Figure \ref{fig:Householder_reflector}.
@@ -166,7 +166,7 @@ The Householder transformation $H_{\mathbf{v}}$ of $\mathbf{x}$ is just the refl
 \label{fig:Householder_reflector}
 \end{figure}
 
-\subsection*{Householder triangularization}
+\subsection*{Householder Triangularization}
 The QR decomposition of an $m \times n$ matrix $A$ can also be computed with Householder transformations via the Householder triangularization.
 Whereas Gram-Schmidt makes $A$ \emph{orthonormal} using a series of transformations stored in an \emph{upper triangular} matrix, Householder triangularization makes $A$ \emph{triangular} by a series of \emph{orthonormal} transformations.
 More precisely, the Householder triangularization finds an $m \times m$ orthogonal matrix $Q$ and and $m \times n$ upper triangular matrix $R$ such that $QA = R$. 
@@ -416,7 +416,7 @@ This algorithm returns orthonormal $Q$ and upper triangular $R$ satisfying $A = 
 \label{prob:HouseholderQR}
 Write a function that accepts as input a $m \times n$ matrix of rank $n$ and computes its QR decomposition, returning the matrices $Q$ and $R$. 
 Your function should use Algorithm \ref{Alg:Householder}. 
-Hint: Read about the function \li{np.outer()}.
+Hint: Read about the function \li{np.outer()}.  Another Hint: When defining $\u$, reshape the array to an $(m-k) \times 1$ array.
 \end{problem}
 
 \begin{comment}
@@ -481,11 +481,11 @@ Householder QR factorization is more numerically stable than Gram-Schmidt or eve
 However, MGS is still useful for some types of iterative methods because it finds the orthonormal basis one vector at a time instead of all at once (for an example see Lab \ref{lab:EigSolve}).
 \end{comment}
 
-\section*{Upper Hessenberg form}
+\section*{Upper Hessenberg Form}
 An upper Hessenberg matrix is a square matrix with zeros below the first subdiagonal.
 Every  $n \times n$ matrix $A$ can be written $A = Q\trp HQ$ where $Q$ is orthonormal and $H$ is an upper Hessenberg matrix, called the Hessenberg form of $A$.
 
-A fast algorithm for computing the QR decomposition of a Hessenberg matrix will be taught in Lab \ref{lab:givens}. This algorithm in turn leads to a fast algorithm for finding eigenvalues of a matrix, which will be discussed in Lab \ref{lab:EigSolve}.
+A fast algorithm for computing the QR decomposition of a Hessenberg matrix will be taught in Lab \ref{lab:givens}. This algorithm in turn leads to a fast algorithm for finding eigenvalues of a matrix.
 
 For now, we will outline an algorithm for computing the upper Hessenberg form of any matrix. 
 Like Householder triangularization, this algorithm uses Householder transformations.
@@ -576,11 +576,10 @@ Thus, the Hessenberg form of a symmetric matrix is especially useful, since as w
 \begin{problem}
 \label{prob:hessenberg}
 Write a function that accepts as input a nonsingular square matrix $A$ and computes its Hessenberg form, returning orthogonal $Q$ and upper Hessenberg $H$ satisfying $A = Q\trp HQ$. 
-Your function should use Algorithm \ref{Alg:Hessenberg}. 
-What happens when you compute the Hessenberg factorization of a symmetric matrix?
+Your function should use Algorithm \ref{Alg:Hessenberg}. Hint: When defining $\u$, reshape the array to an $(m-k-1) \times 1$ array.  What happens when you compute the Hessenberg factorization of a symmetric matrix?
 \end{problem}
 
-\section*{*Givens rotations}
+\section*{*Givens Rotations}
 
 In the previous section we found the QR decomposition of a matrix using Householder transformations, applying a series of these transformations to a matrix until it was in upper triangular form.
 We can use the same strategy to compute the QR decomposition with rotations instead of reflections.
@@ -651,14 +650,14 @@ However, since Givens rotations can be parallelized, they can be much faster tha
 
 
 
-\subsection*{Givens triangularization}
+\subsection*{Givens Triangularization}
 We can apply Givens rotations to a matrix until it is in upper triangular form, producing a factorization $A = QR$ where $Q$ is a composition of Givens rotations and $R$ is upper triangular.
 This is exactly the QR decomposition of $A$.
 
 The idea is to iterate through the subdiagonal entries of $A$ in the order depicted by Figure \ref{fig:givens}. 
 We zero out the $ij^{th}$ entry with a rotation in the plane spanned by $e_{i-1}$ and $e_i$. 
 This rotation is just multiplication by the Givens matrix $G(i-1,i,\theta)$, which can be computed as in the example at the start of the previous section. 
-We just set $a=a_{i-1,j}$ and $b=a_{i,j}$, so $c = \cos \theta = a/\sqrt{a^2+b^2}$ and $s = -b/\sqrt{a^2+b^2}$.
+We just set $a=a_{i-1,j}$ and $b=a_{i,j}$, so $c = \cos \theta = a/\sqrt{a^2+b^2}$ and $s = \sin \theta = -b/\sqrt{a^2+b^2}$.
 
 \begin{figure}
 \begin{center}
@@ -752,7 +751,7 @@ Assuming that at the $ij^{th}$ stage of the algorithm, $a_{ij}$ is nonzero, Algo
 \State $Q \gets \Id{m}$
 \State $G \gets \allocate{2}{2}$
 \For{$j=0\ldots n-1$}
-    \For{$i=m\ldots j+1$}
+    \For{$i=m-1\ldots j+1$}
       \State $a, b \gets R[i-1,j], R[i,j]$
       \State $G \gets [[a, b],[-b,a]]/\sqrt{a^2+b^2}$
       \State $R[i-1:i+1, j:] \gets GR[i-1:i+1, j:]$
@@ -822,6 +821,7 @@ These representations of $Q$ and $R$ can be used in various ways to perform matr
 
 \begin{problem}
 \label{prob:Givens}
+(Optional)
 Write a function that computes the Givens triangularization of a matrix, using Algorithm \ref{Alg:givens}. 
 Assume that at the $ij^{th}$ stage of the algorithm, $a_{ij}$ will be nonzero.
 \end{problem}
@@ -829,10 +829,11 @@ Assume that at the $ij^{th}$ stage of the algorithm, $a_{ij}$ will be nonzero.
 
 \begin{problem}
 \label{prob:givens_hessenberg}
+(Optional)
 Modify your solution to Problem \ref{prob:Givens} to compute the Givens triangularization of an upper Hessenberg matrix, making the following changes:
 \begin{enumerate}
 \item Iterate through the first subdiagonal from left to right. (These are the only entries that need to be zeroed out.)
-\item Line 10 of Algorithm \ref{Alg:givens} updates $Q$ with the current Givens rotation $G$. Decrease the number of entries of $Q$ that are modified in this line. Do this by replacing $Q[i-1:i+1, :]$ with $Q[i-1:i+1, :k_i]$ where $k_i$ is some appropriately chosen number (dependent on $i$) such that $Q[i-1:i+1, k_i:]=0$.
+\item Line 11 of Algorithm \ref{Alg:givens} updates $Q$ with the current Givens rotation $G$. Decrease the number of entries of $Q$ that are modified in this line. Do this by replacing $Q[i-1:i+1, :]$ with $Q[i-1:i+1, :k_i]$ where $k_i$ is some appropriately chosen number (dependent on $i$) such that $Q[i-1:i+1, k_i:]=0$.
 \end{enumerate}
 Hint: Here is how to generate a random upper Hessenberg matrix on which to test your function.
 The idea is to generate a random matrix and then zero out all entries below the first subdiagonal.
