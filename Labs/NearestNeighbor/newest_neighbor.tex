@@ -1,7 +1,6 @@
 \lab{Nearest Neighbor Search}{Nearest Neighbor Search}
 \label{lab:NNS}
 
-% TODO: update this
 \objective{Nearest neighbor search is an optimization problem that arises in applications such as computer vision, pattern recognition, internet marketing, and data compression. In this lab we implement a K-D tree to solve the problem efficiently, then learn use scipy's K-D tree in sklearn to implement a handwriting recognition algorithm.}
 
 \section*{The Nearest Neighbor Search Problem}
@@ -217,7 +216,7 @@ This way if each existing node in the tree has the correct \li{axis}, the correc
 Finish implementing the \li{KDT} class.
 \begin{enumerate}
 \item Override the \li{insert} method.
-To insert a new node, find the correct insertion point by recursively descending as in the \li{find} method (ee figure \ref{fig:k-insert} for an example).
+To insert a new node, find the correct insertion point by recursively descending through the tree as in the \li{find} method (see figure \ref{fig:k-insert} for an example).
 
 The \li{axis} attribute of the new node will be one more than that axis of the parent node.
 If the last dimension of the data has been reached, start over at the first dimension.
@@ -401,7 +400,7 @@ The corresponding label indicates which number was written.
 Classify the testpoints with \li{n_neighbors} as 1, 4 or 10, and with \li{weights} as \li{'uniform'} or \li{'distance'}.
 For each trial print a report indicating how your classifier performs in terms of percentage of misclassifications.
 Which combination gives the most correct classifications?
-(You may wish to streamline this process by writting a function that takes in \li{n_neighbors} and \li{weights} as arguments calls the neighbors functions appropriately)
+(Hint: define an inner function that takes in \li{n_neighbors} and \li{weights} as arguments calls the neighbors functions appropriately)
 
 A similar classification process is used by the United States Postal Service to automatically determine the zip code to send a letter to.
 

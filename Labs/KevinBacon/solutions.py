@@ -1,5 +1,5 @@
 # solutions.py
-"""Volume II Lab 8: Breadth-First Search (Kevin Bacon)
+"""Volume II Lab 7: Breadth-First Search (Kevin Bacon)
 Solutions file. Written by Shane A. McQuarrie.
 """
 

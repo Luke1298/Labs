@@ -1,32 +1,31 @@
 \lab{Breadth-First Search and the Kevin Bacon Problem}{Breadth-First Search and the Kevin Bacon Problem}
 \label{lab:SixDegreesKevinBacon}
 
-\objective{Learn to store graphs as adjacency dictionaries, implement a breadth-first search, learn to use NetworkX, and use the parlor game ``the Six Degrees of Kevin Bacon'' as an application to graph theory.}
-
-\section*{Introduction}
-
-Graph theory has many practical applications.
-For example, graphs may represent a social network, a communication network, or the internet.
-Being able to construct, analyze, and search graphs yields critical insights into the system that the graph represents.
+\objective{Graph theory has many practical applications. A graph may represent a complex system or network, and analyzing the graph often reveals critical information about the network. In this lab we learn to store graphs as adjacency dictionaries, implement a breadth-first search to identify the shortest path between two nodes, then use the NetworkX package to solve the so-called ``Kevin Bacon problem.''}
 
 \section*{Graphs in Python}
 
-Graphs can be stored using various kinds of data structures.
-In previous labs, we stored trees as linked lists.
+Computers can represent mathematical graphs using various kinds of data structures.
+In previous labs, we stored graphs as trees and linked lists.
 For non-tree graphs, perhaps the most common data structure is an adjacency matrix, where each row of the matrix corresponds to a node in the graph and the entries of the row indicate which other nodes the current node is connected to.
-For a full treatment fo adjacency matrices, see chapter 2 of the Volume II text.
+For more on adjacency matrices, see chapter 2 of the Volume II text.
 
 Another comon graph data structure is an \emph{adjacency dictionary}, a Python dictionary with a key for each node in the graph.
 The dictionary values are lists containing the nodes that are connected to the key.
 For example, the following is an adjacency dictionary for the graph in Figure \ref{fig:simple_graph}:
 
 \begin{lstlisting}
+# Python dictionaries are used to store adjacency dictionaries.
 >>> adjacency_dictionary = {'A':['B', 'C', 'D', 'E'], 'B':['A', 'C'],
 'C':['B', 'A', 'D'], 'D':['A', 'C'], 'E':['A']}
 
 # The nodes are stored as the dictionary keys.
 >>> print(adjacency_dictionary.keys())
 ['A', 'C', 'B', 'E', 'D']
+
+# The values are the nodes that the key is connected to.
+>>> print(adjacency_dictionary[A])
+>>> ['B', 'C', 'D', 'E']            # A in connected to B, C, D, and E.
 \end{lstlisting}
 
 \begin{figure}
@@ -206,6 +205,7 @@ If the starting node is not in the adjacency dictionary, raise a \li{ValueError}
 \end{problem}
 
 % Problem 3: general DFS (Optional)
+% TODO: move this to the end as an additional exercise.
 \begin{problem}
 (Optional) Create a new method called \li{DFS} in the \li{Graph} class
 that mimics the \li{traverse} method, but uses a DFS instead of a BFS.

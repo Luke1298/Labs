@@ -10,11 +10,8 @@ class BSTNode(object):
         self.prev = None
         self.left = None
         self.right = None
-        
-    def __str__(self):
-        return str(self.data)
 
-class BST(object): 
+class BST(object):
     def __init__(self):
         self.root = None
     
