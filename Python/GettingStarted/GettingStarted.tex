@@ -206,8 +206,8 @@ True
 
 \subsection*{Variables}
 Variables are used to temporarily store data.
-A \emph{single} equals sign assigns a value (on the right) to a variable name (on the left).
-A \emph{double} equals sign is a comparison operator, as in the previous code block.
+A \emph{single} equals sign assigns one or more values (on the right) to one or more variable names (on the left).
+%A \emph{double} equals sign is a comparison operator, as in the previous code block.
 
 Unlike many programming languages, Python does not require a variable's data type to be specified upon initialization.
 
@@ -216,6 +216,9 @@ Unlike many programming languages, Python does not require a variable's data typ
 >>> y = 2 * 6                       # Initialize y with the integer 2*6 = 12.
 >>> x == y                          # Compare the two variable values.
 True
+>>> x, y = 2, 4                     # Give x and y new values in a single line.
+>>> x == y
+False
 \end{lstlisting}
 \begin{comment} % THIS SHOULD BE A NOTE IN DATA STRUCTURES 1.
 # The 'is' operator checks for object equality. For two variables a and b,
@@ -249,7 +252,7 @@ Most text editors will allow you to set the indentation type to spaces so you ca
 
 Functions are defined with \emph{parameters} and called with \emph{arguments}.
 Below, \li{width} and \li{height} are parameters for the function \li{area}.
-The values \li{2} and \li{5} are the arguments that we pass when calling the function.
+The values \li{2} and \li{5} are the arguments that are passed when calling the function.
 
 In practice, the terms \emph{parameter} and \emph{argument} are often used interchangeably.
 
@@ -267,7 +270,7 @@ That is, if it is not specified in the function call, the variable \li{c} will c
 
 \begin{lstlisting}
 >>> def printer(a, b, c=0):
-...    print a, b, c
+...    print(a, b, c)
 ...
 >>> printer(1, 2, 3)                # Specify each parameter.
 1 2 3
@@ -282,13 +285,13 @@ Carefully examine the following code block demonstrating how positional and name
 \begin{lstlisting}
 # Try defining printer with a named argument before a positional argument.
 >>> def printer(c=0, a, b):
-...    print a, b, c
+...    print(a, b, c)
 ...
 SyntaxError: invalid syntax
 
 # Correctly define printer with the named argument after positional arguments.
 >>> def printer(a, b, c=0):
-...    print a, b, c
+...    print(a, b, c)
 ...
 
 # Call printer with 3 positional arguments.
@@ -410,7 +413,7 @@ Use the letter j, not i, for the imaginary part.
 
 \subsection*{Strings}
 In Python, strings are created with either single or double quotes.
-To concatenate two or more strings, use the \li{+} operator.
+To concatenate two or more strings, use the \li{+} operator between string variables or literals.
 \begin{lstlisting}
 >>> str1 = "Hello"
 >>> str2 = 'world'
@@ -425,6 +428,7 @@ The parameters \li{start} and \li{stop} default to the beginning and end of the 
 The parameter \li{step} defaults to 1.
 
 \begin{lstlisting}
+>>> my_string = "Hello world!"
 # Indexing begins at 0 and negative numbers count backward from the end.
 >>> my_string[4]
 <<'o'>>
@@ -468,7 +472,7 @@ Use IPython to quickly test your syntax for each function.
 % =========================== Lists =========================== %
 
 \subsection*{Lists}
-A Python \li{list} is created by enclosing comma-separated values with square brackets.
+A Python \li{list} is created by enclosing comma-separated values with square brackets \li{[ ]}.
 Entries of a \li{list} do not have to be of the same type.
 Access entries in a \li{list} with the same indexing or slicing operations used with strings.
 \begin{lstlisting}
@@ -531,13 +535,13 @@ Accept a parameter \li{my_list} and perform the following operations on it (in o
 % ================= Sets ================= %
 
 \subsection*{Sets}
-A Python \li{set} is an unordered collection of distinct objects and can be created from a list (or any iterable object).
-Objects can be added to or removed from a set after its creation.
-Initialize a set using the keyword \li{set} or by using curly braces.
+A Python \li{set} is an unordered collection of distinct objects.
+Objects can be added to or removed from a \li{set} after its creation.
+Initialize a \li{set} with curly braces \li{\{ \}}.
 \begin{lstlisting}
 # Initialize some sets. Note that repeats are not added.
 >>> library_members = {"Lytle, Josh", "Henriksen, Amelia", "Webb, Jared"}
->>> gym_members = set(["Doe, John", "Doe, John", "Smith, Jane", "Brown, Bob"])
+>>> gym_members = {"Doe, John", "Doe, John", "Smith, Jane", "Brown, Bob"}
 >>> print(gym_members)
 <<set(['Brown, Bob', 'Doe, John', 'Smith, Jane'])>>
 
@@ -566,8 +570,8 @@ difference, and symmetric difference.
 Like a \li{set}, a Python \li{dict} (dictionary) is an unordered data type.
 A \li{dict} stores \li{key:value} pairs, called \emph{items}.
 The values of a dictionary are indexed by its keys.
+Dictionaries are initialized with curly braces, colons, and commas.
 \begin{lstlisting}
-# Initialize a dictionary with curly braces, colons, and commas.
 >>> my_dictionary = {"business": 4121, "math": 2061, "visual arts": 7321} 
 >>> print(my_dictionary["math"])
 2061
@@ -587,7 +591,9 @@ The values of a dictionary are indexed by its keys.
 True
 \end{lstlisting}
 
-The keys of a dictionary must be \emph{immutable}, which means that they must be objects that cannot be modified after creation. Numerical types and strings are immutable objects. Lists, dictionaries, and sets are mutable.
+The keys of a dictionary must be \emph{immutable}, which means that they must be objects that cannot be modified after creation.
+%Numerical types and strings are immutable objects. Lists, dictionaries, and sets are mutable.
+We will discuss the mutablility of each of these objects in the next lab.
 
 \subsection*{Type Casting}
 
@@ -625,7 +631,7 @@ This is particularly useful with integers and floats, but it works for other dat
 Control flow blocks dictate the order in which code is executed.
 Python supports the usual control flow statements including \li{if} statements, \li{while} loops and \li{for} loops.
 
-\subsection*{The \li{if} Statement}
+\subsection*{The If Statement}
 An \li{if} statement executes the indented code \emph{if} (and only if) the given condition holds.
 The \li{elif} statement is short for ``else if'' and can be used multiple times following an \li{if} statement, or not at all. 
 The \li{else} keyword may be used at most once at the end of a series of \li{if}/\li{elif} statements.
@@ -644,8 +650,8 @@ calorie count unavailable
 % Problem 5: If statements and Pig Latin
 \begin{problem}
 Implement the \li{pig_latin} function.
-Accept an input \li{word}, translate it into Pig Latin, then return the translation.
-The rules for Pig Latin are as follows: if the word starts with a vowel, add ``hay'' to the end of the word; if the word starts with a consonant, take the first character in a word, move it to the end, and add ``ay''.
+Accept a parameter \li{word}, translate it into Pig Latin, then return the translation.
+Specificaly, if \li{word} starts with a vowel, add ``hay'' to the end; if \li{word} starts with a consonant, take the first character of \li{word}, move it to the end, and add ``ay''.
 
 (Hint: use the \li{in} operator to check if the first letter is a vowel.)
 \end{problem}
@@ -701,7 +707,7 @@ There are two additional useful statements to use in loops:
 
 \subsection*{The For Loop}
 A \li{for} loop iterates over the items in any \emph{iterable}.
-Iterables include lists, sets, and dictionaries.
+Iterables include (but are not limited to) lists, sets, and dictionaries.
 There are a few different ways to define a \li{for} loop, with the most common ways demonstrated below.
 
 \begin{lstlisting}
@@ -742,6 +748,7 @@ The number 1 becomes `a', 2 becomes `b', and so on.
 
 % ==================== Generators ==================== %
 
+% TODO: This should be moved to a different lab. It makes this lab too long.
 \subsection*{Generators}
 
 Suppose we are given a large data set and we need to loop through data as we analyze it.

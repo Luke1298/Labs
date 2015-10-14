@@ -15,7 +15,7 @@ def create_data(filename):
 	
 	# Read data in
 	with open(filename, 'r') as f:
-	contents = f.read().split('\n')
+		contents = f.read().split('\n')
 	if contents[-1] == "":
 		contents = contents[:-1]
 
@@ -191,7 +191,7 @@ def some_sentences(chain, word_list, n=10):
 		print_sentence(s, word_list)
 		print '' 
 
-filename = 'Posts_scraped'
+filename = 'math.stackexchange.com.7z'
 print "Creating Data"
 create_data(filename)
 print "\nCreating Word List"

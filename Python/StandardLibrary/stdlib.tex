@@ -1,54 +1,101 @@
 \lab{The Standard Library}{Standard Library}
 \objective{Python is designed to make it easy to implement complex tasks with little code.
 To that end, any Python distribution includes several built-in functions for accomplishing common tasks.
-In addition, Python is designed to import and reuse Python code written by others.
+In addition, Python is designed to import and reuse code written by others.
 A Python file that can be imported is called a module.
-Any Python distribution includes a collection of modules for accomplishing a variety of tasks.
-These modules are called the Python standard library.
-In this lab we become familiar with the Python standard library and learn how to import and use modules.}
+Any Python distribution includes a collection of modules for accomplishing a variety of tasks, collectively called the \emph{Python Standard Library}.
+In this lab we become familiar with the Standard Library and learn how to import and use modules.}
 \label{lab:Standard Library}
 
-\section*{Python Built-in Functions}
+\section*{Built-in Functions}
 
 Every Python installation comes with several built-in functions.
-A listing of all Python built-in functions can be found \href{https://docs.python.org/2/library/functions.html}{here}.
-Built-in functions may be used at any time and Python will recognize them.
+These functions may be used at any time and Python will recognize them.
+IPython's object introspection feature makes it easy to learn about built-in functions.
+Start IPython from the terminal and use $?$ to bring up technical details on each function.
 
 \begin{lstlisting}
-# abs() returns the absolute value of a number
->>> abs(-5)
-5
+In [1]: min?
+Docstring:
+<<min(iterable[, key=func]) -> value
+min(a, b, c, ...[, key=func]) -> value
 
-# min() returns the smallest element of a list or string
->>>min([1,2,3])
-1
->>> min('xyz')
-'x'
+With a single iterable argument, return its smallest item.
+With two or more arguments, return the smallest argument.>>
+Type:      builtin_function_or_method
 
-# max() returns the largest element of a list or string
->>> max([1,2,3])
-3
->>> max('xyz')
-'z'
+In [2]: len?
+Docstring:
+<<len(object) -> integer
 
-# len() returns the length of a list or string
->>> len([1,2,3])
-3
->>> len('abc')
-3
-# sum() returns the sum of a list
->>> sum([1,2,3])
-6
-
-# range(n) returns a list of numbers from 0 to n-1
->>> range(3)
-[0,1,2]
+Return the number of items of a sequence or collection.>>
+Type:      builtin_function_or_method
 \end{lstlisting}
 
-% Problem 1: built-in methods with lists
+\begin{table}
+\begin{tabular}{|c|l|}
+\hline
+Function & Returns \\
+\hline
+\li{abs}() & The absolute value of a real number, or the magnitude \\
+& of a complex number. \\ \hline
+\li{min}() & The smallest element of a single iterable, or the smallest \\
+& of several arguments. Strings are compared  based on \\
+& lexicographical order: numerical characters first, then \\
+& upper-case letters, then lower-case letters. \\ \hline
+\li{max}() & The largest element of a single iterable, or the largest \\
+& of several arguments. \\ \hline
+\li{len}() & The number of items of a sequence or collection. \\ \hline
+\li{sum}() & The sum of a sequence of numbers. \\ \hline
+\end{tabular}
+\caption{Some common built-in functions. Documentation on all built-in functions can be found at \url{https://docs.python.org/2/library/functions.html}.}
+\label{table:builtin}
+\end{table}
+
+The following code demonstrates each of the common built-in functions listed in Table \ref{table:builtin}.
+They are quite intuitive.
+
+\begin{lstlisting}
+# abs() can be used with real or complex numbers.
+>>> abs(-7)
+7
+>>> abs(3 + 4j)
+5.0
+
+# min() can be used on a list, string, or several arguments.
+>>> min([4, 2, 6])
+2
+>>> min('aXbYcZ')               # Characters are ordered lexicographically.
+<<'X'>>
+>>> min(1, 'a', 'A')
+1
+
+# max() works the same way min() does.
+>>> print(max([4, 2, 6]), max('aXbYcZ'), max(1, 'a', 'A'))
+6, c, a
+
+# len() can be used on a string, list, set, dict, tuple, or other iterable.
+>>> len([2, 7, 1])
+3
+>>> len('abcdef')
+6
+>>> len({1, 'a', 'a'})          # Duplicates are not added to sets.
+2
+
+# sum() can be used on iterables containing numbers, but not strings.
+>>> my_list = [1, 2, 3]
+>>> my_tuple = (4, 5, 6)
+>>> my_set = {7, 8, 9}
+>>> sum(my_list) + sum(my_tuple) + sum(my_set)
+45
+>>> sum([min(my_list), max(my_tuple), len(my_set)])
+10
+\end{lstlisting}
+
+% Problem 1: using built-in methods with lists
 \begin{problem}
-Download \texttt{spec.py} to use as a solutions script and save it as \texttt{solutions.py}.
-Write a function that accepts a list of numbers as input and returns a list with the minimum, maximum, and average of the original list (in that order).
+%Download \texttt{spec.py} to use as a solutions script and save it as \texttt{solutions.py}.
+Write a function that accepts a list of numbers as input and returns a new list with the minimum, maximum, and average of the original list (in that order).
 Use floating point division to calculate the average.
 \end{problem}
 % TODO: in Python 3, floating point division is the default, so we can remove that last line.
@@ -58,10 +105,9 @@ Use floating point division to calculate the average.
 \subsection*{Names and Namespaces}
 All objects created in Python resides in memory.
 These objects may be primitive data, data structures, functions, or any other sort of Python object.
-A Python \emph{name} is a reference to a Python object.
-
+A \emph{name} is a reference to a Python object.
 A \emph{namespace} is a dictionary that maps names to Python objects.
-For example, in the following code block we create several names.
+%For example, in the following code block we create several names.
 
 \begin{lstlisting}
 # The number 13 is the object, x is the name.
@@ -96,19 +142,21 @@ Python objects may be mutable or immutable.
 An immutable object cannot be altered once created, so assigning a new name to it creates a copy in memory.
 A mutable object's value may be changed, so assigning a new name to it does not create a copy.
 For example, a list is mutable while a tuple is immutable.
+\begin{comment} % This example is misleading
 % TODO: make error message all black text
 \begin{lstlisting}
->>> example_tuple = (1,2)
->>> example_tuple[0] = 3
-Traceback (most recent call last):
+>>> my_tuple = (1,2)
+>>> my_tuple[0] = 3
+<<Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-TypeError: 'tuple' object does not support item assignment
+TypeError: 'tuple' object does not support item assignment>>
 
 >>> example_list = [1,2]
 >>> example_list[0] = 3
 >>> print(example_list)
 [3,2]
 \end{lstlisting}
+\end{comment}
 
 If two names refer to the same mutable object, then any changes to the object is reflected in both names.
 To avoid this, create a copy of an object.
@@ -120,17 +168,17 @@ To make a copy of a list, use the \li{list()} built-in method.
 >>> students = ["John", "Paul", "George", "Pete"]
 >>> band_members = students
 
-# Replace 'Pete' with 'Ringo' in band_members
+# Replace 'Pete' with 'Ringo' in band_members.
 >>> band_members[3] = "Ringo"
 >>> print(band_members)
 ['John', 'Paul', 'George', 'Ringo']
 
 # Since 'students' and 'band_members' refer to the same object, 
-# 'Ringo' also replaces 'Pete' in students
+# 'Ringo' also replaces 'Pete' in students.
 >>> print(students)
 ['John', 'Paul', 'George', 'Ringo']
 
-# Make a copy this time
+# This time, make a copy of the original list.
 >>> students = ["John", "Paul", "George", "Pete"]
 >>> band_members = list(students)
 >>> band_members[3] = "Ringo"
@@ -143,7 +191,8 @@ To make a copy of a list, use the \li{list()} built-in method.
 % Problem 2: which Python objects are immutable?
 \begin{problem}
 Python has several methods that seem to change immutable objects.
-These methods actually work by making copies of objects. We can determine which object types are mutable and immutable by using the equal sign and ``changing'' the objects.
+These methods actually work by making copies of objects.
+We can determine which object types are mutable and immutable by using the equal sign and ``changing'' the objects.
 For example, if two names refer to the same list then changes to the entries of one name show up in the second.
 
 \begin{lstlisting}
@@ -209,7 +258,7 @@ Once imported, a module's names are available to the user.
 
 For example, download the file \texttt{example\_module.py} and save it to a directory.
 In a Python interpreter, navigate to a directory where the file is not saved.
-If the interpreter then tries to \li{import example\_module}, it throws an error:
+If the interpreter then tries to \li{import example\_module}, it raises an exception:
 
 \begin{lstlisting}
 >>> import example_module
@@ -219,7 +268,7 @@ ImportError: No module named example_module
 \end{lstlisting}
 % TODO: black out the error message
 
-If the interpreter is running in a directory that contains the module, no error is thrown and the module's names become available:
+If the interpreter is running in a directory that contains the module, no exception is thrown and the module's names become available:
 
 \begin{lstlisting}
 >>> import example_module
@@ -257,6 +306,74 @@ AttributeError: 'module' object has no attribute 'subtract_numbers'
 1
 \end{lstlisting}
 % TODO: black out the error message
+
+\subsection*{Importing Syntax}
+
+As mentioned, import statements should all appear near the top of a Python file.
+Expanding on the previous lab, a typical Python file looks something like this.
+
+\begin{lstlisting}
+# filename.py
+"""This is the file header.
+The header is usually more than one line.
+"""
+
+# Import statements go below the header, above any other code.
+import math
+import numpy as np
+from scipy import linalg as la
+import matplotlib.pyplot as plt
+
+def main():
+    print("Hello, world!")
+
+if __name__ == "__main__":
+    main()
+\end{lstlisting}
+
+%import, import as, from _ import, from _ import _ as _, etc. UNDER CONSTRUCTION
+
+\subsection*{Running Vs. Importing}
+
+Consider the following python file.
+\begin{lstlisting}
+# example.py
+"""Note the difference between importing and running a file."""
+
+data = [1, 2, 3, 4]
+
+print("This statement is called when the file is imported or executed.")
+
+if __name__ == '__main__':
+    print("This statement is only executed if the file itself is executed.")
+else:
+    print("But this statement is only executed when the file is imported.")
+\end{lstlisting}
+
+In IPython, note the difference in behavior.
+
+\begin{lstlisting}
+In [1]: run example
+This statement is called when the file is imported or executed
+This statement is only executed if the file itself is executed
+
+In [2]: print(example.data)
+NameError                                 Traceback (most recent call last)
+<<<ipython-input-2-6bc16431f322> in <module>()
+----> 1 print(example.data)
+
+NameError: name 'example' is not defined>>
+
+In [3]: import example
+This statement is called when the file is imported or executed
+But this statement is only executed when the file is imported.
+
+In [4]: print(example.data)
+[1, 2, 3, 4]
+
+\end{lstlisting}
+
+Something about good coding practices. UNDER CONSTRUCTION.
 
 % Problem 3: create your own module.
 \begin{problem}
@@ -300,12 +417,12 @@ In IPython, the question mark yields:
 In [0]: import math
 
 In [1]: math?
-Type:        module
+<<Type:        module
 String form: <module 'math' from '/Users/ACME/anaconda/lib/python2.7/lib-dynload/math.so'>
 File:        /Users/ACME/anaconda/lib/python2.7/lib-dynload/math.so
 Docstring:
 This module is always available.  It provides access to the
-mathematical functions defined by the C standard.
+mathematical functions defined by the C standard.>>
 \end{lstlisting}
 
 Many interpreters also provide shortcuts for exploring modules.
@@ -317,7 +434,7 @@ In [1]: import math
 
 # typing math. and then pressing tab gives the available functions.
 In [2]: math.
-math.acos       math.atanh      math.e          math.factorial  
+<<math.acos       math.atanh      math.e          math.factorial  
 math.hypot      math.log10      math.sin        math.acosh      
 math.ceil       math.erf        math.floor      math.isinf      
 math.log1p      math.sinh       math.asin       math.copysign   
@@ -327,16 +444,16 @@ math.frexp      math.ldexp      math.pi         math.tan
 math.atan       math.cosh       math.expm1      math.fsum       
 math.lgamma     math.pow        math.tanh       math.atan2      
 math.degrees    math.fabs       math.gamma      math.log        
-math.radians    math.trunc
+math.radians    math.trunc>>
 
 
 In [2]: math.sqrt?
-Type:        builtin_function_or_method
+<<Type:        builtin_function_or_method
 String form: <built-in function sqrt>
 Docstring:
 sqrt(x)
 
-Return the square root of x.
+Return the square root of x.>>
 \end{lstlisting}
 
 \subsection*{The \li{sys} module}
