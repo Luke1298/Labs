@@ -1,0 +1,392 @@
+\lab{Exceptions and I/O}{OOP2}
+\label{lab:OOP2}
+
+\objective{%Understanding Object Oriented Programming in Python reveals important insights about how Python works internally. For example,
+Python uses \emph{Exceptions} to handle errors.
+Understanding and utilizing the exception class hierarchy is an important skill for regulating program usage and informing the programmer of problems.
+%Every programming language also has a way of interacting with exterior files.
+Python also has a powerful \li{file} object that allows data to be read in from and out to files easily.
+Understanding how this object's class attributes and methods is essential to data manipulation and analysis.
+In this final introductory lab, we explore exceptions and file I/O protocol from the view of Object Oriented Programming.}
+
+\section*{Exceptions}
+
+Every programming language has a formal way of handling errors.
+In Python, we \li{raise} and handle \emph{Exceptions}.
+There are different kinds of exceptions, each with its appropriate usage.
+In Python, as in most languages, exceptions are organized into a class hierarchy.
+A complete list of Python exceptions can be found \href{https://docs.python.org/2/library/exceptions.html}{here}.
+The following code displays some examples of common exceptions:
+
+\begin{lstlisting}
+# A 'NameError' exception indicates that a nonexistant name was used.
+>>> print(x)
+<<Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'x' is not defined>>
+
+# An 'AttributeError' exception indicates that a nonexistant method or
+# attribute was called on some object.
+>>> [1, 2, 3].fly()
+<<Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'list' object has no attribute 'fly'>>
+
+# A 'SyntaxError' exception indicates bad Python syntax.
+>>> def myFunction(a, b)             # forgot the colon!
+<<  File "<stdin>", line 1
+    def myFunction(a, b)
+                       ^
+SyntaxError: invalid syntax>>
+\end{lstlisting}
+
+Many exceptions, like the ones listed above, are due to coding mistakes and typos.
+Exceptions can also be used programmatically and intentionally to indicate a problem to the user or programmer.
+To raise an exception, use the keyword \li{raise}, followed by the name of the exception class.
+As soon as an exception is raised, the program stops running unless the exception is handled properly.
+
+Exception objects can also be initialized with any number of arguments.
+These arguments are stored in the exception object as a class attribute called \li{args}, and also serve as the string representation of the object.
+Most commonly, we provide a simple message with information about the error.
+
+\begin{lstlisting}
+# Raise a generic exception, without an error message.
+>>> if 7 is not 7.0:
+...     raise Exception
+... 
+<<Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+Exception>>
+
+# Without a message, the error traceback can be rather unhelpful.
+# Now raise a specific type of exception, with an error message included.
+>>> for x in range(10):
+...     if x > 5:
+...         raise ValueError("'x' should not exceed 5.")
+...     print(x),
+... 
+0 1 2 3 4 5
+<<Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+ValueError: 'x' should not exceed 5.>>
+\end{lstlisting}
+
+% Problem 1: Raising Exceptions 101
+\begin{problem}
+Python functions do not require specific types for each parameter.
+Sometimes, however, it is important to validate functional inputs before they are utilized.
+Consider the following function.
+\begin{lstlisting}
+def my_func(a, b, c, d, e):
+    print("The first argument is " + a)
+    x = sum([b, c])
+    y = d + e
+    return a, x, y
+\end{lstlisting}
+Modify \li{my_func} so that it raises a \li{TypeError} if:
+\begin{enumerate}
+\item $a$ is not a string (of type \li{str}),
+\item $b$ or $c$ is not a numerical type (\li{int}, \li{float}, \li{long}, or \li{complex}), or
+\item $d$ and $e$ are not the same type.
+\end{enumerate}
+Include an informative error message with each exception.
+
+(Hint: investigate the \li{type} and \li{isinstance} built-in funcitons.)
+\end{problem}
+
+\subsection*{Handling Exceptions}
+
+To prevent an exception from stopping the program, it must be handled by
+putting the problematic lines of code in a \li{try} block.
+An \li{except} block then follows.
+If an exception is thrown, the compiler exits the \li{try} block and enters the \li{except} block.
+
+\begin{lstlisting}
+# the 'try' block should hold any lines of code that might raise an exception.
+>>> try:
+...     raise Exception("for no reason.")
+...     print("No exception raised")
+... # the 'except' block is entered into after the exception is thrown
+... except:
+...     print("Exception raised!")
+... print("Got to the end.")
+... 
+Exception raised!
+Got to the end.                         # Compilation continued as usual.
+\end{lstlisting}
+
+Exceptions can be caught generally or by class.
+Having \li{except} by itself will catch \emph{any} exception raised in the \li{try} block, but this approach is usually too broad and is typically considered bad coding practice.
+Instead, be specific about the kind (or kinds) of exceptions you expect to encounter.
+
+Additionally, an exception that is caught by an \li{except} statement can be used within the \li{except} block if it is declared using the keyword \li{as}.
+
+\begin{lstlisting}
+# Catch a specific exception class.
+>>> try:
+...     bad = 100 / 0
+... except ZeroDivisionError as e:
+...     print(e)
+... 
+<<integer division or modulo by zero>>
+
+# Here a different exception is raised than the one in the except statement.
+>>> try:
+...     1 + 'a' + 2 + 'b' + 3
+... except ValueError as e:
+...     print(e)
+<<Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+TypeError: unsupported operand type(s) for +: 'int' and 'str'>>
+
+>>> try:
+...     import magic
+... except ImportError as e:
+...     print("Sorry!", e)
+... 
+Sorry! No module named magic
+\end{lstlisting}
+
+Multiple kinds of exceptions can be caught by a single except statement using a parenthesized list of exceptions.
+There can also be more than one \li{except} statements that correspond to a single \li{try} statement.
+An \li{else} statement can also be attached after \li{except} statements
+%This control flow idea is similar to \li{if}, \li{elif}, and \li{else} blocks.
+Last of all, another optional block can be added with the header \li{finally}.
+The code in a \li{finally} block executes after either the try or any subsequent block completes, regardless of whether or not an exception was actually raised.
+% TODO: Combine these last two blocks.
+
+\begin{lstlisting}
+# Catch two kinds of exceptions in the same except statement.
+>>> try:
+...     print("Started in the try block.")
+...     raise ValueError("This is a ValueError!")
+...     print("Got the the end of the try block.")
+... except (ValueError, TypeError, ArithmeticError) as e:
+...     print("An exception was raised. Error: ", e)
+... else:
+...     print("No exceptions were raised.")
+... finally:
+...     print("Finished with the finally block.")
+<<Started in the try block.
+Made it to the except block. Error: This is a ValueError!
+Finished with the finally block.>>
+
+# Equivalently, catch each kind of exception with a separate except statement.
+# Here, no exception is raised and the except block is skipped.
+>>> try:
+...     print("Started in the try block.")
+...     raise TypeError("This is a TypeError!")
+... except ValueError as e:
+...     print("Bad value:", e)
+... except TypeError as e:
+...     print("Bad type:", e)
+... except ArithmeticError as e:
+...     print("Bad math:", e)
+... else:
+...     print("No exceptions were raised.")
+... finally:
+...     print("Finished with the finally block.")
+<<Started in the try block.
+Bad type: This is a TypeError!
+Finished with the finally block.>>
+
+# Note that the else block executes if no exceptions are raised.
+>>> try:
+...     print("Started in the try block.")
+... except (ValueError, TypeError, ArithmeticError) as e:
+...     print("An exception was raised. Error:", e)
+... else:
+...     print("No exceptions were raised.")
+... finally:
+...     print("Finished with the finally block.")
+<<Started in the try block.
+No exceptions were raised.
+Finished with the finally block.>>
+\end{lstlisting}
+
+Complete documentation on raising and handling exceptions can be found at \url{https://docs.python.org/2/tutorial/errors.html}.
+
+%Chaining Exceptions in Python 3...
+
+\begin{problem}
+A \li{KeyboardInterrupt} is a special exception that can be triggered at any time by entering \li{ctrl c} (on most systems) in the keyboard.
+Usually a \li{KeyboardInterrupt} is used to manually escape faulty code that runs forever, but they can also be used intentionally to truncate a process.
+
+Consider the following function.
+\begin{lstlisting}
+def forever():
+    iters = 0
+    while True:
+        iters += 1
+    return i
+\end{lstlisting}
+Modify \li{forever} so that after ten seconds, a \li{RuntimeError} is raised to exit the loop (Hint: use the \li{time} module).
+Catch the exception, print ``Process terminated'', and return \li{iters}.
+
+If a \li{KeyboardInterrupt} is raised before time runs out, catch the exception, print ``Process interrupted'', and return \li{iters}.
+\end{problem}
+
+\begin{comment}
+In [2]: def forever():
+   ...:     i = 0
+   ...:     start = time()
+   ...:     try:
+   ...:         while True:
+   ...:             i += 1
+   ...:             if i % 100 == 0:
+   ...:                 if time() - start > 10:
+   ...:                     raise RuntimeError
+   ...:     except KeyboardInterrupt:
+   ...:         print("Process interrupted")
+   ...:     except RuntimeError:
+   ...:         print("Process terminated")
+   ...:     finally:
+   ...:         return i
+\end{comment}
+
+\begin{problem}
+Function wrapper problem.
+\end{problem}
+
+\subsection*{The Exception Hierarchy}
+
+A \li{ValueError} is a \li{StandardError}, which is an \li{Exception}.
+\begin{lstlisting}
+try:
+    raise ValueError("This is a test")
+    print("Checkpoint 1")
+except Exception as e:
+    print e
+
+# But...
+
+try:
+    raise Exception("This is another test")
+    print("Checkpoint 2")
+except ValueError as e:
+    print e
+\end{lstlisting}
+
+The complete Exception hierarchy is found at \url{https://docs.python.org/2/library/exceptions.html#exception-hierarchy}.
+
+\subsection*{Custom Exceptions}
+
+Custom exception are made by writing a class that inherits from some existing exception (the \li{Exception} class is the most generic).
+They can be very useful for handling problems that you expect, but that the compiler won't catch.
+
+\begin{problem}
+Create a custom class of Exceptions called \li{BadDataError}.
+Have it inherit from the basic \li{Exception} class.
+\end{problem}
+
+\section*{Input and Output}
+
+Python has a useful \li{file} object which acts as an interface to all kinds of different file streams.
+The built-in function \li{open} creates a \li{file} object.
+
+\begin{lstlisting}
+>>> myfile = open('filename.txt','r')   # Open the file with read-only access.
+>>> for line in myfile:                 # Print out each line of the file.
+...     print line
+...
+>>> myfile.close()                      # Close the file connection.
+\end{lstlisting}
+
+The \li{open} command accepts up to three arguments: the filename, mode, and buffering options.
+The mode determines the kind of access to use when opening the file.
+Possible mode strings are:
+\begin{description}
+\item \li{'r'} Opens a file for read-only access.
+This is the default mode.
+\item \li{'w'} Opens a file for write-only access.
+This mode creates the file if it doesn't already exist, and overwrites \textbf{everything} in the file if it does exist.
+\item \li{'a'} Opens a file for appending.
+This mode is like write-only, but instead of overwriting existing data any new data is appended to the end of the file.
+This mode also creates a new file if it doesn't already exist.
+\end{description}
+
+\subsection*{The \li{with} Statement}
+
+If your file cannot be opened for any reason, an exception is raised (usually an \li{IOException}) and the file object is not initialized.
+Files can be opened and closed safely with a careful \li{try} \li{except} \li{else} control flow.
+
+The keyword \li{with} can also be used in conjunction with an \li{open} statement to create an indented block in which the file is open.
+Upon exiting the block, the file is closed safely and automatically.
+This is the preferred method when a file only needs to be accessed briefly, but it is not quite as informative as the previous approach.
+
+\begin{lstlisting}
+>>> try:
+...     myfile = open('in.txt', 'r')    # Open the file with read-only access.
+...     contents = myfile.readlines()   # Read in the content by line.
+... except IOError as e:                # Check for errors.
+...     print("File error:", e)
+... else:
+...     myfile.close()                  # Explicitly close the file.
+
+# Equivalently, use a 'with' statement to take care of errors.
+>>> with open('in.txt', 'r') as myfile:     # Open the file using 'with'.
+...    contents = myfile.readlines()        # Read in the content by line.
+...                                         # The file is closed automatically.
+\end{lstlisting}
+
+\subsection*{Methods for Reading and Writing}
+
+Every file object has several attributes and methods.
+Some of the most notable are described in Table \ref{table:fileattribs}.
+% Talk about the so-called file pointer, an imaginary cursor in the open file.
+
+\begin{table}
+\begin{tabular}{|l|l|}
+\hline
+Attribute & Description \\
+\hline
+\li{closed} & True if file object is closed. \\
+\li{mode} & The access mode used to open the file object. \\
+\li{name} & The name of the file. \\
+\hline
+\hline
+Method & Description \\
+\hline
+\li{close()} & Flush any delayed writes and close the file object. \\
+\li{read()} & Read the next string of the file. \\
+\li{readline()} & Read a line of the file. \\
+\li{readlines()} & Read lines of the file until the end of file (returned as a \li{list}). \\
+\li{write()} & Write a string to the file. \\
+\li{writelines()} & Write a sequence of strings to the file (input a \li{list}). \\
+\hline
+\end{tabular}
+\caption{File object attributes and methods.}
+\label{table:fileattribs}
+\end{table}
+
+Talk about \li{read}, \li{readlines}, \li{write}, \li{writelines}, \li{next}, \li{tell}, and the cursor thing.
+
+Only strings can be written to files.
+To write a non-string type, first cast it as a string using \li{str}.
+Again we present two equivalent methods.
+\begin{lstlisting}
+>>> try:
+...     outfile = open('out.txt', 'w')  # Open the file with write-only access.
+...     for i in xrange(10):
+...         outfile.write(str(i**2))        # Write to the file.
+... except IOError as e:
+...     print("Problem writing to file:", e)
+... finally:
+...     outfile.close()                     # Explicitly close the file.
+
+# The flow is much less cumbersome using a 'with' statement.
+>>> with open('out.txt', 'w') as outfile:   # Open the file using 'with'.
+...     for i in xrange(10):                
+...         outfile.write(str(i**2))        # Write some strings to the file.
+...
+>>> outfile.closed                          # The file is closed automatically.
+True
+\end{lstlisting}
+
+\subsection*{String Formatting}
+
+Talk about the is stuff (\li{isalnum}/\li{isspace}), formatting (\li{capitalize}/\li{lower}/\li{swapcase}), and \li{split} and \li{strip}. 
+
+\begin{problem}
+Make a cool class for reading in data from a file and writing it out to other files in wonky ways.
+\end{problem}
