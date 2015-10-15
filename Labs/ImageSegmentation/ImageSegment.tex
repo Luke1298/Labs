@@ -95,7 +95,7 @@ Such a graph is depicted as in Figure \ref{fig:example_graph2}.
 
 Any graph can be thought of as a weighted graph by assigning a weight of 1 to each edge.
 
-\subsection*{Adjacency, degree, and Laplacian matrices}
+\subsection*{Adjacency, Degree, and Laplacian Matrices}
 We will now introduce three special matrices associated to a graph. 
 Throughout this section, assume we are working with a weighted undirected graph with $N$ nodes, and that $w_{ij}$ is the weight attached to the edge connecting node $i$ and node $j$.
 We first define the adjacency matrix.
@@ -194,7 +194,7 @@ The second matrix is the degree matrix.
 This quantity is just the sum of the weight of each edge that touches node $i$.
 \end{definition}
 %For a directed graph, each node has an \emph{out-degree} (the number of edges directed away from a node) and an \emph{in-degree} (the number edges directed toward a node).
-We call the $(i, i)-th$ entry of the degree matrix the \emph{degree} of node $i$. As an example, the degree matrices of the graphs in Figures \ref{fig:example_graph} and \ref{fig:example_graph2} are $D_1$ and $D_2$, respectively, where
+We call the $(i, i)$-th entry of the degree matrix the \emph{degree} of node $i$. As an example, the degree matrices of the graphs in Figures \ref{fig:example_graph} and \ref{fig:example_graph2} are $D_1$ and $D_2$, respectively.
 
 \[
 D_1 = \begin{pmatrix}
@@ -262,7 +262,7 @@ Another hint: Test your function on the graphs in Figures \ref{fig:example_graph
 
 
 
-\subsection*{Connectivity: first application of Laplacians}
+\subsection*{Connectivity: First Application of Laplacians}
 
 A \emph{connected graph} is a graph where every vertex is connected to every other vertex by at least one path.
 The graph in Figure \ref{fig:example_graph} is connected, whereas the graph in Figure \ref{fig:example_graph2} is not.
@@ -274,7 +274,7 @@ Fortunately, there is a better way.
 Recall that the adjacency matrix of an undirected graph is always symmetric. 
 Thus, it will have real eigenvalues. 
 Surprisingly, a graph is connected if the second smallest eigenvalue of its Laplacian matrix is positive. [TODO: cite something!]
-In many applications the Laplacian matrix is sparse, so by taking advantage of this sparsity, we can cheaply determine if a graph is connected.
+In many applications, the Laplacian matrix is sparse, so by taking advantage of this sparsity, we can cheaply determine if a graph is connected.
 
 \begin{problem}
 \leavevmode
@@ -302,7 +302,7 @@ What do you notice about the likelihood that a random graph is connected?
 \end{problem}
 
 
-\section*{Image Segmentation: second application of Laplacians}
+\section*{Image Segmentation: Second Application of Laplacians}
 
 \begin{figure}
     \centering
@@ -321,7 +321,7 @@ What do you notice about the likelihood that a random graph is connected?
 \caption{An image and its segments.}
 \label{fig:monument}
 \end{figure}
-Image segmentation is the process of finding natural boundaries in an image (see for example Figure \ref{fig:monument}).
+Image segmentation is the process of finding natural boundaries in an image (see Figure \ref{fig:monument}).
 This is an easy task for humans, who can easily pick out portions of an image that ``belong together.''
 In this lab, you will learn one way to program a computer to segment images.
 
@@ -497,7 +497,7 @@ Test your function on the image \li{dream.png} (which is currently a 2-D array o
 \label{prob:adjacency_dream}
 \end{problem}
 
-\subsection*{Minimizing the 'cut'}
+\subsection*{Minimizing the 'Cut'}
 
 As was mentioned before, we are trying to minimize the `cut', or the total weight of the edges we remove to create segments. 
 Let $L$ be the Laplacian of the adjacency matrix defined in \ref{eq:adjacency} and let $D$ be the degree matrix.
