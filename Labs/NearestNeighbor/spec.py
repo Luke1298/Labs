@@ -75,25 +75,6 @@ class KDT(BST):
             nodes in the tree, the root houses data as a numpy array.
         k (int): the dimension of the tree (the 'k' of the k-d tree).
     """
-
-    def __init__(self, data_set):
-        """Set the k attribute and fill the tree with the points in 'data_set'.
-
-        Raises:
-            TypeError: if 'data_set' is not a numpy array (of type np.ndarray)
-        """
-
-        # Validate the input type.
-        if not isinstance(data_set, np.ndarray):
-            raise TypeError("data_set must be a numpy array.")
-
-        # Set the root and dimension attributes.
-        BST.__init__(self)
-        self.k = data_set.shape[1]
-
-        # Load the data into the tree one point at a time.
-        for point in data_set:
-            self.insert(point)
     
     def find(self, data):
         """Return the node containing 'data'.
@@ -129,21 +110,21 @@ class KDT(BST):
             raise ValueError(str(data) + " is not in the tree.")
         return found                       # Otherwise, return the target node.
 
+
 # Problem 5: Implement this function.
-def nearest_neighbor(tree, target):
-    """Use your KDTree class to solve the nearest neighbor problem.
+def nearest_neighbor(data_set, target):
+    """Use the KDT class to solve the nearest neighbor problem.
 
     Inputs:
-        tree (KDT): A KDT object loaded with a data set of m
-            k-dimensional points (as numpy arrays).
-        target (1xk ndarray): A k-dimensional point to compare to the
-            data housed in 'tree'.
+        data_set (mxk ndarray): An array of m k-dimensional points.
+        target (1xk ndarray): A k-dimensional point to compare to 'dataset'.
 
     Returns:
         The point in the tree that is nearest to 'target' (1xk ndarray).
         The distance from the nearest neighbor to 'target' (float).
     """
     raise NotImplementedError("Problem 5 Incomplete")
+
 
 # Problem 6: Implement this function.
 def postal_problem():

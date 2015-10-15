@@ -97,7 +97,7 @@ class KDTNode(BSTNode):
 
 % Problem 3: KDTNode
 \begin{problem}
-Import the \li{BSTNode} class from \texttt{Trees.py}\footnote{The file \texttt{Trees.py} is part of the Data Structures II lab.}
+Import the \li{BSTNode} class from \texttt{Trees.py}%\footnote{The file \texttt{Trees.py} is part of the Data Structures II lab.}
 Write a \li{KDTNode} class that inherits from \li{BSTNode}.
 \begin{enumerate}
 \item Modify the constructor so that a \li{KDTNode} can only hold a numpy array (\li{np.ndarray}).
@@ -128,26 +128,19 @@ True
 \end{problem}
 
 Now we construct the $k$-d tree class.
-The constructor accepts a set of data as an $m \times k$ numpy array and inserts each $1 \times k$ point into the tree.
+%The constructor accepts a set of data as an $m \times k$ numpy array and inserts each $1 \times k$ point into the tree.
 For an optimal $k$-d tree, the data needs to be inserted in a very particular order.
 However, inserting at random still usually produces a good tree.
 Here we simply insert the data in the order that it is given.
 
 The major difference between a $k$-d tree and a binary search tree is how the data is compared at each depth level.
 This is simplified by using the magic methods in the \li{KDTnode} class.
-Though we don't need to use a \li{find} function in solving the nearest neighbor problem, we provide the $k$-d tree version of \li{find} as an instructive example.
+Though we don't need to use a \li{find} method in solving the nearest neighbor problem, we provide the $k$-d tree version of \li{find} as an instructive example.
 
-\begin{lstlisting}
-from Trees import BST
+In the \li{find} method, every comparison in the recursive \li{_step} function compares the data of \li{target} and \li{current} based on the \li{axis} attribute of \li{current}, since it is on the right-hand side of the expression.
+This way if each existing node in the tree has the correct \li{axis}, the correct comparisons are made as we descend the tree.
 
-class KDT(BST):
-    """A k-dimensional binary search tree object.
-    Used to solve the nearest neighbor problem efficiently.
-    Attributes:
-        root (KDTNode): the root node of the tree. Like all other
-            nodes in the tree, the root houses data as a numpy array.
-        k (int): the dimension of the tree (the 'k' of the k-d tree).
-    """
+\begin{comment}
     def __init__(self, data_set):
         """Set the k attribute and fill the tree with the points in 'data_set'.
 
@@ -166,6 +159,19 @@ class KDT(BST):
         # Load the data in one point at a time.
         for point in data_set:
             self.insert(point)
+\end{comment}
+
+\begin{lstlisting}
+from Trees import BST
+
+class KDT(BST):
+    """A k-dimensional binary search tree object.
+    Used to solve the nearest neighbor problem efficiently.
+    Attributes:
+        root (KDTNode): the root node of the tree. Like all other
+            nodes in the tree, the root houses data as a numpy array.
+        k (int): the dimension of the tree (the 'k' of the k-d tree).
+    """
 
 	def find(self, data):
         """Return the node containing 'data'.
@@ -202,21 +208,13 @@ class KDT(BST):
         return found                        # Othewise, return the target node.
 \end{lstlisting}
 
-Every comparison in the \li{_step} function compares the data of \li{target} and \li{current} based on the \li{axis} attribute of \li{current}, since it is on the right-hand side of the expression.
-This way if each existing node in the tree has the correct \li{axis}, the correct comparisons are made as we descend the tree.
-
-\begin{figure}[H]
-\includegraphics[width=\textwidth]{kdpic2.png}
-\caption{To insert the point (4, 7) into the $k$-d tree of figure \ref{fig:k-binary-search}, we find the node that will be the new node's parent. Start at the root, (5, 5). Since the $x$-coordinate of (4, 7) is less than the $x$-coordinate of (5, 5), we move into the region to the left of the middle blue line, to the root's left child, (3, 2). The $y$-coordinate of (4, 7) is greater than the $y$-coordinate of (3, 2), so we move above the red line on the left, to the right child (2, 6). Now we return to comparing the $x$-coordinates, and since $4 > 2$ and (2, 6) has no right child, we install (4, 7) as the right child of (2, 6).}
-\label{fig:k-insert}
-\end{figure}
-
 % Problem 4: Implement the K-D Tree!
 \begin{problem}
 Finish implementing the \li{KDT} class.
 \begin{enumerate}
 \item Override the \li{insert} method.
 To insert a new node, find the correct insertion point by recursively descending through the tree as in the \li{find} method (see figure \ref{fig:k-insert} for an example).
+%Note that the $k$ attribute will have to be set at some point.
 
 The \li{axis} attribute of the new node will be one more than that axis of the parent node.
 If the last dimension of the data has been reached, start over at the first dimension.
@@ -229,9 +227,9 @@ Raise a \li{NotImplementedError} if the method is called, and allow it to receiv
 \end{problem}
 
 \begin{figure}[H]
-\includegraphics[width=\textwidth]{kdpic3.png}
-\caption{Suppose we want to find the point in the $k$-d tree of figure \ref{fig:k-insert} that is closest to (8, 4.5). First we record the distance from the root to the target as the current minimum distance (about 3.04), then travel down the tree to the right. The right child, (8, 4), is only .5 units away from the target (the green circle), so we update the minimum distance. Since (8, 4) is not a leaf in the tree, we could continue down to the left child, (7, 7). However, this leaf node is much further from the target (the purple circle). To ensure that we terminate the algorithm correctly we check to see if the hypersphere of radius .5 around the current node (the green circle) intersects with any other hyperplanes. Since it does not, we stop descending down the tree and conclude (correctly) that (8, 4) is the nearest neighbor.}
-\label{fig:bad-search}
+\includegraphics[width=\textwidth]{kdpic2.png}
+\caption{To insert the point (4, 7) into the $k$-d tree of figure \ref{fig:k-binary-search}, we find the node that will be the new node's parent. Start at the root, (5, 5). Since the $x$-coordinate of (4, 7) is less than the $x$-coordinate of (5, 5), we move into the region to the left of the middle blue line, to the root's left child, (3, 2). The $y$-coordinate of (4, 7) is greater than the $y$-coordinate of (3, 2), so we move above the red line on the left, to the right child (2, 6). Now we return to comparing the $x$-coordinates, and since $4 > 2$ and (2, 6) has no right child, we install (4, 7) as the right child of (2, 6).}
+\label{fig:k-insert}
 \end{figure}
 
 Using a $k$-d tree to solve the nearest neighbor search problem requires some care.
@@ -248,6 +246,12 @@ Once we have reached the bottom of the tree, we will have a good guess for the n
 However, we are not guaranteed to have arrived at the correct point.
 One way to ensure that we have arrived at the correct point is to draw a hypersphere with a radius of the current minimum distance around the candidate nearest neighbor.
 If this hypersphere does not intersect any of the hyperplanes that split the $k$-d tree, then we know that have found a best point.
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{kdpic3.png}
+\caption{Suppose we want to find the point in the $k$-d tree of figure \ref{fig:k-insert} that is closest to (8, 4.5). First we record the distance from the root to the target as the current minimum distance (about 3.04), then travel down the tree to the right. The right child, (8, 4), is only .5 units away from the target (the green circle), so we update the minimum distance. Since (8, 4) is not a leaf in the tree, we could continue down to the left child, (7, 7). However, this leaf node is much further from the target (the purple circle). To ensure that we terminate the algorithm correctly we check to see if the hypersphere of radius .5 around the current node (the green circle) intersects with any other hyperplanes. Since it does not, we stop descending down the tree and conclude (correctly) that (8, 4) is the nearest neighbor.}
+\label{fig:bad-search}
+\end{figure}
 
 \begin{comment}
 \begin{figure}
@@ -295,31 +299,31 @@ We summarize the algorithm below.
 
 
 \begin{problem}
-Use Algorithm \ref{alg:kdneighborz} to write a function that solves the nearest neighbor search problem by searching through a $k$-d tree.
-The function should take in a \li{KDT} object (already loaded with data) and a single point of interest.
-Return the nearest neighbor in the tree and the distance from the nearest neighbor to the point of interest, as in problem 2.
+Use Algorithm \ref{alg:kdneighborz} to write a function that solves the nearest neighbor search problem by searching through a $k$-d tree (your \li{KDT} object).
+The function should take in a data set and a single target point.
+Return the nearest neighbor in the data set and the distance from the nearest neighbor to the target point, as in Problem 2.
 
-To test your function, use Scipy's built-in \li{KDTree} object. This structure behaves like the \li{KDT} class, but its operations are heavily optimized. To solve the nearest neighbor problem, initialize the tree with data, then `query' the tree with the target point. The \li{query} method returns a tuple of the minimun distance and the index of the nearest neighbor in the data.
+To test your function, use Scipy's built-in \li{KDTree} object.
+This structure behaves like the \li{KDT} class, but its operations are heavily optimized.
+To solve the nearest neighbor problem, initialize the tree with data, then `query' the tree with the target point.
+The \li{query} method returns a tuple of the minimun distance and the index of the nearest neighbor in the data.
 
 \begin{lstlisting}
 >>> from scipy.spatial import KDTree
 
 # Initialize the tree with data (in this example we use random data).
->>> data = np.random.random((100,20))
->>> target = np.random.random(20)
->>> tree =  KDTree(data)
+>>> data = np.random.random((100,5))
+>>> target = np.random.random(5)
+>>> tree = KDTree(data)
 
 # Query the tree and print the minimum distance.
->>> min_distance, node_index = tree.query(target)
+>>> min_distance, index = tree.query(target)
 >>> print(min_distance)
-1.1769198641683098
+0.309671532426
 
 # Print the nearest neighbor by indexing into the tree's data.
->>> print tree.data[node_index]
-array([ 0.30411204,  0.72439179,  0.81654881,  0.37483482,  0.37419281,
-        0.19786408,  0.28339901,  0.26042625,  0.95736655,  0.9898518 ,
-        0.3523297 ,  0.91607715,  0.91631037,  0.87982453,  0.66185015,
-        0.8003657 ,  0.73600775,  0.7150884 ,  0.1836229 ,  0.89556912])
+>>> print(tree.data[index])
+[ 0.68001084  0.02021068  0.70421171  0.57488834  0.50492779]
 \end{lstlisting}
 \end{problem}
 
@@ -393,12 +397,12 @@ This data set may be loaded by using the following command:
 labels, points, testlabels, testpoints = np.load('PostalData.npz').items()
 \end{lstlisting}
 This contains a training set and a test set.
-The first entry of each array is a name, so \li{points[1]} and \li{labels[1]} point to the actual points and labels to use.
+The first entry of each array is a name, so \li{points[1]} and \li{labels[1]} are the actual points and labels to use.
 Each point is an image that is represented by a flattened $28 \times 28$ matrix of pixels. 
 The corresponding label indicates which number was written.
 
 Classify the testpoints with \li{n_neighbors} as 1, 4 or 10, and with \li{weights} as \li{'uniform'} or \li{'distance'}.
-For each trial print a report indicating how your classifier performs in terms of percentage of misclassifications.
+For each trial print a report indicating how your classifier performs in terms of percentage of correct classifications.
 Which combination gives the most correct classifications?
 (Hint: define an inner function that takes in \li{n_neighbors} and \li{weights} as arguments calls the neighbors functions appropriately)
 

@@ -236,28 +236,27 @@ class KDT(BST):
             n.axis = (n.prev.axis + 1) % self.k
         return n
     
-    def remove(self, *args):
-        raise AttributeError(
-            "'remove()' has been disabled for this class.")
+    def remove(*args, **kwargs):
+        raise NotImplementedError(
+                            "'remove()' has been disabled for this class.")
 
 
 # Problem 5: Implement this function
-def nearest_neighbor(tree, target):
+def nearest_neighbor(data_set, target):
     """Use your KDTree class to solve the nearest neighbor problem.
 
     Inputs:
-        tree (KDT): A KDT object loaded with a data set of m
-            k-dimensional points (as numpy arrays).
-        target (1xk ndarray): A k-dimensional point to compare to the
-            data housed in 'tree'.
+        data_set (mxk ndarray): An array of m k-dimensional points.
+        target (1xk ndarray): A k-dimensional point to compare to 'dataset'.
 
     Returns:
         The point in the tree that is nearest to 'target' (1xk ndarray).
         The distance from the nearest neighbor to 'target' (float).
     """
     
+    tree = KDT(data_set)
     k = tree.k
-    p = KDTNode(point)
+    p = KDTNode(target)
     
     def KDsearch(current, target, neighbor, distance):
         """The actual nearest neighbor search algorithm.
@@ -297,18 +296,26 @@ def nearest_neighbor(tree, target):
     result = KDsearch(tree.root, p, tree.root, tree.root - p)
     return result[0].data, result[1]
 
-def postal_problem():
+def postal_problem(grading=False):
     """Use the neighbors module in sklearn to classify the Postal data set
     provided in 'PostalData.npz'. Classify the testpoints with 'n_neighbors'
     as 1, 4, or 10, and with 'weights' as 'uniform' or 'distance'. For each
     trial print a report indicating how the classifier performs in terms of
-    percentage of misclassifications. Which combination gives the most
+    percentage of correct classifications. Which combination gives the most
     correct classifications?
 
     Your function should print a report similar to the following:
     n_neighbors = 1, weights = 'distance':  0.903
     n_neighbors = 1, weights =  'uniform':  0.903       (...and so on.)
     """
+    if grading:
+        print "n_neighbors =  1, weights = 'distance':\t0.903"
+        print "n_neighbors =  1, weights = 'uniform' :\t0.903"
+        print "n_neighbors =  4, weights = 'distance':\t0.906"
+        print "n_neighbors =  4, weights = 'uniform' :\t0.89"
+        print "n_neighbors = 10, weights = 'distance':\t0.912 (best)"
+        print "n_neighbors = 10, weights = 'uniform' :\t0.903"
+        return
 
     labels, points, testlabels, testpoints = np.load('PostalData.npz').items()
 
@@ -373,195 +380,246 @@ def test(student_module):
      5 points for problem 1
      5 points for problem 2
     10 points for problem 3
-    15 points for problem 4
-    15 points for problem 5
+    10 points for problem 4
+    20 points for problem 5
     10 points for problem 6
     
-    Parameters:
+    Inputs:
         student_module: the imported module for the student's file.
     
     Returns:
-        score (int): the student's score, out of 60.
-        feedback (str): a printout of results for the student.
+        score (int): the student's score, out of 80.
+        feedback (str): a printout of test results for the student.
     """
-    
-    # Helper functions
-    def numTest(x,y,m):
-        """Test to see if x and y have the same string representation. If
-        correct, award a points and return no message. If incorrect, return
-        0 and return 'm' as feedback.
-        """
-        if np.allclose(x, y, atol=1e-04): return 1, ""
-        else:
-            m += "\n\t\tCorrect response: " + str(x)
-            m += "\n\t\tStudent response: " + str(y)
-            return 0, m
-    
-    def grade(p,m):
-        """Manually grade a problem worth 'p' points with error message 'm'."""
-        part = -1
-        while part > p or part < 0:
-            try:
-                part = int(input("\nScore out of " + str(p) + ": "))
-            except:
-                part = -1
-        if part == p: return p,""
-        else: return part,m
+    tester = _testDriver()
+    tester.test_all(student_module)
+    return tester.score, tester.feedback
 
-    def getCode(func):
-        rawcode = inspect.getsource(func).splitlines()[len(func.__doc__.splitlines())+1:]
+class _testDriver(object):
+    """Class for testing a student's work. See test.__doc__ for more info."""
+    def __init__(self):
+        self.feedback = ""
+
+    # Main routine ------------------------------------------------------------
+    def test_all(self, student_module):
+        self.feedback = ""
+        score = 0
+
+        try:    # Problem 1: 5 points
+            self.feedback += "\n\nProblem 1 (5 points):"
+            points = self.problem1(student_module)
+            score += points
+            self.feedback += "\nScore += " + str(points)
+        except BaseException as e:
+            self.feedback += "\nError: " + e.message
+        
+        try:    # Problem 2: 5 points
+            self.feedback += "\n\nProblem 2 (5 points):"
+            points = self.problem2(student_module)
+            score += points
+            self.feedback += "\nScore += " + str(points)
+        except BaseException as e:
+            self.feedback += "\nError: " + e.message
+
+        try:    # Problem 3: 10 points
+            self.feedback += "\n\nProblem 3 (10 points):"
+            points = self.problem3(student_module)
+            score += points
+            self.feedback += "\nScore += " + str(points)
+        except BaseException as e:
+            self.feedback += "\nError: " + e.message
+
+        try:    # Problems 4 and 5: 30 points
+            self.feedback += "\n\nProblems 4 and 5 (30 points):"
+            points = self.problem5(student_module)
+            score += points
+            self.feedback += "\nScore += " + str(points)
+        except BaseException as e:
+            self.feedback += "\nError: " + e.message
+
+        try:    # Problem 6: 10 points
+            self.feedback += "\n\nProblem 2 (10 points):"
+            points = self.problem6(student_module)
+            score += points
+            self.feedback += "\nScore += " + str(points)
+        except BaseException as e:
+            self.feedback += "\nError: " + e.message
+        
+        # Report final score.
+        total = 60
+        perc = (100. * score) / total
+        self.feedback += "\n\nTotal score: %d/%d = %s%%"%(score, total, perc)
+        if   perc >=  98.0: self.feedback += "\n\nExcellent!"
+        elif perc >=  90.0: self.feedback += "\n\nGreat job!"
+
+        # Add comments (optionally).
+        print self.feedback
+        comments = str(raw_input("Comments: "))
+        if len(comments) > 0:
+            self.feedback += '\n\n\nComments:\n\t' + comments
+        self.score = score
+        
+    # Helper functions --------------------------------------------------------
+    def numTest(self, correct, student, message):
+        """Test to see if correct and student are numerically close.
+        If not, provide feedback. Return 1 for correct and 0 otherwise.
+        """
+        if np.allclose(correct, student, atol=1e-04):
+            return 1
+        else:
+            self.feedback += message
+            self.feedback += "\nCorrect response:\n" + str(correct)
+            self.feedback += "\nStudent response:\n" + str(student)
+            return 0
+
+    def grade(self, points):
+        """Manually grade a problem out of 'points'. Return the points earned.
+        """
+        credit = -1
+        while credit > points or credit < 0:
+            try:
+                credit = int(input("\nScore out of " + str(points) + ": "))
+            except:
+                credit = -1
+        if credit != points:
+            self.feedback += "\n\t" + str(raw_input("Describe problem: "))
+        return credit
+
+    def neighbor(self, m, k, func):
+        """Do a single nearest neighbor search trial for mxk data,
+        solved with the function 'func'.
+        """
+        data = np.random.random((m, k))
+        target = np.random.random(k)
+        tree = KDTree(data)
+        dist, index = tree.query(target)
+        point = tree.data[index]
+        spoint, sdist = func(data, target) # func solves the problem
+        p1 = self.numTest(point, spoint,
+            "\n\t"+func.__name__+"() failed: incorrect nearest neighbor")
+        p2 = self.numTest(dist, sdist, 
+            "\n\t"+func.__name__+"() failed: incorrect minimum distance")
+        return p1 + p2
+
+    @staticmethod
+    def get_code(func):
+        rawcode = inspect.getsource(func).splitlines()[len(
+                                            func.__doc__.splitlines())+1:]
         for line in rawcode: print line
 
-    s = student_module
-    score = 0
-    total = 60
-    feedback = ""
-    
-    try:    # Problem 1: 5 points
-        feedback += "\n\nProblem 1 (5 points):"
-        points = 0
+    # Problems ----------------------------------------------------------------
+    def problem1(self, s):
+        """Test euclidean_metric(). 5 Points."""
+
+        # Test with good inputs (4 points)
         x = np.array([1, 2])
         y = np.array([2, 2])
-        p,f = numTest(euclidean_metric(x,y), s.euclidean_metric(x,y),
-                "\n\teuclidean_metric() failed.")
-        points += p; feedback += f
+        points = self.numTest(euclidean_metric(x,y), s.euclidean_metric(x,y),
+                                            "\n\teuclidean_metric() failed.")
+        
         x = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
         y = np.array([2, 6, 4, 8, 0, 2, 4, 7, 5, 11])
-        p,f = numTest(euclidean_metric(x,y), s.euclidean_metric(x,y),
-                "\n\teuclidean_metric() failed.")
-        points += p; feedback += f
+        points += self.numTest(euclidean_metric(x,y), s.euclidean_metric(x,y),
+                                            "\n\teuclidean_metric() failed.")
+        
         x = (np.random.random(100)-.5)*200
         y = (np.random.random(100)-.5)*200
-        p,f = numTest(euclidean_metric(x,y), s.euclidean_metric(x,y),
-                "\n\teuclidean_metric() failed.")
-        points += p; feedback += f
+        points += self.numTest(euclidean_metric(x,y), s.euclidean_metric(x,y),
+                                        "\n\teuclidean_metric() failed.")*2
+        
+        # Test with bad inputs (1 point)
         x = np.array([1, 2])
         y = np.array([1, 2, 3])
         try:
             s.euclidean_metric(x, y)
-            feedback += "\n\teuclidean_metric() failed to raise a ValueError"
-            feedback += "for vectors of different lengths"
+            self.feedback += "\n\teuclidean_metric() failed to raise a "
+            self.feedback += "ValueError for vectors of different lengths"
         except:
-            points += 2
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except BaseException as e: feedback += "\nError: " + e.message
+            points += 1
+
+        return points
+
+    def problem2(self, s):
+        """Test exhaustive_search(). 5 points."""
     
-    try:    # Problem 2: 5 points
-        feedback += "\n\nProblem 2 (5 points):"
+        points  = self.neighbor(100, 10, s.exhaustive_search)
+        points += self.neighbor(10, 100, s.exhaustive_search)
+        points += 1
+
+        _testDriver.get_code(s.exhaustive_search)
+        print "\n(Check that scipy.spatial.KDTree is not used)"
+        points *= self.grade(1)
+
+        return points
+
+    def problem3(self, s):
+        """Test the KDTNode class. 10 points."""
+
         points = 0
 
-        def neighbor(m, k):
-            """Do a single nearest neighbor search trial."""
-            data = np.random.random((m, k))
-            target = np.random.random(k)
-            tree = KDTree(data)
-            dist, index = tree.query(target)
-            point = tree.data[index]
-            spoint, sdist = s.exhaustive_search(data, target)
-            p1, f1 = numTest(point, spoint, "\n\tIncorrect nearest neighbor")
-            p2, f2 = numTest(dist, sdist, "\n\tIncorrect minimum distance")
-            return p1 + p2, f1 + f2
-        
-        p,f = neighbor(100, 10)
-        points += p; feedback += f
-        p,f = neighbor(10, 100)
-        points += p; feedback += f
-
-        getCode(s.exhaustive_search)
-        print "\n(Check for cheating)"
-        p,f = grade(1, "\n\tNo cheating! You must use the naive method here.")
-        points += 1; feedback += f
-        points *= p
-
-        score += points; feedback += "\nScore += " + str(points)
-    except BaseException as e: feedback += "\nError: " + e.message
-        
-    try:    # Problem 3: 10 points
-        feedback += "\n\nProblem 3 (10 points):"
-        points = 0
-
-        # Test KDTNode.__init__ (can only hold np.ndarrays)
+        # Test KDTNode.__init__ (can only hold np.ndarrays; 2 points)
         try:
-            s.KDTNode([10, "apple", 1.0])
-            feedback += "\n\t__init__ failed to report TypeError"
+            s.KDTNode("This is not a numpy array")
+            self.feedback += "\n\tKDTNode(x) failed to raise a TypeError "
+            self.feedback += "for x not a numpy array (np.ndarray)"
         except:
             points += 2
 
-        # Test KDTNode.__sub__ (euclidean distance)
+        # Test KDTNode.__sub__ (euclidean distance; 2 points)
         x = np.random.random(10); y = np.random.random(10)
         A =   KDTNode(x); B =   KDTNode(y)
         C = s.KDTNode(x); D = s.KDTNode(y)
-        p,f = numTest(A-B, C-D, "\n\tKDTNode.__sub__ failed")
-        points += (p * 2); feedback += f
+        points += 2*self.numTest(A-B, C-D, "\n\tKDTNode.__sub__ failed")
 
-        # Test KDTNode.__eq__
+        # Test KDTNode.__eq__ (1 Point)
         D = s.KDTNode(1.5*x)
-        if C != D: points += 1
-        else: feedback += "\n\tKDTNode.__eq__ failed on nonequal"
-        D = s.KDTNode(x)
-        if C == D: points += 1
-        else: feedback += "\n\tKDTNode.__eq__ failed on equal"
+        if not (C == D):
+            points += 1
+        else:
+            self.feedback += "\n\tKDTNode.__eq__ failed on nonequal"
 
-        # Test KDTNode.__lt__ and KDTNode.__gt__
+        # Test KDTNode.__lt__ and KDTNode.__gt__ (5 points)
         x = s.KDTNode(np.array([3,1,0,5], dtype=np.int)); x.axis = 0
         y = s.KDTNode(np.array([1,2,4,3], dtype=np.int)); y.axis = 1
         if x < y: points += 1
-        else: feedback += "\n\tKDTNode.__lt__ failed"
+        else: self.feedback += "\n\tKDTNode.__lt__ failed"
         if y < x: points += 1
-        else: feedback += "\n\tKDTNode.__lt__ failed"
+        else: self.feedback += "\n\tKDTNode.__lt__ failed"
+
         x.axis = 2; y.axis = 3
         if x > y: points += 1
-        else: feedback += "\n\tKDTNode.__gt__ failed"
-        if y > x: points += 1
-        else: feedback += "\n\tKDTNode.__gt__ failed"
+        else: self.feedback += "\n\tKDTNode.__gt__ failed"
+        if y > x: points += 2
+        else: self.feedback += "\n\tKDTNode.__gt__ failed"
 
-        score += points; feedback += "\nScore += " + str(points)
-    except BaseException as e: feedback += "\nError: " + e.message
-        
-    try:    # Problem 4: 15 points
-        feedback += "\n\nProblem 4 (15 points):"
-        points = 0
-        # Test KDT.insert
-        key = KDT()
-
-        # Test KDT.remove
-        try:
-            K
-        # Test problem 4 here
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except BaseException as e: feedback += "\nError: " + e.message
-
-    try:    # Problem 5: 15 points
-        feedback += "\n\nProblem 5 (15 points):"
-        points = 0
-        # Test problem 5 here
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except BaseException as e: feedback += "\nError: " + e.message
-
-    try:    # Problem 6: 10 points
-        feedback += "\n\nProblem 6 (10 points):"
-        points = 0
-        # Test problem 6 here
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except BaseException as e: feedback += "\nError: " + e.message
+        return points
     
-    
-    # Report final score.
-    feedback += "\n\nTotal score: " + str(score) + "/" + str(total)
-    percentage = (100.0 * score) / total
-    feedback += " = " + str(percentage) + "%"
-    if   percentage >=  98.0: feedback += "\n\nExcellent!"
-    elif percentage >=  90.0: feedback += "\n\nGreat job!"
+    def problem5(self, s):
+        """Test nearest_neighbor(). 30 points."""
+        points = 0
 
-    # Add comments (optionally).
-    print feedback
-    comments = str(raw_input("Comments: "))
-    if len(comments) > 0: feedback += '\n\n\nComments:\n\t' + comments
+        points  = self.neighbor( 10,  10, s.nearest_neighbor)*3
+        points += self.neighbor(100,  10, s.nearest_neighbor)*3
+        points += self.neighbor( 10, 100, s.nearest_neighbor)*3
+        points += self.neighbor(100, 100, s.nearest_neighbor)*3
+        points += self.neighbor(100, 100, s.nearest_neighbor)*3
 
-    return score, feedback
+        _testDriver.get_code(s.nearest_neighbor)
+        print "\n(Check that scipy.spatial.KDTree is not used)"
+        points *= self.grade(1)
+        
+        return points
+
+    def problem6(self, s):
+        """Test postal_problem(). 10 points."""
+
+        print("Correct responses:")
+        postal_problem(grading=True)
+        print("\nStudent responses:")
+        x = s.postal_problem()
+        if x is not None:
+            print x
+        
+        return self.grade(10)
 
 # =============================== END OF FILE =============================== #
