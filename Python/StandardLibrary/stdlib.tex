@@ -193,8 +193,9 @@ To make a copy of a list, use the \li{list()} built-in method.
 Python has several methods that seem to change immutable objects.
 These methods actually work by making copies of objects.
 We can determine which object types are mutable and immutable by using the equal sign and ``changing'' the objects.
-For example, if two names refer to the same list then changes to the entries of one name show up in the second.
-
+%For example, if two names refer to the same list then changes to the entries of one name show up in the second.
+\begin{comment}
+Consider the following.
 \begin{lstlisting}
 >>> list_1 = [1,2,3]
 >>> list_2 = list_1
@@ -204,7 +205,9 @@ For example, if two names refer to the same list then changes to the entries of 
 >>> print(list_2)
 [1, 2, 3, 4]
 \end{lstlisting}
-
+% Only include one of these blocks. Maybe lists?
+Since \li{list_1} and \li{list_2} are the same, we conclude that lists are mutable.
+If the variables were different, it would indicate that the structure is immutable and a copy was made.
 Performing a similar operation on a tuple yields a different result.
 \begin{lstlisting}
 >>> tuple_1 = (1,2,3)
@@ -215,6 +218,7 @@ Performing a similar operation on a tuple yields a different result.
 >>> print(tuple_2)
 (1, 2, 3)
 \end{lstlisting}
+\end{comment}
 
 Determine which object types are mutable and which are immutable.
 Use the following operations to modify each of the given types.
@@ -234,7 +238,7 @@ dictionaries & dic1[1] = `a' \\
 \end{tabular}
 \end{center}
 
-Finally, print a statement of your conclusions to the terminal with the built-in \li{print} function.
+Print a statement of your conclusions to the terminal with the built-in \li{print} function.
 \end{problem}
 
 \begin{info}
