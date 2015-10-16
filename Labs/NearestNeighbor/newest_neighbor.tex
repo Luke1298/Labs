@@ -269,13 +269,15 @@ We summarize the algorithm below.
 \begin{algorithm}
 \begin{algorithmic}[1]
 \Procedure{KDTSearch}{current, target, neighbor, distance}
+\If {current is None}
+    \State return neighbor, distance (Base Case)
+\EndIf
 \State index = current.axis
 \State d = euclidean\_distance
 	\If {d(current,target) $<$ distance}
 		\State neighbor = current
 		\State distance = d(current,target)
 	\EndIf
-	
 	\If {target.data[index] $<$ current.data[index]}
 		\State neighbor, distance = KDTSearch(current.left, target,
 			\State									neighbor, distance)
@@ -291,6 +293,7 @@ We summarize the algorithm below.
 				\State									neighbor, distance)
 		\EndIf
 	\EndIf
+\State return neighbor, distance
 \EndProcedure
 \end{algorithmic}
 \caption{$k$-d tree nearest neighbor search}
@@ -383,10 +386,10 @@ This can then be used to find k-nearest neighbors, much like the \li{KDT} class 
 The second method, \li{predict}, will do a k-nearest neighbor search on the $k$-d tree and use the result to attach a label to unlabelled points.
 
 \begin{lstlisting}
-# 'testpoints' is an array of unlablled points.
+# 'testpoints' is an array of unlabeled points.
 # Perform the search and calculate the accuracy of the classification.
 >>> prediction = nbrs.predict(testpoints)
->>> np.average(prediction/labels)
+>>> np.average(prediction/testlabels)
 \end{lstlisting}
 
 \begin{problem}
