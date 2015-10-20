@@ -288,7 +288,7 @@ We summarize the algorithm below.
 	\Else
 		\State neighbor, distance = KDTSearch(current.right, target,
 			\State									neighbor, distance)
-		\If {target.data[index] + distance $<=$ current.data[index]}
+		\If {target.data[index] - distance $<=$ current.data[index]}
 			\State neighbor, distance = KDTSearch(current.left, target,
 				\State									neighbor, distance)
 		\EndIf
