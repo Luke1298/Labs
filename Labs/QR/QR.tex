@@ -169,7 +169,7 @@ The Householder transformation $H_{\mathbf{v}}$ of $\mathbf{x}$ is just the refl
 \subsection*{Householder Triangularization}
 The QR decomposition of an $m \times n$ matrix $A$ can also be computed with Householder transformations via the Householder triangularization.
 Whereas Gram-Schmidt makes $A$ \emph{orthonormal} using a series of transformations stored in an \emph{upper triangular} matrix, Householder triangularization makes $A$ \emph{triangular} by a series of \emph{orthonormal} transformations.
-More precisely, the Householder triangularization finds an $m \times m$ orthogonal matrix $Q$ and and $m \times n$ upper triangular matrix $R$ such that $QA = R$. 
+More precisely, the Householder triangularization finds an $m \times m$ orthogonal matrix $Q$ and $m \times n$ upper triangular matrix $R$ such that $QA = R$. 
 Since $Q$ is orthogonal, $Q^{-1}=Q\trp$ so $A = Q\trp R$, and we have discovered the QR decomposition.
 
 Let's demonstrate the idea behind Householder triangularization on a $4 \times 3$ matrix $A$.
