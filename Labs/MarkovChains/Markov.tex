@@ -29,7 +29,7 @@ Conversely, if it is cold today, here is a $60\%$ chance that tomorrow will be h
 
 \begin{problem}
 Transition matrices for Markov chains are efficiently stored as NumPy arrays.
-Write a function that accepts a dimension $n$ and returns the transition matrix for a random markov chain with $n$ states.
+Write a function that accepts a dimension $n$ and returns the transition matrix for a random Markov chain with $n$ states.
 \end{problem}
 
 \section*{Simulating State Transitions}
@@ -70,30 +70,53 @@ Assume the first day is hot, but do not include the data from the first day in t
 The resulting list should therefore have \li{num\_days} entries.
 \end{problem}
 
-% Problem 3: 3 states instead of 2.
+For very small Markov chains, the approach in the \li{forecast} function is practical and the implementation is fairly simple.
+However, very small Markov chains are typically useless in applications.
+
+\subsection*{Larger Chains}
+
+The \li{forecast} function makes one random draw from a \emph{uniform} distribution to simulate a state change.
+For larger Markov chains, we draw from a \emph{multinomial} distribution.
+A multinomial distribution is a mulitvariate generalization of the binomial distribution.
+A single draw from a binomial distribution with parameter $p$ indicates successes or failure of a single experiment with probability $p$ of success.
+The classic example is a coin flip, where the $p$ is the probability that the coin lands heads side up.
+A single draw from a multinomial distribution with parameters $\left[p_1, p_2, ..., p_n \right]$ indicates which of $n$ outcomes occurs.
+In this case the classic example is a dice roll, with $6$ possible outcomes instead of the $2$ in a coin toss.
+
+\begin{lstlisting}
+# To simulate a single dice roll, store the probabilities of
+# each outcome in a list or numpy array.
+>>> probabilities = np.array([1./6, 1./6, 1./6, 1./6, 1./6, 1./6])
+
+# Make a single random draw (roll the die once).
+>>> np.random.multinomial(1, probabilities)         
+array([0, 0, 0, 1, 0, 0])                       # The roll resulted in a 4.
+\end{lstlisting}
+
+% Problem 3: 4 states instead of 2. Multinomial transitioning.
 \begin{problem}
-Suppose that we want to model weather with three states: hot, mild, and cold.
-Let the transition matrix for this new Markov chain be:
+Let the following be the transition chain for a Markov chain modeling weather with four states: hot, mild, cold, and freezing.
 
-\[ \left( \begin{array}{ccc}
-0.6 & 0.3 & 0.2\\
-0.3 & 0.4 & 0.4\\
-0.1 & 0.3 & 0.4\end{array} \right)\]
+\[ W^\prime = \left( \begin{array}{cccc}
+0.5 & 0.3 & 0.1 & 0\\
+0.3 & 0.3 & 0.2 & 0.3\\
+0.2 & 0.3 & 0.4 & 0.5\\
+  0 & 0.1 & 0.2 & 0.2\end{array} \right)\]
+with hot, mild, cold, and freezing corresponding to columns 0, 1, 2, and 3, respectively.
 
-With hot, mild, and cold corresponding to 0, 1, and 2, respectively.
-
-Write a new function that accepts a parameter \li{num\_days} and runs the same simulation as \li{forecast}, but that uses the new three-state transition matrix.
-Return a list containing the day-to-day results (0 for hot, 1 for mild, 2 for cold).
+Write a new function that accepts a parameter \li{num\_days} and runs the same simulation as \li{forecast}, but that uses the new four-state transition matrix.
+Return a list containing the day-to-day results (0 for hot, 1 for mild, 2 for cold, and 4 for freezing).
+\label{problem:transition}
 \end{problem}
 
-% Problem 4: Analysis of results
+% Problem 4: Analysis of results.
 \begin{problem}
 Write a function that interprets the results of the functions in the previous two problems.
 Find the percentage of days that are hot, cold, and mild in each simulation.
 Print your results.
 \end{problem}
 
-% This section will be moved to Lab 1, Standard Library.
+% This section will be moved to Lab 3, Exceptions and File I/O.
 \section*{Input and Output in Python}
 
 Throughout some of the previous labs, we have provided code for reading information from and writing information to exterior files.
@@ -219,9 +242,10 @@ Thus, the transition probabilities of our Markov chains will reflect the sort of
 For example, the transition matrix built from the Complete Works of William Shakespeare will differ greatly from, say, a collection of academic journals.
 We will call the source collection of works in the next problems the \emph{training set}.
 
+% Problem 5: Text file to file of ints.
 \begin{problem}
-%First we must convert a file of English words to numbers.
-%These numbers will correspond to rows and columns in our transition matrix.
+First we must convert a file of English words to numbers.
+These numbers will correspond to rows and columns in our transition matrix.
 %Thus, we may refer to a words column or row in the transition matrix by its number.
 
 Write a function that accept the path to a file containing a training set of words.
@@ -235,19 +259,19 @@ The line break structure should be maintained.
 For example, a text and its conversion to numbers follows.
 
 \begin{lstlisting}
-<<Love is patient Love is kind 							1 2 3 1 2 4 
-It does not envy It does not boast 						5 6 7 8 5 6 7 9 
-It is not proud It is not rude 							5 2 7 10 5 2 7 11 
-It is not self-seeking It is not easily angered  		5 2 7 5 2 7 12 13 
-It keeps no record of wrongs							5 14 15 16 17 18 
-Love does not delight in evil							1 6 7 19 20 21 
-but rejoices with the truth 							22 23 24 25 26 
-It always protects always trusts 						5 27 28 27 29 
-always hopes always perseveres 							27 30 27 31 
-Love never fails>> 										1 32 33
+<<Love is patient Love is kind 						1 2 3 1 2 4 
+It does not envy It does not boast 					5 6 7 8 5 6 7 9 
+It is not proud It is not rude 						5 2 7 10 5 2 7 11 
+It is not self-seeking It is not easily angered  	5 2 7 5 2 7 12 13 14 
+It keeps no record of wrongs						5 15 16 17 18 19 
+Love does not delight in evil						1 6 7 20 21 22 
+but rejoices with the truth 						23 24 25 26 27 
+It always protects always trusts 					5 28 29 28 30 
+always hopes always perseveres 						28 31 28 32
+Love never fails 									1 33 34>>
 \end{lstlisting}
 
-The word ``Love'', for example is assigned the number 1, and the word ``It'' is assigned the number 5.
+The word ``Love'' is assigned the number 1, and the word ``It'' is assigned the number 5.
 
 %Besides writing the new file, return a dictionary mapping the numbers in the new file to the words from the original file (so 1 is the key for ``Love'', 5 is the key for ``It'', and so on)
 Also return a list that matches the index of the list to the word assigned that number, prepending and appending unique values for the start and stop states.
@@ -255,26 +279,28 @@ The list generated by the above example could be:
 \begin{lstlisting}
 <<[$tart, Love, is, patient, kind, It, does, not, ..., never, fails, en&]>>
 \end{lstlisting}
+\label{problem:str_to_int}
 \end{problem}
 
 Now that we have converted our English text into numbers, it is time to build the transition matrix for the Markov chain.
 We will scan the file we created in the previous problem and use it to create the matrix.
 
+% Problem 6: Generate the Markov chain.
 \begin{problem}
 Write a function that accepts the path to the file created in the previous problem and the number of unique words in the text (this will be the length of the list from the previous exercise).
 %number of keys in the dictionary from the previous exercise).
-Initialize a \emph{sparse} square zero matrix of floats (use \li{lil_matrix} from the \li{scipy.sparse} library) whose dimension is the number of unique words in the text, plus 2 (to include a start and stop state).
+%Initialize a \emph{sparse} square zero matrix of floats (use \li{lil_matrix} from the \li{scipy.sparse} library) whose dimension is the number of unique words in the text, plus 2 (to include a start and stop state).
+Initialize a square zero matrix of zeros whose dimension is the number of unique words in the text, plus 2 (to include a start and stop state).
 Then, read each line of the file and for each pair of subsequent numbers add one to the corresponding entry of the matrix.
 
 For instance, if we use the example text of the previous problem and we scanned the line 1 6 7 19 20 21, then we would add one to the $(6,1)$, $(7,6)$, $(19,7)$, $(20,19),$ and $(21,20)$ entries of the matrix.
 Also, each line should begin with the start state (assign it the number 0) and stop state (length of the list), so that $(1,0)$ and $(34,21)$ would also be incremented.
 
 Once the entire file has been read, divide each column by its column sum.
-Now each column will sum to one and it's non zero entries correspond to the probability of moving from word $j$ to word $i$.
-%For troubleshooting, use \texttt{stack_exchange_posts_small.txt} to save time.
+Then each column will sum to one, with the $ij^{th}$ entry corresponding to the probability of moving from word $j$ to word $i$.
+\label{problem:chainmaker}
 \end{problem}
 
-\begin{comment}
 \subsection*{Starting and Stopping states}
 
 In the previous weather model we chose a fixed number of states to simulate.
@@ -283,44 +309,22 @@ One way to simulate this is to create a start state and an end state.
 To generate a new sentence, we begin in the given start state.
 Subsequent words will have a probability of moving to the end state.
 Once the chain has moved to the end state, we have reached the end of the sentence and place a period.
-This is modeled in Python with a \li{while} loop and putting the start and stop state as the first and last column of the transition matrix, respectively.
-In the following code, we use a multinomial distribution to produce the transitions.
-
-# THIS NEEDS TO BE EXPLAINED IN THE SIMULATING TRANSITIONS SECTION.
-# It's explanation is beyond their ken (as in, they don't know what a multinomial distribution
-# is.  However, it is the best way I can think of to produce the transitions.
-# Maybe put it in a function and give it to them as a black box to be understood later.
-\end{comment}
 
 %\subsection*{Teaching the Markov Chain}
 
 %Now that we know how to travel through a Markov chain, we will build one to simulate English.
 
+% Problem 7: Random Sentences
 \begin{problem}
-%Now that we have a Markov chain and a word list, we may simulate English sentences by travelling through the chain.
-The follwing code uses a multinomial distribution to simulate state changes in a Markov chain.
-% OR use np.argmax(np.random.multinomial(1, t_matrix[:, current_state]))
-% to avoid using np.where()[0][0], since that'll make no sense to anyone...
-\begin{lstlisting}
-def start_to_stop(t_matrix, word_index, num_sentences=1):
-	"""Travel along the Markov chain with transition matrix 't_matrix'
-	from the starting state (first column) to the stopping state
-	(last column).
-	"""
-	current_state = 0						# Begin at the start state 0.
-	stop_state = t_matrix.shape[1] 			# End at the stopping state n.
+Write a new function that accepts a file name to read data in from, a file name to write data out to, and an optional integer argument \li{num\_sentences}.
+Use Problem \ref{problem:str_to_int} to generate a word list and Problem \ref{problem:chainmaker} to generate the corresponding transition matrix.
+Begin at the start state and use the strategy from Problem \ref{problem:transition} to transition through the Markov chain until the end state is reached.
+Keep track of the path through the chain and the corresponding path of words.
+When the end state is reached, write the resulting sentence to the outfile.
+Write as many sentences to the file as is specified by \li{num\_sentences}.
 
-	while current_state != stop_state:
-		state_vec = np.random.multinomial(1, t_matrix[:,current_state])
-		new_state = np.where(state_vec)[0][0]
-\end{lstlisting}
 
-Use the list returned in Problem 5 to construct a sentence based on the Markov chain generated in Problem 6.
-Modify this function so it prints a sentence generated by the chain.
-%This function will accept the transition matrix and word list as arguments.
-%Also include a keyword argument that allows you to specify the number of sentences created.
-
-Once this is working, you may try experiments with other data sets.
-%We have also made the works of Shakespeare available in \li{shakespeare.txt}.
+Once this is working with small data sets, you may try experimenting with large data sets.
+To accommodate larger data sets, consider using a sparse matrix for the transition matrix in Problem \ref{problem:chainmaker}, such as the \li{lil_matrix} from the \li{scipy.sparse} library.
 \end{problem}
-
+% such as the complete works of Shakespeare available in \li{shakespeare.txt}.
