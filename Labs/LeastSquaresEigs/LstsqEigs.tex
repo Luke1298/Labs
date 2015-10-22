@@ -20,7 +20,7 @@ Let $A=QR$ be the QR decomposition of $A$, so $R = \left(\begin{array}{c}R_0\\
 where $R_0$ is $n \times n$, nonsingular, and upper triangular. 
 It can be shown that $\widehat{\x}$ is the least squares solution to $A\x=\b$ if and only if $R_0\widehat{\x} = (Q\trp \b)[:n].$ 
 Here, $(Q\trp \b)[:n]$ refers to the first $n$ rows of $Q\trp \b$.
-Since $R$ is upper triangular, we can solve this equation quickly with back substitution. (see Volume 1 Exercise 3.46)
+Since $R$ is upper triangular, we can solve this equation quickly with back substitution (see Volume 1 Exercise 3.46).
 
 \begin{problem}
 Write a function that accepts a matrix $A$ and a vector $b$ and returns the least squares solution to $Ax=b$.
