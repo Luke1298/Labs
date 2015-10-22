@@ -1,17 +1,17 @@
 \lab{Least squares and Eigenvalues}{Least squares and Eigenvalues}
-\objective{Use least squares to fit curves to data and use QR decomposition to find eigenvalues}
+%TODO paragraph for the objective. Ask Mylan for a solid example.
+\objective{Use least squares to fit curves to data and use QR decomposition to find eigenvalues.}
 \label{lab:givens}
-
 
 \section*{Least Squares}
 
 A linear system $A\x=\b$ is \emph{overdetermined} if it has no solutions. 
-In this situation, the \emph{least squares solution} is a vector $\widehat{\x}$ hat is ``closest'' to a solution. 
+In this situation, the \emph{least squares solution}, denoted as $\widehat{\x}$, is ``closest'' to a solution. 
 By definition, $\widehat{\x}$ is the vector such that $A\widehat{\x}$ will equal the projection of $\b$ onto the range of $A$. 
-We can compute $\widehat{\x}$ by solving the \emph{Normal Equation} $A\trp A\widehat{\x} = A\trp \b$ (see [TODO: ref textbook] for a derivation of the Normal Equation).
+We can compute $\widehat{\x}$ by solving the \emph{Normal Equation} $A\trp A\widehat{\x} = A\trp \b$ (see Volume 1 Section 3.8). In this lab, we will be considering matrices in $M_{m \times n}(\Bbb{R})$. Therefore, we will use the transpose instead of the Hermitian.
 
 
-\subsection*{Solving the normal equation}
+\subsection*{Solving the Normal Equation}
 If $A$ is full rank, we can use its QR decomposition to solve the normal equation. 
 In many applications, $A$ is usually full rank, including when least squares is used to fit curves to data.
 
@@ -20,19 +20,18 @@ Let $A=QR$ be the QR decomposition of $A$, so $R = \left(\begin{array}{c}R_0\\
 where $R_0$ is $n \times n$, nonsingular, and upper triangular. 
 It can be shown that $\widehat{\x}$ is the least squares solution to $A\x=\b$ if and only if $R_0\widehat{\x} = (Q\trp \b)[:n].$ 
 Here, $(Q\trp \b)[:n]$ refers to the first $n$ rows of $Q\trp \b$.
-Since $R$ is upper triangular, we can solve this equation quickly with back substitution. 
-
+Since $R$ is upper triangular, we can solve this equation quickly with back substitution. (see Volume 1 Exercise 3.46)
 
 \begin{problem}
 Write a function that accepts a matrix $A$ and a vector $b$ and returns the least squares solution to $Ax=b$.
 Use the QR decomposition as outlined above.
-Your function should use SciPy's functions for QR decomposition and for solving triangular systems, which are \li{la.qr()} and \li{la.solve_triangular()}, respectively.
+Your function should use SciPy's functions for QR decomposition and for solving triangular systems, which are \li{la.qr()} and \li{la.solve_triangular()}, respectively. If you are unfamiliar with these functions, consult the documentation of these functions using object introspection.
 \end{problem}
 
-\subsection*{Using least squares to fit curves to data}
+\subsection*{Using Least Squares to Fit Curves to Data}
 The least squares solution can be used to find the curve of a chosen type that best fits a set of points. 
 
-\subsubsection*{Example 1: Fitting a line}
+\subsubsection*{Example 1: Fitting a Line}
 For example, suppose we wish to fit a general line $y=mx+b$ to the data set $\{(x_k, y_k)\}_{k=1}^n$. 
 When we plug the constants $(x_k, y_k)$ into the equation $y=mx+b$, we get a system of linear equations in the unknowns $m$ and $b$. 
 This system corresponds to the matrix equation
@@ -62,7 +61,6 @@ Then the system will be overdetermined.
 The least squares solution to this equation will be a slope $\widehat{m}$ and $y$-intercept $\widehat{b}$ that produce a line $y = \widehat{m}x+\widehat{b}$ which best fits our data points.
 
 
-
 %DO: spring constant as an example of this
 % circle fit
 % mention in this situation A will usually be full rank.
@@ -70,23 +68,21 @@ The least squares solution to this equation will be a slope $\widehat{m}$ and $y
 
 
 
-
-
-
-
-Let us do an example with some actual data. Imagine we place different loads on a spring and measure the displacement, recording our results in the table below.
 %TODO: get data points that are not so close to an actual line
+\begin{comment}
 \begin{table}
 \begin{tabular}{c|c|c|c|c|c|c|c}
 displacement (cm)& 1.04  &2.03  &2.95  &3.92  &5.06  &6.00  &7.07  \\ \hline
 load (dyne) & 3.11&  6.01&  9.07&  11.99 &  15.02&  17.91&  21.12\\
 \end{tabular}
 \end{table}
+\end{comment}
 
+Let us do an example with some actual data. 
 Hooke's law from physics says that the displacement $x$ should be proportional to the load $F$, or $F = kx$ for some constant $k$.
 The equation $F=kx$ describes a line with slope $k$ and $F$-intercept 0.
-So the setup is similar to the setup for the general line we discussed above, except we already know $b=0$
-When we plug our seven data points $(x,F)$ pairs into the equation $F=kx$, we get seven linear equations in $k$, corresponding to the matrix equation
+So the setup is similar to the setup for the general line we discussed above, except we already know $b=0$.
+When we plug our seven data points $(x,F)$ into the equation $F=kx$, we get seven linear equations in $k$, corresponding to the matrix equation
 \[
 \begin{pmatrix}
 1.04\\
@@ -99,7 +95,7 @@ When we plug our seven data points $(x,F)$ pairs into the equation $F=kx$, we ge
 \end{pmatrix}
 \begin{pmatrix}k\end{pmatrix} =
 \begin{pmatrix}
-3.11 \\
+3.11\\
 6.01\\
 9.07\\
 11.99\\
@@ -111,18 +107,17 @@ When we plug our seven data points $(x,F)$ pairs into the equation $F=kx$, we ge
 We expect such a linear system to be overdetermined, and in fact it is: the equation is $1.04k = 3.11$ which implies $k=2.99$, but the second equation is $2.03k = 6.01$ which implies $k=2.96$.
 
 We can't solve this system, but its least squares solution is a ``best'' choice for $k$.
-We can find the least squares solution with the SciPy function \li{linalg.lstlsq()}. 
-This function returns a tuple of several values, the first of which is the least squares solution.
+We can find the least squares solution with the SciPy function \li{linalg.lstsq()}. We pass this function the matrix $A$ and the vector $b$ from the normal equation. 
+This function returns a tuple of several values, the first of which is the least squares solution, $\widehat{x}$.
 \begin{lstlisting}
 >>> A = np.vstack([1.04,2.03,2.95,3.92,5.06,6.00,7.07])
 >>> b = np.vstack([3.11,6.01,9.07,11.99,15.02,17.91,21.12])
 >>> k = la.lstsq(A, b)[0]
 >>> k
-array([[ 2.99568294]])
+array([[2.99568294]])
 \end{lstlisting}
 Hence, to two decimal places, $k = 3.00$.
 We plot the data against the best-fit line with the following code, whose output is in Figure \ref{fig:spring_fit}
-
 
 \begin{lstlisting}
 >>> from matplotlib import pyplot as plt
@@ -198,30 +193,27 @@ The \li{linepts} array has two columns corresponding to the $x$ and $y$ coordina
 %$y = mx_k + b$ is as small as possible.
 
 
-\subsubsection*{Example 2: Fitting a circle}
+\subsubsection*{Example 2: Fitting a Circle}
 Now suppose we wish to fit a general circle to a data set $\{(x_k, y_k)\}_{k=1}^n$. Recall that the equation of a circle with radius $r$ and center $(c_1,c_2)$ is
 \begin{equation}
 \label{circle}
 (x-c_1)^2 + (y-c_2)^2 = r^2.
 \end{equation}
-What happens when we plug a data point into this equation? Suppose $(x_k, y_k)=(1,2)$.
-\footnote{You don't have to plug in a point for this derivation, but it helps us remember which symbols are constants and which are variables.} Then
-\begin{equation*}\label{equ:example}
-5 = 2c_1+4c_2+(r^2-c_1^2-c_2^2).
+
+After expanding and rearranging this equation, we get
+\begin{equation*}
+\label{circle2}
+2c_1x + 2c_2y + r^2 - c_1^2 - c_2^2 = x^2 + y^2.
 \end{equation*}
+
 To find $c_1$, $c_2$, and $r$ with least squares, we need \emph{linear} equations. 
-Then Equation \ref{equ:example} above is not linear because of the $r^2$, $c_1^2$, and $c_2^2$ terms. 
-We can do a trick to make this equation linear: create a new variable $c_3$ defined by $c_3 = r^2-c_1^2-c_2^2$. 
-Then Equation \ref{equ:example} becomes
-\[
-5=2c_1+4c_2+c_3,
-\]
-which \emph{is} linear in $c_1$, $c_2$, and $c_3$. Since $r^2 = c_3+c_1^2+c_2^2$, after solving for the new variable $c_3$ we can also find $r$.
+The equation above is not linear because of the $r^2$, $c_1^2$, and $c_2^2$ terms. Note that it is acceptable to have the $x^2$ and $y^2$ terms because the variables in this equation are $r$, $c_1$, and $c_2$, not $x$ and $y$.
+We can do a trick to make this equation linear: create a new variable $c_3$ defined by $c_3 = r^2-c_1^2-c_2^2$.
 
 For a general data point $(x_k, y_k)$, we get the linear equation
-\[
+\begin{equation*}
 2c_1x_k+2c_2y_k+c_3=x_k^2+y_k^2.
-\]
+\end{equation*}
 Thus, we can find the best-fit circle from the least squares solution to the matrix equation
 
 \begin{equation}\label{equ:circle_fit}
@@ -248,27 +240,26 @@ If the least squares solution is $\widehat{c_1}, \widehat{c_2}$, $\widehat{c_3}$
 (x-\widehat{c_1})^2 + (y-\widehat{c_2})^2 = \widehat{c_3}+\widehat{c_1}^2+\widehat{c_2}^2.
 \]
 
-
-Let us use least squares to find the circle that best fits the following nine points:
-%TODO: get data points that are not so close to an actual circle
+As an example, we use least squares to find the circle that best fits the nine points found in Table \ref{table:circlepts}:
 \begin{table}
 \begin{tabular}{c||c|c|c|c|c|c|c|c|c}
-$x$& 134  &104 &34  &-36  &-66  &-36  &34 &104 &  134  \\ \hline
-$y$& 76&  146&  176&  146 &  76&  5& -24 & 5 & 76\\
+$x$& 5  &-53 & -45 &  28 & 74 & -51 &  65 & 142 & 120 \\ \hline
+$y$& 11 & 35 & 139 & 170 & -7 &  87 & -24 &  64 & 131 \\
 \end{tabular}
+\caption{Points used in example of fitting to a circle using least squares.}
+\label{table:circlepts}
 \end{table}
-
 
 We enter them into Python as a $9\times 2$ array.
 \begin{lstlisting}
->>> P = np.array([[134,76],[104,146],[34,176],[-36,146],
-                  [-66,76],[-36,5],[34,-24],[104,5],[134,76]])
+>>> P = np.array([[5,11],[-53,35],[-45,139],[28,170],[74,-7],
+                [-51,87],[65,-24],[142,64],[120,131]])
 \end{lstlisting}
 
 We compute $A$ and $b$ according to Equation \ref{equ:circle_fit}.
 \begin{lstlisting}
->>> A = np.hstack((2*P, np.ones((9,1))))
->>> b = (P**2).sum(axis=1)
+>>> A = np.hstack((2*P[:,:1], 2*P[:,1:], np.ones((9,1))))
+>>> b = P[:,:1]**2 + P[:,1:]**2
 \end{lstlisting}
 
 Then we use SciPy to find the least squares solution.
@@ -278,7 +269,7 @@ Then we use SciPy to find the least squares solution.
 
 We can solve for $r$ using the relation $r^2 = c_3+c_1^2+c_2^2$.
 \begin{lstlisting}
->>> r = sqrt(c1**2 + c2**2 + c3)
+>>> r = np.sqrt(c1**2 + c2**2 + c3)
 \end{lstlisting}
 
 A good way to plot a circle is to use polar coordinates. 
@@ -293,8 +284,8 @@ The resulting image is Figure \ref{fig:circle}.
 \end{lstlisting}
 
 \begin{figure}
-\includegraphics[width=\textwidth]{circle.pdf}
-\caption{The graph of the some data and its best-fit circle.}
+\includegraphics[width=\textwidth]{newcircle.pdf}
+\caption{The graph of some data and its best-fit circle.}
 \label{fig:circle}
 \end{figure}
 
@@ -309,7 +300,6 @@ The function should return nothing.
 \end{problem}
 \end{comment}
 
-%TODO: figure out how to plot this problem
 \begin{problem}
 \leavevmode
 \begin{enumerate}
@@ -319,9 +309,35 @@ The general equation for an ellipse is
 \[
 ax^2 + bx + cxy + dy + ey^2 = 1.
 \]
-You should get  $0.087$, $-0.141$,  $0.159$, $-0.316$, $0.366$ for $a, b, c, d,$ and $e$ respectively.
+You should get  $0.087$, $-0.141$,  $0.159$, $-0.316$, $0.366$ for $a, b, c, d,$ and $e$ respectively. Generate a plot of the resulting curve and the data points used to produce the curve.
 %\item Plot the data and your line on the same graph.
 \end{enumerate}
+
+We can plot our result using polar coordinates as we did when plotting the circle. Code for visualizing your best-fit ellipse is given below. Note this bit of code plots the curve and not the data points. 
+
+\begin{lstlisting}
+    """Plots an ellipse of the form ax^2 + bx + cxy + dy + ey^2 = 1
+
+    Input:
+      X (array) - x-coordinates of all the data points.
+      Y (array) - y-coordinates of all the data points.
+      a,b,c,d,e (float) - the coefficients from the equation of an 
+                    ellipse of the form ax^2 + bx + cxy + dy + ey^2 = 1.
+    """
+    def get_r(a, b, c, d, e):
+        theta = np.linspace(0,2*np.pi,200)
+        A = a*(np.cos(theta)**2) + c*np.cos(theta)*np.sin(theta) + e*(np.sin(theta)**2)
+        B = b*np.cos(theta) + d*np.sin(theta)
+        r = (-B + np.sqrt(B**2 + 4*A))/(2*A)
+        return r, theta
+        
+    r,theta = get_r(a,b,c,d,e)
+    plt.plot(r*np.cos(theta), r*np.sin(theta), color = "r")
+    plt.plot(X,Y,".", color = "b")
+    plt.axes().set_aspect('equal', 'datalim')
+    plt.show()
+\end{lstlisting}
+
 \end{problem}
 
 %TODO: keep this?
@@ -366,12 +382,12 @@ You will need to apply this technique in the next problem.
 
 \end{comment}
 
-\section*{Computing eigenvalues}
+\section*{Computing Eigenvalues}
 The eigenvalues of a matrix are the roots of its characteristic polynomial. 
 Thus, to find the eigenvalues of an $n \times n$ matrix, we must compute the roots of a degree-$n$ polynomial. 
 This is easy for small $n$. 
 For example, if $n=2$ the quadratic equation can be used to find the eigenvalues. 
-However, Abel's Impossibility Theorem says that no such formula exists for the roots of a polynomial of degree 5 or larger.
+However, Abel's Impossibility Theorem says that no such formula exists for the roots of a polynomial of degree 5 or higher.
 
 \begin{theorem}[Abel's Impossibility Theorem]
 There is no general algebraic solution for solving a polynomial equation of degree $n\geq5$.
@@ -383,7 +399,7 @@ Thus, it is impossible to write an algorithm that will exactly find the eigenval
 This is a significant result. 
 It means that we must find eigenvalues with \emph{iterative methods}, methods that generate sequences of approximate values converging to the true value.
 
-\subsection*{The power method}
+\subsection*{The Power Method}
 There are many iterative methods for finding eigenvalues. 
 The power method finds an eigenvector corresponding to the \emph{dominant} eigenvalue of a matrix, if such an eigenvalue exists.
 The dominant eigenvalue of a matrix is the unique eigenvalue of greatest magnitude.
@@ -403,7 +419,7 @@ then the vectors $\x_0, \x_1, \x_2, \ldots$ will converge to an eigenvector of $
 If all entries of $A$ are positive, then $A$ will always have a dominant eigenvalue (see [TODO: ref something!] for a proof). 
 There is no way to guarantee that the second condition is met, but if we choose $\x_0$ randomly, it will almost always satisfy this condition.
 
-Once you know that $\x$ is an eigenvector of $A$, the corresponding eigenvalue is equal to the \emph{Raleigh quotient}
+Once you know that $\x$ is an eigenvector of $A$, the corresponding eigenvalue is equal to the \emph{Rayleigh quotient}
 \[
 \lambda = \frac{\langle Ax, x \rangle}{\|\x\|^2}.
 \]
@@ -429,7 +445,7 @@ Note that $A^k=VJ^kV^{-1}$. The limit as $k \rightarrow \infty$ of $(\frac{1}{\l
 So $(\frac{A}{\norm{A}})^k \approx VJ^kV^{-1}$ So the largest eigenvalue dominates.
 \end{comment}
 
-\subsection*{The QR algorithm}
+\subsection*{The QR Algorithm}
 The disadvantage of the power method is that it only finds the largest eigenvector and a corresponding eigenvalue. 
 To use the QR algorithm, let $A_0=A$. Then let $Q_kR_k$ be the QR decomposition of $A_k$, and recursively define 
 \[
@@ -464,7 +480,7 @@ A $2 \times 2$ block will occur in $S$ when $A$ is real but has complex eigenval
 In this case, the complex eigenvalues occur in conjugate pairs, each pair corresponding to a $2 \times 2$ block on the diagonal of $S$.
 
 
-\subsubsection*{Hessenberg preconditioning}
+\subsubsection*{Hessenberg Preconditioning}
 Often, we ``precondition'' a matrix by putting it in upper Hessenberg form before passing it to the QR algorithm. 
 This is always possible because every matrix is similar to an upper Hessenberg matrix (see Lab \ref{}). 
 Hessenberg preconditioning is done for two reasons.
@@ -480,7 +496,7 @@ If we apply the QR algorithm to an upper Hessenberg matrix $H$, then this speed-
 Write a function that implements the QR algorithm with Hessenberg preconditioning as described above. 
 Do this as follows.
 \begin{enumerate}
-\item Accept a matrix \li{A}, a number of iterations \li{niter}, and a tolerance \li{tol}
+\item Accept a matrix \li{A}, a number of iterations \li{niter}, and a tolerance \li{tol}.
 \item Put \li{A} in Hessenberg form using \li{la.hessenberg()}.
 \item Compute the matrix $S$ by performing the QR algorithm \li{niter} times. 
 Use the function \li{la.qr()} to compute the QR decomposition.
