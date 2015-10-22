@@ -1,0 +1,187 @@
+\lab{Fast Fourier Transform}{Fast Fourier Transform}
+\objective{Explore Fourier tranfroms of digital audio signals}
+
+% Problem 1
+\section*{Introduction}
+
+The analysis of periodic functions has many applications in pure and applied mathematics.
+In this lab we will study periodic functions that correspond to sound.
+
+Sounds are vibrations in the air around us.
+The frequency and intensity of these vibrations determine how sound is perceived.
+Though physically sounds correspond to continuous functions, we may discretely approximate them on a computer.
+These discrete approximations can be made indistinguishable from a continuous signal.
+
+\section*{TBD}
+
+There are two pieces to a digital audio signal: samples from the soundwave and a sample rate.
+These correspond to amplitude and frequency, respectively.
+A sample is a measurement of the amplitude of the wave at an instant in time.
+To see why the sample rate is necessary, consider an array with samples from a soundwave.
+If we do not know how frequently those samples were collected then we can arbitrarily stretch or compress the soundwave to make a variety of sounds.
+See Figure \ref{fig:comp_wave} for an illustration of this principle.
+
+\begin{center}
+\begin{figure}
+\caption{A picture of samples from a soundwave with varything frequencies.  It should be stretched or compressed to show how the frequency changes.}
+\label{fig:comp_wave}
+\end{figure}
+\end{center}
+
+However, if we know at what rate the samples were taken, then we can construct the wave exactly as it was recorded.
+In most applications, this sample rate will be measured in number of samples taken per second.
+The standard rate for high quality audio is $44100$ samples per second.
+
+\begin{problem}
+
+Create a class called \li{Signal} that creates a digital audio signal when instantiated.
+The constructor should accept a \li{numpy} array of samples from a wave form and a sample rate.
+The wave and the sample rate should be stored as attributes, called \li{wave} and \li{rate} respectively.
+
+Add a method to the class called \li{plot} that generates the graph of the waveform.
+
+\end{problem}
+
+\subsection*{Wave File Format} 
+
+One of the most common audio file formats across operating systems is the \li{wave} format, also called \li{wav} after its file extension.
+It is a lightweight, common standard that is in wide use.
+\li{Scipy} has builtin tools to read and create \li{wav} files.
+For example, if we had a \li{numpy} array called \li{signal}, we could create an audio file using the \li{write} method in the \li{scipy.io.wavfile} library.
+
+\begin{lstlisting}
+# Import wavfile from scipy.io.  This library allows us to read and create wav files.
+>>> from scipy.io import wavfile
+
+# Suppose that signal is a numpy array of audio samples, sampled at a rate of 44100 hz.  Write it to a file called "my_sound.wav"
+>>> samplerate = 44100
+>>> wavfile.write('my_sound.wav', samplerate, signal)
+
+# Note that the write method requires a filename, a sampling rate, and the actual samples.
+\end{lstlisting}
+
+It should be noted that \li{wavfile.write} expects an array of 16 bit integers for the samples (whole numbers between $-32767$ and $32767$).
+Therefore, waves may need to be scaled an converted to integers before using this function.
+
+\begin{problem}
+
+Add a method to the \li{Signal} class called \li{write_to_file} that generates a \li{.wav} file from the \li{signal} attribute.
+
+\end{problem}
+
+\section*{Creating Sounds in Python}
+
+In order to generate a sound in python, we need to sample the corresponding sine wave and then save it as an audio file.
+This can be done quite efficiently using \li{numpy} arrays and functions.
+For example, suppose that we want to generate a sound with a frequency of 500 hertz for 10 seconds.
+We can use \li{numpy}'s \li{sin} function to generate the correct wave form.
+
+\begin{lstlisting}
+# Set appropriate variables
+>>> samplerate = 44100
+>>> frequency = 500
+>>> length = 10			# Length in seconds of our desired sound
+
+# We wish to sample a 500 hertz soundwave for 10 seconds.
+# Since sin(x) has a period of 2*pi, we will sample the function f(x) = sin ( 500*x ) from 0 to 2*pi*10.
+# Using the sample rate, we can calculate the appropriate step size to get the correct samples.
+
+>>> stepsize = frequency*2*np.pi / samplerate
+
+# Use a range to generate the points at which we wish to sample the sine wave
+
+# Since frequency*2*np.pi gives the range to sample from for 1 second of sound, we need to multiply by the number
+# of seconds we desire to get the correct range.
+
+>>> sample_points = np.arange(0, frequency*2*np.pi*length, stepsize)
+
+# Finally, calculate the actual samples from the sine wave.
+
+>>> samples = np.sin(sample_points)
+
+# If we want to write our sound to a wave file, we need to rescale and convert to 16 bit integers.
+
+>>> scaled_samples = np.int16(samples*32767)
+\end{lstlisting}
+
+The \li{scaled_samples} array that we generated in the previous code block can now be written to a file using \li{wavfile.write}.
+This file can be played using media software included with most operating systems.
+
+% Problem 3
+\begin{problem}
+
+The `A' note occurs at a frequency of 440 hertz.
+Generate the sine wave that corresponds to an `A' note being played for 5 seconds.
+
+Once you have successfully generated the `A' note, experiment with different frequencies to generate different notes.
+The following table shows some frequencies that correspond to common notes.
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Note & Frequency \\
+\hline
+A & 440 \\
+B & 493.88 \\
+C & 523.25 \\
+D & 587.33 \\
+E & 659.25 \\
+F & 698.46 \\
+G & 783.99 \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{problem}
+
+\section*{Discrete Fourier Transform}
+
+\subsection*{Some Technicalities}
+
+Recall that under the right conditions, a continuous periodic function may be represented as a sum of sine waves:
+\[
+f(x) = \displaystyle{\sum_{k=-\infty}^{\infty}} c_k \sin{kx}
+\]
+where the constants $c_k$ are called the Fourier coefficients.
+
+Further recall that such a transform also exists for discrete periodic functions.
+Whereas the frequencies present in the continuous case are multiples of a sine wave with a period of 1, the discrete case is somewhat different.
+The Fourier coefficients in the discrete case represent the amplitudes of sine waves whose periods are multiples of a ``fundamental frequency.''
+The fundamental frequency is a sine wave with a period length equal to the amount of time of the signal.
+
+The k$th$ coefficient of a signal $\{x_0, .., x_{N-1}\}$ is calculated with the following formula:
+\[
+c_k = \displaystyle{\sum_{n=0}^{N-1}} x_n \cdot e^{\frac{2\pi ikn}{N}}
+\]
+where $i$ is the square root of $-1$.
+This process is done for each $k$ from $0$ to $N-1$.
+Thus there are just as many Fourier coefficients as samples from the orginal signal.
+
+% Problem 4
+\begin{problem}
+
+Add a method the \li{Signal} class called \li{calculate_DFT} that calculates the discrete Fourier transform of the \li{wave} attribute.
+Store the calculated coefficients in an attribute called \li{DFT}.
+
+The \li{scipy} module has a \li{dft} method that also calculates the discrete Fourier transform of an array.
+Use \li{\%timeit} to compare your implmentation with the one in \li{scipy}
+\end{problem}
+
+\section*{Plotting the DFT}
+
+% Problem 5
+\begin{problem}
+
+Update the \li{plot} method so that it includes a kew word argument, \li{DFT}, that defaults to \li{False}.
+If the \li{DFT} attribute is set to \li{True} by the user, then \li{plot} should generate a plot of the coefficients from the discrete Fourier transform.
+If it is set to \li{False}, then the functionality should be unchanged.
+
+\end{problem}
+
+% Problem 6
+\begin{problem}
+
+A chord is a conjunction of several notes played together.
+
+\end{problem}
+
