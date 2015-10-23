@@ -7,8 +7,8 @@ This decomposition is useful for computing least squares and finding eigenvalues
 As stated in the following theorem, the QR decomposition of $A$ always exists when the rank of $A$ equals the number of columns of $A$.
 \begin{theorem}
 Let $A$ be an $m\times n$ matrix of rank $n$.  Then $A$ can be
-factored into a product $Q R$, where $Q$ is an $m\times m$ matrix
-with orthonormal columns and $R$ is a $m \times n$ upper
+factored into a product $Q R$, where $Q$ is an $m\times n$ matrix
+with orthonormal columns and $R$ is a $n \times n$ upper
 triangular matrix of rank $n$.
 \end{theorem}
 
@@ -107,7 +107,7 @@ True
 \end{lstlisting}
 We can use the same method to check that \li{Q} is ``very close'' to an orthogonal matrix.
 \begin{lstlisting}
->>> np.allclose(Q.T.dot(Q), np.eye(4)) 
+>>> np.allclose(Q.T.dot(Q), np.eye(3)) 
 True
 \end{lstlisting}
 
@@ -399,7 +399,7 @@ This algorithm returns orthonormal $Q$ and upper triangular $R$ satisfying $A = 
 \State $m, n \gets \shape{A}$
 \State $R \gets \makecopy{A}$
 \State $Q \gets \Id{m}$
-\For{$k=0\ldots n-2$}
+\For{$k=0\ldots n-1$}
     \State $\u \gets \makecopy{R[k:,k]}$
     \State $\u[0] \gets \u[0] + \sign( \u[0] ) \norm{\u}$
     \State $\u \gets \u / \norm{\u}$
