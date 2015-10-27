@@ -91,12 +91,12 @@ In this lab we will only consider undirected graphs, which we will simply call g
 A \emph{weighted} graph is a graph with a weight attached to each edge.
 For example, a weighted graph could represent a collection of cities with roads connecting them.
 The vertices would be cities, the edges roads, and weight of an edge would be the length of a road.
-Such a graph is depicted as in Figure \ref{fig:example_graph2}.
+Such a graph is depicted in Figure \ref{fig:example_graph2}.
 
 Any graph can be thought of as a weighted graph by assigning a weight of 1 to each edge.
 
 \subsection*{Adjacency, Degree, and Laplacian Matrices}
-We will now introduce three special matrices associated to a graph. 
+We will now introduce three special matrices associated with a graph. 
 Throughout this section, assume we are working with a weighted undirected graph with $N$ nodes, and that $w_{ij}$ is the weight attached to the edge connecting node $i$ and node $j$.
 We first define the adjacency matrix.
 
@@ -215,7 +215,7 @@ D_1 = \begin{pmatrix}
 \end{pmatrix}
 \]
 
-Finally, we can combine the degree matrix and the adjacency matrix into the Laplacian matrix.
+Finally, we can combine the degree matrix and the adjacency matrix to get the Laplacian matrix.
 % Wikipedia defines the Laplacian of a simple graph only. I don't know why.
 % The graph in our application is NOT simple. 
 % However, the non-simple parts cancel out, meaning that the Laplacian of the graph is the same as if you removed all self edges and then computed the Laplacian.
@@ -273,22 +273,21 @@ While this works for very small graphs, most interesting graphs will have thousa
 Fortunately, there is a better way.
 Recall that the adjacency matrix of an undirected graph is always symmetric. 
 Thus, it will have real eigenvalues. 
-Surprisingly, a graph is connected if the second smallest eigenvalue of its Laplacian matrix is positive.
+Surprisingly, a graph is connected if the second smallest eigenvalue of its Laplacian matrix is positive.  By second smallest, we mean the second eigenvalue when they are ordered smallest to largest.  The eigenvalues of the Laplacian matrix are never negative; thus, if the second one is not zero, the graph is connected.
 In many applications, the Laplacian matrix is sparse, so by taking advantage of this sparsity, we can cheaply determine if a graph is connected.
 
 \begin{problem}
 \leavevmode
 \begin{enumerate}
-\item Write a function that accepts a symmetric adjacency matrix as an argument and returns the second smallest eigenvalue of the Laplacian matrix.
-Use the \li{scipy.linalg} package to compute the eigenvalue.
+\item Write a function that accepts a symmetric adjacency matrix as an argument and returns the second smallest eigenvalue of the Laplacian matrix.  Use the \li{scipy.linalg} package to compute the eigenvalue.  Note: Only return the real part.
 
 \item Here is a function that creates a random symmetric matrix of Boolean values with sparsity determined by the input \li{c}.
 \begin{lstlisting}
 def sparse_generator(n, c):
     ''' Return a symmetric nxn matrix with sparsity determined by c.
     Inputs:
-        n -- an integer
-        c -- a decimal number in [0,1]. Larger values of c will produce
+        n (int): dimension of matrix
+        c (float): a float in [0,1]. Larger values of c will produce
              matrices with more entries equal to zero.
     '''
     A = np.random.rand(n**2).reshape((n, n))
@@ -338,7 +337,7 @@ The ``cut'' is the total weight of the edges removed. Thus, to segment an image,
 We can ``cut'' an image multiple times to segment an image into more than two pieces.
 
 Now let us define the adjacency matrix of the graph associated to an image. 
-Since an $N \times N$ image has $N^2$ pixels, the adjacency matrix will be $N^2 \times N^2$.
+Since an $M \times N$ image has $M \times N$ pixels, the adjacency matrix will be $(M \times N) \times (M \times N)$.
 After choosing a radius $r$ and some constants $\sigma_I$ and $\sigma_d$, we define the adjacency matrix to be $W = (w_{ij})$, where
 
 \begin{equation}
@@ -431,13 +430,18 @@ Notice that $W$ will be sparse as long as $r$ is small. Figure \ref{fig:adjacenc
 
 \end{tikzpicture}
 
-\caption{The grid at left represents a $4\times4$ (or $N \times N$) image (\li{img}), which has 16 pixels. Thus the adjacency matrix at right is $16 \times 16$ (or $N^{2} \times N^{2}$). We have not calculated the weights in the adjacency matrix, but we have shaded the nonzero entries. For example, the $6^{th}$ row corresponds to the $6^{th}$ pixel. Within that row, entries are nonzero if they correspond to pixels that are at most 1.2 away from pixel 6. (These nonzero elements correspond to the \li{indices} and \li{distances} returned by the \li{getNeighbors} function given the \li{pixel} 6 and \li{radius} 1.2.)}
+\caption{The grid at left represents a $4\times4$ (or $M \times N$) image, which has 16 pixels. Thus the adjacency matrix at right is $16 \times 16$ (or $(M \times N) \times (M \times N)$). We have not calculated the weights in the adjacency matrix, but we have shaded the nonzero entries. For example, the $6^{th}$ row corresponds to the $6^{th}$ pixel. Within that row, entries are nonzero if they correspond to pixels that are at most 1.2 away from pixel 6. (These nonzero elements correspond to the \li{indices} and \li{distances} returned by the \li{getNeighbors} function given the \li{pixel} 6 and \li{radius} 1.2.)}
 \label{fig:adjacency}
 \end{figure}
 
 
 \subsection*{Computing the Adjacency Matrix}
-In this section, we will write a function that accepts an image \li{img} and constants \li{radius}, \li{sigma_I}, and \li{sigma_d}. The function will return the adjacency matrix defined in (\ref{eq:adjacency}) and the diagonal of the corresponding degree matrix. Some helper functions are given to help create the adjacency and diagonal matrices.  The input \li{img} should be a 2-D array of brightness values.  Use \li{getImage} to convert the image into an array of brightness values and then flatten the array using \li{img.flatten}.
+In this section, we will write a function that accepts an image and constants \li{radius}, \li{sigma_I}, and \li{sigma_d}. The function will return the adjacency matrix defined in (\ref{eq:adjacency}) and a list of the diagonals of the corresponding degree matrix. Some helper functions are given to help create the adjacency and diagonal matrices.  The input \li{filename} should be the filename of the image that you want to segment.  The function \li{getImage} will return a 2-D array of brightness values associated with the image. Flatten the array using \li{img.flatten}.
+\begin{lstlisting}
+>>> A = np.array([[1,2],[3,4]])
+>>> A.flatten()                
+array([1,2,3,4])
+\end{lstlisting}
 
 \begin{comment}
 Here is the function definition, which includes some default values for the constants.
@@ -456,7 +460,7 @@ Later, our function will iterate through the rows of the adjacency matrix, initi
 \end{lstlisting}
 \end{comment}
 
-Next we want to initialize the adjacency and degree matrices. As can be seen in Figure \ref{fig:adjacency}, the adjacency matrix will be sparse, so we initialize it as a sparse matrix \li{W}. The sparse matrix type \li{lil_matrix} is optimized for building a matrix one entry at a time, which is what we will do. On the other hand, we only need to compute the diagonal of the degree matrix, so we initialize this diagonal as a regular NumPy array \li{D}.
+Next we want to initialize the adjacency and degree matrices. As can be seen in Figure \ref{fig:adjacency}, the adjacency matrix will be sparse, so we initialize it as a sparse matrix \li{W}. The sparse matrix type \li{lil_matrix} is optimized for building a matrix one entry at a time, which is what we will do. On the other hand, we only need to compute the diagonal of the degree matrix, so we initialize this diagonal as a regular 1-dimensional NumPy array \li{D}.
 
 Iterate through each pixel in the image, we initialize the corresponding row of the adjacency matrix.
 The sum of the entries of this row will be the corresponding entry in \li{D}. 
@@ -497,7 +501,7 @@ img_color = plt.imread('dream.png')
 img = (img_color[:,:,0]+img_color[:,:,1]+img_color[:,:,2])/3.0
 \end{lstlisting}
 \end{comment}
-Test your function on the image \li{dream.png} (which is currently a 2-D array of RGB values).
+Test your function on the image \li{dream.png}.
 
 
 %Notice that for each pixel you can save time by only checking the pixels $r$ rows and columns away.
@@ -510,11 +514,11 @@ Test your function on the image \li{dream.png} (which is currently a 2-D array o
 
 As was mentioned before, we are trying to minimize the `cut', or the total weight of the edges we remove to create segments. 
 Let $L$ be the Laplacian of the adjacency matrix defined in \ref{eq:adjacency} and let $D$ be the degree matrix.
-Shi and Malik proved that we can minimize the `cut' by finding the second smallest eigenvalue of $D^{-1/2}LD^{-1/2}$.
+Shi and Malik proved that we can minimize the `cut' by finding the second smallest eigenvalue of $D^{-1/2}LD^{-1/2}$.  Note that $D^{-1/2}$ refers not to matrix, but element-wise, exponentiation.
 Because both $D$ and $L$ will be symmetric matrices, all eigenvalues of $D^{-1/2}LD^{-1/2}$ will be real, and so it makes sense to ask for the second smallest one.
 
-The eigenvector associated to the second smallest eigenvalue will have $N^2$ entries, some positive and some negative. 
-Reshape this vector to be an $N \times N$ mask defining two segments, segments that correspond to the positive and negative values of the eigenvector.
+The eigenvector associated to the second smallest eigenvalue will have $M \times N$ entries, some positive and some negative. 
+Reshape this vector to be an $M \times N$ mask defining two segments, segments that correspond to the positive and negative values of the eigenvector.
 Shi and Malik proved that these are the segments we desire. 
 
 Once we have a mask of True-False values, we multiply it by the image entrywise. This zeros out the pixels in the matrix corresponding to the \li{False} entries in the mask and leaves the pixels corresponding to \li{True} entries unaffected. We can negate the mask using the tilde operator, which lets us compute the other segment of the image. Finally we return the two segments.
@@ -563,14 +567,14 @@ Next we create a mask that is \li{True} wherever \li{eigvec} is positive and res
 \begin{problem} Write the function \li{segment} described in this section.  Test your function on the image \li{dream.png}. Use the function \li{displayPosNeg} to plot your images. Your segments should look like the segments in Figure \ref{fig:dream_solution} (the original image is on the left). Here are some hints:
 
 \begin{enumerate}
-\item Once you have defined $D^{-1/2}$, convert $D$ and $D^{-1/2}$ into sparse matrices using \li{scipy.sparse.diag}.
+\item Once you have defined $D^{-1/2}$, convert $D$ and $D^{-1/2}$ into sparse matrices using \li{scipy.sparse.spdiags}.
 \item You should NOT use your solution to Problem \ref{prob:laplacian} to calculate the Laplacian matrix because in this problem we are working with sparse matrices, and you have already computed the degree matrix.
 
 \item Multiply sparse matrices with \li{A.dot(B)}.
 
 \item Use \li{scipy.sparse.eigs} to calculate the eigenvector. Set the keyword \li{which = "SR"}.
 
-\item Reshape the mask to be an $N \times N$ matrix
+\item Reshape the mask to be an $M \times N$ matrix
 
 
 \end{enumerate}

@@ -1,5 +1,5 @@
 # name this file solutions.py
-"""Volume I Lab : 
+"""Volume I Lab 10: 
 <Name>
 <Class>
 <Date>
@@ -55,13 +55,13 @@ def sparse_generator(n, c):
     return A.T.dot(A)
 
 # Helper function used to display the images.
-def displayPosNeg(img,pos,neg):
+def displayPosNeg(img_color,pos,neg):
     '''
     Displays the original image along with the positive and negative
     segments of the image.
     
     Inputs:
-        img (array): Original image
+        img_color (array): Original image
         pos (array): Positive segment of the original image
         neg (array): Negative segment of the original image
     Returns:
@@ -73,20 +73,25 @@ def displayPosNeg(img,pos,neg):
     plt.subplot(132)
     plt.imshow(pos)
     plt.subplot(133)
-    plt.imshow(img)
+    plt.imshow(img_color)
     plt.show()
 
 # Helper function used to convert the image into the correct format.
 def getImage(filename='dream.png'):
     '''
     Reads an image and converts the image to a 2-D array of brightness
-    values (or grayscale).
+    values.
     
     Inputs:
         filename (str): filename of the image to be transformed.
+    Returns:
+        img_color (array): the image in array form
+        img_brightness (array): the image array converted to an array of
+            brightness values.
     '''
     img_color = plt.imread(filename)
-    return (img_color[:,:,0]+img_color[:,:,1]+img_color[:,:,2])/3.0
+    img_brightness = (img_color[:,:,0]+img_color[:,:,1]+img_color[:,:,2])/3.0
+    return img_color,img_brightness
 
 
 # Problem 1: Implement this function.
@@ -110,30 +115,33 @@ def secondEigenvalue(A):
         A (array): adjacency matrix for undirected weighted graph,
              shape (n,n)
     Returns:
-        lambda (float): second smallest eigenvalue of L
+        lambda (float): the second of the eigenvalues of L, when they
+            arranged least to greatest.  Only return the real part.
     '''
     raise NotImplementedError("Problem 2 Incomplete")
 
 # Problem 3: Implement this function.
-def adjacency(img, radius = 5.0, sigmaI = .15, sigmaX = 1.7):
+def adjacency(img_brightness, radius = 5.0, sigma_I = .15, sigma_d = 1.7):
     '''
     Compute the weighted adjacency matrix for
-    the image array img given radius. Do all computations with sparse matrices.
+    the image given the radius. Do all computations with sparse matrices.
     Also, return an array giving the main diagonal of the degree matrix.
     
     Inputs:
-        img (array): an array representing the image as returned by getImage()
+        img_brightness (array): array of brightnesses given by the function getImage()
         radius (float): maximum distance where the weight isn't 0
-        sigmaI (float): some constant to help define the weight
-        sigmaD (float): some constant to help define the weight
+        sigma_I (float): some constant to help define the weight
+        sigma_d (float): some constant to help define the weight
     Returns:
-        W (sparse array(csc)): the weighted adjacency matrix of img, in sparse form.
+        W (sparse array(csc)): the weighted adjacency matrix of img_brightness,
+            in sparse form.
         D (array): 1D array representing the main diagonal of the degree matrix.
     '''
+    
     raise NotImplementedError("Problem 3 Incomplete")
 
 # Problem 4: Implement this function.
-def segment(img):
+def segment(img_brightness):
     '''
     Compute and return the two segments of the image as described in the text. 
     Compute L, the laplacian matrix. Then compute D^(-1/2)LD^(-1/2),and find
@@ -141,13 +149,14 @@ def segment(img):
     Use this eigenvector to calculate a mask that will be usedto extract 
     the segments of the image.
     Inputs:
-        img (array): image array of shape (n,n)
+        img_brightness (array): an array of brightnesses given by the function
+            getImage().
     Returns:
-        seg1 (array): an array the same size as img, but with 0's
+        seg1 (array): an array the same size as img_brightness, but with 0's
                 for each pixel not included in the positive
                 segment (which corresponds to the positive
                 entries of the computed eigenvector)
-        seg2 (array): an array the same size as img, but with 0's
+        seg2 (array): an array the same size as img_brightness, but with 0's
                 for each pixel not included in the negative
                 segment.
     '''
