@@ -108,7 +108,7 @@ Finally, add a new method to the backpack called \li{dump} that empties the cont
 In object-oriented programming, inheritance is a tool for code reuse and organization.
 To create a new class similar to one that already exists, it is sometimes easier to ``inherit'' the already existing methods.
 This is done by including the existing class as an argument in the class definition.
-This creates a \emph{class heierarchy}.
+This creates a \emph{class hierarchy}.
 For example, since a knapsack is a backpack (but not all backpacks are knapsacks), we can create a special \li{Knapsack} class that automatically inherits the attributes and methods of the \li{Backpack} class, and adds extra functionality.
 A class that inherits from another class is called a \emph{subclass}.
 The class that a subclass inherits from is called a \emph{superclass}.
@@ -153,7 +153,7 @@ class Knapsack(Backpack):
 A subclass may have new attributes and methods that are unavailable to the superclass.
 If methods in the new class need to be changed, they are overwritten as is the case of the constructor in the \li{Knapsack} class.
 New methods are included normally.
-For example, the \li{put} and \li{take} methods in \li{knapsack} are modified to check if the knapsack is shut. 
+For example, the \li{put} and \li{take} methods in \li{Knapsack} are modified to check if the knapsack is shut. 
 \li{tie} and \li{untie} methods are added as well.
 
 \begin{lstlisting}
@@ -186,7 +186,7 @@ All methods defined in the \li{Backpack} class are available to instances of the
 Thus, in this example, the \li{dump} method is available even though it is not defined explicitly in the \li{knapsack} class.
 
 \begin{lstlisting}
-# Import the Knapsack class from Backpay.py
+# Import the Knapsack class from Backpack.py
 >>> from Backpack import Knapsack
 >>> my_knapsack = Knapsack()
 
@@ -217,7 +217,7 @@ Set the default amount of \li{fuel} to 10.
 
 Add a \li{fly} method that accepts an amount of fuel to be burned, and decrement \li{fuel} by that amount.
 If the user tries to burn more fuel than remains, print ``Not enough fuel!"
-Finally, overload the \li{dump} method so that both the contents and the fuel tank are emptied.
+Finally, overwrite the \li{dump} method so that both the contents and the fuel tank are emptied.
 \end{problem}
 
 \section*{Magic Methods}
@@ -245,7 +245,7 @@ It is important to write good docstrings so that others can utilize your code co
 Now, suppose we wanted to add two backpacks together.
 How should addition be defined for backpacks?
 A simple option is to add the number of contents.
-Then if backpack $A$ has $3$ items and backpack $B$ has $5$ items, $A + B$ return $8$.
+Then if backpack $A$ has $3$ items and backpack $B$ has $5$ items, $A + B$ returns $8$.
 Magic methods can also potentially alter the objects themselves.
 In the following example, addition copies over the contents from the backpack on the right-hand side of the $+$ operator into the contents of the backpack on the left-hand side of the $+$.
 
