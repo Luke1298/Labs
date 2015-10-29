@@ -1,5 +1,5 @@
 \lab{Data Visualization}{Data Visualization} 
-\objective{Use data visualizations to explore data and communicate it to others.}
+\objective{Use data visualizations to explore data and communicate effectively to others.}
 \label{lab:DataVis}
 
 \noindent\emph{The purpose of visualization is insight, not pictures.} \small{---Card, Mackinlay, \& Shneiderman (after Hamming)}
@@ -29,13 +29,11 @@ Here are some of the most useful types of data visualizations.  We explain each 
 \begin{enumerate}
 
 
-\item A \emph{bar chart} is generally the preferred method for displaying a small (discrete) collection of one-dimensional data points. Each discrete data point is represented as a bar whose length is determined by the value of the data.
+\item A \emph{bar chart} is generally the preferred method for displaying a small (discrete) collection of one-dimensional data points. Each discrete data point is represented as a bar whose length is determined by the value of the data (see Figure \ref{fig:barchart}).
 
-\item A \emph{histogram} is a special type of  bar graph where the length of each bar corresponds to the number of data points in a certain range (sometimes called a \emph{bin}). 
-(see Figure \ref{fig:healthcare}). 
-Histograms are useful for revealing statistical distributions.
+\item A \emph{histogram} is a special type of  bar graph where the length of each bar corresponds to the number of data points in a certain range (sometimes called a \emph{bin}).  Histograms are useful for revealing statistical distributions (see Figure \ref{fig:healthcare}).
 
-\item A \emph{line plot} plots $(x,y)$-pairs as points and connects them with a line. 
+\item A \emph{line plot} plots $(x,y)$-pairs as points and connects them with a curve. 
 You should use a line plot for graphing continuous functions or when there is a natural order to your two-dimensional data---for example when the data is a time series (a sequence of values over time). 
 
 \item A \emph{scatter plot} plots $(x,y)$ tuples as discrete points.  This should be used instead of a line plot when the data is two-dimensional but has no natural order. 
@@ -43,10 +41,7 @@ You should use a line plot for graphing continuous functions or when there is a 
 A scatter plot can reveal correlation (or lack thereof) between $x$ and $y$. 
 
 
-\item Three-dimensional data can be displayed on a two-dimensional page with a \emph{contour plot}.  This draws lines in the plane where the third value is constant---like a topographical map.  Filling in the contours with successive colors gives a  \emph{heat map}.
-
-\item A \emph{pseudocolor plot} or \emph{heat map} uses color to display a third dimension on a two-dimensional page (see Figure \ref{fig:heatmap}). 
-
+\item Three-dimensional data can be displayed on a two-dimensional page with a \emph{contour plot}.  This draws lines in the plane where the third value is constant---like a topographical map.  Filling in the contours with successive colors gives a  \emph{heat map} (see Figure \ref{fig:heatmap}).
 
 Three-dimensional data can also be plotted as a surface in 3-space, but it is often difficult to find a view where none of the important features of the data are obscured.
 A contour plot or a heat map can help avoid this problem and is often easier for the viewer to decode.
@@ -70,7 +65,7 @@ A contour plot or a heat map can help avoid this problem and is often easier for
 
 \subsection*{Bar Charts}
 
-Bar charts are best for relatively small sets of discrete, one-dimensional data.  They are usually best presented with the bars running horizontally because when the bars are vertical the labels tend to run together (and the other possible solution to that problem---making the text vertical---is harder to read) as seen in Figure \ref{fig:barchart}.  
+Bar charts are best for relatively small sets of discrete, one-dimensional data.  They are usually best presented with the bars running horizontally because when the bars are vertical the labels tend to run together.  The other possible solution to that problem---making the text vertical---is harder to read (see Figure \ref{fig:barchart}).  
 
 
 
@@ -93,7 +88,7 @@ Bar charts are best for relatively small sets of discrete, one-dimensional data.
 \includegraphics[width=\textwidth]{bar_chart_vertical_bars_vertical_labels.png}
 \end{subfigure}
 
-\caption{Bar Chart examples}
+\caption{Bar Charts.  Note how the good example in the upper left is easier to use for comparison than the upper right, and easier to read than the bottom two charts.  Also, the labels in the bottom left are overlapping and the labels in the bottom right are vertical, making it hard to read.}
 \label{fig:barchart}
 \end{figure}
 
@@ -141,10 +136,7 @@ Vietnam & 165.7 cm (5 ft 5 in) & 155.2 cm (5 ft 1 in) \\
 \subsection*{Histograms}
 
 
-A histogram depicts a distribution of numerical data. They can be used to look for trends over time and to investigate statistical distributions. 
-Histograms can give a clear view of the way data is distributed, but sometimes changing the size and position of the bins (a small interval of that data) can change the picture substantially.
-
-You can create a histogram in matplotlib with the command \li{plt.hist()}. 
+A histogram depicts a distribution of numerical data.  To construct a histogram of several one-dimensional data points, we divide the data into "bins" based on what range they lie in, and then we plot a bar whose height corresponds to the number of points in the bin.  Histograms can give a clear view of the way data is distributed, but sometimes changing the size and position of the bins can change the picture substantially.  You can create a histogram in matplotlib with the command \li{plt.hist()}. 
 
 When plotting histograms, it can sometimes be useful to include reference lines.  A nice way to do this without cluttering the figure is to make the reference lines white.  You can do this in matplotlib with the command \li{plt.grid(True, color='w',linestyle='-')}.
 
@@ -188,13 +180,13 @@ Using 1000 random numbers from a Gaussian distribution,
 from numpy.random import normal
 gaussian_numbers = normal(size=1000)
 \end{lstlisting}
-plot a histogram with white reference lines. Vary the number of bins and compare.
+plot a histogram with white reference lines.  Do this for 20 bins, 10 bins, 5 bins, and 3 bins.
 
 \end{problem}
 
 \subsection*{Line Plots}
 
-Line plots should not be used for data that has no natural ordering or progression because it gives the false impression that there is an order or progression when none exists (see Figure \ref{fig:lineplot_bad}.
+Line plots should not be used for data that is one-dimensional or is two-dimensional with no natural ordering or progression because it gives the false impression that there is an order or progression when none exists (see Figure \ref{fig:lineplot_bad}.
 
 Recall that you can create a line plot in matplotlib with the command \li{plt.plot()}.
 
@@ -213,15 +205,15 @@ When plotting line graphs in matplotlib, the default line width is usually too t
 \centering
 \includegraphics[width=\textwidth]{line_plot_bad_thick.png}
 \end{subfigure}
-\caption{Line Plot with previous bar chart data}
+\caption{Line Plot}
 \label{fig:lineplot_bad}
 \end{figure}
 
 
 \begin{problem}
-Using 1000 subintervals, plot the equation
+Using 1000 data points, plot the equation
 
-$$y = x^2sin(x),$$
+$$y = x^2\sin(x),$$
 $$x \in [0,100].$$
 
 
@@ -255,7 +247,7 @@ You can create a scatter plot in matplotlib with the command \li{plt.scatter()}.
 \centering
 \includegraphics[width=\textwidth]{scale_scatter_zoomed_out.png}
 \end{subfigure}
-\caption{Scatter Plots with and without a strong correlation}
+\caption{Scatter Plots.  The data in both plots are the same, but note how in the first we see litle correlation compared to the second.  This is solely an artifact of the scale of the plot.  Keep this in mind when you make scatter plots.}
 \label{fig:scatter_correlation}
 \end{figure}
 
@@ -263,13 +255,13 @@ You can create a scatter plot in matplotlib with the command \li{plt.scatter()}.
 Figure \ref{fig:scatter_correlation} displays two scatter plots, the first appearing to have no strong correlation and the second a strong correlation. However, the same data is being plotted and the only difference is the scale and window size. Manipulating these can change your interpretation and should be done with careful consideration.
 
 \begin{problem}
-Plot the average heights of men against women using the data from Problem \ref{prob1}. Zoom in and out to see what difference that makes.
+Plot the average heights of men ($y$) against women ($x$) using the data from Problem \ref{prob1}. Zoom in and out to see what difference that makes.
 \end{problem}
 
 
 
 
-\subsection*{Contour Plots and Heat maps}
+\subsection*{Contour Plots and Heat Maps}
 
 Three-dimensional data can be displayed on a two-dimensional page with a \emph{contour plot}.  This draws lines in the plane where the third value is constant---like a topographical map.  
 
@@ -277,7 +269,7 @@ You can create a contour plot in matplotlib with
 \li{plt.contour()}.
 
 Filling in the contours with successive colors gives a  \emph{heat map}. Note that the default color map for matplotlib is the  \emph{rainbow color map}.  This is a poor choice for a heat map or colored contour map because people do not naturally interpret one color to be greater than another.  To solve this problem in matplotlib, use the argument \li{cmap='NAME\_OF\_COLORMAP'}
-where \li{NAME\_OF\_COLORMAP} is one of matplotlib's sequential or diverging colormaps. 
+where \li{NAME\_OF\_COLORMAP} is one of matplotlib's sequential or diverging colormaps like \li{afmhot}. 
 
 \begin{lstlisting}
 import numpy as np
@@ -309,7 +301,7 @@ plt.contourf(X, Y, F, [-2,-1,0.0001,1,2,3,4,5] ,cmap=plt.get_cmap('afmhot'))
 \centering
 \includegraphics[width=\textwidth]{contour_map_rainbow.png}
 \end{subfigure}
-\caption{Contour Maps}
+\caption{Contour Maps.  The top left is a good contour map and the top right is a good heat map, and the bottom tow are inferior because of bad color choices.}
 \label{fig:contour}
 \end{figure}
 
@@ -323,7 +315,7 @@ TODO add in the list (and pix) of sequential and diverging colormaps from \url{h
 \begin{problem}
 Using 400 intervals, plot a filled contour map of
 
-$$z = sin(x) + sin(y),$$ $$ x\in[0,12\pi], y\in[0,12\pi].$$ 
+$$z = \sin(x) + \sin(y),$$ $$ x\in[0,12\pi], y\in[0,12\pi].$$ 
 
 Be sure to use an appropriate color map. 
 \end{problem}
@@ -341,7 +333,7 @@ Be sure to use an appropriate color map.
 \end{subfigure}
 %\includegraphics[width=\textwidth]{heatmap.png}
 \caption{Both of these pseudocolor plots depict the function $z = \sin(x)\sin(y)$ on the domain $[-1,4] \times [-4,1]$. 
-The plot on the left uses a rainbow gradient which is pretty to look at but whose choice of colors has no meaningful relationship to the data. 
+The plot on the left uses a rainbow gradient, which is pretty to look at, but whose choice of colors has no meaningful relationship to the data. 
 The plot on the right uses the color map called \li{afmhot}, which has the important benefit that the lighter colors are naturally associated with higher values, while the darker colors are naturally associated with lower values.}
 \label{fig:heatmap}
 \end{figure}
@@ -351,7 +343,6 @@ The plot on the right uses the color map called \li{afmhot}, which has the impor
 You can also create a pseudocolor plot in matplotlib with the \li{plt.pcolormesh()} command.
 
 
-One situation where heat maps are useful is when data is naturally associated to a geographic location.  When a heat map is plotted on a map it is often called a \emph{cloropleth}.
 \begin{comment}
 TODO example of a cloropleth---maybe percentage income donated to charity by county? (makes Utah look good).
 
@@ -422,12 +413,13 @@ Some of the questions that you should be asking in this iterative process includ
 \item Would filtering the data to look at a particular subset give a more informative picture?
 \item Would a transformation of the data give a more informative picture?
 \end{enumerate}
+Let's consider each of these questions in more detail.
 
-\subsubsection*{Data integrity}
+\subsubsection*{1. Data integrity}
 
 Visualization is a powerful way to identify problems with your data set.  Ask yourself, whether the results look like what you expect.  Are they the right magnitude? Are there missing values? 
 
-\subsubsection*{Trends, patterns, and irregularities}
+\subsubsection*{2. Trends, patterns, and irregularities}
 
 Some patterns you may look for:
 \begin{enumerate}
@@ -442,7 +434,7 @@ Some patterns you may look for:
 \item Is the data dense or sparse?
 \end{enumerate}
 
-\subsubsection*{Using different types of visualization}
+\subsubsection*{3. Using different types of visualization}
 
 Data can be visualized using different types of visualization and is relatively easy to transform.
 
@@ -469,6 +461,7 @@ Choose another type of visualization and plot the data again. What are the relat
 
 \end{problem}
 
+\begin{comment}
 \begin{figure}
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -478,7 +471,9 @@ Choose another type of visualization and plot the data again. What are the relat
 \caption{Pie Chart for instrument problem}
 \label{fig:pie}
 \end{figure}
-\subsubsection*{Changing the view}
+\end{comment}
+
+\subsubsection*{4. Changing the view}
 
 By choosing to plot only a portion of your data, you may be able to focus your attention on the most relevant data.  On the other hand, you may also miss some interesting behavior in the data you didn't graph. Figures \ref{fig:scatter_correlation} and \ref{fig:line_scale} are two such examples. 
 
@@ -920,9 +915,11 @@ def Chebyshev_subplots():
         plt.ylim(-1.1,1.1)
         ax.set_title('$T_%d$'%i)
         if i%3:
+            # remove the inner y-ticks and labels.
             ax.set_yticklabels([])
             ax.yaxis.set_ticks_position('none')
         if i<6:
+            # remove the inner x-ticks and labels.
             ax.xaxis.set_ticks_position('none')
             ax.set_xticklabels([]) 
 
@@ -941,6 +938,7 @@ Plot the Bernstein basis polynomials for $v,n$ in [0,3] as small multiples and c
 
 \end{problem}
 
+\begin{comment}
 \subsection*{Tell the truth}
 
 Just as graphics can tell your reader about your data, they can also give your viewer false impressions. 
@@ -998,6 +996,6 @@ TODO get full refs for the follwoing
 \item \emph{Now you see it} by Stephen Few
 \end{itemize}
 
-
+\end{comment}
 
 \printbibliography
