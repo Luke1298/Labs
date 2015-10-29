@@ -37,30 +37,32 @@ to build and return a list of 10000 elements.  The second function is only margi
 returning the 10000 elements in approximately 1.09ms.  
 This gap between the two functions grows much wider as the inputs are increased.
 
-Where the real difference in the two functions lies is in the time the function takes to execute when
-it is first called.  The first function requires 1.43ms to execute the first time.  The second function,
-a mere .00000041ms!  The reason for this is the first function calculates its results and returns them all at once.  The second function only creates a \emph{generator} object.  This object has several methods.
+Where the real difference in the two functions lies is in the time the function takes to return (or yield) its first value.
+The first function requires 1.43ms to return its first value, because it waits until it has computed the entire list and then returns the whole thing at once.
+The second function takes a mere .00000041ms to yield its first value because it only creates a \emph{generator} object.
+This object has several methods.
 The most important and most useful method is the \li{next()} method.  Every time this method is called, 
 the generator resumes from its previous state and computes the next value in the sequence. Each time \li{yield} statement is executed, the generator is effectively suspended until \li{next()} is called again.
-When the generator has finished executing, a \li{StopIteration} exception is raised the generator terminates.
+When the generator has finished executing, a \li{StopIteration} exception is raised and the generator terminates.
 You can send values and throw exceptions to the generators via the \li{send()} and \li{throw()} methods respectively.
 For more information on these methods we refer to PEP 342 (Python Enhancement Proposal 342).
 
 When you are writing \li{for} loops, you should use a generator whenever it is reasonable to do so.
 The \li{xrange()} function that is built into Python is a generator based version of \li{range()} and is generally faster when used in \li{for} loops.
 
-
-
 \section*{Combinations}
 Combinations are subsets of a set.  The power set of a set, $S$, is the set of all combinations
 of elements in $S$.  The cardinality of the the power set is $2^{\abs{S}}$.  Clearly, if our
 set is of any appreciable size, the power set will be much larger.  Let's look at one method for
-generating the power set of a set.
+computing the power set of a set.
 
-We can generate the power set of a set by representing each element in a set by one bit.
-If a bit is 0, then we do not include the element in the current combination.  If a
-bit is 1, the element is included in the combination.
-Using this representation we can count through the power set of any finite set $A$, by counting from 0 to $2^{\abs{A}}-1$, looking at the binary representation of the number, and then including or excluding elements based on the value of each bit.
+We will use a convenient correspondence between elements of the power set and binary numbers.
+If $S$ has $n$ elements, then we can use an $n$-bit binary integer to represent each subset.
+If the $i$th element of $S$ is in the subset, then the $i$th bit of the integer is a $1$.
+Otherwise it is a $0$.
+For example, if $S = \{a,b,c,d,e\}$, then the subset $\{b,d,e\}$ corresponds to the integer $01011$.
+
+Using this representation, we can count through the power set of any finite set $S$, by counting from 0 to $2^{\abs{S}}-1$, looking at the binary representation of the number, and then including or excluding elements based on the value of each bit.
 
 \begin{problem}
 Write a function that will generate a list of the first $n$ binary numbers.  This should accept an integer $n$ and return a list of strings.
@@ -71,20 +73,21 @@ Write a function that will accept a list and return a list of all the combinatio
 of elements of that list.
 \end{problem}
 
-This is, however, an inefficient way to generate combinations.  Ideally, we would want
-to generate the next combination by modifying the previous combination.  However, with
+This is, however, an inefficient way to compute combinations.
+It is faster to make each combination by modifying the previous combination, especially if the modification can be made minimal.
+However, with
 our current method of counting in binary, we are rebuilding the combination from scratch
-each time.  For example it we have a combination represented by \texttt{01111}, the next
+each time.  For example, if we have a combination represented by \texttt{01111}, the next
 combination would be \texttt{10000}.  We added one element and removed four elements!
-It can be useful to get our next combination by changing the previous combination as little as possible.
-Fortunately, there is a really neat way of doing this--reflected binary codes or Gray codes. 
+
+Fortunately, there is a really neat way of avoiding such large modifications ---  Gray codes. 
 A Gray code is a sequence of binary numbers where each new number is generated by
 changing the previous code by exactly one bit.  Geometrically, we can think of it as
-traversing a unit cube by moving only along the edges of the cube.
+traversing a unit $n$-cube by moving only along the edges of the cube.
 Gray codes are used frequently in error correction schemes.
 
 A Gray code is constructed as follows.\cite{Brualdi2010}
-The Gray code of order $n$ can be calculated using recursion in the following way:
+The code of order $n$ can be calculated recursively in the following way:
 \begin{enumerate}
 \item The Gray code of order 1 is 0, 1.
 \item Compute the Gray code of order $n-1$.  Write the binary numbers in a new list and then write them again in reverse order on the end of the same list (reflect them so that the last Gray code or order $n-1$ is first and the first Gray code of order $n-1$ is last).
@@ -92,8 +95,7 @@ The Gray code of order $n$ can be calculated using recursion in the following wa
 \end{enumerate}
 While this is a simple algorithm to describe, it is not very efficient.  
 To generate a Gray code of order $n$, we have to generate all previous Gray codes.
-If we were to calculate the Gray codes up to order 6, we would calculate the Gray code of order 6 once, order 5 twice, order 4 three times, order 3 four times, and order 2 five times!
-Fortunately, there exists another way to compute Gray codes of order $n$ much more efficiently.
+Fortunately, there exists another way to compute Gray codes of order $n$ more efficiently.
 The algorithm is given in Brualdi's book.  
 We first note that a Gray code of order $n$ is of length $2^n$ with each code of length $n$.
 We also observe that the reflected gray codes always begin with $0\dots0$ and terminate with $10\dots0$.
@@ -101,17 +103,17 @@ We also observe that the reflected gray codes always begin with $0\dots0$ and te
 \item Start with $0\dots0$ ($n$ zeros).  This is the current binary number.
 \item Sum the digits of the current binary number.
 \begin{enumerate}
-\item If the sum of the digits is even, add 1 to the last digit mod 2.
-This becomes our new current Gray and we go back to step 1.
-\item If the sum of the digits is odd, find the rightmost non-zero digit and add 1 to the digit immediately to the left of it.
-This becomes our new current number and we go back to step 1.
-\item If the rightmost non-zero digit of the number is the first one you have reached the end of the Gray code.
+\item If the sum of the digits is even, flip the last bit.
+This becomes our new current number. Go to Step 2.
+\item If the sum of the digits is odd, find the rightmost non-zero bit and flip the bit immediately to the left of it.
+This becomes our new current number. Go to Step 2.
+\item If the rightmost non-zero bit of the number is the first one you have reached the end of the Gray code.
 \end{enumerate}
 \end{enumerate}
 
 \begin{problem}
 \label{prob:brualdi_gray}
-Implement the algorithm above for calculating the Gray code of order $n$.
+Implement the second algorithm above for calculating the Gray code of order $n$.
 Your implementation must function as a generator.
 \end{problem}
 
@@ -120,21 +122,6 @@ Your implementation must function as a generator.
 Gray codes are an ordering of the power set such that any consecutive subsets differ by exactly one element.  Write a generator that will only return the change required to arrive at the next subset in the ordering.  Each time the generator is called, 
 it should return a single element and a boolean value that determines if that element should be
 added or removed from the set to obtain the next Gray code.  This function should be able to accept any set with arbitrary elements.
-\end{problem}
-
-\begin{problem}
-\label{prob:subblocks}
-Write a generator function that will evenly split a 1-dimensional array into sub-blocks.
-Your function should be capable of returning sub-blocks that could possibly overlap.
-The function should accept as arguments: a 1-dimensional array, a block width, and an optional offset.
-If the array cannot be evenly divided into sub-blocks, raise an error.
-For example, if I want to divide an array\li{X} with 9 elements into subblocks of 3 elements with a step of 2 between each block, my generator would return the values \li{X[0:3]}, \li{X[2:5]}, \li{X[4:7]}, and \li{X[6:9]}.
-It would raise an error if I were to ask for that sort of stepping on an array with 10 entries since the last item could not be included in any subblock.
-\end{problem}
-
-\begin{problem}
-Expand your solution to Problem \ref{prob:subblocks} to work with 2-dimensional
-arrays.  You may implement them as separate functions if you wish.
 \end{problem}
 
 \printbibliography
