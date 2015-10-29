@@ -76,7 +76,7 @@ array([[1, 1],
       [3, 4]])
 \end{lstlisting}
 
-Array objects also support the usual binary operators, including addition \li{+} and element-wise multiplication \li{*}. For Python lists, the \li{+} operator performs concantenation and the \li{*} operator is not defined.
+Array objects also support the usual binary operators, including addition \li{+} and element-wise multiplication \li{*}. For Python lists, the \li{+} operator performs concatenation and the \li{*} operator is not defined.
 
 \begin{lstlisting}
 >>> a = [1,2,3]
@@ -346,6 +346,7 @@ Thus, when you change elements in a view, you also change the array it reference
 # Slicing produces a view of ex5. 
 >>> view_ex5 = ex5[:]
 >>> view_ex5
+array([0, 1, 2, 3, 4])
 
 # Check that ex5 and view_ex5 are distinct objects in Python.
 >>> id(view_ex5) == id(ex5) 
