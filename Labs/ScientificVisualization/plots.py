@@ -175,6 +175,31 @@ def log_plots():
     
     plt.savefig("log_plots.pdf")
     plt.close()
+
+# bar chart
+def barChart_horizontal_sorted(save=False):
+    # The slices will be ordered and plotted counter-clockwise.
+    labels = 'Spam', 'Eggs', 'Ham', 'Sausage', 'Bacon', 'Baked beans','Lobster thermidor'
+    fracs = range(22,15,-1)
+    fracs[-1]=10
+    fracs[-2]=11
+    
+    val = fracs[::-1]    # the bar lengths
+    pos = np.arange(7)+.5    # the bar centers on the y axis
+
+    plt.figure(1)
+    plt.barh(pos,val, align='center')
+    plt.yticks(pos, labels[::-1])
+    plt.xticks([])
+    plt.title('More lobster or beans?')
+    plt.grid(False)
+    if(save==False):
+        plt.show()
+    else:
+        plt.title("Bar chart")
+        plt.gca().tight_layout()
+        plt.savefig("bar_chart_horizontal_sorted.png")
+        plt.close()
     
 if __name__ == "__main__":
     dog_plots()

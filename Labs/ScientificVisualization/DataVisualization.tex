@@ -16,13 +16,13 @@ extract value from it.} \small{---Hal Varian (Google's Chief Economist)}
 
 
 
-\section*{What is data visualization?} 
+\section*{What is Data Visualization?} 
 Data visualizations (or graphs) are used to understand and explore data as well as communicate results to others.  Often data is more easily interpreted or understood in graphical format than as a list of numbers or data points.  
 
 
 
 
-\section*{Types of visualizations}
+\section*{Types of Visualizations}
 
 Here are some of the most useful types of data visualizations.  We explain each of these in more detail below.
 
@@ -713,11 +713,11 @@ The first step in creating a graphic to do this is to choose the right type of v
 As we saw in the section ``Types of Visualizations,'' there are many possibilities, each with different strengths. 
 You should carefully consider which one best suits your data set and communication needs.  Your goal should always be communicating as clearly, effectively, and accurately as possible.  
 
-\subsubsection*{Visualizations to avoid}
+\subsubsection*{Visualizations to Avoid: Pie Charts, Radar Charts, and Stacked Bar Charts}
 There are also several popular types of visualizations that you should generally \textbf{not} use.  These may look pretty, but they tend to obscure information or cause confusion because of natural difficulties humans have in interpreting them.
 
 For example, people have much more difficulty judging changes and variation in area than they do in length.  
-As a result, charts that depend on distinguishing variation in area will be less effective.  One of the most common charts that has this problem is the pie chart. Figure \ref{fig:pievsbar} indicates the difficulty in judging the difference in area between the lobster and bean slices.
+As a result, charts that depend on distinguishing variation in area will be less effective and easily misunderstood.  One of the most common charts that has this problem is the pie chart. Figure \ref{fig:pievsbar} indicates the difficulty in judging the difference in area between the lobster and bean slices.
 
 \begin{figure}
 \centering
@@ -729,26 +729,15 @@ As a result, charts that depend on distinguishing variation in area will be less
 \centering
 \includegraphics[width=\textwidth]{bar_chart_horizontal_sorted.png}
 \end{subfigure}
-\caption{A pie chart on the left that has been transformed into a bar chart on the right}
+\caption{A pie chart on the left that has been improved by a transformation into a bar chart on the right}
 \label{fig:pievsbar}
 \end{figure}
 
 
-As bad as the pie chart may be, there is a way to make things worse---make the chart three-dimensional.  It seems to be very popular for people to convert a visualization that is naturally 2 or 1 dimensional into one that is artificially three dimensional, but this inevitably makes things more confusing.  For example, we already have difficulty distinguishing the variation in area in a pie chart, and when we add a third dimension, it becomes even harder (see Figure \ref{fig:pie3d}.
-
-\begin{figure}
-\centering
-\begin{subfigure}{.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{pie_chart3d.png}
-\end{subfigure}
-\caption{A 3-D pie chart}
-\label{fig:pie3d}
-\end{figure}
+As bad as the pie chart may be, there is a way to make things worse---make the chart three-dimensional.  It seems to be very popular for people to convert a visualization that is naturally 2 or 1 dimensional into one that is artificially three dimensional, but this inevitably makes things more confusing.  For example, we already have difficulty distinguishing the variation in area in a pie chart, and when we add a third dimension, it becomes even harder to distinguish variation in volume.
 
 
-
-Other visualization types that tend to be confusing and ineffective include the stacked bar and the radar graph.  The radar graph is just generally confusing. One problem with stacking bars is that the second bar is not based at zero, so it becomes difficult to compare the different parts, as in Figure \ref{fig:stacked}
+Other visualization types that tend to be confusing and ineffective include the stacked bar and the radar graph.  The radar graph is just generally confusing. The main problem with stacking bars is that the second bar is not based at zero, so it becomes difficult to compare the different parts, as in Figure \ref{fig:stacked}
 
 \begin{figure}
 \centering
@@ -764,9 +753,6 @@ Other visualization types that tend to be confusing and ineffective include the 
 \label{fig:stacked}
 \end{figure}
 
-In these examples, differences in design give completely different impressions of the data, so the reality of the data is obscured rather than illuminated by the design.  As the famous visualization guru, Edward Tufte, says, ``Show data variation, not design variation.''  Pie charts and stacked bar charts show design variation more than data variation.
-
-
 \subsection*{Simplify}
 
 \noindent\emph{A sentence should contain no unnecessary words, a paragraph no unnecessary sentences for the same reason that a drawing should contain no unnecessary lines and a machine no unnecessary parts.} \small{---Strunk and White}
@@ -774,7 +760,7 @@ In these examples, differences in design give completely different impressions o
 
 Once you have chosen the visualization best suited to your data, you should design the details so that all elements contribute to the communication of data. 
 
-Edward Tufte offers two principles for simplifying graphics: (1) erase ink that does not communicate data, and (2) erase ink that communicates data redundantly.  (\cite{tufte2001} pp.96-100). According to these principles, decorative backgrounds, fancy lettering, and cute graphics in the corner of you plots should all be deleted.
+Data visualization guru, Edward Tufte, offers two principles for simplifying graphics: (1) erase ink that does not communicate data, and (2) erase ink that communicates data redundantly.  (\cite{tufte2001} pp.96-100). According to these principles, decorative backgrounds, fancy lettering, and cute graphics in the corner of your plots should all be deleted.
 
 Other opportunities for simplification are harder to notice and implement. As an example, let us examine the plot on the right of Figure \ref{fig:healthcare}. 
 This plot was created with the following code.
@@ -885,7 +871,7 @@ For example, one might wish to compare the first six Chebyshev polynomials.  It 
 \centering
   \includegraphics[width=\textwidth]{PoT_separate.png}
 \end{subfigure}
-\caption{Plotting on top and plotting separately comparison}
+\caption{Chebyshev polynomials together on the left and separately on the right. Notice that the legend is no longer needed for the right graph and it is easier to compare between Chebyshev polynomials because the graph isn't cluttered.}
 \label{fig:PoT}
 \end{figure}
 
