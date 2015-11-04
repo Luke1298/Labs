@@ -1,5 +1,5 @@
 \lab{Computer Caches}{Caches}
-\objective{Understand the role caches play in computational performance.}
+\objective{Caches play an important role in computational performance.  Computers store memory in various caches, each with its advantages and drawbacks.  We discuss the three main levels of caches. Cache lines and cache sizes are discussed, along with CPU starving.}
 
 The real computational bottleneck of computers lies in the memory system, not the processor.
 In the early days of computing, memory speed and CPU speed were evenly matched.
@@ -51,13 +51,13 @@ However, if we are not intelligent in our choice of algorithm, we will be forcin
 The optimal strategy for an efficient algorithm is to fetch sequential blocks of data and reuse them as much as possible before requesting more data from main memory.
 For the last few decades, the bottleneck in performance has been memory speed, not processor speed.
 
-\section*{Cache lines}
+\section*{Cache Lines}
 The cache is made up of \emph{cache lines}.
 Cache lines contain blocks of bytes that have been fetched from main memory.
 Accessing other bytes within the same cache line has close to no overhead.
 When a requested byte is already in cache, it is called a \emph{cache hit}.
 We can measure the cache line size by reading values from a large array of 32 bit (4 byte) integers.
-For example, if we have 64 byte cache lines, then reading one integer from the array will also pull in the next fifteen because $4 \mbox{~bytes} * 16 \mbox{~integers} = 64 \mbox{~bytes}$.
+For example, if we have 64-byte cache lines, then reading one integer from the array will also pull in the next fifteen, because $4 \mbox{~bytes} * 16 \mbox{~integers} = 64 \mbox{~bytes}$.
 So if we read in every integer, or every other integer, or even every sixteenth integer, we will have to load the entire array into the cache, one line at a time.
 With step sizes larger than 16, however, we are not fetching the entire array into cache because there is a gap between each integer read and the end of the previously fetched cache line.
 \begin{figure}[h]
