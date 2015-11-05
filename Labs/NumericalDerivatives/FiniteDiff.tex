@@ -353,10 +353,21 @@ values, as they may be too small for some of the calculations.
 \end{comment}
 \section*{Derivative Approximations in Multiple Dimensions}
 Finite difference methods can also be used to calculate derivatives in higher dimensions.
-Recall that the Jacobian of a function $f:\mathbb{R}^n \rightarrow \mathbb{R}^m$ at a point $x_0 \in \mathbb{R}^n$ is the $m \times n$ matrix $J = (J_{ij})$ defined by
+Recall that the Jacobian of a function $f:\mathbb{R}^n \rightarrow \mathbb{R}^m$ at a point $x_0 \in \mathbb{R}^n$ is the $m \times n$ matrix $J = (J_{ij})$ defined component-wise by
 \begin{equation*}
 J_{ij} = \frac{\partial f_i}{\partial x_j}(x_0).
 \end{equation*}
+For example, the Jacobian for a function $f:\mathbb{R}^3 \rightarrow \mathbb{R}^2$ is defined by
+
+\[
+J = \begin{pmatrix}
+\frac{\partial f}{\partial x_1}&\frac{\partial f}{\partial x_2}&\frac{\partial f}{\partial x_3}
+\end{pmatrix}
+= \begin{pmatrix}
+\frac{\partial f_1}{\partial x_1}&\frac{\partial f_1}{\partial x_2}&\frac{\partial f_1}{\partial x_3}\\
+\frac{\partial f_2}{\partial x_1}&\frac{\partial f_2}{\partial x_2}&\frac{\partial f_2}{\partial x_3}
+\end{pmatrix}.
+\]
 
 The Jacobian is useful in many applications.  For example, the Jacobian can be used to find zeros of functions in multiple variables.
 
@@ -364,27 +375,27 @@ The Jacobian is useful in many applications.  For example, the Jacobian can be u
 
 The forward difference quotient for approximating a partial derivative is
 \begin{equation*}
-\frac{\partial f}{\partial x_i} (x_0) \approx \frac{f(x_0+h e_i)-f(x_0)}{h},
+\frac{\partial f}{\partial x_j} (x_0) \approx \frac{f(x_0+h e_j)-f(x_0)}{h},
 \end{equation*}
-where $e_i$ the $i^{th}$ standard basis vector. 
+where $e_j$ the $j^{th}$ standard basis vector. 
 Similarly, the centered difference approximation is
 \begin{equation*}
-\frac{\partial f}{\partial x_i} (x_0) \approx \frac{\frac{1}{2}f(x_0+h e_i)-\frac{1}{2}f(x_0-h e_i)}{h}.
+\frac{\partial f}{\partial x_j} (x_0) \approx \frac{\frac{1}{2}f(x_0+h e_j)-\frac{1}{2}f(x_0-h e_j)}{h}.
 \end{equation*}
 
 \begin{problem}
 \leavevmode
-\begin{enumerate}
-\item Write a function that accepts 
+Write a function that accepts 
 \begin{enumerate}
 \item a function handle \li{f},
-\item an integer that is the dimension of the range of \li{f},
 \item an integer \li{n} that is the dimension of the domain of \li{f},
+\item an integer \li{m} that is the dimension of the range of \li{f},
 \item an \li{n}-dimensional NumPy array \li{pt} representing a point in $\mathbb{R}^n$, and
 \item an keyword argument \li{h} that defaults to \li{1e-5}.
 \end{enumerate}
 Return the approximate Jacobian matrix of \li{f} at \li{pt} using the centered difference quotient.
-
+\end{problem}
+\begin{problem}
 \item Let $f: \mathbb{R}^2 \to \mathbb{R}^2$ be defined by
 \begin{equation*}
 f(x, y) =
@@ -393,16 +404,20 @@ e^{x} \sin(y) + y^3 \\
 3y - \cos(x)
 \end{pmatrix}
 \end{equation*}
-Compare your function against the analytically computed derivative on the square $[-1,1] \times [-1,1]$ using ten thousand grid points (100 per side).
-You may apply your function to the points one at a time using a double \li{for} loop, but you should compute the analytic derivative in one line.
-What is the maximum error of your function?
+Find the error between your Jacobian function and the analytically computed derivative on the square $[-1,1] \times [-1,1]$ using ten thousand grid points (100 per side).
+You may apply your Jacobian function to the points one at a time using a double \li{for} loop.  Once you get the error matrix for a given point, calculate the Frobenius norm of this matrix (\li{la.norm} defaults to the Frobenius norm).  This norm will be your total error for that point.
+What is the maximum error of your Jacobian function over all points in the square?
 
-Hint: The following code defines the function $f(x,y) = (x^2, x+y)$.
+Hint: The following code defines the function
+$f(x,y) = 
+\begin{pmatrix}
+x^2\\
+x+y
+\end{pmatrix}$.
 \begin{lstlisting}
 # f accepts a length-2 NumPy array
 >>> f = lambda x: np.array([x[0]**2, x[0]+x[1]])
 \end{lstlisting}
-\end{enumerate}
 \end{problem}
 
 \begin{comment}
@@ -445,7 +460,7 @@ This function is known as the Rosenbrock Banana function, or Rosenbrock's Valley
 \section*{Application to Image Filters}
 Recall that a computer stores an image as a 2-D array of pixel values (i.e., a matrix of intensities).
 An image filter is a function that transforms an image by operating on it locally.
-That is, to compute the $ij^{th}$ pixel value in the new image, an image filter uses only the pixels in a small neighborhood of the $ij^{th}$ pixel in the original image.
+That is, to compute the $ij^{th}$ pixel value in the new image, an image filter uses only the pixels in a small neighborhood around the $ij^{th}$ pixel in the original image.
 
 In this lab, we will use a filter derived from the gradient of an image to find edges in an image.
 
@@ -516,11 +531,11 @@ The following code loads this image and plots it with matplotlib.
 
 Here is the function definition and some setup.
 \begin{lstlisting}
-1. def Filter(image, filter):
+1. def filter(image, F):
 2.     m, n = image.shape
-3.     h, k = filter.shape
+3.     h, k = F.shape
 \end{lstlisting}
-To convolve \li{image} with \li{filter}, we must first \emph{pad} the array \li{image} with zeros around the edges.
+To convolve \li{image} with the filter \li{F}, we must first \emph{pad} the array \li{image} with zeros around the edges.
 This is because in \eqref{equ:convolve}, entries $A_{ij}$ are set to zero when $i$ or $j$ is out of bounds.
 We do this by creating a larger array of zeros, and then making the interior part of the array equal to the original image (see Figure \ref{fig:convolution}).
 
@@ -531,25 +546,25 @@ image_pad = np.zeros((m+2, n+2))
 # Make the interior of image_pad equal to the original image
 image_pad[1:1+m, 1:1+n] = image
 \end{lstlisting}
-We want to do this in general in our function.
+We want to do this in general in our function.  Note that the number of zeros we need to pad our array depends on the size of the filter \li{F}.
 \begin{lstlisting}
 5.    image_pad = # Create an array of zeros of the appropriate size
-7.   # Make the interior of image_pad equal to image
+6.   # Make the interior of image_pad equal to image
 \end{lstlisting}
 
 Finally, we iterate through the image to compute each entry of the convolution matrix.
 \begin{lstlisting}
-8.    C = np.empty_like(image)
-9.    for i in xrange(n):
-10.        for j in xrange(m):
-11.            C[i, j] = # Compute C[i, j]
+7.    C = np.empty_like(image)
+8.    for i in range(n):
+9.        for j in range(m):
+10.            # Compute C[i, j]
 \end{lstlisting}
 
 
 \begin{problem}\label{prob:filter}
 \leavevmode
 \begin{enumerate}
-\item Finish writing the function \li{Filter} by filling in lines 5, 7, and 10. 
+\item Finish writing the function \li{filter} by filling in lines 5, 6, and 10.  Hint: Note in \ref{equ:convolve}, $C_ij$ was calculated by summing from -1 to 1.  This is only the case if the filter \li{F} is $3 \times 3$. A slight modification is needed in the general case.
 \item SciPy has a function that convolves two matrices just like \li{Filter}.
 Load this function with the command \li{from scipy.signal import convolve2d}. 
 Then, convolve an image \li{img} with a filter \li{F} by typing \li{convolve2d(img, F)}.
@@ -568,7 +583,7 @@ G = \frac{1}{159}\begin{pmatrix}
 2&4&5&4&2
 \end{pmatrix}.
 \]
-We can use the function \li{Filter} that we wrote in Problem \ref{prob:filter} to apply a Gaussian blur to the image \li{cameraman.jpg}. 
+We can use the function \li{filter} that we wrote in Problem \ref{prob:filter} to apply a Gaussian blur to the image \li{cameraman.jpg}. 
 The result is in Figure \ref{fig:cameraman_blur}.
 Blurring an image can remove ``noise'', or random variation that is the visual analog of static in a radio signal (and equally undesirable).
 
