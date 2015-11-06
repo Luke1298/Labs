@@ -2,8 +2,10 @@
 
 \objective{Learn how to compute the compact SVD and explore the SVD as a method of image compression.}
 \label{lab:SVD}
-
-
+% TODO
+% - write a more compelling objective.
+% - add references to the textbook.
+%
 
 The theoretical use of the \emph{Singular Value Decomposition} or \emph{SVD} has long been appreciated.
 In fact, the idea of a canonical way of decomposing a matrix was so alluring that the SVD was independently discovered by at least four people through use of both  integral equations and systems of linear equations.
@@ -21,10 +23,9 @@ Together, Beltrami and Jordan are considered the codiscoverers of the singular v
 
 Later, James Joseph Sylvester independently presented an iterative algorithm and a rule for carrying out the reduction in 1889.
 This rule was essentially Beltrami's work.
-However Sylvester sent the note detailing his rule to the same  journal Jordan had published in, showing not just his ignorance of Jordan's and Beltrami's works but his perception of the SVD's importance.
+However Sylvester sent the note detailing his rule to the same journal Jordan had published in, showing not just his ignorance of Jordan's and Beltrami's works but his perception of the importance of the SVD.
 
-
-The SVD's concurrent and independant derivation shows its importance as a theoretical tool, but it wasn't until Erhard Schmidt discovered a computational use for the SVD that the practical applications became apparent.
+The concurrent and independant derivation of the SVD shows its importance as a theoretical tool, but it wasn't until Erhard Schmidt discovered a computational use for the SVD that the practical applications became apparent.
 Schmidt used integral equations rather than linear equations to derive the SVD, but
 his most important contribution was showing how the SVD could be a computational tool to obtain optimal, low-rank approximations.
 
@@ -112,20 +113,23 @@ To calculate the SVD:
 \end{comment}
 
 \begin{problem}
-Write a function to calculate either the truncated SVD or the compact SVD.
-Since the process is the same, we only need to write one function.
+Write a function \li{truncated_svd} that accepts a matrix A and an integer \li{k = None}. If \li{k = None}, calculate the compact SVD. If $k$ is an integer, calculate the truncated SVD.
+Since only difference between these two processes is the number of singular values we keep, we only need to write one function.
 
 \begin{enumerate}
 \item Find the eigenvalues and eigenvectors of $A^H A$.
 \item Find the singular values of $A$.
-\item Sort the singular values and only keep the greatest $r$.
+\item Sort the singular values and only keep the greatest $k$.
 \item Calculate $V$.
 \item Calculate $U$.
 \end{enumerate}
 
 Check your function by calculating the compact SVD and seeing if $U_1\Sigma_1 V_1^H = A$ using \li{np.allclose()}.
 
-Hint: While calculating the truncated SVD, you will need to sort the eigenvalues while keeping track of their associated eigenvectors. To accomplish this, use \li{np.argsort}.
+Hint: While calculating the SVD, you will need to sort the eigenvalues while keeping track of their associated eigenvectors. 
+To accomplish this, use \li{np.argsort} to generate a mask that can be used to order the eigenvalues. The same mask can be used to order the columns of a matrix. 
+Also, an efficient and concise way to keep the nonzero eigenvalues is to use fancy indexing. 
+See the NumPy and SciPy lab for more information on \li{np.argsort} and fancy indexing. 
 
 \label{prob:calc_svd}
 \end{problem}
@@ -353,9 +357,9 @@ Remember to make the singular values a diagonal matrix before multiplying.
 >>> U,s,Vt = svd(X, full_matrices=False)
 >>> S = sp.diag(s)
 \end{lstlisting}
-In the next code block, $n$ represents the desired rank of the output.
+In the next code block, $k$ represents the desired rank of the output.
 \begin{lstlisting}
->>> n = 50
+>>> k = 50
 >>> u1, s1, vt1 = U[:,0:n], S[0:n,0:n], Vt[0:n,:]
 >>> Xhat = u1.dot(s1).dot(vt1)
 >>> (u1.nbytes + np.diag(s1).nbytes + vt1.nbytes) - X.nbytes   #should be negative
