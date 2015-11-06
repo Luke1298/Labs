@@ -1,8 +1,7 @@
 \lab{Numerical Derivatives}{Numerical Derivatives}
 \label{lab:NumericalDerivatives}
 
-\objective{Understand and implement finite difference approximations of the derivative. 
-Then use finite difference quotients to find edges in images via the Sobel filter.}
+\objective{Understand and implement finite difference approximations of the derivative in single and multiple dimensions. Evaluate the accuracy of these approximations.  Then use finite difference quotients to find edges in images via the Sobel filter.}
 
 \section*{Derivative Approximations in One Dimension}
 The derivative of a function $f$ at a point $x_0$ is
@@ -524,14 +523,14 @@ Let us write a function that convolves an image with a filter.
 You can test this function on the image \li{cameraman.jpg}, which appears in Figure \ref{fig:cameraman}.
 The following code loads this image and plots it with matplotlib.
 \begin{lstlisting}
->>> K = plt.imread('cameraman.jpg')
->>> plt.imshow(K, cmap = 'gray')
+>>> image = plt.imread('cameraman.jpg')
+>>> plt.imshow(image, cmap = 'gray')
 >>> plt.show()
 \end{lstlisting}
 
 Here is the function definition and some setup.
 \begin{lstlisting}
-1. def filter(image, F):
+1. def Filter(image, F):
 2.     m, n = image.shape
 3.     h, k = F.shape
 \end{lstlisting}
@@ -571,13 +570,12 @@ G = \frac{1}{159}\begin{pmatrix}
 2&4&5&4&2
 \end{pmatrix}.
 \]
-We can use the function \li{filter} that we wrote in Problem \ref{prob:filter} to apply a Gaussian blur to the image \li{cameraman.jpg}. 
-The result is in Figure \ref{fig:cameraman_blur}.
+
 Blurring an image can remove ``noise'', or random variation that is the visual analog of static in a radio signal (and equally undesirable).
 
 \begin{problem}\label{prob:filter}
 \leavevmode
-Finish writing the function \li{filter} by filling in lines 5, 6, and 10.  Hint: Note in \ref{equ:convolve}, $C_{ij}$ was calculated by summing from -1 to 1.  This is only the case if the filter \li{F} is $3 \times 3$. A slight modification is needed in the general case.  Test your function on the image \li{cameraman.jpg} using the Gaussian Blur.
+Finish writing the function \li{Filter} by filling in lines 5, 6, and 10.  Hint: Note in \ref{equ:convolve}, $C_{ij}$ was calculated by summing from -1 to 1.  This is only the case if the filter \li{F} is $3 \times 3$. A slight modification is needed in the general case.  Test your function on the image \li{cameraman.jpg} using the Gaussian Blur. The result is in Figure \ref{fig:cameraman_blur}.
 \end{problem}
 
 
@@ -664,7 +662,7 @@ Here, the 1's in $B$ were mapped to ``white'' and the 0's were mapped to ``black
 
 
 \begin{problem}
-Write a function that accepts an image as input and applies the Sobel filter to the image.
+Write a function that accepts an image as input and applies the Sobel filter to the image.  Test your function on \li{cameraman.jpg}.  Hint: If you want to find the average of a matrix \li{A}, use the function \li{A.mean()}.
 \end{problem}
 
 
