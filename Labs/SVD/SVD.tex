@@ -4,7 +4,7 @@
 \label{lab:SVD}
 % TODO
 % - write a more compelling objective.
-% - add references to the textbook.
+% - add references to the textbook and determine what is actually needed here. The explanation in the textbook is way better.
 %
 
 The theoretical use of the \emph{Singular Value Decomposition} or \emph{SVD} has long been appreciated.
@@ -113,8 +113,8 @@ To calculate the SVD:
 \end{comment}
 
 \begin{problem}
-Write a function \li{truncated_svd} that accepts a matrix A and an integer \li{k = None}. If \li{k = None}, calculate the compact SVD. If $k$ is an integer, calculate the truncated SVD.
-Since only difference between these two processes is the number of singular values we keep, we only need to write one function.
+Write a function \li{truncated_svd} that accepts a matrix A and an optional integer \li{k = None}. If $k$ is \li{None}, calculate the compact SVD. If $k$ is an integer, calculate the truncated SVD.
+Since the only difference between these two processes is the number of singular values we keep, we only need to write one function.
 
 \begin{enumerate}
 \item Find the eigenvalues and eigenvectors of $A^H A$.
@@ -381,9 +381,9 @@ the lowest rank approximation of $A$ with error less than $e$ (with respect to t
 \end{problem}
 
 \begin{problem}
-Using your \li{svd_approx} function from Problem \ref{prob:svd_approx}, write a function \li{compress_img} that accepts two parameters \li{filename} and \li{k}. Your function should plot the original image and the best rank k approximation of the original image. Your output should be similar to Figure \ref{fig:compressed_image}.
+Using your \li{svd_approx} function from Problem \ref{prob:svd_approx}, write a function \li{compress_img} that accepts two parameters \li{filename} and \li{k}. Your function should plot the original image and the best rank k approximation of the original image. While your \li{svd_approx} function worked for grayscale images, your \li{compress_img} function should work on color images. Your output should be similar to Figure \ref{fig:compressed_image}.
 
-At times, \li{plt.imshow} does not behave as expected when being passed RGB values between 0 and 255. It behaves much better when being passed numbers between 0 and 1. Additionally, since the SVD provides an approximation, it is possible that the SVD will generate values slightly outside the valid range of RGB values. To remedy this, use masks as discussed in the NumPy and SciPy lab. 
+At times, \li{plt.imshow} does not behave as expected when being passed RGB values between 0 and 255. It behaves much better when being passed numbers between 0 and 1. Additionally, since the SVD provides an approximation, it is possible that the SVD will generate values slightly outside the valid range of RGB values. To remedy this, use fancy indexing as discussed in the NumPy and SciPy lab. 
 
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{compressed.jpg}
