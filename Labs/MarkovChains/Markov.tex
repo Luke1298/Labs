@@ -70,8 +70,8 @@ Assume the first day is hot, but do not include the data from the first day in t
 The resulting list should therefore have \li{num\_days} entries.
 \end{problem}
 
-For very small Markov chains, the approach in the \li{forecast} function is practical and the implementation is fairly simple.
-However, very small Markov chains are typically useless in applications.
+For Markov chains with very few states, the approach in the \li{forecast} function is practical and the implementation is fairly simple.
+However, small Markov chains are typically useless in applications.
 
 \subsection*{Larger Chains}
 
@@ -84,8 +84,7 @@ A single draw from a multinomial distribution with parameters $\left[p_1, p_2, .
 In this case the classic example is a dice roll, with $6$ possible outcomes instead of the $2$ in a coin toss.
 
 \begin{lstlisting}
-# To simulate a single dice roll, store the probabilities of
-# each outcome in a list or numpy array.
+# To simulate a single dice roll, store the probabilities of each outcome.
 >>> probabilities = np.array([1./6, 1./6, 1./6, 1./6, 1./6, 1./6])
 
 # Make a single random draw (roll the die once).
@@ -99,124 +98,28 @@ Let the following be the transition chain for a Markov chain modeling weather wi
 
 \[ W^\prime = \left( \begin{array}{cccc}
 0.5 & 0.3 & 0.1 & 0\\
-0.3 & 0.3 & 0.2 & 0.3\\
+0.3 & 0.3 & 0.3 & 0.3\\
 0.2 & 0.3 & 0.4 & 0.5\\
   0 & 0.1 & 0.2 & 0.2\end{array} \right)\]
 with hot, mild, cold, and freezing corresponding to columns 0, 1, 2, and 3, respectively.
 
-Write a new function that accepts a parameter \li{num\_days} and runs the same simulation as \li{forecast}, but that uses the new four-state transition matrix.
-Return a list containing the day-to-day results (0 for hot, 1 for mild, 2 for cold, and 4 for freezing).
+Write a new function that accepts a parameter \li{num\_days} and runs the same kind of simulation as \li{forecast}, but that uses the new four-state transition matrix.
+This time, assume the first day is mild.
+Return a list containing the day-to-day results (0 for hot, 1 for mild, 2 for cold, and 3 for freezing).
 \label{problem:transition}
 \end{problem}
 
 % Problem 4: Analysis of results.
 \begin{problem}
-Write a function that interprets the results of the functions in the previous two problems.
-Find the percentage of days that are hot, cold, and mild in each simulation.
-Print your results.
+Write a function that investigates and interprets the results of the simulations in the previous two problems.
+Specifically, find the average percentage of days that are hot, mild, cold, and freezing in each simulation.
+Does changing the starting day alter the results?
+Print a report of your findings to the terminal.
 \end{problem}
 
-% This section will be moved to Lab 3, Exceptions and File I/O.
-\section*{Input and Output in Python}
-
-Throughout some of the previous labs, we have provided code for reading information from and writing information to exterior files.
-Here we briefly introduce formal file I/O protocol.
-It's not very hard, but read this carefully.
-
-Python has a useful \li{file} object which acts as an interface to all kinds of different file streams.
-The built-in function \li{open} creates a \li{file} object.
-
-\begin{lstlisting}
->>> myfile = open('filename.txt','r') 	# Open the file with read-only access.
->>> for line in myfile:                 # Print out each line of the file.
-... 	print line
-...
->>> myfile.close() 						# Close the file connection.
-\end{lstlisting}
-
-The \li{open} command accepts up to three arguments: the filename, mode, and buffering options.
-The mode determines the kind of access to use when opening the file.
-Possible mode strings are:
-\begin{description}
-\item \li{'r'} Opens a file for read-only access.
-This is the default mode.
-\item \li{'w'} Opens a file for write-only access.
-This mode creates the file if it doesn't already exist, and overwrites \textbf{everything} in the file if it does exist.
-\item \li{'a'} Opens a file for appending.
-This mode is like write-only, but instead of overwriting existing data any new data is appended to the end of the file.
-This mode also creates a new file if it doesn't already exist.
-\end{description}
-
-If your file cannot be opened for any reason, an exception is raised (usually an \li{IOException}).
-Finally, every file object has several attributes and methods.
-The most notable are described in Table \ref{table:fileattribs}.
-
-\begin{table}
-\begin{tabular}{|l|l|}
-\hline
-Attribute & Description \\
-\hline
-\li{closed} & True if file object is closed. \\
-\li{mode} & The access mode used to open the file object. \\
-\li{name} & The name of the file. \\
-\hline
-\hline
-Method & Description \\
-\hline
-\li{close()} & Flush any delayed writes and close the file object. \\
-\li{read()} & Read the next string of the file. \\
-\li{readline()} & Read a line of the file. \\
-\li{readlines()} & Read lines of the file until the end of file (returned as a \li{list}). \\
-\li{write()} & Write a string to the file. \\
-\li{writelines()} & Write a sequence of strings to the file (input a \li{list}). \\
-\hline
-\end{tabular}
-\caption{File object attributes and methods.}
-\label{table:fileattribs}
-\end{table}
-
-\subsection*{The \li{with} Statement}
-
-The keyword \li{with} can be used in conjunction with an \li{open} statement to create an indented block in which the file is open.
-Upon exiting the block, the file is closed safely and automatically.
-This is the preferred method when a file only needs to be accessed briefly.
-
-\begin{lstlisting}
->>> myfile = open('in.txt', 'r')		# Open the file with read-only access.
->>> contents = myfile.readlines()		# Read in the content by line.
->>> myfile.close()						# Explicitly close the file.
->>> for line in contents: 				# Note that the contents variable is
-...		print(line) 					#  still accessible, even though the 
-... 									#  file variable is closed.
-
->>> with open('in.txt', 'r') as myfile: 	# Open the file using 'with'.
-...    contents = myfile.readlines() 		# Read in the content by line.
-... 										# The file is closed automatically.
->>> for line in contents:					# Again, the contents variable
-...		print(line) 						#  is still accessible.
-\end{lstlisting}
-
-Only strings can be written to files.
-To write a non-string type, first cast it as a string using \li{str}.
-Again we present two equivalent methods.
-\begin{lstlisting}
->>> outfile = open('out.txt', 'w') 		# Open the file with write-only access.
->>> for i in xrange(10):
-...		outfile.write(str(i**2))		# Write some strings to the file.
->>> outfile.close()						# Explicitly close the file.
-
->>> with open('out.txt', 'w') as outfile: 	# Use the file using 'with'.
-... 	for i in xrange(10): 				
-... 		outfile.write(str(i**2)) 		# Write some strings to the file.
-...
->>> outfile.closed 							# The file is closed automatically.
-True
-\end{lstlisting}
-
-% I/O section ends here.
 \section*{Using Markov Chains to Simulate English}
-
-One of the original applications of Markov chains was to study natural languages (citation needed, but it totally was).
+% TODO: is it okay to make this reference?
+One of the original applications of Markov chains was to study natural languages\footnote{See \url{http://langvillea.people.cofc.edu/MCapps7.pdf} for some details}.
 In the early $20^{th}$ century, Markov used his chains to model how Russian switched from vowels to consonants.
 By midcentury, they had been used to try and model English.
 It turns out that Markov chains are, by themselves, insufficient to model very good English.
@@ -230,33 +133,31 @@ Then the chain would say that the next word in the sentence is more likey to be 
 However, without the context of the rest of the sentence, even two likely words stringed together may result in gibberish.
 
 To build a Markov chain to simulate English, we need to determine the transition probabilities between words.
-One way to do this would be to assign every word in English a number.  Say there are $N$ of them, and create an $N\times N$ matrix of zeros.
+One way to do this would be to assign every word in English a number.
+Say there are $N$ of them, and create an $N\times N$ matrix of zeros.
 Then, read every written work in English and when word $b$ follows word $a$, we add 1 to the $(b,a)^{th}$ entry of the matrix.
 Once we have done this for every word of every written work, we normalize the columns and have a transition matrix that we may simulate from.
 
 The main problem with this approach is the sheer enormity of the task at hand.
-We will restrict ourselves to a subproblem of modeling the English of a specific group of people.
-%Specifically, we will use the posts from the math stack exchange website.
-%(See \texttt{stack_exchange_posts.txt}).
+We will restrict ourselves to a subproblem of modeling the English of a specific file.
 Thus, the transition probabilities of our Markov chains will reflect the sort of English that the source authors speak.
 For example, the transition matrix built from the Complete Works of William Shakespeare will differ greatly from, say, a collection of academic journals.
 We will call the source collection of works in the next problems the \emph{training set}.
+%Specifically, we will use the posts from the math stack exchange website.
+%(See \texttt{stack_exchange_posts.txt}).
 
 % Problem 5: Text file to file of ints.
 \begin{problem}
 First we must convert a file of English words to numbers.
-These numbers will correspond to rows and columns in our transition matrix.
-%Thus, we may refer to a words column or row in the transition matrix by its number.
+Each unique word in the file will correspond to a single number, and each of these numbers will correspond to a row and column in the transition matrix (to be built in the next problem).
 
-Write a function that accept the path to a file containing a training set of words.
-Each line in the file will be an English sentence.
-Examine each line, one at a time.
-Check each word in the line to see if it has been assigned a number yet.
-If it hasn't, then assign the word a number and write the number into a new file.
-If a number has been assigned already, write it to the new file.
-The line break structure should be maintained.
+Write a function that accepts the path to a file containing a training set of English sentences, with one sentence per line.
+Parse the file, assigning a unique natural number to each unique word.
+As you parse, write the corresponding sequence of numbers to a new file, maintaining the line break structure.
 
-For example, a text and its conversion to numbers follows.
+We provide an example below.
+On the left is the training set of sentences, and on the right is the corresponding file of numbers.
+Note that once a word is assigned a number, the same number is used to represent the word throughout the rest of the file, thus preserving the 1-1 relationship of words to numbers.
 
 \begin{lstlisting}
 <<Love is patient Love is kind 						1 2 3 1 2 4 
@@ -271,44 +172,57 @@ always hopes always perseveres 						28 31 28 32
 Love never fails 									1 33 34>>
 \end{lstlisting}
 
-The word ``Love'' is assigned the number 1, and the word ``It'' is assigned the number 5.
+Here the word ``Love'' is assigned the number 1, ``is'' is assigned 2, and ``kind'' is assigned 4 (since it is the $4^{th}$ unique word in the file).
 
-%Besides writing the new file, return a dictionary mapping the numbers in the new file to the words from the original file (so 1 is the key for ``Love'', 5 is the key for ``It'', and so on)
+Also keep track of each word-number pair with a some basic data structure.
+This could be an ordered list of words, a word-number dictionary, a set of tuples, or any other simple structure (which will be fastest?).
+Return this data structure.
+
+\begin{comment}
 Also return a list that matches the index of the list to the word assigned that number, prepending and appending unique values for the start and stop states.
 The list generated by the above example could be:
 \begin{lstlisting}
 <<[$tart, Love, is, patient, kind, It, does, not, ..., never, fails, en&]>>
 \end{lstlisting}
+
+Examine each line, one at a time.
+Check each word in the line to see if it has been assigned a number yet.
+If it hasn't, then assign the word a number and write the number into a new file.
+If a number has been assigned already, write it to the new file.
+The line break structure should be maintained.
+\end{comment}
 \label{problem:str_to_int}
 \end{problem}
 
-Now that we have converted our English text into numbers, it is time to build the transition matrix for the Markov chain.
-We will scan the file we created in the previous problem and use it to create the matrix.
-
-% Problem 6: Generate the Markov chain.
-\begin{problem}
-Write a function that accepts the path to the file created in the previous problem and the number of unique words in the text (this will be the length of the list from the previous exercise).
-%number of keys in the dictionary from the previous exercise).
-%Initialize a \emph{sparse} square zero matrix of floats (use \li{lil_matrix} from the \li{scipy.sparse} library) whose dimension is the number of unique words in the text, plus 2 (to include a start and stop state).
-Initialize a square zero matrix of zeros whose dimension is the number of unique words in the text, plus 2 (to include a start and stop state).
-Then, read each line of the file and for each pair of subsequent numbers add one to the corresponding entry of the matrix.
-
-For instance, if we use the example text of the previous problem and we scanned the line 1 6 7 19 20 21, then we would add one to the $(6,1)$, $(7,6)$, $(19,7)$, $(20,19),$ and $(21,20)$ entries of the matrix.
-Also, each line should begin with the start state (assign it the number 0) and stop state (length of the list), so that $(1,0)$ and $(34,21)$ would also be incremented.
-
-Once the entire file has been read, divide each column by its column sum.
-Then each column will sum to one, with the $ij^{th}$ entry corresponding to the probability of moving from word $j$ to word $i$.
-\label{problem:chainmaker}
-\end{problem}
-
 \subsection*{Starting and Stopping states}
+
+Now that we have converted our English text into numbers, we can build the transition matrix for the Markov chain.
+We will scan the file we created in the previous problem and use it to create the matrix.
 
 In the previous weather model we chose a fixed number of states to simulate.
 However, in English, sentences are of varying length.
 One way to simulate this is to create a start state and an end state.
 To generate a new sentence, we begin in the given start state.
-Subsequent words will have a probability of moving to the end state.
-Once the chain has moved to the end state, we have reached the end of the sentence and place a period.
+The start state may transition to any of the words that are at the beginning of the sentences in the training set.
+Words that are at the end of the sentences in the training set will have a probability of moving to the end state.
+Once the chain has moved to the end state, we terminate the sentence.
+
+% Problem 6: Generate the Markov chain's transition matrix.
+\begin{problem}
+Write a function that accepts the path to the file created in the previous problem and the number of unique words in the training.
+Initialize a square zero matrix of zeros whose dimension is the number of unique words in the text, plus 2 (to include the start and stop state).
+Then, read each line of the file and for each pair of subsequent numbers add one to the corresponding entry of the matrix.
+
+For instance, if we scanned the line 2 6 3 7 9, then we would add one to the $(6,2)$, $(3,6)$, $(7,3)$, and $(9,7)$ entries of the matrix.
+In addition, the start state must transition to the first word in of the line and the last word of the line must transition to the end state.
+Then we would also increment the $(2,0)$ and $(N,9)$ entries, where $N$ is the index of the last column in the matrix.
+Finally, to avoid a column of all zeros, we say that the end state transitions to itself with probability 1.
+Thus we increment the $(N,N)$ entry as well.
+
+Once the entire file has been read, divide each column by its column sum.
+Then each column will sum to one, with the $ij^{th}$ entry corresponding to the probability of moving from word $j$ to word $i$.
+\label{problem:chainmaker}
+\end{problem}
 
 %\subsection*{Teaching the Markov Chain}
 
@@ -316,15 +230,25 @@ Once the chain has moved to the end state, we have reached the end of the senten
 
 % Problem 7: Random Sentences
 \begin{problem}
-Write a new function that accepts a file name to read data in from, a file name to write data out to, and an optional integer argument \li{num\_sentences}.
-Use Problem \ref{problem:str_to_int} to generate a word list and Problem \ref{problem:chainmaker} to generate the corresponding transition matrix.
-Begin at the start state and use the strategy from Problem \ref{problem:transition} to transition through the Markov chain until the end state is reached.
+Write a function that accepts a file name to read data in from (the training set), a file name to write data out to, and an optional integer argument \li{num\_sentences}.
+Use Problem \ref{problem:str_to_int} to write the file of numbers that corresponds to the training set, and to get the data structure describing the one-to-one relationship between the words and the numbers.
+Then use Problem \ref{problem:chainmaker} to generate the corresponding transition matrix.
+
+Begin at the start state and use the strategy from Problem \ref{problem:transition} to transition through the Markov chain.
 Keep track of the path through the chain and the corresponding path of words.
-When the end state is reached, write the resulting sentence to the outfile.
+When the end state is reached, stop transitioning and terminate the sentence.
+Write the resulting sentence to the outfile, followed by a newline character.
 Write as many sentences to the file as is specified by \li{num\_sentences}.
-
-
-Once this is working with small data sets, you may try experimenting with large data sets.
-To accommodate larger data sets, consider using a sparse matrix for the transition matrix in Problem \ref{problem:chainmaker}, such as the \li{lil_matrix} from the \li{scipy.sparse} library.
 \end{problem}
-% such as the complete works of Shakespeare available in \li{shakespeare.txt}.
+
+\section*{Additional Exercises}
+
+\begin{problem}
+The approach in the previous three problems begins to fail as the training set grows larger.
+For example, a single Shakespearean play may not be large enough to cause memory problems, but the Complete Works of William Shakespeare certainly will.
+
+Consolidate the functions from the previous three problems into a single function.
+Then, to accommodate larger data sets, use a sparse matrix for the transition matrix in instead of a regular NumPy array (use the \li{lil_matrix} from the \li{scipy.sparse} library).
+Ensure that the process still works on small training sets, then proceed to larger training sets.
+How are the resulting sentences different if a very large training set is used instead of a small training set?
+\end{problem}
