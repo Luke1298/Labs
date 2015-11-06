@@ -3,9 +3,9 @@
 \objective{Understand Newton's Method. Understand definition of basin of attraction.  Basic understanding of Julia Sets.}
 
 Newton's method finds the zeros of functions; i.e., Newton's method finds $\overline{x}$ such that $f\left(\overline{x}\right) = 0$.
-This method is used to optimize functions (find their maxima and minima), for example to find the zeros of the first derivative.
+This method can be used to optimize functions (find their maxima and minima).  For example, it can be used to find the zeros of the first derivative.
 
-\section*{Newton's method}
+\section*{Newton's Method}
 Newton's method begins with an initial guess $x_0$. 
 Then recursively define a sequence by
 \[
@@ -13,7 +13,7 @@ x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
 \]
 In other words, Newton's method approximates a function by its tangent line, and then uses the zero of the tangent line as the next guess for $x_n$ (see Figure \ref{fig:newton}).
 
-The sequence $\{x_n\}$ will converge to the zero $\overline{x}$ if
+The sequence $\{x_n\}$ will converge to the zero $\overline{x}$ of $f$ if
 \begin{enumerate}
 \item $f$, $f'$, and $f''$ exist and are continuous,
 \item $f'(\overline{x})\neq0$, and
@@ -127,7 +127,7 @@ This also means that you will have to use your own \li{jacobian} function.
 \end{comment}
 
 
-\section*{Basins of attraction: Newton fractals}
+\section*{Basins of Attraction: Newton Fractals}
 When $f(x)$ has many roots, the root that Newton's method converges to depends on the initial guess $x_0$.
 For example, the function $f(x)=x^2-1$ has roots at $-1$ and $1$.
 If $x_0<0$, then Newton's method coverges to -1; if $x_0>0$ then it converges to 1 (see Figure \ref{fig:basins1}).
