@@ -1,4 +1,4 @@
-\lab{Facial Recognition using Eigenfaces}{Facial Recognition using Eigenfaces}
+\lab{Facial Recognition Using Eigenfaces}{Facial Recognition Using Eigenfaces}
 \label{lab:FacialRecognition}
 
 \objective{Use the singular value decomposition to build a facial recognition system.}
@@ -13,7 +13,7 @@ For example, facial recognition can be combined with video surveillance to ident
 Humans can easily compare two face images and determine whether they belong to the same person, but automating this process is more challenging.
 One technique for automated facial recognition uses \emph{eigenfaces}.
 
-\section*{Load the data}
+\section*{Load the Data}
 Eigenfaces are an efficient way to store and query a database of face images.
 As the name suggests, this method uses eigenvectors of matrices related to the collection of face images.
 Essentially, the method of eigenfaces projects face images to a lower-dimensional subspace in a way that preserves their distinguishing characteristics. 
@@ -21,7 +21,6 @@ In the lower-dimensional subspace, comparing face images is much faster.
 
 Recall that a digital image may be stored as an $m \times n$ array of pixel intensities. 
 In this lab, we will store the images as $mn$-vectors by concatenating the rows of the $m \times n$ arrays.
-
 
 \begin{problem}
 \label{prob:getTrainingFaces}
@@ -59,9 +58,9 @@ class FacialRec:
         pass
     def initEigenfaces(self):
         pass
-    def project(self, s):
+    def project(self, A, s=38):
         pass
-    def findNearest(self, image):
+    def findNearest(self, image, s=38):
         pass
 \end{lstlisting}
 
@@ -69,15 +68,15 @@ The function \li{getFaces()} should construct a database of face images by selec
 It should return an array whose columns are the selected face images.
 One implementation of this function is found at the end of this lab.
 
-\begin{enumerate}[resume]
-\item Initialize a \li{FacialRec} instance with the command \li{facialRec = FacialRec(\"./faces94\")}. You may have to replace the parameter \li{\"./faces94\"} with the location of the directory \li{faces94} on your machine. Check that \li{facialRec.F} is a $360000 \times 153$ array. The columns of this array are 153 face images of 153 different people.
+\begin{enumerate}
+\item Initialize a \li{FacialRec} instance with the command \li{facialRec = FacialRec(\"./faces94\")}. You may have to replace the parameter \li{\"./faces94\"} with the location of the directory \li{faces94} on your machine. Check that \li{facialRec.F} is a $36000 \times 153$ array. The columns of this array are 153 face images of 153 different people.
 \end{enumerate}
 \end{problem}
 
 
-\section*{Shift by the mean}
+\section*{Shift By the Mean}
 
-The facial recognition algorithm is more robust if we first \emph{shift by the mean}. 
+The facial recognition algorithm is more robust if we first \emph{shift by the mean}. When we shift a set of data by the mean, the distinguishing features are exaggerated. Therefore, in the context of facial recognition, shifting by the mean accentuates the unique features of the face.
 Suppose we have a collection of $k$ face images represented as vectors $\f_1, \f_2, \ldots, \f_k$ of length $mn$.
 Define the \emph{mean face} ${\boldsymbol \mu}$ to be the average of the $\f_i$:
 \[
@@ -139,12 +138,11 @@ def initDifferences(self):
 \end{lstlisting}
 This can be done in one line using array broadcasting.
 \item
-Plot the first mean-shifted face, i.e. the first column of the matrix \li{Fbar}.
-It should match the first face in Figure \ref{facialRecognition:differenceFaces}.
+Plot a mean-shifted face. The output should be similar to the faces in Figure \ref{facialRecognition:differenceFaces}.
 \end{enumerate}
 \end{problem}
 
-\section*{Project to a subspace}
+\section*{Project to a Subspace}
 Now suppose we have a new face vector $\g$. 
 The closest face image to $\g$ should be the vector $\bar{\f}_i$ that minimizes $\|\bar{\g}-\bar{\f}_i\|_2$, where $\bar{\g} = \g - {\boldsymbol \mu}$.
 Unfortunately, computing $\|\bar{\g}-\bar{\f}_i\|_2$ for each $i$ is computationally intractable when the length $mn$ of the vectors is large.
@@ -152,7 +150,7 @@ Since a low-resolution photo may easily have $100\times 100 = 10,000$ pixels, in
 
 Here is the trick: instead of computing in the $mn$-dimensional space of all possible images, we will compute in a lower-dimensional subspace.
 We could start by using the subspace spanned by the vectors $\bar{\f}_1, \ldots \bar{\f}_k$, which is at most $k$-dimensional. 
-Unfortunately, in practice $k$ is still to large for this subspace to be computationally efficient.
+Unfortunately, in practice $k$ is still too large for this subspace to be computationally efficient.
 %We need to project our problem into some subspace of the span of $\bar{\f}_1, \ldots \bar{\f}_k$.
 
 Therefore, we want to project to a subspace of $\bar{\f}_1, \ldots \bar{\f}_k$ in a way that retains as much information about the $\bar{\f_i}$ as possible.
@@ -167,7 +165,7 @@ The matrix for this projection is $P_s = U_s U_s^T$ where $U_s = [ \u_1\; \ldots
 Because the vectors $\u_i$ are eigenvectors of $\bar{F}\bar{F}^T$, we call them \emph{eigenfaces}. 
 Therefore, the best $s$-dimensional subspace for solving the facial recognition problem is exactly the span of the first $s$ eigenfaces.
 
-\subsection*{The proof: SVD as a least squares solution}
+\subsection*{The Proof: SVD as a Least Squares Solution}
 \begin{theorem}
 Let $\f_1, \ldots, \f_k$ be vectors on $\mathbb{R}^{mn}$, and let $\bar{F} = [\bar{f}_1 \; \ldots \; \bar{f}_k]$. Suppose $U\Sigma V^T$ is an SVD for $\bar{F}$. Then the $s$-dimensional subspace that solves the least squares problem for $\f_1, \ldots, \f_k$ is the span of the first $s$ columns of $U$. If $U_s$ is the first $s$ columns of $U$, then the matrix $U_sU_s^T$ is projection onto this subspace.
 \end{theorem}
@@ -211,11 +209,11 @@ It should match the first eigenface shown in Figure \ref{facialRecognition:eigen
 \end{enumerate}
 \end{problem}
 
-\section*{Change basis}
+\section*{Change Basis}
 
 It does us no good to project all our vectors into an $s$-dimensional space if we still store them as vectors in $\mathbb{R}^{nm}$. 
 Instead, we must store our face vectors in terms of the columns of $U_s$.
-This way, each vector is a lenth-$s$ array in NumPy, instead of a length-$mn$ array.
+This way, each vector is a length-$s$ array in NumPy, instead of a length-$mn$ array.
 
 The change-of-basis matrix is $U_s^T$, so $U_s^T\widehat{P}_s = U_s^TU_sU_s^T = U_s^T$. 
 Thus we can project into the subspace and change basis by multiplying by $U_s^T$.
@@ -244,8 +242,8 @@ To change back to the full $mn$-vector, multiply by $U_s$.
 \begin{enumerate}
 \item Implement the method  \li{FacialRec.project(s)} as follows.
 \begin{lstlisting}
-def project(self,s):
-        # Return U_s^T
+def project(self,A,s=38):
+    # project A onto s-dimensional subspace and return A_s.
 \end{lstlisting}
 \item (Optional) Let \li{face} be the first mean-shifted face from the database (the first column of \li{facialRec.Fbar}). Do the following:
 \begin{enumerate}
@@ -306,12 +304,12 @@ Note that we can approximately reconstruct $\bar{f}_i$ from the coordinate vecto
 See Figure \ref{facialRecognition:rebuiltImage} for examples of reconstructed face images giving different numbers of eigenfaces.
 \end{comment}
 
-\section*{Recognizing faces}
-Finally, we are ready to identify which mean-shifted image $\bar{\f}_i$ is closest to $\bar{\g}$. 
+\section*{Recognizing Faces}
+Finally, we are ready to identify which mean-shifted image $\bar{\f}_i$ is closest to an inputed image, $\bar{\g}$. 
 We begin by projecting all vectors to some $s$-dimensional subspace and writing them in terms of an orthonormal basis for that subspace. 
 This is accomplished with multiplication by $U_s^T$:
 \[
-\widehat{\f}_i = U_s^T(\f_i-{\boldsymbol \mu}) \qquad \widehat{\g} = U_s^T(\widehat{\g}-{\boldsymbol \mu}).
+\widehat{\f}_i = U_s^T(\f_i-{\boldsymbol \mu}) \qquad \widehat{\g} = U_s^T(\g-{\boldsymbol \mu}).
 \]
 
 Next, we compute which $\widehat{\f}_i$ is closest to $\widehat{\g}$. 
@@ -330,13 +328,13 @@ Then the $i^*$-th face image is the best match for $\g$.
 Implement the method \li{FacialRec.findNearest()} as follows.
 \begin{lstlisting}
 def findNearest(self, image, s=38):
-    Ut = self.project(s)
-    ghat = # Shift `image' by the mean and project, producing g-hat as defined above
     Fhat = # Project Fbar, producing a matrix whose columns are the f-hat defined above 
-        
-    # Return the index that minimizes || fhat_i - ghat ||_2.
+    ghat = # Shift 'image' by the mean and project, producing g-hat as defined above
+    # for both Fhat and ghat, use your project function from the previous problem
+    
+    # Return the index that minimizes ||fhat_i - ghat||_2.
 \end{lstlisting}
-The functions \li{la.norm()} and \li{np.argmin()} will be useful for the last line.
+The functions \li{np.linalg.norm()} and \li{np.argmin()} will be useful for the last line. When using \li{np.linalg.norm}, make sure you indicate the correct axis. 
 
 \item Test your facial recognition system on faces selected randomly from the \li{faces94} dataset.
 The function \li{sampleFaces(n_tests, path)} at the end of this lab will build an array of \li{n_tests} random faces from the \li{faces94} database.
@@ -360,15 +358,14 @@ This section contains some functions to help you code up the facial recognition 
 
 \begin{lstlisting}
 def getFaces(path="./faces94"):
-    """
-    Traverse the directory specified by `path' and return an array containing
+    """Traverse the directory specified by 'path' and return an array containing
     one column vector per subdirectory.
     
     For the faces94 dataset, this gives an array with just one column for each
     face in the database. Each column corresponds to a flattened grayscale image.
     """
     
-    # Traverse the directory and get one image per subdirectory
+    # Traverse the directory and get one image per subdirectory.
     faces = []
     for (dirpath, dirnames, filenames) in walk(path):
         for f in filenames:
@@ -378,15 +375,13 @@ def getFaces(path="./faces94"):
                 faces.append(face)
                 break
         
-    # put all the face vectors column-wise into a matrix
+    # put all the face vectors column-wise into a matrix.
     F = np.array(faces).T
     return F
 
 
 def show(im, w=200, h=180):
-    """
-    Plot the flattened grayscale image `im' of width `w' and height `h'
-    """
+    """Plot the flattened grayscale image 'im' of width 'w' and height 'h'."""
     
     plt.imshow(im.reshape((w,h)), cmap=cm.Greys_r)
     plt.show()
@@ -394,9 +389,8 @@ def show(im, w=200, h=180):
 
 
 def sampleFaces(n_tests,path = "./faces94")
-    """
-    Return an array containing a sample of n_tests images contained 
-    in the path as flattened images in the columns of the output
+    """Return an array containing a sample of n_tests images contained 
+    in the path as flattened images in the columns of the output.
     """
     files = []
     for (dirpath, dirnames, filenames) in walk(path):
@@ -412,9 +406,8 @@ def sampleFaces(n_tests,path = "./faces94")
     
 
 def show2(im1, im2, w=200, h=180):
-    """
-    Convenience function for plotting two flattened grayscale images of
-    the specified width and height side by side
+    """Convenience function for plotting two flattened grayscale images of
+    the specified width and height side by side.
     """
     plt.subplot(121)
     plt.imshow(im1.reshape((w,h)), cmap=cm.Greys_r)
