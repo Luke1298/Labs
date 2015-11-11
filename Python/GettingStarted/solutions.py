@@ -28,7 +28,7 @@ def first_half(my_string):
     """
     return my_string[:len(my_string)//2]
     
-def reverse(my_string):
+def backward(my_string):
     """Return the reverse of the string 'my_string'.
     
     Examples:

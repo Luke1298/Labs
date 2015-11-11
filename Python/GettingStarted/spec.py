@@ -30,7 +30,7 @@ def first_half(my_string):
     """
     pass
     
-def reverse(my_string):
+def backward(my_string):
     """Return the reverse of the string 'my_string'.
     
     Examples:
