@@ -1,5 +1,12 @@
 \lab{Discrete Fourier Transform}{Discrete Fourier Transform}
-\objective{The analysis of periodic functions has many applications in pure and applied mathematics, especially in settings dealing with sound waves. The Fourier transform provides a way to analyze such periodic functions. In this lab, we implement the discrete Fourier transform and explore digital audio signals in Python.}
+\objective{The analysis of periodic functions has many applications in pure and applied mathematics, especially in settings dealing with sound waves. The Fourier transform provides a way to analyze such periodic functions. In this lab, we implement the discrete Fourier transform and explore digital audio signals.}
+
+% TODO:
+%   - Add the FFT back in. It's okay if it's a little confusing.
+%   - We need a really legit solutions file.
+%   - Lots of problems happened with scaling. The Signal class may be doing
+%       more damage than good.
+%   - The naive DFT is way too slow. We need to use an FFT in the Signal class.
 
 \section*{Sound Waves}
 
@@ -15,6 +22,8 @@ These correspond to the amplitude and frequency, respectively.
 A sample is a measurement of the amplitude of the wave at an instant in time.
 To see why the sample rate is necessary, consider an array with samples from a soundwave.
 If we do not know how frequently those samples were collected then we can arbitrarily stretch or compress the soundwave to make a variety of sounds.
+
+\begin{comment} % TODO: This figure.
 See Figure \ref{fig:comp_wave} for an illustration of this principle.
 
 \begin{center}
@@ -23,6 +32,7 @@ See Figure \ref{fig:comp_wave} for an illustration of this principle.
 \label{fig:comp_wave}
 \end{figure}
 \end{center}
+\end{comment}
 
 However, if we know at what rate the samples were taken, then we can construct the wave exactly as it was recorded.
 In most applications, this sample rate will be measured in number of samples taken per second.
@@ -49,39 +59,50 @@ To read in a \li{wav} file, we can use the \li{read} function that returns the f
 
 \begin{lstlisting}
 >>> from scipy.io import wavfile
->>> rate, signal = wavfile.read('tada.wav')
+>>> rate, wave = wavfile.read('tada.wav')
 \end{lstlisting}
 
-To get an idea of what the soundwave looks like, we plot \li{signal}.
+To get an idea of what the soundwave looks like, we plot \li{wave}.
 See Figure \ref{fig:tada_sig}.
 
 \begin{figure}[ht]\centering\includegraphics[width=\textwidth]{tada.png}\caption{The soundwave of \li{tada.wav}.}\label{fig:tada_sig}\end{figure}
 
-For example, if we had a NumPy array called \li{signal}, we could create an audio file using the \li{write} method in the \li{scipy.io.wavfile} library.
+Writing a signal to a file is also simple.
+For example, if we had a NumPy array called \li{wave}, we could create an audio file using the \li{write} method in the \li{scipy.io.wavfile} library.
 
 \begin{lstlisting}
 # Write a random signal sampled at a rate of 44100 hz to my_sound.wav.
->>> signal = np.random.randint(-32767, 32767, 30000)
+>>> wave = np.random.randint(-32767, 32767, 30000)
 >>> samplerate = 44100
->>> wavfile.write('my_sound.wav', samplerate, signal)
+>>> wavfile.write('my_sound.wav', samplerate, wave)
 \end{lstlisting}
 
-It should be noted that \li{wavfile.write} expects an array of 16 bit integers for the samples (whole numbers between $-32767$ and $32767$).
-Therefore, waves may need to be scaled and converted to integers before using this function.
+\subsection*{Scaling}
 
+The \li{wavfile.write} function expects an array of 16 bit integers for the samples (whole numbers between $-32767$ and $32767$).
+Therefore, waves may need to be scaled and converted to integers before being written to a file.
+
+\begin{lstlisting}
+# Generate random samples between -0.5 and 0.5.
+>>> samples = np.random.random(30000)-.5
+# Scale the wave so that the samples are between -32767 and 32767.
+>>> samples *= 32767*2
+# Cast the samples as 16 bit integers.
+>>> samples = np.int16(samples)
+\end{lstlisting}
+
+If the entries of a wave are not scaled properly, the operating system may not know how to play the file.
+
+% Problem 2: Signal.write_to_file
 \begin{problem}
-
-Add a method to the \li{Signal} class called \li{write_to_file} that generates a \li{.wav} file from the \li{signal} attribute.
-The \li{write_to_file} method should accept the name of the file to be written.
-
+Add a method to the \li{Signal} class called \li{write_to_file} that accepts a file name and generates a \li{.wav} file from the array of samples.
+Scale the array of samples appropriately before writing to the outfile.
 \end{problem}
 
 \section*{Creating Sounds in Python}
 
 In order to generate a sound in python, we need to sample the corresponding sine wave and then save it as an audio file.
-This can be done quite efficiently using \li{numpy} arrays and functions.
 For example, suppose that we want to generate a sound with a frequency of 500 hertz for 10 seconds.
-%We can use \li{numpy}'s \li{sin} function to generate the correct wave form.
 
 \begin{lstlisting}
 >>> samplerate = 44100
@@ -99,8 +120,8 @@ where $f$ is our desired frequency.
 %# Create a lambda function to sample from.
 %>>> wave_function = lambda x: np.sin(2*np.pi*x*frequency)
 \begin{lstlisting}
->>> def wave_function(x):
-...     return np.sin(2*np.pi*x*frequency)
+# The lambda key word is a shortcut for creating a one-line function.
+>>> wave_function = lambda x: return np.sin(2*np.pi*x*frequency)
 \end{lstlisting}
 
 In the following code, we generate a signal using three steps: first, find the correct step given the \li{samplerate}.
@@ -113,8 +134,8 @@ Finally, get the samples we want by passing \li{sample_points} to \li{wave_funct
 >>> samples = wave_function(sample_points)
 \end{lstlisting}
 
-Our samples will be numbers between 0 to 1 taken from \li{wave_function}.
-Recall that \li{wavfile.write} requires integeres between $-32767$ and $32767$.
+In this case, the samples are numbers between 0 to 1, taken from \li{wave_function}.
+However, \li{wavfile.write} requires integeres between $-32767$ and $32767$.
 Thus, we scale our sample points before creating a \li{.wav} file that can be played by the computer.
 
 \begin{lstlisting}
@@ -124,9 +145,8 @@ Thus, we scale our sample points before creating a \li{.wav} file that can be pl
 The \li{scaled_samples} array can now be written to a file using \li{wavfile.write}.
 This file can be played using media software included with most operating systems.
 
-% Problem 3
+% Problem 3: make a sound
 \begin{problem}
-
 The `A' note occurs at a frequency of 440 hertz.
 Generate the sine wave that corresponds to an `A' note being played for 5 seconds.
 
@@ -149,24 +169,26 @@ G & 783.99 \\
 \end{tabular}
 \end{center}
 
+Implement a function outside of the \li{Signal} class that accepts a frequency and a duration and returns an instance of the \li{Signal} class corresponding to the desired soundwave.
+The default frequency should be 440 Hz, and the default duration should be 5 seconds.
+Sample at a rate of 44100 samples per second to create these sounds.
 \end{problem}
 
 \section*{Discrete Fourier Transform}
 
 \subsection*{Some Technicalities}
-
-Recall that under the right conditions, a continuous periodic function may be represented as a sum of sine waves:
+Under the right conditions, a continuous periodic function may be represented as a sum of sine waves:
 \[
 f(x) = \displaystyle{\sum_{k=-\infty}^{\infty}} c_k \sin{kx}
 \]
-where the constants $c_k$ are called the Fourier coefficients.
+where the constants $c_k$ are called the \emph{Fourier coefficients}.
 
-Further recall that such a transform also exists for discrete periodic functions.
+Such a transform also exists for discrete periodic functions.
 Whereas the frequencies present in the continuous case are multiples of a sine wave with a period of 1, the discrete case is somewhat different.
 The Fourier coefficients in the discrete case represent the amplitudes of sine waves whose periods are multiples of a ``fundamental frequency.''
 The fundamental frequency is a sine wave with a period length equal to the amount of time of the signal.
 
-The k$th$ coefficient of a signal $\{x_0, .., x_{N-1}\}$ is calculated with the following formula:
+The $k^{th}$ coefficient of a signal $\{x_0, .., x_{N-1}\}$ is calculated with the following formula:
 \[
 c_k = \displaystyle{\sum_{n=0}^{N-1}} x_n \cdot e^{\frac{2\pi ikn}{N}}
 \]
@@ -174,69 +196,102 @@ where $i$ is the square root of $-1$.
 This process is done for each $k$ from $0$ to $N-1$.
 Thus there are just as many Fourier coefficients as samples from the orginal signal.
 
-% Problem 4
+% Problem 4: Naive DFT
 \begin{problem}
+Write a function that accepts a NumPy array and computes the discrete Fourier transform of the array.
+Return the array of calculated coefficients.
 
-Add a method the \li{Signal} class called \li{calculate_DFT} that calculates the discrete Fourier transform of the \li{wave} attribute.
-Store the calculated coefficients in an attribute called \li{DFT}.
+SciPy has several methods for calculating the DFT of an array.
+Use \li{scipy.fft} or \li{scipy.fftpack.fft} to check your implementation.
+(Hint: the naive method is significantly slower than SciPy's implementation, so test your function only on small arrays. Can you calculate each coefficient $c_k$ in just one line of code?)
 
-The \li{scipy} module has a \li{fft} method that also calculates the discrete Fourier transform of an array.
-Time the speed of your implmentation with the one in SciPy.
+Also add a method the \li{Signal} class called \li{calculate_DFT} that calculates the discrete Fourier transform of the wave using one of SciPy's DFT functions.
+Store the calculated coefficients as an attribute.
 \end{problem}
 
-% Fast fourier transform?
+% TODO: a section on the FFT (!!!!)
+
+% Problem 4.5: FFT - implement by hand, time / compare with SciPy, use a SciPy in the Signal class.
 
 \section*{Plotting the DFT}
 
-The graph of the fourier transform of a sound file is useful in applications.
-While the graph of the original signal gives information about the amplitude of a soundwave at certain points, the graph of the discrete Fourier transform will show which frequencies are present in the signal.
-For example, the sounds that we generated in the previous section contained only one frequency.
-If we created an `A' note at 440 hz, then the graph of the DFT would appear as in Figure \ref{fig:dft_a}.
-
 \begin{center}
 \begin{figure}
-\caption{The discrete Fourier transform of an `A' note.  Notice that there is only one spike in the graph, as there is only one frequency present.}
+\includegraphics[scale=0.7]{a_dft}
+\caption{The magnitude of the coefficients of the discrete Fourier transform of an `A' note.  Notice that there are two spikes in the graph, the first around 440 on the x-axis.  This second spike is due to symmetries inherent in the DFT.  For our purposes we will mostly be concerned with the left side of the DFT plot.}
 \label{fig:dft_a}
 \end{figure}
 \end{center}
 
+The graph of the fourier transform of a sound file is useful in applications.
+While the graph of the original signal gives information about the amplitude of a soundwave at certain points, the graph of the discrete Fourier transform  shows which frequencies are present in the signal.
+Frequencies present in the signal have non-zero coefficients.
+The magnitude of these coefficients corresponds to how influential the frequency is in the signal.
+For example, the sounds that we generated in the previous section contained only one frequency.
+If we created an `A' note at 440 hz, then the graph of the DFT would appear as in Figure \ref{fig:dft_a}.
+
 On the other hand, the DFT of a more complicated soundwave will have many frequencies present.
+Some of these frequencis correspond to the different tones present in the signal.
 See Figure \ref{fig:dft_tada} for an example.
 
 \begin{center}
 \begin{figure}
+\includegraphics[scale=0.7]{tada_dft}
 \caption{The discrete Fourier transform of \li{tada.wav}.  Each spike in the graph corresponds to a frequency that is present in the signal.}
 \label{fig:dft_tada}
 \end{figure}
 \end{center} 
 
-% Problem 5
+\subsection*{Fixing the x-axis}
+
+If we take the DFT of a signal and then plot it without any other considerations, the x-axis will correspond to the index of the coefficients in the DFT and not their frequencies.
+In a previous section, we mention that the ``fundamental frequency'' for the DFT corresponds to a sine wave whose period is the same as the length of the signal.
+Thus, if unchanged, the x-axis gives us the number of times a particular sine wave cycles throughout the whole signal.
+If we want to label the x-axis with the frequencies measured in hertz, or cycles per second, we will need to convert the units.
+Fortunately, the bitrate is measured in samples per second.
+Therfore, if we divide the frequency (given by the index) by the number of samples, and multiply by the sample rate, we end up with cycles per second, or hertz.
+
+\begin{center}
+    $\frac{\mbox{cycles}}{\mbox{samples}} \times \frac{\mbox{samples}}{\mbox{second}} = \frac{\mbox{cycles}}{\mbox{second}}$
+\end{center}
+
+\begin{lstlisting}
+# Calculate the DFT and the x-values that correspond to the coefficients. Then
+# convert the x-values so that they measure frequencies in hertz.
+>>> dft = sp.fft(signal)
+>>> x_vals = np.arange(1,len(dft)+1, 1)*1. # Make them floats
+
+# x_vals now corresponds to frequencies measured in cycles per signal length.
+>>> x_vals = x_vals/len(signal)
+>>> x_vals = x_vals*rate
+\end{lstlisting}
+
+\begin{comment} % What is this problem here for?
 \begin{problem}
+Modify the \li{calculate_dft} method so that in addition to calculating the Fourier coefficients, it also returns a list of their corresponding frequencies measured in hertz.
+\end{problem}
+\end{comment}
 
-Update the \li{plot} method so that it includes a kew word argument, \li{DFT}, that defaults to \li{False}.
-If the \li{DFT} attribute is set to \li{True} by the user, then \li{plot} should generate a plot of the coefficients from the discrete Fourier transform.
+% Problem 5: plotting the DFT.
+% TODO: change this so both the signal AND the DFT are plotted every time,
+%   using subplots. The side-by-side picture will be helpful.
+\begin{problem}
+Update the \li{plot} method in the \li{Signal} class so that it includes a key word argument, \li{DFT}, that defaults to \li{False}.
+If the \li{DFT} argument is set to \li{True}, then \li{plot} should generate a plot of the magnitude of the coefficients from the discrete Fourier transform.
 If it is set to \li{False}, then the functionality should be unchanged.
-
 \end{problem}
 
 % Problem 6
+% TODO: make sure that we can give good directions on scaling.
 \begin{problem}
-
 A chord is a conjunction of several notes played together.
-We may create a chord in python by adding several sound waves together.
-For example, to create a chord with `A', `C', and `E' notes, we would generate the sound waves for each, as in the prior problem, and then add them together.
-\begin{lstlisting}
-# Create an A, C, and E note as before, and call them a_note, c_note, and e_note
-chord = a_note + c_note + e_note
-\end{lstlisting}
+We can create a chord in Python by adding several sound waves together.
+For example, to create a chord with `A', `C', and `E' notes, we generate the sound waves for each, as in the prior problem, and then add them together.
 
 Create several chords and observe the plot of their DFT.
 There should be as many spikes as there are notes in the plot.
-
-Now, create a sound that changes over time.
-(Hint: Start with a single note or chord and append another)
-Examine the plot of the DFT.
-How many frequencies are present?  Why?
-
+Then create a sound that changes over time.
+(Hints: consider using \li{numpy.hstack} and remember to scale the wave.)
 \end{problem}
 
+% Conclusion?
