@@ -20,34 +20,24 @@ The top image was stretched by a factor of $1.5$ in all directions, producing th
 \begin{problem}\label{prob:dilation}
 Write a function that accepts an array of points and an array giving the stretching factors in each direction. 
 Your function should return the dilated points. 
-
-Included with this lab is a dataset of points saved as a numpy array. To import this array, use \li{np.load("pi.npy")}. This function will return an array of size $(2, 368)$. This array represents $368$ points in $\mathbb{R}^2$ stored as columns.
-
-To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined below.
+Hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined below.
 \begin{lstlisting}
 import numpy as np
 from matplotlib import pyplot as plt
 
-def plot_transform(original, new):
-    """Display a plot of points before and after a transform.
-    
-    Inputs:
-        original (array) - Array of size (2,n) containing points in R2 
-            as columns.
-        new (array) - Array of size (2,n) containing points in R2 
-            as columns.
-    """
-    v = [-5,5,-5,5]
-    plt.subplot(1, 2, 1)
-    plt.title('Before')
-    plt.gca().set_aspect('equal')
-    plt.scatter(original[0], original[1])
-    plt.axis(v)
-    plt.subplot(1, 2, 2)
-    plt.title('After')
-    plt.gca().set_aspect('equal')
+def plotOldNew(old, new):
+    '''Inputs:
+    new -- a (2,n) numpy array containing x-coordinates on the 
+            first row and y-coordinates on the second row.
+    old -- a (2,n) numpy array containing x-coordinates on the first
+            row and y-coordinates on the second row.
+    '''
+            
+    plt.subplot(2, 1, 1)
+    plt.scatter(old[0], old[1])
+    plt.axis('equal')
+    plt.subplot(2, 1, 2)
     plt.scatter(new[0], new[1])
-    plt.axis(v)
     plt.show()
 \end{lstlisting}
 \end{problem}
@@ -70,8 +60,7 @@ The top image was rotated by $\pi/3$, producing the bottom image.}
 \begin{problem}
  Write a function that accepts an array of points and the angle of rotation (in radians). 
  Your function should return the rotated points. 
- 
- To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined in Problem \ref{prob:dilation}.
+ Hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined in Problem \ref{prob:dilation}.
 \end{problem}
 
 \subsection*{Shears}
@@ -101,13 +90,12 @@ The horizontal shear in Figure \ref{fig:shear} corresponds to the matrix $\begin
 \end{pmatrix}
 $.
 
-\begin{comment}
+
 \begin{problem}[Optional]
 Write a function that accepts an array of points, a floating point argument that indicates the shearing amount, and an integer argument that indicates the direction of the shear (0 for horizontal, 1 for vertical). 
 Your function should return the sheared points. 
-Hint: To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined in Problem \ref{prob:dilation}.
+Hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined in Problem \ref{prob:dilation}.
 \end{problem}
-\end{comment}
 
 \subsection*{Reflections}
 
@@ -137,13 +125,11 @@ As another example, the reflection in Figure \ref{fig:reflection} about the line
 2\sqrt{3} & -2
 \end{pmatrix}$.
 
-\begin{comment}
 \begin{problem}[Optional]
 Write a function that accepts an array of points and a 1-D array describing the axis of reflection (in the notation above, this argument is $(l_1, l_2)$. 
 Your function should return the reflected points. 
-Hint: To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined in Problem \ref{prob:dilation}.
+Hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined in Problem \ref{prob:dilation}.
 \end{problem}
-\end{comment}
 
 \subsection*{Composition of linear transformations}
 Recall that composition of linear transformations corresponds to matrix multiplication. 
@@ -174,16 +160,17 @@ Therefore, they cannot be represented as matrix multiplication.
 \begin{problem}
 Write a function that accepts an array of points and an array indicating how much to shift them in each direction. 
 The function should return the translated points. 
-Hint: You can construct a $2 \times 1$ array using the syntax \li{np.vstack([a,b])}.
+Hint: You can construct a $2 \times 1$ array using the syntax \li{np.array([[a], [b]])}. 
 This may be more convenient for broadcasting. 
-Another hint: To check your work, plot the original points and their images under the transformation using the function \li{plot_transform()} defined in Problem \ref{prob:dilation}.
+Another hint: To check your work, plot the original points and their images under the transformation using the function \li{plotOldNew()} defined in Problem \ref{prob:dilation}.
 \end{problem}
 
 \subsection*{Affine transformations}
-Translations, together with linear transformations, make up the broader class of transformations called ``affine transformations." 
+Translations, together, with linear transformations, make up the broader class of transformations called ``affine transformations." 
 These are transformations of the form $T: \mathbb{R}^2 \to \mathbb{R}^2$, $T(X) = AX + b$ where $A$ is an $n\times n$ matrix and $b \in \mathbb{R}^n$. 
 Affine transformations include all compositions of scalings, rotations, dilations, reflections, and translations. 
 For example, if $S$ represents a shear and $R$ a rotation, and if $\mathbf{b}$ is a vector in $\mathbb{R}^2$, then $T(\mathbf{x}) = RS\mathbf{x} + \mathbf{b}$ first shears $\mathbf{x}$, then rotates it, and finally translates it by $\mathbf{b}$. 
+
 
 \begin{problem}
 Imagine a particle $p_1$ rotating around a second particle $p_2$ which is moving through $\mathbb{R}^2$ in a straight line. 
@@ -204,7 +191,7 @@ The location of $p_1$ at time $t$ can be computed as follows:
 \end{itemize}
 \end{itemize}
 \end{enumerate}
-\item Plot the trajectory of $p_1$ on the time interval $(0, 10)$ assuming $\omega=\pi$, $v=(1, 1)$, and $s=2$. 
+\item Plot the trajectory of $p_1$ on the time interval $(0, 10)$ assuming $\omega=\pi$, $v=(1, 1)$, and $s=3$. 
 Your graph should look something like Figure \ref{fig:trajectory}.
 \begin{figure}[H]
 \includegraphics[width=\textwidth]{trajectory.pdf}
@@ -346,14 +333,17 @@ We have the following algorithm for the LU decomposition, assuming it exists.
 \begin{algorithm}
 \begin{algorithmic}[1]
 \Procedure{LU Decomposition}{$A$}
-\State $m, n \gets \shape{A}$ 
-\State $U \gets \makecopy{A}$
-\State $L \gets \Id{n}$
-\For{$i=1 \ldots n-1$}
-    \For{$j=0 \ldots i-1$}
-    \State $L[i,j] \gets U[i, j]/U[j, j]$
-    \State $U[i,j:] \gets U[i,j:] - L[i,j]U[j, j:]$
-    \EndFor
+\State Store the dimensions $(m, n)$ of $A$ 
+\State Initialize the $U$ matrix as a copy of $A$
+\State Initialize the $L$ matrix as the $n\times n$ identity matrix
+\State Then create your matrices as follows:
+\For{$j=0 \ldots n-1$}
+    \For{$i=j+1 \ldots m-1$}
+    %\State $L[i,j] \gets U[i, j]/U[j, j]
+    \State Set each element of $L$ to the corresponding element of $U$ divided by $U[j,j]$
+    %\State $U[i,j:] \gets U[i,j:] - L[i,j]U[j, j:]$
+    \State Set $U[i,j:]$ to itself minus $L[i,j] \times U[j,j:]$
+	\EndFor
 \EndFor
 \State \pseudoli{return} $L, U$
 \EndProcedure
@@ -371,11 +361,11 @@ You may assume that the matrix has an LU decomposition.
 The LU decomposition can be performed in-place by storing $U$ on and above the main diagonal of the array and storing $L$ below it.
 The main diagonal of $L$ does not need to be stored since all its entries are ones.
 
-\begin{comment}
+
 \begin{problem}[Optional]
 Modify your solution to Problem \ref{prob:LU_copy} so that the function computes the LU decomposition in place.
 \end{problem}
-\end{comment}
+
 
 
 \subsection*{Applications of the LU decomposition}
@@ -393,15 +383,16 @@ This technique is significantly faster than storing $A^{-1}$ and then computing 
 \begin{problem}\label{prob:solve}
 In this problem you will solve the system $Ax = b$ for fixed $A$ and many different values of $b$. 
 You will do this in two ways. 
-For a random $1000 \times 1000$ array $A$ and a random $1000 \times 500$ array $B$ do the following:
+For a random $1000 \times 1000$ array $A$ and a random $1000 \times 500$ array $B$ do the following.
 \begin{enumerate}
 \item Time \li{la.lu_factor(A)}.
 \item Time \li{la.inv(A)}.
 \item Store the output of \li{la.lu_factor()}. Time \li{la.lu_solve()} on this stored output and $B$.
 \item Store the inverse of $A$. Time how long it takes to multiply $A^{-1}$ by $B$.
-Print each of these times. What can you conclude about the more efficient way to solve linear systems?
+\item What can you conclude about the more efficient way to solve linear systems?
 \end{enumerate}
 \end{problem}
+
 
 Our technique for solving linear equations can also be used to invert matrices. 
 We can compute $A^{-1}$ by solving $LUx_i = P_i$ for every $P_i$ that is a column of $P$. 
@@ -420,7 +411,7 @@ So if $U$ has diagonal entries $u_{ii}$ for $i=1, \ldots, n$, then
 where $S$ is the number of row-swaps.
 
 
-\begin{comment}
+
 %\begin{problem}
 %\label{prob:lusolve}
 %Write a function that takes the LU decomposition computed by the second function you made in Problem \ref{prob:LU} and another array representing the right hand side of a linear system and modifies the second array in place so that it represents the solution to the linear system.
@@ -434,7 +425,6 @@ Write a function that finds the determinant of a matrix using \li{la.lu_factor()
 Read the documentation to learn about the output of \li{la.lu_factor()}.
 Hint: If the $i^{th}$ entry of the output \li{piv} does not equal $i$, this means that a row swap occurred.
 \end{problem}
-
 
 \subsection*{The Cholesky decomposition (Optional)}
 The Cholesky decomposition requires half the calculations and memory of the LU decomposition. 
@@ -523,4 +513,3 @@ As with the LU decomposition, SciPy has the methods \li{la.cho_factor} and \li{l
 \begin{problem}[Optional]
 Repeat problem \ref{prob:solve}, this time using the methods \li{la.cho_factor} and \li{la.cho_solve}.
 \end{problem} 
-\end{comment}
