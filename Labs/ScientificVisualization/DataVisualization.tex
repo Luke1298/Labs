@@ -186,11 +186,11 @@ plot a histogram with white reference lines.  Do this for 20 bins, 10 bins, 5 bi
 
 \subsection*{Line Plots}
 
-Line plots should not be used for data that is one-dimensional or is two-dimensional with no natural ordering or progression because it gives the false impression that there is an order or progression when none exists (see Figure \ref{fig:lineplot_bad}.
+Line plots should not be used for data that is one-dimensional or is two-dimensional with no natural ordering or progression because it gives the false impression that there is an order or progression when none exists (see Figure \ref{fig:lineplotbadX}).
 
 Recall that you can create a line plot in matplotlib with the command \li{plt.plot()}.
 
-When plotting line graphs in matplotlib, the default line width is usually too thin.  It will help your reader (or you) if you set the line width to 2 or more with the argument \li{lw=2}.
+When plotting line graphs in matplotlib, the default line width is usually too thin.  It will help your reader (or you) if you set the line width to 2 or more with the argument \li{lw=2} (See Figure \ref{fig:lineplot_bad}).
 
 %\li{plt.plot(x,y,lw=2)}
 
@@ -203,10 +203,20 @@ When plotting line graphs in matplotlib, the default line width is usually too t
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
 \centering
-\includegraphics[width=\textwidth]{line_plot_bad_thick.png}
+\includegraphics[width=\textwidth]{line_plot_good.png}
 \end{subfigure}
-\caption{Line Plot}
+\caption{Line Plot.  The left plot is plotted with \li{lw=1} whereas the right plot is plotted with \li{lw=2}.  Notice that the right plot is better because it is easier to see the line.}
 \label{fig:lineplot_bad}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+\centering
+\includegraphics[width=\textwidth]{line_plot_bad_X.png}
+\end{subfigure}
+\caption{Line plot.  Notice that this graph appears to show that the x-values are ordered.  Whereas in reality they are unordered.  This is a bad practice and misrepresents the data.}
+\label{fig:lineplotbadX}
 \end{figure}
 
 
@@ -271,18 +281,6 @@ You can create a contour plot in matplotlib with
 Filling in the contours with successive colors gives a  \emph{heat map}. Note that the default color map for matplotlib is the  \emph{rainbow color map}.  This is a poor choice for a heat map or colored contour map because people do not naturally interpret one color to be greater than another.  To solve this problem in matplotlib, use the argument \li{cmap='NAME\_OF\_COLORMAP'}
 where \li{NAME\_OF\_COLORMAP} is one of matplotlib's sequential or diverging colormaps like \li{afmhot}. 
 
-\begin{lstlisting}
-import numpy as np
-from matplotlib import pyplot as plt
-
-n=400
-xrange = np.linspace(-1.5,1.5,n)
-yrange = np.linspace(-1.5,1.5,n)
-X, Y = np.meshgrid(xrange,yrange)
-F = Y**2 - X**3 + X**2
-plt.contourf(X, Y, F, [-2,-1,0.0001,1,2,3,4,5] ,cmap=plt.get_cmap('afmhot'))
-\end{lstlisting}
-
 \begin{figure}[h]
 \centering
 \begin{subfigure}{.45\textwidth}
@@ -301,13 +299,25 @@ plt.contourf(X, Y, F, [-2,-1,0.0001,1,2,3,4,5] ,cmap=plt.get_cmap('afmhot'))
 \centering
 \includegraphics[width=\textwidth]{contour_map_rainbow.png}
 \end{subfigure}
-\caption{Contour Maps.  The top left is a good contour map and the top right is a good heat map, and the bottom tow are inferior because of bad color choices.}
+\caption{Contour Maps.  The top left is a good contour map and the top right is a good heat map, and the bottom two are inferior because of bad color choices.  The top right corresponds to the code below.}
 \label{fig:contour}
 \end{figure}
 
+\begin{lstlisting}
+# This code corresponds to the above graph on the top right.
+import numpy as np
+from matplotlib import pyplot as plt
+
+n=400
+xrange = np.linspace(-1.5,1.5,n)
+yrange = np.linspace(-1.5,1.5,n)
+X, Y = np.meshgrid(xrange,yrange)
+F = Y**2 - X**3 + X**2
+plt.contourf(X, Y, F, [-2,-1,0.0001,1,2,3,4,5] ,cmap=plt.get_cmap('afmhot'))
+\end{lstlisting}
 
 
-TODO add in the list (and pix) of sequential and diverging colormaps from \url{http://matplotlib.org/examples/color/colormaps_reference.html} 
+TODO add in a list (and pix) of a few sequential and diverging colormaps from \url{http://matplotlib.org/examples/color/colormaps_reference.html} 
 
 
 
@@ -354,13 +364,9 @@ TODO make an example where things are binned in two different ways  and give a d
 
 
 Finally, three-dimensional data can also be plotted as a surface in 3-space, but it is often difficult to find a view where none of the important features of the data are obscured.
-A heatmap can help avoid this problem and is often easier for the viewer to decode.
+A heatmap can help avoid this problem and is often easier for the viewer to decode (see Problem \ref{prob:differentVisualizations}).
 
-
-TODO give example of how the surface can obscure your view and how the contour or heatmap gives a clearer picture.
-
-
-\section*{Exploring data with visualizations}
+\section*{Exploring Data with Visualizations}
 When you visualize data you may notice trends that are not apparent from the numbers. 
 The following problem is a famous example of this phenomenon.
 
@@ -400,7 +406,7 @@ x & y & x & y & x & y & x & y \\
 
 As Problem \ref{prob:anscombe} demonstrates, a picture can quickly reveal properties of the data that are difficult to see in a list of numbers.
 
-\subsection*{The iterative process of exploratory visualization} 
+\subsection*{The Iterative Process of Exploratory Visualization} 
 
 Understanding a data set through visualization is often an iterative process. We start with an initial visualization---usually a broad overview.  Examining the result leads to observations that provoke questions.  We then filter or transform the data and adjust the visualization based on those questions and observations, and then repeat the process until we converge on a useful result.
 
@@ -415,11 +421,11 @@ Some of the questions that you should be asking in this iterative process includ
 \end{enumerate}
 Let's consider each of these questions in more detail.
 
-\subsubsection*{1. Data integrity}
+\subsubsection*{1. Data Integrity}
 
 Visualization is a powerful way to identify problems with your data set.  Ask yourself, whether the results look like what you expect.  Are they the right magnitude? Are there missing values? 
 
-\subsubsection*{2. Trends, patterns, and irregularities}
+\subsubsection*{2. Trends, Patterns, and Irregularities}
 
 Some patterns you may look for:
 \begin{enumerate}
@@ -434,10 +440,11 @@ Some patterns you may look for:
 \item Is the data dense or sparse?
 \end{enumerate}
 
-\subsubsection*{3. Using different types of visualization}
+\subsubsection*{3. Using Different Types of Visualization}
 
 Data can be visualized using different types of visualization and is relatively easy to transform.
 
+TODO give example of how the surface can obscure your view and how the contour or heatmap gives a clearer picture.
 \begin{problem}
 This data
 
@@ -458,7 +465,7 @@ Violin & 22 \\
  is visualized in Figure \ref{fig:pie} as a pie chart.
 
 Choose another type of visualization and plot the data again. What are the relative merits of your plot compared to the pie chart?
-
+\label{prob:differentVisualizations}
 \end{problem}
 
 \begin{comment}
@@ -473,7 +480,7 @@ Choose another type of visualization and plot the data again. What are the relat
 \end{figure}
 \end{comment}
 
-\subsubsection*{4. Changing the view}
+\subsubsection*{4. Changing the View}
 
 By choosing to plot only a portion of your data, you may be able to focus your attention on the most relevant data.  On the other hand, you may also miss some interesting behavior in the data you didn't graph. Figures \ref{fig:scatter_correlation} and \ref{fig:line_scale} are two such examples. 
 
@@ -514,7 +521,7 @@ from Problem 3 and plot it a few more times adjusting the scale.
 TODO example where scatterplot of all people looks random, but separating by something like education level shows clear trends for one level. 
 \end{comment}
 
-\subsubsection*{Transforming the data}
+\subsubsection*{Transforming the Data}
 
 Often a transformation of the data can reveal useful information that was previously hidden.
 
@@ -546,7 +553,7 @@ Transformations can also be useful for histograms.
 As an example, let us look at the cost of health care claims. 
 Our data set is fabricated, but designed to closely resemble real-life data. 
 An initial plotting of the data produces the histogram on the left in Figure \ref{fig:healthcare}. 
-From this picture, it is hard to see the nature of the data---the plot just looks like a single bar. 
+From this picture, it is hard to see the nature of the data---the plot almost looks like a single bar. 
 We may think that all health care claims are cheap. 
 However, when we take the logarithm of the claims prices, we get the histogram on the right in Figure \ref{fig:healthcare}. 
 Graphed on this scale, the data has a bell-shaped distribution similar to a normal distribution. 
@@ -561,17 +568,18 @@ Moreover, we see that there are some very expensive claims being submitted, thou
   \centering
   \includegraphics[width=\textwidth]{healthcare_logscale.pdf}
 \end{subfigure}
-\caption{The same data (meant to resemble the prices of health care claims) is plotted in both histograms above. 
-The plot at left is a lin-lin scale, whereas the plot at right is a log-lin scale. 
+\caption{Two histograms of the same data are plotted above. 
+The plot at left is a lin-lin scale, whereas the plot at right is a log-lin scale (log of the $y$-values). 
 In this case, changing scales revealed important information about the data.}
 \label{fig:healthcare}
 \end{figure}
 
-As a general rule, log-lin plots are useful when the range of the $y$-values is orders of magnitude larger than the range of the $x$-values. 
+As a general rule, taking the log of the $y$-values is most useful when the range of the $y$-values is orders of magnitude larger than the range of the $x$-values. 
 Our health care data was an example of this. 
-Similarly, lin-log plots are useful when the range of the $x$-values is much bigger than the range of the $y$-values. 
+Similarly, taking the log of the $x$-values is most useful when the range of the $x$-values is much bigger than the range of the $y$-values. 
 In any case, you can try applying a log scale to one or both of your axes as a way to explore your data.
 
+\begin{comment}
 Let us analyze the mathematics behind log plots. 
 Suppose we have some data that roughly follows the line $y=cx^a$ where $c$ and $a$ are constants. 
 Taking the logarithm of both sides yields
@@ -579,7 +587,7 @@ Taking the logarithm of both sides yields
 \log(y) = a\log(x) + \log(c).
 \]
 If we set new variables $X = \log(x)$ and $Y = \log(y)$, then this equation becomes $Y = aX + \log(c)$, which is the equation of a straight line. 
-So  on a log-log plot, polynomial-shaped data looks linear. 
+So on a log-log plot, polynomial-shaped data looks linear. 
 Similarly, taking the log of $y = a^x$ yields
 \[
 \log(y) = \log(a)x,
@@ -587,6 +595,7 @@ Similarly, taking the log of $y = a^x$ yields
 so exponential data looks linear on a log-lin plot. 
 Finally, data of the form $y = a\log(x)+b$ will look linear on a lin-log plot. 
 See Figure \ref{fig:log_plots}.
+\end{comment}
 
 \begin{figure}
 \centering
@@ -597,7 +606,7 @@ We have used different ranges on the $y$-axes to highlight appropriate parts of 
 \label{fig:log_plots}
 \end{figure}
 
-Be warned that many different functions can look linear on log plots. 
+Be warned that many different functions can look almost linear on log plots. 
 Thus, if you graph your data on a log-log plot and you see a line, you cannot conclude that your data must follow a polynomial. 
 In general, you need more information.
 
@@ -701,13 +710,13 @@ explore it. Plot it in different ways, zoom in and out, and do a transformation.
 
 
 
-\section*{Communicating data with visualizations}
+\section*{Communicating Data with Visualizations}
 
 As the saying has it, ``a picture is worth a thousand words.'' 
 Certainly, a data visualization is far more valuable than a thousand data points to a colleague who wants to understand the results of your analysis. 
 Data visualizations are critical for communication in both business and research.
 
-\subsection*{Choosing the right visualization}
+\subsection*{Choosing the Right Visualization}
 At this point, you have already used visualization to explore your data and draw conclusions, and you are ready to tell your results to someone else. 
 The first step in creating a graphic to do this is to choose the right type of visualization. 
 As we saw in the section ``Types of Visualizations,'' there are many possibilities, each with different strengths. 
@@ -747,9 +756,9 @@ Other visualization types that tend to be confusing and ineffective include the 
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
 \centering
-\includegraphics[width=\textwidth]{stackedbarinv.png}
+\includegraphics[width=\textwidth]{unstackedbar.png}
 \end{subfigure}
-\caption{Stacked Bar Chart comparison}
+\caption{Stacked Bar Chart. Note how much more difficult it is to compare the relative values when they are stacked (on the left) instead of adjacent (on the right).}
 \label{fig:stacked}
 \end{figure}
 
@@ -931,7 +940,7 @@ Just as graphics can tell your reader about your data, they can also give your v
 You should never use data visualizations to mislead your reader. 
 There are many ways that pictures can be used to lie, and some of them can be unintentional.
 
-\subsubsection*{2- and 3-D effects}
+\subsubsection*{2- and 3-D Effects}
 For example, we see differences in flat shapes by area, not width or height. 
 Suppose you are creating a pictogram to demonstrate the recent increase in housing prices, which have doubled in the last $n$ years. 
 So, you draw two houses, one whose sides are 1cm and one whose sides are 2cm. 
@@ -945,7 +954,7 @@ Even worse, volume is cubed rather than squared, so if a picture is intended to 
 Three-dimensional special effects also tend to be misleading.  As mentioned above, a 3-D pie chart, for example, can be used to distort the sizes of its slices. 
 Similarly, a 3-D histogram can use perspective to distort the relative differences between bars.
 
-\subsubsection*{Base, scale, and labels}  
+\subsubsection*{Base, Scale, and Labels}  
 
 As mentioned above, bar charts should be based at 0 and all charts should be scaled in the way that most clearly conveys the most important and relevant information.  When there is a possibility of confusion, axes and key data values should be labeled for clarity.
 
