@@ -444,7 +444,14 @@ Some patterns you may look for:
 
 Data can be visualized using different types of visualization and is relatively easy to transform.
 
+\begin{problem}
 TODO give example of how the surface can obscure your view and how the contour or heatmap gives a clearer picture.
+Here is a 3-D surface:
+Change this surface to a heatmap and a contour plot.  Return a string of the benefits of each type of visualization.
+\label{prob:differentVisualizations}
+\end{problem}
+
+\begin{comment}
 \begin{problem}
 This data
 
@@ -465,8 +472,9 @@ Violin & 22 \\
  is visualized in Figure \ref{fig:pie} as a pie chart.
 
 Choose another type of visualization and plot the data again. What are the relative merits of your plot compared to the pie chart?
-\label{prob:differentVisualizations}
+
 \end{problem}
+\end{comment}
 
 \begin{comment}
 \begin{figure}
@@ -498,7 +506,7 @@ You can modify the scale of an existing plot using \li{plt.yscale()} or \li{plt.
   \centering
   \includegraphics[width=\textwidth]{scale_line_zoomed_out.png}
 \end{subfigure}
-\caption{Scale issues}
+\caption{Scale issues.  Notice that $y$-values on the left graph look random.  However, it is clear to see on the right graph that the $y$-values aren't as sporadic.}
 \label{fig:line_scale}
 \end{figure}
 
@@ -507,29 +515,32 @@ You can modify the scale of an existing plot using \li{plt.yscale()} or \li{plt.
 \begin{problem}
 Return to your plot of 
 
-$$y = x^2sin(x)$$ $$x\in[0,100]$$
+$$y = x^2\sin(x)$$ $$x\in[0,100]$$
 
-from Problem 3 and plot it a few more times adjusting the scale. 
+from Problem 3 and plot it a few more times adjusting the scale by setting the $y$ limits to be $\pm10^{k}$ for $k = 0,1,2,3,4$ by using the command 
+
+\li{plt.ylim(lower_limit,upper_limit)}. 
 \end{problem}
 
 
 
-%\subsubsection*{Filtering the data}
+\subsubsection*{5. Filtering the Data}
+Sometimes important information about a subset of the data can be obscured by considering the whole data set. For example, if  
 
-%Sometimes important information about a subset of the data can be obscured by considering the whole data set.  
+
 \begin{comment}
 TODO example where scatterplot of all people looks random, but separating by something like education level shows clear trends for one level. 
 \end{comment}
 
-\subsubsection*{Transforming the Data}
+\subsubsection*{6. Transforming the Data}
 
 Often a transformation of the data can reveal useful information that was previously hidden.
 
-For example, data that grows very rapidly or that is tightly clustered may be better visualized by plotting the logarithm of the data, instead of the original data, A log-lin plot (also called a log plot) is constructed by by taking the logarithm of only the $y$-values of your data set. 
+For example, data that grows very rapidly or that is tightly clustered may be better visualized by plotting the logarithm of the data, instead of the original data, A log-lin plot (also called a log plot) is constructed by by taking the logarithm of the $y$-values of your data set. 
 
 This is easily done in matplotlib with the command \li{plt.semilogy(x,y)}.  The syntax is the same as \li{plt.plot()}.
 
-On the left side of Figure \ref{fig:exp}, $x^{14}$ and $x^{13}$ look almost idential. Graphic them on a log-lin plot (as on the right side of Figure \ref{fig:exp}), their differences become apparent. 
+On the left side of Figure \ref{fig:exp}, $x^{14}+1$ and $x^{13}+1$ look almost idential. Graphic them on a log-lin plot (as on the right side of Figure \ref{fig:exp}) makes their differences apparent.  Beware, however, that you should not label the transformed axis with transformed labels, because the reader ultimately needs the untransformed values.  So a log-lin plot could have $y$-axis with $10^{1},10^{2},10^{3},10^{4}$ etc.  all equidistant.  And not with values $1,2,3,4$ equidistant (see Figure ).
 
 \begin{figure}[h]
 \centering
@@ -546,8 +557,8 @@ On the left side of Figure \ref{fig:exp}, $x^{14}$ and $x^{13}$ look almost iden
 \end{figure}
 
 
-Similarly, if the data grows very slowly, you may find that a lin-log plot (given by by taking the logarithm of only the $x$-values) gives a more useful view.
-This is easily done in matplotlib with the command \li{plt.semilogx(x,y)}
+Similarly, if the data grows very slowly, you may find that a lin-log plot (given by by taking the logarithm of the $x$-values) gives a more useful view.
+This is easily done in matplotlib with the command \li{plt.semilogx(x,y)}.
 
 Transformations can also be useful for histograms.
 As an example, let us look at the cost of health care claims. 
