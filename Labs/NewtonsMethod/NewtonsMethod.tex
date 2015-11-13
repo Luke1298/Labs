@@ -1,6 +1,6 @@
-\lab{Newton's Method, Julia Sets and Basins of Attraction}{Newton's Method}
+\lab{Newton's Method and Basins of Attraction}{Newton's Method}
 \label{lab:NewtonsMethod}
-\objective{Understand Newton's Method. Understand definition of basin of attraction.  Basic understanding of Julia Sets.}
+\objective{Understand Newton's Method. Understand definition of basin of attraction.}
 
 Newton's method finds the zeros of functions; i.e., Newton's method finds $\overline{x}$ such that $f\left(\overline{x}\right) = 0$.
 This method can be used to optimize functions (find their maxima and minima).  For example, it can be used to find the zeros of the first derivative.
@@ -64,25 +64,23 @@ We have already computed the root 1 to two digits of accuracy.
 \item Implement Newton's method with the following function.
 \begin{lstlisting}
 def Newtons_method(f, x0, Df, iters=15, tol=.002):
-    '''Use Newton's method to approximate a zero of a function.
-    
-    INPUTS:
-    f     - A function handle. Should represent a function from 
-            R to R.
-    x0    - Initial guess. Should be a float.
-    Df    - A function handle. Should represent the derivative 
-            of `f`.
-    iters - Maximum number of iterations before the function 
+    '''
+    Use Newton's method to approximate a zero of a function.
+    Inputs:
+        f (function): A function handle. Should represent a function 
+            from R to R.
+        x0 (float): Initial guess.
+        Df (function): A function handle. Should represent the derivative
+             of f.
+        iters (int): Maximum number of iterations before the function
             returns. Defaults to 15.
-    tol   - The function returns when the difference between 
-            successive approximations is less than `tol`.
-    
-    RETURN:
-    A tuple (x, converged, numiters) with
-    x           - the approximation to a zero of `f`
-    converged   - a Boolean telling whether Newton's method 
-                converged
-    numiters    - the number of iterations the method computed
+        tol (float): The function returns when the difference between
+            successive approximations is less than tol.
+    Returns:
+        A tuple (x, converged, numiters) with
+        x (float): the approximation for a zero of f
+        converged (bool): a Boolean telling whether Newton's method converged
+        numiters (int): the number of iterations the method computed
     '''
 \end{lstlisting}
 
@@ -93,7 +91,7 @@ Plot $f(x) = \frac{sin(x)}{x}-x$ on $[-4, 4]$.
 Note that this function can be made continuous on this domain by defining $f(0)=1$. 
 Use your function \li{Newtons_method()} to compute the zero of this function to 7 digits of accuracy.
 \item Run \li{Newtons_method()} on $f(x)=x^9$ with $x_0=1$. 
-How many iterations are required to get 1 digit of accuracy? 
+How many iterations are required to get 2 digit of accuracy? 
 What is the reason for this slow convergence?
 \item Run \li{Newtons_method()} on $f(x)=x^{1/3}$ with $x_0=.01$. 
 What happens and why?
@@ -155,7 +153,7 @@ Blue values converge to $-1$, red converge to 0, and green converge to 1.}
 \end{figure}
 
 We can extend these examples to the complex plane. 
-Newton's method works in arbitrary Banach spaces with slightly stronger hypotheses (see theorem in textbook), and in particular it holds over $\mathbb{C}$.
+Newton's method works in arbitrary Banach spaces with slightly stronger hypotheses (see Chapter 7 of Volume 1), and in particular it holds over $\mathbb{C}$.
 
 Let us plot the basins of attraction for $f(x) = x^3-x$ on the domain $\{a+bi \mid (a, b) \in [-1.5, 1.5] \times [-1.5, 1.5] \}$ in the complex plane.
 We begin by creating a $700 \times 700$ grid of points in this domain. 
@@ -182,7 +180,7 @@ Finally, we plot the array \li{Xnew}. The result is similar to Figure \ref{fig:f
 >>> plt.pcolormesh(Xreal, Ximag, Xnew)
 \end{lstlisting}
 
-Notice that in Figure \ref{fig:fractal_ex}, whenever red and blue try to come together, a patch of green appears inbetween.
+Notice that in Figure \ref{fig:fractal_ex}, whenever red and blue try to come together, a patch of green appears in between.
 This behavior repeats on an infinitely small scale, producing a fractal.
 Because it arises from Newton's method, this fractal is called a \emph{Newton fractal}.
 
