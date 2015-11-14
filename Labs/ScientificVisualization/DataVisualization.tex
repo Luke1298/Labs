@@ -93,6 +93,15 @@ Bar charts are best for relatively small sets of discrete, one-dimensional data.
 \end{figure}
 
 You can create a bar chart in matplotlib with the commands \li{plt.bar()} and \li{plt.barh()}.
+\begin{lstlisting}
+# This code created the top right bar chart.
+labels = 'Spam', 'Eggs', 'Ham', 'Sausage', 'Bacon', 'Baked beans','Lobster thermidor'
+val = [10, 11, 18, 19, 20, 21, 22]    # the bar lengths
+pos = np.arange(7)+.5    # the bar centers on the y axis
+plt.barh(pos,val, align='center')
+plt.yticks(pos, labels[::-1])
+plt.show()
+\end{lstlisting}
 
 The data in a bar chart should generally be sorted in some natural way, based on the intended use.  If the chart will be used to compare the value of different data points, we usually sort by size; if the chart will be used for looking up specific values, the data could be sorted alphabetically or in some other logical order that facilitates finding specific values.
 
@@ -152,7 +161,7 @@ data = randn(75) + randn(75) + randn(75) + randn(75)
 plt.hist(data)
 plt.grid(True, color = 'w', linestyle = '-')
 
-plt.title("histogram)
+plt.title("histogram")
 plt.show()
 
 \end{lstlisting}
@@ -175,10 +184,10 @@ plt.show()
 
 
 \begin{problem}
-Using 1000 random numbers from a Gaussian distribution,
+Using 1000 random numbers from a normal distribution,
 \begin{lstlisting}
 from numpy.random import normal
-gaussian_numbers = normal(size=1000)
+normal_numbers = normal(size=1000)
 \end{lstlisting}
 plot a histogram with white reference lines.  Do this for 20 bins, 10 bins, 5 bins, and 3 bins.
 
@@ -215,7 +224,7 @@ When plotting line graphs in matplotlib, the default line width is usually too t
 \centering
 \includegraphics[width=\textwidth]{line_plot_bad_X.png}
 \end{subfigure}
-\caption{Line plot.  Notice that this graph appears to show that the x-values are ordered.  Whereas in reality they are unordered.  This is a bad practice and misrepresents the data.}
+\caption{Line plot.  Notice that this graph appears to show that the x-values are ordered.  However, in reality, they are unordered.  This is a bad practice and misrepresents the data.}
 \label{fig:lineplotbadX}
 \end{figure}
 
@@ -257,7 +266,7 @@ You can create a scatter plot in matplotlib with the command \li{plt.scatter()}.
 \centering
 \includegraphics[width=\textwidth]{scale_scatter_zoomed_out.png}
 \end{subfigure}
-\caption{Scatter Plots.  The data in both plots are the same, but note how in the first we see litle correlation compared to the second.  This is solely an artifact of the scale of the plot.  Keep this in mind when you make scatter plots.}
+\caption{Scatter Plots.  The data in both plots are the same, but note how in the first we see little correlation compared to the second.  This is solely an artifact of the scale of the plot.  Keep this in mind when you make scatter plots.}
 \label{fig:scatter_correlation}
 \end{figure}
 
@@ -304,14 +313,14 @@ where \li{NAME\_OF\_COLORMAP} is one of matplotlib's sequential or diverging col
 \end{figure}
 
 \begin{lstlisting}
-# This code corresponds to the above graph on the top right.
+# This code corresponds to the figure on the top right of the contour maps.
 import numpy as np
 from matplotlib import pyplot as plt
 
 n=400
-xrange = np.linspace(-1.5,1.5,n)
-yrange = np.linspace(-1.5,1.5,n)
-X, Y = np.meshgrid(xrange,yrange)
+xran = np.linspace(-1.5,1.5,n)
+yran = np.linspace(-1.5,1.5,n)
+X, Y = np.meshgrid(xran,yran)
 F = Y**2 - X**3 + X**2
 plt.contourf(X, Y, F, [-2,-1,0.0001,1,2,3,4,5] ,cmap=plt.get_cmap('afmhot'))
 \end{lstlisting}
@@ -445,9 +454,18 @@ Some patterns you may look for:
 Data can be visualized using different types of visualization and is relatively easy to transform.
 
 \begin{problem}
-TODO give example of how the surface can obscure your view and how the contour or heatmap gives a clearer picture.
-Here is a 3-D surface:
-Change this surface to a heatmap and a contour plot.  Return a string of the benefits of each type of visualization.
+This is an example of a surface that obscures your view:
+\begin{lstlisting}
+x = np.linspace(-2*np.pi,2*np.pi,num=400)
+y = np.linspace(-2*np.pi,2*np.pi,num=400)
+X, Y = np.meshgrid(x,y)
+Z = np.exp(np.cos(np.sqrt(X**2 + Y**2)))
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+ax.plot_surface(X,Y,Z)
+plt.show()
+\end{lstlisting}
+Change this surface to a heatmap or a contour plot.  Return a string of the benefits of each type of visualization.  See the beginning of the lab for how to make a contour plot.
 \label{prob:differentVisualizations}
 \end{problem}
 
@@ -525,7 +543,7 @@ from Problem 3 and plot it a few more times adjusting the scale by setting the $
 
 
 \subsubsection*{5. Filtering the Data}
-Sometimes important information about a subset of the data can be obscured by considering the whole data set. For example, if  
+Sometimes important information about a subset of the data can be obscured by considering the whole data set. For example, if we were to 
 
 
 \begin{comment}
@@ -621,12 +639,12 @@ Be warned that many different functions can look almost linear on log plots.
 Thus, if you graph your data on a log-log plot and you see a line, you cannot conclude that your data must follow a polynomial. 
 In general, you need more information.
 
-
+\begin{comment}
 \begin{problem}
 Graph your data from Problem 1 in the Complexity and Sparse Matrices lab on a (a) log-log scale, (b) log-lin scale, and (c) lin-log scale. 
 Which plot makes the data easiest to understand?
 
-\begin{comment}
+
 In this problem you will analyze the complexity of the following functions.
 
 \begin{enumerate}
@@ -636,7 +654,7 @@ In this problem you will analyze the complexity of the following functions.
 # Single ``for'' loop
 def func1(n):
     n = 500*n
-    sum(xrange(n))
+    sum(range(n))
 \end{lstlisting}
 
 \item 
@@ -645,8 +663,8 @@ def func1(n):
 def func2(n):
     n = 3*n
     t = 0
-    for i in xrange(n):
-        for j in xrange(i):
+    for i in range(n):
+        for j in range(i):
             t += j
 \end{lstlisting}
 
@@ -691,8 +709,9 @@ Do this as follows:
 \end{enumerate}
 \item For each function, discuss how its spatial and temporal complexity could have contributed to its runtime.
 \end{enumerate}
-\end{comment}
 \end{problem}
+\end{comment}
+
 
 
 \begin{problem}
@@ -749,7 +768,7 @@ As a result, charts that depend on distinguishing variation in area will be less
 \centering
 \includegraphics[width=\textwidth]{bar_chart_horizontal_sorted.png}
 \end{subfigure}
-\caption{A pie chart on the left that has been improved by a transformation into a bar chart on the right}
+\caption{A pie chart on the left that has been improved by a transformation into a bar chart on the right.}
 \label{fig:pievsbar}
 \end{figure}
 
@@ -795,7 +814,7 @@ s = 0.63
 num_samples = 10000
 samples = []
 
-for i in xrange(num_samples):
+for i in range(num_samples):
     samples.append(sp.random.normal(m, s)) 
 
 sp_samples = sp.array(samples)
@@ -914,7 +933,7 @@ def Chebyshev_subplots():
 
     x = np.linspace(-1,1,500)
 
-    for i in xrange(9):
+    for i in range(9):
         ax = plt.subplot(3,3,i+1)
         ax.plot(x, T.basis(i)(x), lw=2, label="$T_%d$"%i)
         plt.xlim(-1.1,1.1)
@@ -937,7 +956,7 @@ def Chebyshev_subplots():
 
 The $n+1$ Bernstein basis polynomials of degree $n$ are defined as 
 
-$$b_{v,n} = {{n} \choose {k}} x^v (1-x)^{n-v}, v = 0, 1,..., n.$$
+$$b_{v,n} = {{n} \choose {v}} x^v (1-x)^{n-v}, v = 0, 1,..., n.$$
 
 
 Plot the Bernstein basis polynomials for $v,n$ in [0,3] as small multiples and compare that to the cluttered version of plotting them on top of each other.
