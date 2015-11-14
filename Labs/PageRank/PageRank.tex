@@ -10,7 +10,7 @@ Named for Larry Page, cofounder of Google, this algorithm ranks pages based on h
 The PageRank algorithm is also used in applications other than internet search engines.
 For example, it has been used to rank graduate institutions and the impact factor of journals, and it has been used in some biological applications.
 
-\section*{The internet as a graph}
+\section*{The Internet as a Graph}
 The PageRank algorithm models the internet with a directed graph. 
 Each webpage is a node, and there is an edge from node $i$ to node $j$ if page $i$ links to page $j$.
 Let $\In(i)$ be the websites linking to page $i$ and let $\Out(i)$ be the websites that page $i$ links to. 
@@ -53,7 +53,7 @@ Moreover, a link from a more important page counts more than a link from a less 
 For example, in Figure \ref{fig:network1} we would expect node 0 to have a very high rank because every other node links to it. 
 Consequently we would expect node 7 to have a fairly high rank because node 0 links to it, even though node 0 is the only node to do so.
 
-\section*{The PageRank algorithm}
+\section*{The PageRank Algorithm}
 The PageRank algorithm assumes that a surfer chooses a starting webpage randomly.
 Then, if the surfer is at page $i$, they randomly select a page from $\Out(i)$ to visit next.
 This means that the surfer's chance of being on page $i$ at time $t$ is determined by where they were at time $t-1$.
@@ -69,7 +69,7 @@ For example, in Figure \ref{fig:network1} we have $N=8$, and
 p(6, t+1)=\frac{p(3,t)}{3}+\frac{p(4,t)}{3} + \frac{p(5,t)}{2}.
 \]
 
-\subsection*{Refining the model: pages with no outbound links}
+\subsection*{Refining the Model: Pages with No Outbound Links}
 A node with no outbound links is called a \emph{sink}. 
 For example, node 2 in Figure \ref{fig:network1} is a sink.
 According to our model, if the surfer ever visits a sink, they will stay there forever.
@@ -117,7 +117,7 @@ For example, we replace Figure \ref{fig:network1} with Figure \ref{fig:network2}
 \label{fig:network2}
 \end{figure}
 
-\subsection*{Refining the model: adding boredom}
+\subsection*{Refining the Model: Adding Boredom}
 The equations in \eqref{equ:pr1} describe the surfer's habits as a Markov chain.
 However, the model is more realistic if we add the assumption that the surfer sometimes gets bored and randomly picks a new starting page.
 We will denote the probability that a surfer stays interested at step $t$ by a constant $d$, called the \emph{damping factor}.
@@ -128,7 +128,7 @@ p(i,0)=\frac{1}{N} \qquad p(i,t+1) = \frac{1-d}{N} + d\sum_{j \in \In(i)} \frac{
 \end{equation}
 
 
-\subsection*{Matrix form of the PageRank algorithm}
+\subsection*{Matrix Form of the PageRank Algorithm}
 We can rewrite \eqref{equ:pr2} as the matrix equation
 \begin{equation}\label{equ:pr3}
 \mathbf{p}(0)=\frac{1}{N}\mathbf{1} \qquad \mathbf{p}(t+1) = dK\mathbf{p}(t) + \frac{1-d}{N}\mathbf{1}
@@ -138,7 +138,7 @@ where $\mathbf{p}(t)=(p(1,t), p(2,t), \ldots, p(N,t))^T$ and $\mathbf{1} = (1,\l
 	0 & \mbox{ otherwise.} \end{cases}\]
 
 
-\subsection*{Defining page rank}
+\subsection*{Defining Page Rank}
 As given by the PageRank algorithm, the \emph{rank} of page $i$ is
 \[p(i) = \lim_{t\to \infty} p(i,t).\]
 In other words, the page ranks are the steady state of the modified Markov chain defined in \eqref{equ:pr3}.
@@ -247,9 +247,9 @@ K = np.array([[ 0   ,  1   ,  1./8,  1./3,  1./3,  1./2,  1   ,  1   ],
 \end{lstlisting}
 
 
-\subsection*{Solving for the page ranks}
+\subsection*{Solving for the Page Ranks}
 There are several ways to solve for $\lim_{t \to \infty} \mathbf{p}(t)$.
-\subsubsection*{Algebraic method}
+\subsubsection*{Algebraic Method}
 One possibility is to assume the modified Markov chain has a steady state $\mathbf{p}$ and solve for it algebraically:
 \begin{equation}\label{equ:matrix_solve}
 (I-dK)\mathbf{p} = \frac{1-d}{N} \mathbf{1}.
@@ -268,7 +268,7 @@ As expected, node 0 has the highest rank, approximately equal to .43.
 Node 7 has a much higher rank than node 6, even though $\In(7)=1$ and $\In(6)=3$. 
 This is because node 7's single in-edge comes from a node that has a very high rank (node 0).
 
-\subsubsection*{Iterative method}
+\subsubsection*{Iterative Method}
 Solving the system in \eqref{equ:matrix_solve} is feasible for our small working example, but this is not an efficient strategy for very large systems.
 
 One option for large systems is to iterate the equation for $\mathbf{p}(t)$ until $\norm{\mathbf{p}(t)-\mathbf{p}(t-1)}$ is sufficiently small.
@@ -306,7 +306,7 @@ It is possible (but not necessary) to do this in a single line.
 \end{enumerate}
 \end{problem}
 
-\subsubsection*{Eigenvalue method}
+\subsubsection*{Eigenvalue Method}
 Another way to solve this problem is to make it into an eigenvalue problem. 
 Let $E$ be an $N \times N$ matrix of ones; then $E\mathbf{p}(t) = \mathbf{p}(t)$. 
 Hence, the matrix equation \eqref{equ:pr3} for $\mathbf{p}(t+1)$ becomes
@@ -345,7 +345,7 @@ Hint: Review the techniques from the Markov chain section of Lab \ref{lab:EigSol
 \end{problem}
 
 
-\section*{SNAP datasets}
+\section*{SNAP Datasets}
 The SNAP graph library, located at \url{http://snap.stanford.edu/data/index.html}, provides a variety of medium sized data sets for public use.
 The \li{matplotlib.pyplot.spy} command on the adjacency matrix from a SNAP data set yielded the plot shown in Figure \ref{fig:WebSparse}
 
