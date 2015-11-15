@@ -7,6 +7,9 @@
 %       just before writing to file. Do not scale in other examples.
 %       Show proper technique for scaling.
 %   - Add implementation of FFT back in, right after naiive DFT.
+%   - Recommended spec format: iPython Notebook.
+%   - Possible additions: down sampling, etc.
+%   - Explain that Fourier coefficients are complex. Absolute value!!!
 
 \section*{Sound Waves}
 
@@ -87,7 +90,7 @@ We use \li{wavfile.write}, specifing the name of the new file, the sample rate, 
 
 \begin{lstlisting}
 # Write a random signal sampled at a rate of 44100 hz to my_sound.wav.
->>> wave = np.random.randint(-32767, 32767, 30000)
+>>> wave = sp.random.randint(-32767, 32767, 30000)
 >>> samplerate = 44100
 >>> wavfile.write('my_sound.wav', samplerate, wave)
 \end{lstlisting}
@@ -99,11 +102,11 @@ Therefore, waves may need to be scaled and converted to integers before being wr
 
 \begin{lstlisting}
 # Generate random samples between -0.5 and 0.5.
->>> samples = np.random.random(30000)-.5
+>>> samples = sp.random.random(30000)-.5
 # Scale the wave so that the samples are between -32767 and 32767.
 >>> samples *= 32767*2
 # Cast the samples as 16 bit integers.
->>> samples = np.int16(samples)
+>>> samples = sp.int16(samples)
 \end{lstlisting}
 
 The scaling technique in the above example works, but only because we knew beforehand that the values were in the interval $[-\frac{1}{2}, \frac{1}{2}]$.
@@ -138,7 +141,7 @@ where $f$ is our desired frequency.
 
 \begin{lstlisting}
 # The lambda keyword is a shortcut for creating a one-line function.
->>> wave_function = lambda x: return np.sin(2*np.pi*x*frequency)
+>>> wave_function = lambda x: sp.sin(2*sp.pi*x*frequency)
 \end{lstlisting}
 
 In the following code, we generate a signal using three steps: first, find the correct step size given the sample rate.
@@ -149,7 +152,7 @@ Then we can use our \li{Signal} class to plot the soundwave or write it to a fil
 \begin{lstlisting}
 # Calculate the step size, the sample points, and the sample values.
 >>> stepsize = 1./samplerate
->>> sample_points = np.arange(0, length, stepsize)
+>>> sample_points = sp.arange(0, length, stepsize)
 >>> samples = wave_function(sample_points)
 
 # Use the Signal class to write the sound to a file.
@@ -165,7 +168,7 @@ However, \li{wavfile.write} requires integeres between $-32767$ and $32767$.
 Thus, we scale our sample points before creating a \li{.wav} file that can be played by the computer.
 
 \begin{lstlisting}
->>> scaled_samples = np.int16(samples*32767)
+>>> scaled_samples = sp.int16(samples*32767)
 \end{lstlisting}
 
 The \li{scaled_samples} array can now be written to a file using \li{wavfile.write}.
@@ -289,14 +292,14 @@ Therfore, if we divide the frequency (given by the index) by the number of sampl
 # Calculate the DFT and the x-values that correspond to the coefficients. Then
 # convert the x-values so that they measure frequencies in hertz.
 >>> dft = sp.fft(signal)
->>> x_vals = np.arange(1,len(dft)+1, 1)*1. # Make them floats
+>>> x_vals = sp.arange(1,len(dft)+1, 1)*1. # Make them floats
 
 # x_vals now corresponds to frequencies measured in cycles per signal length.
 >>> x_vals = x_vals/len(signal)
 >>> x_vals = x_vals*rate
 \end{lstlisting}
 
-\begin{comment} % What is this problem here for?
+\begin{comment} % Modify this problem so it's about calculating Hz.
 \begin{problem}
 Modify the \li{calculate_dft} method so that in addition to calculating the Fourier coefficients, it also returns a list of their corresponding frequencies measured in hertz.
 \end{problem}
@@ -320,7 +323,7 @@ There should be as many spikes as there are notes in the plot.
 Then create a sound that changes over time.
 
 (Hints: you may consider implementing the \li{__add__} magic method for the \li{Signal} class.
-The functions \li{numpy.hstack} and \li{numpy.vstack} may also be helpful.)
+The SciPy/NumPy functions \li{hstack} and \li{vstack} may also be helpful.)
 \end{problem}
 
 % Conclusion? Mono vs. Stereo?
