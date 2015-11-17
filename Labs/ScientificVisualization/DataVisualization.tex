@@ -325,8 +325,7 @@ F = Y**2 - X**3 + X**2
 plt.contourf(X, Y, F, [-2,-1,0.0001,1,2,3,4,5] ,cmap=plt.get_cmap('afmhot'))
 \end{lstlisting}
 
-
-TODO add in a list (and pix) of a few sequential and diverging colormaps from \url{http://matplotlib.org/examples/color/colormaps_reference.html} 
+Two sequential colormaps are \li{afmhot} and \li{cool}.  Two diverging colormaps are \li{seismic} and \li{bwr}.  These colormaps along with their color scheme can be found on \url{http://matplotlib.org/examples/color/colormaps_reference.html}.
 
 
 
@@ -543,7 +542,7 @@ from Problem 3 and plot it a few more times adjusting the scale by setting the $
 
 
 \subsubsection*{5. Filtering the Data}
-Sometimes important information about a subset of the data can be obscured by considering the whole data set. For example, if we were to 
+Sometimes important information about a subset of the data can be obscured by considering the whole data set.  Some information is difficult to notice when all the data is combined into one plot.  But when the data is divided into subsets, more information can be gathered.  For example, when the height of males and females are plotted for multiple countries, there may appear to be a large variance.  But when males' heights and females' heights are isolated, more information about the variance can be deduced.
 
 
 \begin{comment}
@@ -558,7 +557,7 @@ For example, data that grows very rapidly or that is tightly clustered may be be
 
 This is easily done in matplotlib with the command \li{plt.semilogy(x,y)}.  The syntax is the same as \li{plt.plot()}.
 
-On the left side of Figure \ref{fig:exp}, $x^{14}+1$ and $x^{13}+1$ look almost idential. Graphic them on a log-lin plot (as on the right side of Figure \ref{fig:exp}) makes their differences apparent.  Beware, however, that you should not label the transformed axis with transformed labels, because the reader ultimately needs the untransformed values.  So a log-lin plot could have $y$-axis with $10^{1},10^{2},10^{3},10^{4}$ etc.  all equidistant.  And not with values $1,2,3,4$ equidistant (see Figure ).
+On the left side of Figure \ref{fig:exp}, $x^{14}+1$ and $x^{13}+1$ look almost idential. Graphic them on a log-lin plot (as on the right side of Figure \ref{fig:exp}) makes their differences apparent.  Beware, however, that you should not label the transformed axis with transformed labels, because the reader ultimately needs the untransformed values.  So a log-lin plot could have $y$-axis with $10^{1},10^{2},10^{3},10^{4}$ etc.  all equidistant.  And not with values $1,2,3,4$ equidistant.
 
 \begin{figure}[h]
 \centering
@@ -572,6 +571,15 @@ On the left side of Figure \ref{fig:exp}, $x^{14}+1$ and $x^{13}+1$ look almost 
 \end{subfigure}
 \caption{Plotting exponential graphs on a log-lin plot}
 \label{fig:exp}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{log_plots.pdf}
+\caption{Here are some functions plotted on various logarithmic and linear scales. 
+The dark blue line is $y=x$, the green line is $y=\log(x)$, the red line is $y=e^x$, and the light blue line is $y=x^3$. 
+We have used different ranges on the $y$-axes to highlight appropriate parts of the graphs.}
+\label{fig:log_plots}
 \end{figure}
 
 
@@ -625,15 +633,6 @@ so exponential data looks linear on a log-lin plot.
 Finally, data of the form $y = a\log(x)+b$ will look linear on a lin-log plot. 
 See Figure \ref{fig:log_plots}.
 \end{comment}
-
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{log_plots.pdf}
-\caption{Here are some functions plotted on various logarithmic and linear scales. 
-The dark blue line is $y=x$, the green line is $y=\log(x)$, the red line is $y=e^x$, and the light blue line is $y=x^3$. 
-We have used different ranges on the $y$-axes to highlight appropriate parts of the graphs.}
-\label{fig:log_plots}
-\end{figure}
 
 Be warned that many different functions can look almost linear on log plots. 
 Thus, if you graph your data on a log-log plot and you see a line, you cannot conclude that your data must follow a polynomial. 
@@ -713,7 +712,7 @@ Do this as follows:
 \end{comment}
 
 
-
+\begin{comment}
 \begin{problem}
 Given the following data, 
 
@@ -737,7 +736,7 @@ Y & N &  24 & S & Y & Y & Y\\
 
 explore it. Plot it in different ways, zoom in and out, and do a transformation.
 \end{problem}
-
+\end{comment}
 
 
 \section*{Communicating Data with Visualizations}
