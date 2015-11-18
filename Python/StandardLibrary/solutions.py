@@ -3,20 +3,12 @@
 Solutions file. Written by Shane McQuarrie, Summer 2015.
 """
 
-# import calculator # as c
-import sys
-import time
-# import matrix_multiply # as m
-
-# In many labs, students will submit multiple files.
+# In several labs, students will submit multiple files.
 # Every solutions file contains all of the code that students will write,
 # separated by file.
 
-
-# ============================== calculator.py ============================== #
+# calculator.py ============================================================= #
 # Students write this module as part of problem 3. Do not provide to students.
-
-import math
 
 def add(x,y):
     return x+y
@@ -25,11 +17,12 @@ def mult(x,y):
     return x*y
 
 def sqrt(x):
-    return math.sqrt(x)
+    return x**.5
+    # or, import math at the top and return math.sqrt(x)
 
 # Or "sqrt = math.sqrt"
 
-# =========================== matrix_multiply.py ============================ #
+# matrix_multiply.py ======================================================== #
 # This module is provided to students and used to complete problem 4.
 
 import numpy as np
@@ -71,7 +64,7 @@ def method3(A,B):
     return np.dot(A,B)
 
 
-# ============================== Solutions.py =============================== #
+# solutions.py ============================================================== #
 # The students are provided a specifications file called 'spec.py' with the
 # following functions. They are to rename the file 'solutions.py'.
 
@@ -85,8 +78,9 @@ def prob1(l):
 
 # Problem 2: Implement this function.
 def prob2():
-    """Determine which Python objects are mutable and which are immutable. Test
-    numbers, strings, lists, tuples, and dictionaries.
+    """Programmatically determine which Python objects are mutable and which
+    are immutable. Test numbers, strings, lists, tuples, and dictionaries.
+    Print your results to the terminal.
     """
 
     # numbers: num+= 1
@@ -197,11 +191,6 @@ def prob4():
         method3(A,B)
         print(time.time() - start)
 
-
-# Everything under this 'if' statement is executed when this file is run from
-#   the terminal. In this case, if we enter 'python solutions.py word' into
-#   the terminal, then sys.argv is ['solutions.py', 'word'], and prob4() is
-#   executed. Note that the arguments are parsed as strings. Do not modify.
 if __name__ == "__main__":
     prob4()
 

@@ -20,9 +20,9 @@ def prob1(l):
 
 # Problem 2: Implement this function.
 def prob2():
-    """Determine which Python objects are mutable and which are immutable. Test
-    numbers, strings, lists, tuples, and dictionaries. Print your results to the
-    terminal using the print() function.
+    """Programmatically determine which Python objects are mutable and which
+    are immutable. Test numbers, strings, lists, tuples, and dictionaries.
+    Print your results to the terminal.
     """
     pass
 
@@ -54,14 +54,5 @@ def prob4():
     Print your results to the terminal.
     """
     pass
-
-
-# Everything under this 'if' statement is executed when this file is run from
-#   the terminal. In this case, if we enter 'python solutions.py word' into
-#   the terminal, then sys.argv is ['solutions.py', 'word'], and prob4() is
-#   executed. Note that the arguments are parsed as strings. Do not modify.
-if __name__ == "__main__":
-    prob4()
-
 
 # ============================== END OF FILE ================================ #

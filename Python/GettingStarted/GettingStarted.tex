@@ -5,7 +5,9 @@
 % FUTURE EDITS
 %  - transition from ipython notebook to jupyter notebook
 %  - transition from Python 2.7 to Python 3.x
-%     - Use parenthesis with all print statements, as print is a function.
+%     - Use parenthesis with all print statements, as print is now a function.
+
+% Introduction ================================================================
 
 \section*{Python}
 Python is quickly gaining momentum as a fundamental tool in scientific computing because it has the following features:
@@ -90,9 +92,9 @@ $ pwd
 /Users/Guest
 $ ls
 Desktop     Documents       Downloads       Pictures        Music
-$ cd Downloads
+$ cd Documents
 $ pwd
-/Users/Guest/Downloads
+/Users/Guest/Documents
 $ ls
 getting_started.py
 \end{lstlisting}
@@ -106,6 +108,8 @@ $ python getting_started.py
 If ``Hello, world!'' is displayed in the terminal, you have just successfully executed your first Python program.
 \label{prob:helloWorld}
 \end{problem}
+
+% IPython and Editors =========================================================
 
 \subsection*{IPython}
 
@@ -170,6 +174,8 @@ The QTConsole is a console that communicates with Jupyter more fluidly than the 
 Spyder is a popular IDE built specifically for Python programming.
 To start IPython Notebook, QTConsole, or Spyder from the terminal, run \li{ipython notebook}, \li{ipython qtconsole}, or \li{spyder}, respectively.
 Try using each of these interfaces until you find the one you are most comfortable with.
+
+% Basics ======================================================================
 
 \section*{Python Basics}
 
@@ -347,7 +353,7 @@ Write a function that prints out the alphabet, separated by tabs, with newlines 
 \end{problem}
 \end{comment}
 
-% Problem 2: a basic function.
+% Problem 2: write a very basic function.
 \begin{problem}
 In your Python file from Problem \ref{prob:helloWorld}, define a new function called \li{sphere_volume}.
 This function should accept a single parameter \li{r} and return (not print) the volume of the sphere of radius \li{r}.
@@ -359,7 +365,7 @@ Run your file to see if your answer is what you expect it to be.
 
 \section*{Data Types}
 
-% ======================= Numerical Types ======================= %
+% Numerical Types -------------------------------------------------------------
 
 \subsection*{Numerical Types}
 Python has four numerical data types: \li{int}, \li{long}, 
@@ -417,7 +423,7 @@ Use the letter j, not i, for the imaginary part.
 5
 \end{lstlisting}
 
-% =========================== Strings =========================== %
+% Strings =====================================================================
 
 \subsection*{Strings}
 In Python, strings are created with either single or double quotes.
@@ -474,7 +480,7 @@ Write two new functions, called \li{first_half} and \li{backward}.
 Use IPython to quickly test your syntax for each function.
 \end{problem}
 
-% =========================== Lists =========================== %
+% Lists =======================================================================
 
 \subsection*{Lists}
 A Python \li{list} is created by enclosing comma-separated values with square brackets \li{[ ]}.
@@ -554,7 +560,7 @@ Return the resulting list.
 \end{enumerate}
 \end{problem}
 
-% ================= Sets ================= %
+% Sets ========================================================================
 
 \subsection*{Sets}
 A Python \li{set} is an unordered collection of distinct objects.
@@ -586,7 +592,7 @@ difference, and symmetric difference.
 <<set(['Lytle, Josh'])>>
 \end{lstlisting}
 
-% =================== Dictionaries =================== %
+% Dictionaries ================================================================
 
 \subsection*{Dictionaries}
 Like a \li{set}, a Python \li{dict} (dictionary) is an unordered data type.
@@ -601,7 +607,8 @@ Use \li{dict()} to create an empty dictionary.
 
 # Add a value indexed by 'science' and delete the 'business' keypair.
 >>> my_dictionary["science"] = 6284
->>> del my_dictionary["business"]
+>>> my_dictionary.pop("business")       # Use 'pop' or 'popitem' to remove.
+4121
 >>> print(my_dictionary)
 <<{'visual arts': 7321, 'math': 2016, 'science': 6284}>>
 
@@ -610,8 +617,6 @@ Use \li{dict()} to create an empty dictionary.
 <<['visual arts', 'math', 'science']>>
 >>> my_dictionary.values()
 <<[7321, 2016, 6284]>>
->>> my_dictionary.has_key("math")
-True
 \end{lstlisting}
 
 The keys of a dictionary must be \emph{immutable}, which means that they must be objects that cannot be modified after creation.
@@ -620,7 +625,7 @@ We will discuss the mutablility of each of these objects in the next lab.
 \subsection*{Type Casting}
 
 The names of each of Python's data types can be used as functions to cast a value as that type.
-This is particularly useful with integers and floats.%, but it works for other data types as well.
+This is particularly useful with integers and floats.
 \begin{lstlisting}
 # Cast numerical values as different kinds of numerical values.
 >>> x = int(3.0)
@@ -647,7 +652,7 @@ This is particularly useful with integers and floats.%, but it works for other d
 
 \end{lstlisting}
 
-% ================== Control Flow Tools ================== %
+% Control Flow Tools ==========================================================
 
 \section*{Control Flow Tools}
 Control flow blocks dictate the order in which code is executed.
@@ -669,7 +674,7 @@ The \li{else} keyword may be used at most once at the end of a series of \li{if}
 calorie count unavailable
 \end{lstlisting}
 
-% Problem 5: If statements and Pig Latin
+% Problem 5: If statements and Pig Latin.
 \begin{problem}
 Write a function called \li{pig_latin}.
 Accept a parameter \li{word}, translate it into Pig Latin, then return the translation.
@@ -758,7 +763,7 @@ The number 1 becomes `a', 2 becomes `b', and so on.
 (Hint: consider using a dictionary and a loop)
 \end{problem}
 
-% ==================== List Comprehension ==================== %
+% List Comprehension ==========================================================
 
 \subsection*{List Comprehension}
 A \emph{list comprehension} uses a loop between square brackets to create a \li{list}.
@@ -787,7 +792,7 @@ Accept a list \li{my_list} of numbers and convert each entry of the list into a 
 Return the new list.
 \end{problem}
 
-% Problem 8: the alternatinc harmonic series.
+% Problem 8: the alternating harmonic series.
 \begin{problem}
 Write a function called \li{alt_harmonic}.
 The alternating harmonic series (1 - 1/2 + 1/3 - 1/4 + 1/5 - ...) converges to ln(2).
@@ -799,7 +804,7 @@ The sum of the first 500,000 terms of this series approximates ln(2) to five dec
 
 \section*{Conclusion}
 Refer back to this and other introductory labs often as you continue getting used to Python syntax and data types.
-As you continue your study of Python, we recommend the following readings:
+As you continue your study of Python, we strongly recommend the following readings:
 \begin{enumerate}
 \item Chapters 3, 4, and 5 of the Official Python Tutorial \\
         (\url{http://docs.python.org/2.7/tutorial/introduction.html}).
