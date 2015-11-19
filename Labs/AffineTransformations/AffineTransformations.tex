@@ -150,7 +150,7 @@ The top image was translated by the vector $(2, 0)\trp$ to produce the bottom im
 \end{figure}
 
 A translation is a map $T: \mathbb{R}^2 \rightarrow \mathbb{R}^2$ defined by $T(\mathbf{x}) = \mathbf{x}+\mathbf{b}$ where $\mathbf{b} \in \mathbb{R}^2$. 
-For example, if $\mathbf{b} = (2, 0)\trp$, then applying $T$ to an image will shift it left by 2. 
+For example, if $\mathbf{b} = (2, 0)\trp$, then applying $T$ to an image will shift it right by 2. 
 This translation is illustrated in Figure \ref{fig:translation}.
 
 
@@ -230,7 +230,7 @@ array([[ 4. ,  5. ,  6. ,  3. ],
        [ 0. ,  0. , -9. ,  1. ]])
 \end{lstlisting}
 
-In the third row operation modified only a part of the third row because we knew that the first value would still be 0. 
+The third row operation modified only a part of the third row because we knew that the first value would still be 0. 
 Modifying only those entries of the array that are affected by a row operation will save a lot of time when you are row reducing a large matrix.
 
 Beware that round-off error in row reduction can cause serious problems.
@@ -348,7 +348,7 @@ We have the following algorithm for the LU decomposition, assuming it exists.
 \State \pseudoli{return} $L, U$
 \EndProcedure
 \end{algorithmic}
-\caption{The algorithm for LU decomposition of a matrix $A$. This algorithm returns lower triangular $L$ and upper triangular $U$ such that $A = LU$.}
+\caption{The algorithm for the LU decomposition of a matrix $A$. This algorithm returns lower triangular $L$ and upper triangular $U$ such that $A = LU$.}
 \label{Alg:gram_schmidt}
 \end{algorithm}
 
@@ -377,7 +377,7 @@ Suppose that after row swaps, $A$ has the decomposition $PA = LU$.
 Then $Ax=b$ is equivalent to $LUx=Pb$. 
 We can solve this system by first solving $Ly = Pb$ and then $Ux = y$. 
 Since $L$ and $U$ are triangular, these systems can be solved with backward and forward substitution, which is faster than row reduction. 
-Thus, we can perform row reduction once to compute the $LU$ factorization of $A$, and then we can use substitution to solve $Ax=b$ many different values of $b$. 
+Thus, we can perform row reduction once to compute the $LU$ factorization of $A$, and then we can use substitution to solve $Ax=b$ for many different values of $b$. 
 This technique is significantly faster than storing $A^{-1}$ and then computing $A^{-1}b$ (see Problem \ref{prob:solve}).
 
 \begin{problem}\label{prob:solve}
@@ -399,7 +399,7 @@ We can compute $A^{-1}$ by solving $LUx_i = P_i$ for every $P_i$ that is a colum
 Then $A^{-1}$ is the matrix with columns $x_1, x_2, \ldots, x_n$. 
 
 Finally, the LU decomposition also gives us an efficient way to compute determinants. 
-For if $PA=LU$, then $\det(A) = [\det(P)]^{-1}\det(L)\det(U)$. 
+If $PA=LU$, then $\det(A) = [\det(P)]^{-1}\det(L)\det(U)$. 
 But the determinant of a triangular matrix is the product of its diagonal entries, and every diagonal entry of $L$ is 1. 
 Also, $\det(P)$ is the number of row swaps we applied to $A$ to put it in the appropriate form. 
 So if $U$ has diagonal entries $u_{ii}$ for $i=1, \ldots, n$, then
