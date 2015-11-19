@@ -60,16 +60,16 @@ The entire modified Gram-Schmidt algorithm is described in Algorithm \ref{Alg:gr
 \begin{algorithm}
 \begin{algorithmic}[1]
 \Procedure{Modified Gram-Schmidt}{$A$}
-\State Store the dimenstions $(m,n)$ of $A$
+\State Store the dimensions $(m,n)$ of $A$
 \State Initialize the $Q$ matrix as a copy of $A$
-\State Initialize the $R$ matrix as the $n\times n$ zero matrix
+\State Initialize the $R$ matrix as an $n\times n$ matrix of zeros
 \State Then create your matrices as follows:
 \For{$i=0\ldots n-1$}
     \State Set every diagonal entry of $R$ to be $\norm{Q[:,i]}$
     \State Set every column $i$ of $Q$ to be $ Q[:,i]/R[i,i]$
     \For{$j=i+1\ldots n-1$}
         \State Set every element of $R$ to be $Q[:,j]\trp  Q[:,i]$
-        \State Set each column $j$ to be itself minus $R[i,j]Q[:,i]$
+        \State Subtract $R[i,j]Q[:,i]$ from each column $j$
 	\EndFor
 \EndFor
 \State \pseudoli{return} $Q, R$
@@ -396,15 +396,16 @@ This algorithm returns orthonormal $Q$ and upper triangular $R$ satisfying $A = 
 \label{Alg:Householder}
 \begin{algorithmic}[1]
 \Procedure{Householder}{$A$}
-\State $m, n \gets \shape{A}$
-\State $R \gets \makecopy{A}$
-\State $Q \gets \Id{m}$
+\State Store the dimensions $(m,n)$ of $A$
+\State Initialize the $R$ matrix as a copy of $A$
+\State Initialize the $Q$ matrix as the $m\times m$ identity matrix
+\State Then create your matrices as follows:
 \For{$k=0\ldots n-1$}
-    \State $\u \gets \makecopy{R[k:,k]}$
-    \State $\u[0] \gets \u[0] + \sign( \u[0] ) \norm{\u}$
-    \State $\u \gets \u / \norm{\u}$
-    \State $R[k:,k:] \gets R[k:,k:] - 2 \u \left(\u\trp R[k:,k:] \right)$
-    \State $Q[k:] \gets Q[k:] - 2 \u \left( \u\trp Q[k:] \right)$
+    \State Set $\u$ to $R[k:,k]$
+    \State Add sign$(\u[0])$ multiplied by the norm of $\u$ to $\u[0]$
+    \State Divide $\u$ by its norm
+    \State Set $R[k:,k:]$ to itself minus $2 \u \left(\u\trp R[k:,k:] \right)$
+    \State Set $Q[k:]$ to itself minus $2 \u \left( \u\trp Q[k:] \right)$
 \EndFor
 \State \pseudoli{return} $Q\trp, R$
 \EndProcedure
