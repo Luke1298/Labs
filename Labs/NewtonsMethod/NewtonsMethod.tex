@@ -236,13 +236,13 @@ When the function \li{plt.pcolormesh()} is called on a complex array, it evaluat
 This means that if two roots of \li{f} have the same real part, their basins will be the same color if you plot directly using \li{plt.pcolormesh()}.
 
 One way to fix this problem is to compute \li{Xnew} as usual.
-Then iterate through the entries of \li{Xnew} and identify which root each entry is using the input \li{roots}.
+Then iterate through the entries of \li{Xnew} and identify which root each entry is closest to using the input \li{roots}.
 Finally, create a new array whose entries are integers corresponding to these roots.
-Plot the array of integers to view the basins of attraction.
+Plot the array of integers to view the basins of attraction.  Hint: The roots of $f(x) = x^3-x$ are $[0,1,-1]$.
 
 
-\item Run \li{plot_basins()} on the function $x^3-1$ on the domain $\{a+bi \mid (a, b) \in [-1.5, 1.5] \times [-1.5, 1.5] \}$. 
-The resulting plot should look like Figure \ref{fig:fractal_hw}.
+\item Run \li{plot_basins()} on the function $f(x) = x^3-1$ on the domain $\{a+bi \mid (a, b) \in [-1.5, 1.5] \times [-1.5, 1.5] \}$. 
+The resulting plot should look like Figure \ref{fig:fractal_hw}.  Hint: the roots of $f(x) = x^3-1$ are $[1,-1j^{1/3},1j^{2/3}]$.
 
 
 \end{enumerate}
