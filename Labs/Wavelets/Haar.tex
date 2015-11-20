@@ -1,16 +1,9 @@
 \lab{Introduction to Wavelets}{Intro to Wavelets}
 
-\objective{Learn the basics of Wavelet Analysis
-and explore the wavelet-based FBI fingerprint compression standard.}
-
-Recall that in the context of Fourier analysis, one seeks to represent a
-function as a sum of sinusoids.
-A drawback to this approach is that the
-Fourier transform only captures global frequency information, and local
-information is lost; we can know which frequencies are the
-most prevalent, but not when or where they occur.
-The Wavelet transform provides an alternative approach that avoids this shortcoming
-and is often a superior analysis technique for many types of signals and images.
+\objective{In the context of Fourier analysis, one seeks to represent a function as a sum of sinusoids.
+A drawback to this approach is that the Fourier transform only captures global frequency information, and local information is lost; we can know which frequencies are the most prevalent, but not when or where they occur.
+The Wavelet transform provides an alternative approach that avoids this shortcoming and is often a superior analysis technique for many types of signals and images.
+}
 
 \subsection*{The Discrete Wavelet Transform}
 In wavelet analysis, we seek to analyze a function by considering its \emph{wavelet decomposition}.
@@ -452,6 +445,8 @@ reconstruct the image from the compressed bitstream. See Diagram
 \caption{Wavelet Image Compression Schematic}
 \label{tikz:wsqscheme}
 \end{figure}
+
+\begin{comment}
 
 \subsection*{WSQ: The FBI Fingerprint Image Compression Algorithm}
 The Wavelet Scalar Quantization (WSQ) algorithm is among the first successful wavelet-based image compression algorithms.
@@ -1556,7 +1551,7 @@ Calculate the compression ratio, and plot the original image and compressed imag
 >>> plt.imshow(new_finger.clip(finger.min(), finger.max()), cmap=plt.cm.Greys_r)
 >>> plt.show()
 \end{lstlisting}
-
+\end{comment}
 
 
 \begin{comment}
