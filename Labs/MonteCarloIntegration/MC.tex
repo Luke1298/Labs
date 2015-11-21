@@ -1,7 +1,7 @@
 \lab{Monte-Carlo Integration}{Monte-Carlo Integration}
 \objective{Use Monte-Carlo integration to estimate areas.}
 
-Some multivariable integrals which are critical in applications are impossible to evaulate symbolically.
+Some multivariable integrals which are critical in applications are impossible to evaluate symbolically.
 For example, the integral of the joint normal distribution
 \[
 \int_{\Omega} \frac{1}{\sqrt{(2 \pi)^k}} e^{- \frac{\bold{x}^T\bold{x}}{2}}
@@ -58,8 +58,8 @@ This differs from $\pi$ by about 0.117.
 
 We analyze the error of the MC method by repeating this experiment for many values of \li{numPoints} and plotting the errors.
 The result is the blue line in Figure \ref{fig:mc_error}.
-The error appears to be proportional to $1/\sqrt{N}$ where $N=$\li{numPoints} (the green line in Figure \ref{fig:mc_error}).
-This means that to divide the error by10, we must sample \emph{100 times} more points.
+The error appears to be proportional to $1/\sqrt{N}$ where $N=$ \li{numPoints} (the green line in Figure \ref{fig:mc_error}).
+This means that to divide the error by 10, we must sample \emph{100 times} more points.
 
 \begin{figure}
 \includegraphics[width=.7\textwidth]{mc_error.pdf}
@@ -80,8 +80,9 @@ You can calculate the area of the unit circle with the following integration pro
 \]
 where
 \begin{equation}\label{equ:mc_func}
-f(x,y) = \begin{cases} 1 &\mbox{ if $x$,$y$ is in the unit circle} \\ 0 &\mbox{ otherwise.} \end{cases}
+f(x,y) = \begin{cases} 1 &\mbox{ if $(x$,$y)$ is in the unit circle} \\ 0 &\mbox{ otherwise.} \end{cases}
 \end{equation}
+%$
 
 We can use a random-points method as above to approximate any integral.
 Suppose we with to evaluate
@@ -145,9 +146,16 @@ def mc_int(f, mins, maxs, numPoints=500, numIters=100):
 Hints:
 \begin{enumerate}
 \item To create a random array of points on which to evaluate \li{f}, first create a random array of points in $[0,1] \times \ldots \times [0,1]$.
-Then multiply this array by the appropriate vector to stretch it the right amount in each direction.
+Then multiply this array by a vector of the lengths of the sides to stretch it the right amount in each direction.
 Finally, add the appropriate vector to shift the points to the right location.
-\item You can evaluate \li{f} on an array of points in one line using \li{np.apply_along_axis()}.
+\item You can evaluate \li{f} on an array of points in one line using \li{np.apply_along_axis()} as follows:
+\begin{lstlisting}
+# to evaluate the function f using the rows of vecs as input
+f = lambda x: la.norm(x)
+vecs = np.array([[1,1,1],[0,2,1],[0.5,0.5,0.5],[1,0,1]])
+np.apply_along_axis(f,1,vecs)
+\end{lstlisting}
+
 \end{enumerate}
 \end{problem}
 
