@@ -1,10 +1,9 @@
 # solutions.py
 """Volume I: Monte Carlo Integration
-Solutions file. Written by Tanner Christensen
+<Name>
+<Class>
+<Date>
 """
-
-import numpy as np
-import scipy.stats as stats
 
 def mc_int(f, mins, maxs, numPoints=500, numIters=100):
     """Use Monte-Carlo integration to approximate the integral of f
@@ -30,28 +29,8 @@ def mc_int(f, mins, maxs, numPoints=500, numIters=100):
         >>> mc_int(f, np.array([-1,-1]), np.array([1,1]))
         3.1290400000000007
     """
-    if len(mins) != len(maxs):
-        raise ValueError("Dimension of mins and maxs must be the same")
+    pass
     
-    results = []
-    for i in xrange(numIters):
-        # create points
-        dim = len(mins)
-        side_lengths = maxs-mins
-        points = np.random.rand(numPoints,dim)
-        points = side_lengths*points + mins
-
-        # calculate Volume
-        V = 1
-        for i in xrange(dim):
-            V *= maxs[i] - mins[i]
-
-        # apply the function f along axis=1 and sum all the results
-        total = np.sum(np.apply_along_axis(f,1,points))
-        results.append((V/float(numPoints))*total)
-    estimate = np.average(results)
-    return estimate
-
 def joint_normal(mins, maxs):
     """Caluclate the integral of the joint normal distribution using SciPy and 
     Monte Carlo integration.
@@ -65,17 +44,4 @@ def joint_normal(mins, maxs):
         estimate (1-D np.ndarray) - result of Monte Carlo integration
             using 'numPoints' = {10,100,1000,10000}
     """
-    # define means and covs
-    means = np.zeros(4)
-    covs = np.eye(4)
-
-    #calculate integral using SciPy
-    value, inform = stats.mvn.mvnun(mins, maxs, means, covs)
-
-    f = lambda x: (1./np.sqrt((2*np.pi)**(len(x))))*np.exp(-x.dot(x)/2)
-    estimates = []
-    for n in xrange(1,5):
-        estimates.append(mc_int(f,mins,maxs,numPoints=10**n))
-    estimates = np.array(estimates)
-    
-    return value, estimates
+    pass
