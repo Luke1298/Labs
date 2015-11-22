@@ -32,9 +32,9 @@ def backward(my_string):
     """Return the reverse of the string 'my_string'.
     
     Examples:
-        >>> reverse("python")
+        >>> backward("python")
         'nohtyp'
-        >>> reverse("ipython")
+        >>> backward("ipython")
         'nohtypi'
     """
     return my_string[::-1]
@@ -310,16 +310,16 @@ class _testDriver(object):
         return points
 
     def problem3(self, s):
-        """Test first_half() and reverse(). 10 points."""
+        """Test first_half() and backward(). 10 points."""
         if s.first_half("abcde") is None:
             raise NotImplementedError("Problem 3 incomplete.")
         points  = 2*self.strTest(first_half("abcde"), s.first_half("abcde"),
                                             "\n\tfirst_half('abcde') failed")
         points += 3*self.strTest(first_half("TK421"), s.first_half("TK421"),
                                             "\n\tfirst_half('TK421') failed")
-        points += 2*self.strTest(reverse("abcde"), s.reverse("abcde"),
+        points += 2*self.strTest(backward("abcde"), s.backward("abcde"),
                                             "\n\tfirst_half('abcde') failed")
-        points += 3*self.strTest(reverse("TK421"), s.reverse("TK421"),
+        points += 3*self.strTest(backward("TK421"), s.backward("TK421"),
                                             "\n\tfirst_half('TK421') failed")
         return points
 
