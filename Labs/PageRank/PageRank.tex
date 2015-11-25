@@ -44,24 +44,24 @@ An example is illustrated in Figure \ref{fig:network1}.
 
 \end{tikzpicture}
 
-\caption{A directed graph can describe the links between webpages. In this example, the set of web pages linking to page 0 is $\In(0)=\{1,2,3,4,5,6,7\}$, and page 0 links to $\Out(0)=\{7\}$.}
+\caption{A directed graph can describe the links between webpages. In this example, the set of web pages linking to page 0 is $\In(0)=\{1,3,4,5,6,7\}$, and page 0 links to $\Out(0)=\{7\}$.}
 \label{fig:network1}
 \end{figure}
 
 The PageRank algorithm ranks pages based on how many other pages link to them.
 Moreover, a link from a more important page counts more than a link from a less important page.
 For example, in Figure \ref{fig:network1} we would expect node 0 to have a very high rank because every other node links to it. 
-Consequently we would expect node 7 to have a fairly high rank because node 0 links to it, even though node 0 is the only node to do so.
+Consequently, we would expect node 7 to have a fairly high rank because node 0 links to it, even though node 0 is the only node to do so.
 
 \section*{The PageRank Algorithm}
 The PageRank algorithm assumes that a surfer chooses a starting webpage randomly.
 Then, if the surfer is at page $i$, they randomly select a page from $\Out(i)$ to visit next.
 This means that the surfer's chance of being on page $i$ at time $t$ is determined by where they were at time $t-1$.
 
-Suppose the internet has $N$ webpages and let $P(i,t)$ be the likelihood that the surfer is on page $i$ at time $t$.
-Then the probabilities $P(i,t)$ are given by
+Suppose the internet has $N$ webpages and let $p(i,t)$ be the likelihood that the surfer is on page $i$ at time $t$.
+Then the probabilities $p(i,t)$ are given by
 \begin{equation}\label{equ:pr1}
-p(i,0)=\frac{1}{N} \qquad p(i,t+1) = \sum_{j \in \In(i)} \frac{p(j,t)}{\Out(j)}.
+p(i,0)=\frac{1}{N} \qquad p(i,t+1) = \sum_{j \in \In(i)} \frac{p(j,t)}{\abs{\Out(j)}}.
 \end{equation}
 
 For example, in Figure \ref{fig:network1} we have $N=8$, and 
@@ -124,7 +124,7 @@ We will denote the probability that a surfer stays interested at step $t$ by a c
 Then the probability that the surfer gets bored at time $t$ is $1-d$.
 Accounting for boredom, the formulas in \eqref{equ:pr1} become
 \begin{equation}\label{equ:pr2}
-p(i,0)=\frac{1}{N} \qquad p(i,t+1) = \frac{1-d}{N} + d\sum_{j \in \In(i)} \frac{p(j,t)}{\Out(j)}.
+p(i,0)=\frac{1}{N} \qquad p(i,t+1) = d\sum_{j \in \In(i)} \frac{p(j,t)}{\abs{\Out(j)}}+\frac{1-d}{N} .
 \end{equation}
 
 
@@ -134,7 +134,7 @@ We can rewrite \eqref{equ:pr2} as the matrix equation
 \mathbf{p}(0)=\frac{1}{N}\mathbf{1} \qquad \mathbf{p}(t+1) = dK\mathbf{p}(t) + \frac{1-d}{N}\mathbf{1}
 \end{equation}
 where $\mathbf{p}(t)=(p(1,t), p(2,t), \ldots, p(N,t))^T$ and $\mathbf{1} = (1,\ldots, 1)^T$, and $K$ is defined by
-\[K_{ij} = \begin{cases} \frac{1}{\Out(j)} & \mbox{ if j links to i} \\
+\[K_{ij} = \begin{cases} \frac{1}{\abs{\Out(j)}} & \mbox{ if j links to i} \\
 	0 & \mbox{ otherwise.} \end{cases}\]
 
 
@@ -150,7 +150,7 @@ A good strategy for computing $K$ comes from writing
 \[
 K = (D^{-1}A)^T
 \]
-where $A$ is the adjacency matrix of the directed graph representing the internet and $B$ is a diagonal matrix with $B_{jj}=\Out(j)$.
+where $A$ is the adjacency matrix of the directed graph representing the internet and $D$ is a diagonal matrix with $D_{jj}=\abs{\Out(j)}$.
 Since $\Out(j)$ can be computed from the adjacency matrix, we will begin by creating $A$.
 
 The adjacency matrix $A$ of a directed graph has $A_{ij}=1$ if there is an edge from node $i$ to node $j$, and $A_{ij}=0$ otherwise.
@@ -245,6 +245,14 @@ K = np.array([[ 0   ,  1   ,  1./8,  1./3,  1./3,  1./2,  1   ,  1   ],
               [ 0   ,  0   ,  1./8,  1./3,  1./3,  1./2,  0   ,  0   ],
               [ 1   ,  0   ,  1./8,  0   ,  0   ,  0   ,  0   ,  0   ]])
 \end{lstlisting}
+\begin{problem}
+Write a function that computes the K matrix given an adjacency matrix.
+\begin{enumerate}
+\item Compute the diagonal matrix $D$.
+\item Compute the modified adjacency matrix where the rows corresponding to sinks all have ones instead of zeros.
+\item Compute $K$ using array broadcasting.
+\end{enumerate}
+\end{problem}
 
 
 \subsection*{Solving for the Page Ranks}
@@ -278,13 +286,14 @@ One option for large systems is to iterate the equation for $\mathbf{p}(t)$ unti
 \label{prob:pagerank_dense_iter}
 Implement the function below, using the iterative method to find the steady state of the PageRank algorithm.
 \begin{lstlisting}
-def iter_solve( data, N=None, d=.85, tol=1E-5):
+def iter_solve( data, datasize, N=None, d=.85, tol=1E-5):
     '''
     Return the page ranks of the network described by `data`.
     
     INPUTS:
     data - A NumPy array representing the adjacency matrix of a directed 
             graph
+    datasize - An integer representing the size of the 'data' array.
     N     - Restrict the computation to the first `N` nodes of the graph. 
             Defaults to N=None; in this case, the entire matrix is used.
     d     - The damping factor, a float between 0 and 1. 
@@ -302,13 +311,13 @@ Hints:
 \item At each step, test your function against the example in this lab.
 \item Don't forget to eliminate sinks. 
 It is possible (but not necessary) to do this in a single line.
-\item When \li{n} is not \li{None}, you want to work with only the upper $n \times n$ portion of the array \li{data}.
+\item When \li{N} is not \li{None}, you want to work with only the upper $N \times N$ portion of the array \li{data}.
 \end{enumerate}
 \end{problem}
 
 \subsubsection*{Eigenvalue Method}
 Another way to solve this problem is to make it into an eigenvalue problem. 
-Let $E$ be an $N \times N$ matrix of ones; then $E\mathbf{p}(t) = \mathbf{p}(t)$. 
+Let $E$ be an $N \times N$ matrix of ones; then $E\mathbf{p}(t) = \mathbf{1}$. 
 Hence, the matrix equation \eqref{equ:pr3} for $\mathbf{p}(t+1)$ becomes
 \[\mathbf{p}(t+1) = \Big(dK + \frac{1-d}{N}E\Big)\mathbf{p}(t).\]
 If we write $B = dK + \frac{1-d}{N}E$, this simplifies to $\mathbf{p}(t+1) = B\mathbf{p}(t).$
@@ -324,13 +333,14 @@ We can also attempt to compute $\mathbf{p}$ using eigenvalue solvers in SciPy.
 \begin{problem}
 Implement the function below, using the eigenvalue method to find the steady state of the PageRank algorithm.
 \begin{lstlisting}
-def iter_solve( data, n=None, d=.85):
+def eig_solve( data, datasize, N=None, d=.85):
     '''
     Return the page ranks of the network described by `data`.
     
     INPUTS:
     data - A NumPy array representing the adjacency matrix of a directed 
             graph
+    datasize - An integer representing the size of the 'data' array.
     N     - Restrict the computation to the first `N` nodes of the graph. 
             Defaults to N=None; in this case, the entire matrix is used.
     d     - The damping factor, a float between 0 and 1. 
@@ -361,7 +371,7 @@ Data was taken from the SNAP datasets.}
 Try running the functions you wrote in this lab on a data set downloaded from SNAP.
 \begin{enumerate}
 \item Begin by running your methods on the first 100 nodes of the data set.
-\item Modify your solution to Probelm \ref{prob:pagerank_dense_iter} so that it uses only sparse matrices. 
+\item Modify your solution to Problem \ref{prob:pagerank_dense_iter} so that it uses only sparse matrices. 
 With this modification, you should be able to run the function on more nodes.
 Hint: Convert the adjacency matrix to a \li{csc_matrix} or a \li{csr_matrix} to perform the computations.
 \end{enumerate}
