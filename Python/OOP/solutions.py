@@ -1,6 +1,6 @@
 # solutions.py
-"""Volume II Lab 2: Object Oriented Programming
-Solutions file. Written by Shane McQuarrie, Spring 2015.
+"""Object Oriented Programming solutions file.
+Written by Shane McQuarrie, Fall 2015.
 """
 
 from math import sqrt
@@ -8,17 +8,18 @@ from math import sqrt
 # Problem 1: Modify this class. Add 'name' and max_size' attributes, modify
 #   the put() method, and add a dump() method. Remember to update docstrings.
 class Backpack(object):
-    """Backpack object. Has a color, name, maximum size, and a list of contents
+    """Backpack object. Has a name, color, maximum size,
+    and a list of contents.
     
     Attributes:
+        name (str): the name of the backpack's owner.
         color (str): the color of the backpack.
-        name (str): the name of the backpack.
         max_size (int): the maximum number of items that can fit in the
             backpack.
         contents (list): the contents of the backpack.
     """
 
-    def __init__(self, color, name, max_size=5):
+    def __init__(self, name, color, max_size=5):
         """Set the color, name, and maximum size of the backpack.
         Also initialize an empty contents list.
         
@@ -31,8 +32,8 @@ class Backpack(object):
         Returns:
             A backpack object wth no contents.
         """
-        self.color = color
         self.name = name
+        self.color = color
         self.max_size = max_size
         self.contents = []
     
@@ -79,10 +80,10 @@ class Backpack(object):
 
     def __str__(self):
         """String Representation: a list of the backpack's attributes."""
-        return "Name:\t\t%s\nColor:\t\t%s\nSize:\t\t%d\nMax Size:\t%d\nContents:\t%s"%(self.name,
+        return "Owner:\t\t%s\nColor:\t\t%s\nSize:\t\t%d\nMax Size:\t%d\nContents:\t%s"%(self.name,
             self.color, len(self.contents), self.max_size, self.contents)
         # Or, a slightly longer way:
-        out = "Name:\t\t" + self.name
+        out = "Owner:\t\t" + self.name
         out += "\nColor:\t\t" + self.color
         out += "\nSize:\t\t" + str(len(self.contents))
         out += "\nMax Size:\t" + str(self.max_size)
@@ -95,22 +96,22 @@ class Knapsack(Backpack):
     A knapsack is smaller than a backpack and can be tied closed.
     
     Attributes:
+        name (str): the name of the knapsack's owner.
         color (str): the color of the knapsack.
-        name (str): the name of the knapsack.
         max_size (int): the maximum number of items that can fit
             in the knapsack.
         contents (list): the contents of the backpack.
         closed (bool): whether or not the knapsack is tied shut.
     """
     
-    def __init__(self, color, name, max_size=3):
+    def __init__(self, name, color, max_size=3):
         """Use the Backpack constructor to initialize the name and
         max_size attributes. A knapsack only holds 3 item by default
         instead of 5. 
         
         Inputs:
+            name (str): the name of the knapsack's owner.
             color (str): the color of the knapsack.
-            name (str): the name of the knapsack.
             max_size (int, opt): the maximum number of items that can be
                 stored in the knapsack. Defaults to 3.
         
@@ -118,7 +119,7 @@ class Knapsack(Backpack):
             A knapsack object with no contents.
         """
         
-        Backpack.__init__(self, color, name, max_size)
+        Backpack.__init__(self, name, color, max_size)
         self.closed = True
     
     def put(self, item):
@@ -208,6 +209,23 @@ class ComplexNumber(object):
         """
         return sqrt(self.real**2 + self.imag**2)
     
+    def __lt__(self, other):
+        """(a+bi) < (c+di) iff |a+bi| < |c+di|."""
+        return abs(self) < abs(other)
+
+    def __gt__(self, other):
+        """(a+bi) > (c+di) iff |a+bi| > |c+di|."""
+        return abs(self) > abs(other)
+
+    def __eq__(self, other):
+        """(a+bi) = (c+di) iff a=c AND b=d."""
+        return self.real == other.real and self.imag == other.imag
+
+    def __ne__(self, other):
+        """(a+bi) != (c+di) iff a!=c OR b!=d."""
+        return not self == other            # or, more explicitly,
+        return self.real != other.real or self.imag != other.imag
+
     def __add__(self, other):
         """(a+bi) + (c+di) = (a+c) + (b+d)i"""
         return ComplexNumber(self.real + other.real, self.imag + other.imag)
@@ -225,7 +243,7 @@ class ComplexNumber(object):
     def __div__(self,other):
         """Do a little algebra before implementing:
         (a+bi) / (c+di)
-        = (a+bi)*(c-di) / (c+di)*(c-di)             # Multiply by conjugate
+        = (a+bi)*(c-di) / (c+di)*(c-di)             # Multiply by the conjugate
         = ((ac+bd) + (bc-ad)i) / (c**2 + d**2)      # Distribute
         """
         denom = float(other.real**2 + other.imag**2)
@@ -233,304 +251,378 @@ class ComplexNumber(object):
         imag = ((self.imag * other.real) - (self.real * other.imag))/denom
         return ComplexNumber(real, imag)
 
-# ============================ END OF SOLUTIONS ============================= #
+# END OF SOLUTIONS ============================================================
+
+from numpy.random import randint
 
 # Test script
-def test(student_module, late=False):
-    """Test script. You must import the students file as a module.
+def test(student_module):
+    """Test script. Import the student's solutions file as a module.
     
-    10 points for problem 1
-    15 points for problem 2
-    15 points for problem 3
-    15 points for problem 4
+    10 points for problem 1.
+    10 points for problem 2.
+    15 points for problem 3.
+    25 points for problem 4.
     
     Inputs:
         student_module: the imported module for the student's file.
-        late (bool, opt): if True, half credit is awarded.
     
     Returns:
-        score (int): the student's score, out of 55.
-        feedback (str): a printout of the test results for the student.
+        score (int): the student's score, out of 60.
+        feedback (str): a printout of test results for the student.
     """
-    
-    def grade(p,m):
-        """Manually grade a problem worth 'p' points with error message 'm'."""
-        part = -1
-        while part > p or part < 0:
-            part = int(input("\nScore out of " + str(p) + ": "))
-        if part < p: return part,m
-        else: return part,""
-    
-    def attrTest(x,y,m):
-        """Test that 'x' and 'y' are equal with error message 'm'."""
-        if x == y: return 1, ""
+    tester = _testDriver()
+    tester.test_all(student_module)
+    return tester.score, tester.feedback
+
+# Test Driver
+class _testDriver(object):
+    """Class for testing a student's work. See test.__doc__ for more info.
+
+    This particular test driver is designed to allow flexibility in the
+    student's Backpack and Jetpack classes by never explicitly calling
+    a particular attribute name. That is, instead of examining a Backpack's
+    'max_size' attribute (which the student may or may not have called
+    'max_size'), the Backpack's put() method is called to ensure that the
+    contents list has not grown past the limit. The only exception is that
+    'contents' is specifically referred to, because it is explicitly named
+    that way in the example code.
+    """
+
+    # Constructor
+    def __init__(self):
+        self.feedback = ""
+
+    # Main routine
+    def test_all(self, student_module):
+        """Grade the provided module on each problem and compile feedback."""
+        self.feedback = ""
+        self.score = 0
+
+        def test_one(problem, number, total):
+            try:
+                self.feedback += "\n\nProblem %d (%d points):"%(number, total)
+                points = problem(student_module)
+                self.score += points
+                self.feedback += "\nScore += %d"%points
+            except BaseException as e:
+                self.feedback += "\nError: %s"%e
+
+        test_one(self.problem1, 1, 10)  # Problem 1: 10 points.
+        test_one(self.problem2, 2, 10)  # Problem 2: 10 points.
+        test_one(self.problem3, 3, 15)  # Problem 3: 15 points.
+        test_one(self.problem4, 4, 25)  # Problem 4: 25 points.
+
+        # Report final score.
+        total = 60
+        percentage = (100. * self.score) / total
+        self.feedback += "\n\nTotal score: %d/%d = %s%%"%(
+                                    self.score, total, percentage)
+        if   percentage >=  98: self.feedback += "\n\nExcellent!"
+        elif percentage >=  90: self.feedback += "\n\nGreat job!"
+
+        # Add comments (optionally).
+        print(self.feedback)
+        comments = str(raw_input("Comments: "))
+        if len(comments) > 0:
+            self.feedback += "\n\n\nComments:\n\t%s"%comments
+
+    # Helper Functions --------------------------------------------------------
+    def eqTest(self, correct, student, message):
+        """Test to see if 'correct' == 'student'."""
+        if correct == student:
+            return 1
         else:
-            message  = m
-            message += "\n\t\tCorrect response: " + str(x)
-            message += "\n\t\tStudent response: " + str(y)
-            return 0, message
-    
-    s = student_module
-    score = 0
-    total = 55
-    feedback = ""
-    
-    try:    # Problem 1: 10 points
-        feedback += "\n\nProblem 1 (10 points):"
-        points = 0
-        # Test default name and max_size attributes
-        b1 =   Backpack()
-        b2 = s.Backpack()
-        p,f = attrTest(b1.name, b2.name,
-            "\n\tBackpack.name failed on default value")
-        points += p; feedback += f
-        p,f = attrTest(b1.max_size, b2.max_size,
-            "\n\tBackpack.max_size failed on default value")
-        points += p; feedback += f
-        # Test non-default color, name, and max_size attributes
-        b1 =   Backpack(color='teal',name='Francis', max_size=3)
-        b2 = s.Backpack(color='teal',name='Francis', max_size=3)
-        p,f = attrTest(b1.name, b2.name,
-            "\n\tBackpack.name failed on nondefault value")
-        points += p; feedback += f
-        p,f = attrTest(b1.max_size, b2.max_size,
-            "\n\tBackpack.max_size failed on nondefault value")
-        points += p; feedback += f
-        p,f = attrTest(b1.color, b2.color,
-            "\n\tBackpack.color failed on nondefault value")
-        points += p; feedback += f
-        # Test put() (no going over the limit)
-        b1.put('f'); b1.put('u'); b1.put('n')
-        b2.put('f'); b2.put('u'); b2.put('n')
+            self.feedback += message
+            self.feedback += "\nCorrect response:\n%s"%correct
+            self.feedback += "\nStudent response:\n%s"%student
+            return 0
+
+    def evalTest(self, expression, correct, message):
+        """Test a boolean to see if it is correct (for Backpack.__eq__())."""
+        if expression is correct:
+            return 1
+        else:
+            self.feedback += message
+            return 0
+
+    def grade(self, points):
+        """Manually grade a problem worth 'points'. Return the score."""
+        credit = -1
+        while credit > points or credit < 0:
+            try:
+                credit = int(input("\nScore out of %d: "%points))
+            except:
+                credit = -1
+        if credit != points:
+            comments = raw_input("Feedback: ")
+            if len(comments) > 0:
+                self.feedback += "\n\t%s"%comments
+        return credit
+
+    # Problems ----------------------------------------------------------------
+    def problem1(self, s):
+        """Test the Backpack class. 10 points."""
+
+        # Test the constructor.
+        b1 = Backpack("Teacher", "silver")
+        try:
+            b2 = s.Backpack("Student", "green")
+        except TypeError as e:
+            raise NotImplementedError("Problem 1 Incomplete: %s"%e)
+        points = 2
+
+        # Test put() (no going over the limit).
+        for item in ['this', 'is', 'a', 'test', '...']:
+            b1.put(item); b2.put(item)
+        points += self.eqTest(b1.contents, b2.contents,
+            "\n\tBackpack.put() failed to update Backpack.contents correctly")
+        print("\nTest that Backpack.put() doesn't go over the max_size.")
         print("Correct output:\t"),; b1.put('this should not fit')
         print("Student output:\t"),; b2.put('this should not fit')
-        p,f = grade(1,"\n\tBackpack.put() failed to print 'Backpack Full!'")
-        points += p; feedback += f
-        p,f = attrTest(b1.contents, b2.contents,
-            "\n\tBackpack.put() failed (Backpack.contents over max_size)")
-        points += p; feedback += f
-        # Test dump()
-        b1.dump(); b2.dump()
-        p,f = attrTest(b1.contents, b2.contents,
-            "\n\tBackpack.dump() failed to empty contents")
-        points += p; feedback += f
-        # Test docstrings
-        print("\nStudent Backpack class docstrings:\n")
-        print(b2.__doc__); print(b2.__init__.__doc__)
-        p,f = grade(2,"\n\tbad Backpack docstring(s)")
-        points += p; feedback += f
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
-        
-    try:    # Problem 2: 15 points
-        feedback += "\n\nProblem 2 (15 points):"
-        points = 0
-        # Test default name, and max_size attributes
-        b1 =   Jetpack()
-        b2 = s.Jetpack()
-        p,f = attrTest(b1.name, b2.name,
-            "\n\tJetpack.name failed on default value")
-        points += p; feedback += f
-        p,f = attrTest(b1.max_size, b2.max_size,
-            "\n\tJetpack.max_size failed on default value")
-        points += p; feedback += f
-        # Test non-default color, name, and max_size attributes
-        b1 =   Jetpack(color='Gold',name='Golden Boy', max_size=3)
-        b2 = s.Jetpack(color='Gold',name='Golden Boy', max_size=3)
-        p,f = attrTest(b1.name, b2.name,
-            "\n\tJetpack.name failed on nondefault value")
-        points += p; feedback += f
-        p,f = attrTest(b1.max_size, b2.max_size,
-            "\n\tJetpack.max_size failed on nondefault value")
-        points += p; feedback += f
-        p,f = attrTest(b1.color, b2.color,
-            "\n\tJetpack.color failed on nondefault value")
-        points += p; feedback += f
-        # Test fuel attribute
-        p,f = attrTest(b1.fuel, b2.fuel,
-            "\n\tJetpack.fuel failed on default value")
-        points += p; feedback += f
-        # Test put() (no going over the limit)
-        b1.put('f'); b1.put('u'); b1.put('n')
-        b2.put('f'); b2.put('u'); b2.put('n')
-        print("\nCorrect output:\t"),; b1.put('this should not fit')
+        points += self.grade(1)
+        points += self.eqTest(b1.contents, b2.contents,
+            "\n\tBackpack.put() failed to update Backpack.contents correctly")
+        b1.max_size = 1; b1.dump(); b2 = s.Backpack("Student", "green", 1)
+        b1.put("Testing..."); b2.put("Testing...")
+        print("\nTest that Backpack.put() doesn't go over the max_size.")
+        print("Correct output:\t"),; b1.put('this should not fit')
         print("Student output:\t"),; b2.put('this should not fit')
-        p,f = grade(1,"\n\tBackpack.put() failed to print 'Backpack Full!'")
-        points += p; feedback += f
-        p,f = attrTest(b1.contents, b2.contents,
-            "\n\tJetpack.put() failed (Jetpack.contents over max_size)")
-        points += p; feedback += f
-        # Test dump()
+        points += self.grade(1)
+        points += 2*self.eqTest(b1.contents, b2.contents,
+            "\n\tBackpack.put() failed to update Backpack.contents correctly")
+
+        # Test dump().
         b1.dump(); b2.dump()
-        p,f = attrTest(b1.contents, b2.contents,
-            "\n\tJetpack.dump() failed to empty contents")
-        points += p; feedback += f
-        # Test fly()
-        b1.fuel = 10; b2.fuel = 10
-        print("\nCorrect output:\t"),; b1.fly(20)
-        print(  "Student output:\t"),; b2.fly(20)
-        p,f = grade(1,"\n\tJetpack.put() failed to print 'Not enough fuel!'")
-        points += p; feedback += f
-        p,f = attrTest(b1.fuel, b2.fuel,
-            "\n\tJetpack.fly() failed to decrease fuel correctly")
-        points += p; feedback += f
-        b1.fly(5); b2.fly(5)
-        p,f = attrTest(b1.fuel, b2.fuel,
-            "\n\tJetpack.fly() failed to decrease fuel correctly")
-        points += (p*2); feedback += f        
-        # Test docstrings
-        print("\nStudent Jetpack class docstrings:\n")
-        print(b2.__doc__); print(b2.__init__.__doc__)
-        p,f = grade(2,"\n\tbad Jetpack docstring(s)")
-        points += p; feedback += f
+        points += 2*self.eqTest(b1.contents, b2.contents,
+                            "\n\tBackpack.dump() failed to empty contents")
+        return points
+
+    def problem2(self, s):
+        """Test the Jetpack class. 10 Points."""
+
+        # Test the constructor.
+        j1 = Jetpack("Teacher", "silver")
+        try:
+            j2 = s.Jetpack("Student", "green")
+        except (TypeError, AttributeError) as e:
+            raise NotImplementedError("Problem 2 Incomplete: %s"%e)
+        points = 2
+
+        # Test put() (no going over the limit).
+        for item in ['Testing', 'testing']:
+            j1.put(item); j2.put(item)
+        points += self.eqTest(j1.contents, j2.contents,
+                                            "\n\tJetpack.put() failed.")
+        print("\nTest that Jetpack.put() doesn't go over the max_size.")
+        print("Correct output:\t"),; j1.put('this should not fit')
+        print("Student output:\t"),; j2.put('this should not fit')
+        points += self.grade(1)
+        points += self.eqTest(j1.contents, j2.contents,
+            "\n\tJetpack.put() failed to update Jetpack.contents correctly")
+        j1.max_size = 1; j1.dump(); j2 = s.Jetpack("Student", "green", 1)
+        j1.put("Testing..."); j2.put("Testing...")
+        print("\nTest that Jetpack.put() doesn't go over the max_size.")
+        print("Correct output:\t"),; j1.put('this should not fit')
+        print("Student output:\t"),; j2.put('this should not fit')
+        points += self.grade(1)
+        points += self.eqTest(j1.contents, j2.contents,
+            "\n\tJetpack.put() failed to update Jetpack.contents correctly")
+
+        # Test fly().
+        print("\nTest that fly(amount) doesn't work if amount > fuel.")
+        print("Correct output:\t"),; j1.fly(11)
+        print("Student output:\t"),; j2.fly(11)
+        points += self.grade(1)
         
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
+        # Test dump().
+        j1.dump(); j2.dump()
+        print("\nTest that Jetpack.dump() sets the fuel to zero.")
+        print("Correct output:\t"),; j1.fly(1)
+        print("Student output:\t"),; j2.fly(1)
+        points += 2*self.grade(1)
+
+        if not issubclass(s.Jetpack, s.Backpack):
+            self.feedback += "\n\tThe Jetpack class must inherit from the "
+            self.feedback += "Backpack class!"
+            points = 0
+
+        return points
+
+    def problem3(self, s):
+        """Test the Backpack class's magic methods. 15 points."""
         
-    try:    # Problem 3: 15 points
-        points = 0
-        feedback += "\n\nProblem 3 (15 points):"
-        # Test __str__ on an empty, default backpack
-        b1 =   Backpack()
-        b2 = s.Backpack()
+        # Test Backpack.__eq__() in False case (4 points).
+        try:
+            b1 = s.Backpack("Name1", "Color", 10)
+        except TypeError as e:
+            raise NotImplementedError("Problem 3 Incomplete: %s"%e)
+        b2 = s.Backpack("Name2", "Color", 10)
+        points = self.evalTest(b1==b2, False,
+                    "\n\tBackpack.__eq__() failed on different names")
+        
+        b1 = s.Backpack("Name", "Color1", 10)
+        b2 = s.Backpack("Name", "Color2", 10)
+        points += self.evalTest(b1==b2, False,
+                    "\n\tBackpack.__eq__() failed on different colors")
+
+        b1 = s.Backpack("Name", "Color", 10)
+        b2 = s.Backpack("Name", "Color", 10)
+        for item in [1, 2, 3]:
+            b1.put(item); b2.put(item)
+        b2.put(4)
+        points += self.evalTest(b1==b2, False,
+                    "\n\tBackpack.__eq__() failed on different contents")
+        b1.put(5)
+        points += self.evalTest(b1==b2, False,
+                    "\n\tBackpack.__eq__() failed on different contents")
+
+        # Test Backpack.__eq__() in True case (3 points).
+        b1 = s.Backpack("Name", "Color", 100)
+        b2 = s.Backpack("Name", "Color", 10)
+        points += self.evalTest(b1==b2, True,
+                    "\n\tBackpack.__eq__() failed on equal objects.")
+        
+        for item in ["apple", "banana", "carrot"]:
+            b1.put(item); b2.put(item)
+        points += self.evalTest(b1==b2, True,
+                    "\n\tBackpack.__eq__() failed on equal objects.")
+
+        b1.put("mango"); b1.put("salsa"); b2.put("salsa"); b2.put("mango")
+        points += self.evalTest(b1==b2, True,
+                    "\n\tBackpack.__eq__() failed on equal objects.")
+        if not b1==b2:
+            self.feedback += "\n\t(Hint: Backpack1.contents: %s"%b1.contents
+            self.feedback += "\n\tBackpack2.contents: %s)"%b2.contents
+        
+        # Test Backpack.__str__() on an empty Backpack (4 points).
+        b1 =   Backpack("Student", "green", 4)
+        b2 = s.Backpack("Student", "green", 4)
+        print("\nTest Backpack.__str__() on a Backpack with no contents.")
         print("\nCorrect output:"); print(b1)
         print("\nStudent output:"); print(b2)
-        p,f = grade(3,"\n\tBackpack.__str__ failed")
-        points += p; feedback += f
-        if p < 3: feedback += "\n\tStudent str(Backpack):\n\n" + str(b2) + '\n'
-        # Test __str__ on a partially full backpack
-        b1 =   Backpack(color='Blue and White',name='ACME',max_size=7)
-        b2 = s.Backpack(color='Blue and White',name='ACME',max_size=7)
-        b1.put('thing1'); b1.put('thing2'); b1.put('thing3')
-        b2.put('thing1'); b2.put('thing2'); b2.put('thing3')
+        p = self.grade(4)
+        if p < 4:
+            self.feedback += "\nBackpack.__str__():\n%s\n"%b2
+        points += p
+        
+        # Test Backpack.__str__() on a Backpack with contents (4 points).
+        b1 =   Backpack("Master Yoda", "tan", 7)
+        b2 = s.Backpack("Master Yoda", "tan", 7)
+        for item in ["Crystal", "Lightsaber", "Commlink", "Banana"]:
+            b1.put(item); b2.put(item)
+        print("\nTest Backpack.__str__() on a Backpack with some contents.")
         print("\nCorrect output:"); print(b1)
         print("\nStudent output:"); print(b2)
-        p,f = grade(5,"\n\tBackpack.__str__ failed")
-        points += p; feedback += f
-        if p < 5: feedback += "\n\tStudent str(Backpack):\n\n" + str(b2) + '\n'
-        # Test __eq__ in False case
-        b1 = s.Backpack(color='Color',name='Name',max_size=5)
-        b2 = s.Backpack(color='Color',name='Name',max_size=5)
-        b1.name = 'FalseName'
-        if b1 == b2:
-            feedback += "\n\tBackpack.__eq__ failed on different names"
-        else: points += 1
-        b1.name = 'Name'; b1.color = 'Red'
-        if b1 == b2:
-            feedback += "\n\tBackpack.__eq__ failed on different colors"
-        else: points += 1
-        b1.color = 'Color'
-        b1.put('an item'); b2.put("a different item")
-        if b1 == b2:
-            feedback += "\n\tBackpack.__eq__ failed on different contents"
-            feedback += "\n\t\tBackpack_1.contents: " + str(b1.contents)
-            feedback += "\n\t\tBackpack_2.contents: " + str(b2.contents)
-        else: points += 1
-        b1.put("yet another item")
-        if b1 == b2:
-            feedback += "\n\tBackpack.__eq__ failed on different contents"
-            feedback += "\n\t\tBackpack_1.contents: " + str(b1.contents)
-            feedback += "\n\t\tBackpack_2.contents: " + str(b2.contents)
-        else: points += 1
-        # Test __eq__ in True case
-        b1 = s.Backpack(color='green',name='Math',max_size=3)
-        b2 = s.Backpack(color='green',name='Math',max_size=3)
-        if not (b1 == b2): feedback += "\n\tBackpack.__eq__ failed on equal"
-        else: points += 1
-        b1.put('an item'); b2.put('an item')
-        if not (b1 == b2): feedback += "\n\tBackpack.__eq__ failed on equal"
-        else: points += 1
-        b1.put('A'); b1.put('B')
-        b2.put('B'); b2.put('A')
-        if not (b1 == b2):
-            feedback += "\n\tBackpack.__eq__ failed on equal"
-            feedback += "\n\t\tBackpack_1.contents: " + str(b1.contents)
-            feedback += "\n\t\tBackpack_2.contents: " + str(b2.contents)
-            feedback += "\n\t\t(two backpacks with the same contents"
-            feedback += "\n\t\t are equal even if the contents are in"
-            feedback += "\n\t\t a different order"
-        else: points += 1
+        p = self.grade(4)
+        if p < 4:
+            self.feedback += "\nBackpack.__str__()):\n%s\n"%b2
+        points += p
+
+        return points
+
+    def problem4(self, s):
+        """Test the ComplexNumber class. 25 points."""
+
+        # Test the constructor (2 points).
+        a, b = randint(-50, 50, 2)
+        try:
+            cn = s.ComplexNumber(a, b)
+        except AttributeError as e:
+            raise NotImplementedError("Problem 4 Incomplete: %s"%e)
+        if not hasattr(cn, "real") or not hasattr(cn, "imag"):
+            self.feedback += "\n\tComplexNumber class must have attributes "
+            self.feedback += "'real' and 'imag'."
+            return 0
+        points  = self.eqTest(a, cn.real, "\n\tComplexNumber.real failed")
+        points += self.eqTest(b, cn.imag, "\n\tComplexNumber.imag failed")
+
+        # Check for cheating.
+        if s.ComplexNumber is complex:
+            print("Check solutions file; ComplexNumber is complex.")
+            return 0
+
+        # Test ComplexNumber.conjugate() (2 points).
+        cn2 = cn.conjugate()
+        if not isinstance(cn2, s.ComplexNumber):
+            self.feedback += "\n\tComplexNumber.conjugate() should return a "
+            self.feedback += "new ComplexNumber object."
+        else:
+            points += self.eqTest(a, cn2.real,
+                        "\n\tComplexNumber.conjugate() failed on real part")
+            points += self.eqTest(-1*b, cn2.imag,
+                        "\n\tComplexNumber.conjugate() failed on imag part")
+
+        # Test ComplexNumber.__abs__() (1 point).
+        a, b = randint(-50, 50, 2)
+        cn = s.ComplexNumber(a, b)
+        points += self.evalTest(abs(sqrt(a**2 + b**2) - abs(cn)) < 1e-8,
+                                True, "\n\tComplexNumber.__abs__() failed")
+
+        # Test ComplexNumber.__lt__() (2 points).
+        cn1, cn2 = s.ComplexNumber(5, 7), s.ComplexNumber(1, 2)
+        points += self.evalTest(cn1 < cn2, False,
+                                "\n\tComplexNumber.__lt__() failed")
+        points += self.evalTest(cn2 < cn1, True,
+                                "\n\tComplexNumber.__lt__() failed")
+
+        # Test ComplexNumber.__gt__() (2 points).
+        cn1, cn2 = s.ComplexNumber(1, 2), s.ComplexNumber(3, 4)
+        points += self.evalTest(cn1 > cn2, False,
+                                "\n\tComplexNumber.__gt__() failed")
+        points += self.evalTest(cn2 > cn1, True,
+                                "\n\tComplexNumber.__gt__() failed")
+
+        # Test ComplexNumber.__eq__() (2 points).
+        cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 4)
+        points += self.evalTest(cn1 == cn2, False,
+                        "\n\tComplexNumber.__eq__() failed on nonequal")
+        cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 3)
+        points += self.evalTest(cn2 == cn1, True,
+                        "\n\tComplexNumber.__eq__() failed on equal")
+
+        # Test ComplexNumber.__ne__() (2 points).
+        cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 4)
+        points += self.evalTest(cn1 != cn2, True,
+                        "\n\tComplexNumber.__ne__() failed on nonequal")
+        cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 3)
+        points += self.evalTest(cn2 != cn1, False,
+                        "\n\tComplexNumber.__ne__() failed on equal")
+
+        # Test ComplexNumber.__add__() (2 points).
+        a, b, c, d = randint(-50, 50, 4)
+        cn = s.ComplexNumber(a, b) + s.ComplexNumber(c, d)
+        points += self.eqTest(a+c, cn.real,
+                    "\n\tComplexNumber.__add__() failed on real part")
+        points += self.eqTest(b+d, cn.imag,
+                    "\n\tComplexNumber.__add__() failed on imag part")
+
+        # Test ComplexNumber.__sub__() (2 points).
+        a, b, c, d = randint(-50, 50, 4)
+        cn = s.ComplexNumber(a, b) - s.ComplexNumber(c, d)
+        points += self.eqTest(a-c, cn.real,
+                    "\n\tComplexNumber.__sub__() failed on real part")
+        points += self.eqTest(b-d, cn.imag,
+                    "\n\tComplexNumber.__sub__() failed on real part")
+
+        # Test ComplexNumber.__mul__() (4 points).
+        a, b, c, d = randint(-50, 50, 4)
+        cn1 =   ComplexNumber(a, b) *   ComplexNumber(c, d)
+        cn2 = s.ComplexNumber(a, b) * s.ComplexNumber(c, d)
+        points += 2*self.eqTest(cn1.real, cn2.real,
+                    "\n\tComplexNumber.__mul__() failed on real part")
+        points += 2*self.eqTest(cn1.imag, cn2.imag,
+                    "\n\tComplexNumber.__mul__() failed on imag part")
         
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
-        
-    try:    # Problem 4: 20 points
-        feedback += "\n\nProblem 4 (15 points):"
-        points = 0
-        x1 =   ComplexNumber(3392,-493)
-        y1 = s.ComplexNumber(3392,-493)
-        # Test real / imag attributes
-        p,f = attrTest(x1.real, y1.real, "\n\tComplexNumber.real failed")
-        points += p; feedback += f
-        p,f = attrTest(x1.imag, y1.imag, "\n\tComplexNumber.imag failed")
-        points += p; feedback += f
-        # Test conjugate()
-        x2 = x1.conjugate(); y2 = y1.conjugate()
-        p,f = attrTest(x2.real, y2.real,
-            "\n\tComplexNumber.conjugate() failed on real part")
-        points += p; feedback += f
-        p,f = attrTest(x2.imag, y2.imag,
-            "\n\tComplexNumber.conjugate() failed on imag part")
-        points += p; feedback += f
-        # Test norm()
-        p,f = attrTest(x1.norm(), y1.norm(),
-            "\n\tComplexNumber.norm() failed")
-        points += p; feedback += f
-        # Test __add__
-        x2 = ComplexNumber(-21,210); y2 = ComplexNumber(-21,210)
-        x3 = x1 + x2; y3 = y1 + y2
-        p,f = attrTest(x3.real, y3.real,
-            "\n\tComplexNumber.__add__ failed on real part")
-        points += p; feedback += f
-        p,f = attrTest(x3.imag, y3.imag,
-            "\n\tComplexNumber.__add__ failed on imag part")
-        points += p; feedback += f
-        # Test __sub__
-        x3 = x1 - x2; y3 = y1 - y2
-        p,f = attrTest(x3.real, y3.real,
-            "\n\tComplexNumber.__sub__ failed on real part")
-        points += p; feedback += f
-        p,f = attrTest(x3.imag, y3.imag,
-            "\n\tComplexNumber.__sub__ failed on imag part")
-        points += p; feedback += f
-        # Test __mul__
-        x3 = x1 * x2; y3 = y1 * y2
-        p,f = attrTest(x3.real, y3.real,
-            "\n\tComplexNumber.__mul__ failed on real part")
-        points += p; feedback += f
-        p,f = attrTest(x3.imag, y3.imag,
-            "\n\tComplexNumber.__mul__ failed on imag part")
-        points += p; feedback += f
-        # Test __div__
-        x3 = x1 / x2; y3 = y1 / y2
-        p,f = attrTest(x3.real, y3.real,
-            "\n\tComplexNumber.__div__ failed on real part")
-        points += p; feedback += f
-        p,f = attrTest(x3.imag, y3.imag,
-            "\n\tComplexNumber.__div__ failed on imag part")
-        points += p; feedback += f
-        # Test docstrings
-        print("\nStudent docstrings:\n")
-        print(y1.__doc__); print(y1.__init__.__doc__)
-        p,f = grade(2,"\n\tbad ComplexNumber docstring(s)")
-        points += p; feedback += f
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
-    
-    # Late submission penalty
-    if late:
-        feedback += "\n\nHalf credit for late submission."
-        feedback += "\nRaw score: " + str(score) + "/" + str(total)
-        score *= .5
-    
-    # Report final score.
-    feedback += "\n\nTotal score: " + str(score) + "/" + str(total)
-    percentage = (100.0 * score) / total
-    feedback += " = " + str(percentage) + "%"
-    if   percentage >=  98.0: feedback += "\n\nExcellent!"
-    elif percentage >=  90.0: feedback += "\n\nGreat job!"
-    return score, feedback
+        # Test ComplexNumber.__div__() (4 points).
+        a, b, c, d = randint(-50, 50, 4)
+        cn1 =   ComplexNumber(a, b) /   ComplexNumber(c, d)
+        cn2 = s.ComplexNumber(a, b) / s.ComplexNumber(c, d)
+        points += 2*self.eqTest(cn1.real, cn2.real,
+                    "\n\tComplexNumber.__div__() failed on real part")
+        points += 2*self.eqTest(cn1.imag, cn2.imag,
+                    "\n\tComplexNumber.__div__() failed on imag part")
+
+        return points
 
 # =============================== END OF FILE =============================== #

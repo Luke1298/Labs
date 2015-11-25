@@ -1,5 +1,5 @@
 # Packs.py
-"""Volume II Lab 2: Object Oriented Programming.
+"""Object Oriented Programming
 <Name>
 <Class>
 <Date>
@@ -8,23 +8,23 @@
 # Problem 1: Modify this class. Add 'name' and max_size' attributes, modify
 #   the put() method, and add a dump() method. Remember to update docstrings.
 class Backpack(object):
-    """Backpack object. Has a color, and a list of contents
+    """A Backpack object class. Has a name and a list of contents.
     
     Attributes:
-        color (str): the color of the backpack.
+        name (str): the name of the backpack's owner.
         contents (list): the contents of the backpack.
     """
 
-    def __init__(self, color, name, max_size=5):
+    def __init__(self, name):
         """Set the color and initialize an empty contents list.
         
         Inputs:
-            color (str): the color of the backpack.
+            name (str): the name of the backpack's owner.
         
         Returns:
             A backpack object wth no contents.
         """
-        self.color = color
+        self.name = name
         self.contents = []
     
     def put(self, item):
@@ -35,7 +35,7 @@ class Backpack(object):
         """Remove 'item' from the backpack's list of contents."""
         self.contents.remove(item)
     
-    # Magic Methods -----------------------------------------------------------
+    # Magic Methods (Problem 3) -----------------------------------------------
     
     def __add__(self, other):
         """Add the number of contents of each Backpack."""
@@ -56,22 +56,22 @@ class Knapsack(Backpack):
     A knapsack is smaller than a backpack and can be tied closed.
     
     Attributes:
+        name (str): the name of the knapsack's owner.
         color (str): the color of the knapsack.
-        name (str): the name of the knapsack.
         max_size (int): the maximum number of items that can fit
             in the knapsack.
         contents (list): the contents of the backpack.
         closed (bool): whether or not the knapsack is tied shut.
     """
     
-    def __init__(self, color, name, max_size=3):
+    def __init__(self, name, color, max_size=3):
         """Use the Backpack constructor to initialize the name and
         max_size attributes. A knapsack only holds 3 item by default
         instead of 5. 
         
         Inputs:
+            name (str): the name of the knapsack's owner.
             color (str): the color of the knapsack.
-            name (str): the name of the knapsack.
             max_size (int, opt): the maximum number of items that can be
                 stored in the knapsack. Defaults to 3.
         
@@ -99,4 +99,6 @@ class Knapsack(Backpack):
 
 # Problem 2: Write a 'Jetpack' class that inherits from the 'Backpack' class.
 
+
 # Problem 4: Write your own 'ComplexNumber' class.
+

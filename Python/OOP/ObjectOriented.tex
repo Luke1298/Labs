@@ -22,22 +22,22 @@ For example, the following code defines a class for storing information about ba
 
 \begin{lstlisting}
 class Backpack(object):
-    """A Backpack object class. Has a color and a list of contents.
+    """A Backpack object class. Has a name and a list of contents.
     
     Attributes:
-        color (str): the color of the backpack.
+        name (str): the name of the backpack's owner.
         contents (list): the contents of the backpack.
     """
-    def __init__(self, color):          # This function is the constructor.
-        """Set the color and initialize an empty contents list.
+    def __init__(self, name):           # This function is the constructor.
+        """Set the name and initialize an empty contents list.
         
         Inputs:
-            color (str): the color of the backpack.
+            name (str): the name of the backpack's owner.
         
         Returns:
             A Backpack object wth no contents.
         """ 
-        self.color = color              # Initialize some attributes.
+        self.name = name                # Initialize some attributes.
         self.contents = []
 \end{lstlisting}
 
@@ -59,18 +59,18 @@ In the following code, we import the \li{Backpack} class and instantiate a \li{B
 \begin{lstlisting}
 # Import the Backpack class and instantiate an object called 'my_backpack'.
 >>> from Packs import Backpack
->>> my_backpack = Backpack("blue")
+>>> my_backpack = Backpack("Fred")
 
 # Access the attributes of the object with a period.
->>> my_backpack.color
-<<'blue'>>
+>>> my_backpack.name
+<<'Fred'>>
 >>> my_backpack.contents
 []
 
 # The object's attributes can be modified dynamically.
->>> my_backpack.color = "green"
->>> print(my_backpack.color)
-green
+>>> my_backpack.name = "George"
+>>> print(my_backpack.name)
+George
 \end{lstlisting}
 
 \begin{info}
@@ -113,15 +113,15 @@ The \li{self} argument is only included in the declaration of the class methods,
 <<['notebook']>>
 \end{lstlisting}
 
-\begin{comment}
+\begin{comment} % This doesn't quite fit here, but it's covered later.
 IPython's object introspection feature reveals details on the object.
 
 \begin{lstlisting}
 In [1]: import Packs
 
-In [2]: b = Packs.Backpack("green")
+In [2]: b = Packs.Backpack("Bill")
 
-In [3]: b.  # press 'tab'
+In [3]: b.  # press 'tab' to see the attributes and methods.
 b.color     b.contents  b.put       b.take      
 
 In [4]: b.put?
@@ -137,13 +137,13 @@ Type:      instancemethod>>
 \begin{problem}
 Expand the \li{Backpack} class to match the following specifications.
 \begin{enumerate}
-\item Modify the constructor so that it accepts a color, a name, and a maximum size, in that order.
+\item Modify the constructor so that it accepts a name, a color, and a maximum size, in that order.
 Make \li{max_size} a default argument with default value $5$.
-Store each input as a class attribute.
+Store each input as an attribute.
 %the new attributes as \li{self.name} and \li{self.max_size}.
 
 \item Modify the \li{put()} method to ensure that the backpack does not go over capacity.
-If the user tries to put in more than \li{max\_size} items, print ``I'm Full!'' and do not add the item to the contents list.
+If the user tries to put in more than \li{max\_size} items, print ``No Room!'' and do not add the item to the contents list.
 
 \item Add a new method to the backpack called \li{dump()} that empties the contents of the backpack.
 This method should receive no arguments.
@@ -155,7 +155,7 @@ To ensure that your class works properly, consider writing a test function outsi
 Your function may look something like this:
 \begin{lstlisting}
 def test_backpack():
-    backpack_1 = Backpack("black", "Barry")     # Instantiate the object.
+    backpack_1 = Backpack("Barry", "black")     # Instantiate the object.
     if backpack_1.max_size != 5:                # Test an attribute.
         print("Wrong default max_size!")
     for item in ["pencil", "pen", "paper", "computer"]:
@@ -182,28 +182,28 @@ class Knapsack(Backpack):
     A knapsack is smaller than a backpack and can be tied closed.
     
     Attributes:
+        name (str): the name of the knapsack's owner.
         color (str): the color of the knapsack.
-        name (str): the name of the knapsack.
         max_size (int): the maximum number of items that can fit
             in the knapsack.
         contents (list): the contents of the backpack.
         closed (bool): whether or not the knapsack is tied shut.
     """
-    def __init__(self, color, name, max_size=3):
-        """Use the Backpack constructor to initialize the name and
-        max_size attributes. A knapsack only holds 3 item by default
+    def __init__(self, name, color, max_size=3):
+        """Use the Backpack constructor to initialize the name, color,
+        and max_size attributes. A knapsack only holds 3 item by default
         instead of 5.
 
         Inputs:
+            name (str): the name of the knapsack's owner.
             color (str): the color of the knapsack.
-            name (str): the name of the knapsack.
-            max_size (int, opt): the maximum number of items that can be
-                stored in the knapsack. Defaults to 3.
+            max_size (int, opt): the maximum number of items that can
+                be stored in the knapsack. Defaults to 3.
         
         Returns:
             A knapsack object with no contents.
         """
-        Backpack.__init__(self, color, name, max_size)
+        Backpack.__init__(self, name, color, max_size)
         self.closed = True
 \end{lstlisting}
 
@@ -236,7 +236,7 @@ Thus, in this example, the \li{dump()} method is available even though it is not
 
 \begin{lstlisting}
 >>> from Packs import Knapsack
->>> my_knapsack = Knapsack("brown", "Brady")
+>>> my_knapsack = Knapsack("Brady", "brown")
 >>> isinstance(my_knapsack, Backpack)       # A Knapsack is a Backpack.
 True
 
@@ -262,8 +262,8 @@ True
 \begin{problem}
 Create a \li{Jetpack} class that inherits from the \li{Backpack} class.
 \begin{enumerate}
-\item Overwrite the constructor so that in addition to a color, name, and maximum size, it also accepts an amount of fuel.
-Store the fuel as a class attribute.
+\item Overwrite the constructor so that in addition to a name, color, and maximum size, it also accepts an amount of fuel.
+Store the fuel as an attribute.
 Also change the default value of \li{max_size} to $2$, and set the default value of fuel to $10$.
 %Add an optional argument for fuel with a default value of $10$ to keep track of how much fuel is left in the jetpack.
 
@@ -282,12 +282,12 @@ In Python, a \emph{magic method} is a special method used to make an object beha
 Magic methods begins and ends with two underscores, like \li{__init__()}.
 Every Python object is automatically endowed with several magic methods, but they are hidden because they begin with an underscore (this is a way of hiding attributes or methods from the user; for example, try hiding the \li{closed} attribute in the \li{Knapsack} class by changing it to \li{_closed}).
 
-We can see details on the \li{Backpack} object, including its magic methods, using object instrospection:
+We can see details on the \li{Backpack} object, including its magic methods, using IPython's object instrospection feature:
 
 \begin{lstlisting}
 In [1]: import Packs
 
-In [2]: b = Packs.Backpack("green", "Oscar")
+In [2]: b = Packs.Backpack("Oscar", "green")
 
 In [3]: b.      # Press 'tab' to see standard methods and attributes.
 b.color     b.contents  b.put       b.take
@@ -311,16 +311,16 @@ In [6]: b?
 <<Type:           Backpack
 File:           ~/Downloads/Packs.py
 Docstring:
-A Backpack object class. Has a color and a list of contents.
+A Backpack object class. Has a name and a list of contents.
 
 Attributes:
-    color (str): the color of the backpack.
+    name (str): the name of the backpack's owner.
     contents (list): the contents of the backpack.
 Init docstring:
-Set the color and initialize an empty contents list.
+Set the name and initialize an empty contents list.
 
 Inputs:
-    color (str): the color of the backpack.
+    name (str): the name of the backpack's owner.
 
 Returns:
     A backpack object wth no contents.>>
@@ -352,8 +352,8 @@ The object on the left side of the $+$ is passed in as \li{self} and the object 
 
 \begin{lstlisting}
 >>> from Packs import Backpack
->>> backpack1 = Backpack("red", "Rose")
->>> backpack2 = Backpack("cyan", "Carly")
+>>> backpack1 = Backpack("Rose", "red")
+>>> backpack2 = Backpack("Carly", "cyan")
 
 # Put some items in the backpacks.
 >>> backpack1.put("textbook")
@@ -398,8 +398,8 @@ The \li{__le__()}, \li{__ge__()}, \li{__eq__()}, and \li{__ne__()} methods corre
 
 \begin{lstlisting}
 >>> from Packs import Backpack
->>> backpack1 = Backpack("magenta", "Maggy")
->>> backpack2 = Backpack("yellow", "Lemony")
+>>> backpack1 = Backpack("Maggy", "magenta")
+>>> backpack2 = Backpack("Yolanda", "yellow")
 
 >>> backpack1.put('book')
 >>> backpack2.put('water bottle')
@@ -424,7 +424,7 @@ The two contents lists do not have to have their items in the same order to be c
 This method is invoked when an object is cast as a string with the \li{str} function, or when using the \li{print} statement.
 Implement the \li{__str__()} method in the \li{Backpack} class so that printing a \li{Backpack} object yields the following output:
 \begin{lstlisting}
-<<Name:		<name>
+<<Owner:		<name>
 Color:		<color>
 Size:       <number of items in contents>
 Max Size:   <max_size>
@@ -436,7 +436,7 @@ Contents:   [<item1>, <item2>, ...]>>
 
 \begin{warn}
 Comparison operators are not automatically related.
-For exampele, for two backpacks $A$ and $B$, if $A==B$ is \li{True}, it does not automatically imply that $A!=B$ is \li{False}.
+For example, for two backpacks $A$ and $B$, if $A==B$ is \li{True}, it does not automatically imply that $A!=B$ is \li{False}.
 Accordingly, when defining \li{__eq__()}, one should also define \li{__ne__()} so that the operators will behave as expected.
 \end{warn}
 
@@ -449,7 +449,8 @@ Create your own \li{ComplexNumber} class that supports the basic operations of c
 \item Add the following magic methods:
 \begin{enumerate}
 \item The \li{__abs__()} magic method determines the output of the built-in \li{abs} function (absolute value). Implement \li{__abs__()} so that it returns the magnitude of the complex number. Recall that $|a+bi| = \sqrt{a^2+b^2}$.
-\item Implement \li{__lt__()}, \li{__gt__()}, and \li{__eq__()} so that \li{ComplexNumber} objects can be compared by their magnitudes. That is, $(a+bi) < (c+di)$ if and only if $|a+bi| < |c+di|$, and so on.
+\item Implement \li{__lt__()} and \li{__gt__()} so that \li{ComplexNumber} objects can be compared by their magnitudes. That is, $(a+bi) < (c+di)$ if and only if $|a+bi| < |c+di|$, and so on.
+\item Implement \li{__eq__()} and \li{__ne__()} so that two \li{ComplexNumber} objects are equal if and only if they have the same real and imaginary parts.
 \item Implement \li{__add__()}, \li{__sub__()}, \li{__mul__()}, and \li{__div__()} appropriately.
 Each of these should return a new \li{ComplexNumber} object.
 
