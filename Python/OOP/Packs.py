@@ -1,6 +1,5 @@
-# Backpack.py
-"""Volume II Lab 2: Object Oriented Programming (Auxiliary file)
-Modify this file for problems 1 and 3.
+# Packs.py
+"""Volume II Lab 2: Object Oriented Programming.
 <Name>
 <Class>
 <Date>
@@ -18,18 +17,16 @@ class Backpack(object):
         # Good docstrings are required for full credit.
     """
     
-    def __init__(self, color='black'):
-        """Constructor for a backpack object.
-        Set the color and initialize the contents list.
+    def __init__(self, color):
+        """Set the color and initialize an empty contents list.
         
         Inputs:
-            color (str, opt): the color of the backpack. Defaults to 'black'.
+            color (str): the color of the backpack.
             # ADD INPUTS INFO HERE AS YOU EXPAND THIS FUNCTION
         
         Returns:
             A backpack object wth no contents.
-        """
-        
+        """        
         self.color = color
         self.contents = []
     
@@ -41,7 +38,7 @@ class Backpack(object):
         """Remove 'item' from the backpack's content list."""
         self.contents.remove(item)
     
-    # -------------------- Magic Methods (Problem 3) -------------------- #
+    # Magic Methods (Problem 3) -----------------------------------------------
     
     def __add__(self, other):
         """Add the contents of 'other' to the contents of 'self'.
@@ -55,6 +52,9 @@ class Backpack(object):
         """
         self.contents = self.contents + other.contents
     
+    def __cmp__(self, other):
+        return cmp(len(self.contents), len(other.contents))
+    '''
     def __lt__(self, other):
         """Compare two backpacks. If 'self' has fewer contents
         than 'other', return True. Otherwise, return False.
@@ -66,6 +66,7 @@ class Backpack(object):
                 of the '<' comparison operator.
         """    
         return len(self.contents) < len(other.contents)
+    '''
     
     # Problem 3: write the __str__ and __eq__ magic methods for the Backpack.
     def __str__(self):
@@ -144,5 +145,8 @@ class Knapsack(Backpack):
     def tie(self):
         """Tie the knapsack."""
         self.closed = True
+
+
+# Problem 2: Write a Jetpack class.
 
 # ============================== END OF FILE ================================ #
