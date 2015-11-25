@@ -89,11 +89,11 @@ In the following code, we define two simple methods in the \li{Backpack} class.
 class Backpack(object):
     # ...
     def put(self, item):
-        """Add 'item' to the backpack's content list."""
+        """Add 'item' to the backpack's list of contents."""
         self.contents.append(item)
     
     def take(self, item):
-        """Remove 'item' from the backpack's content list."""
+        """Remove 'item' from the backpack's list of contents."""
         self.contents.remove(item)
 \end{lstlisting}
 
@@ -190,10 +190,10 @@ class Knapsack(Backpack):
         closed (bool): whether or not the knapsack is tied shut.
     """
     def __init__(self, color, name, max_size=3):
-        """Constructor for a knapsack object. A knapsack only holds 3 item by
-        default instead of 5. Use the Backpack constructor to initialize the
-        name and max_size attributes.
-        
+        """Use the Backpack constructor to initialize the name and
+        max_size attributes. A knapsack only holds 3 item by default
+        instead of 5.
+
         Inputs:
             color (str): the color of the knapsack.
             name (str): the name of the knapsack.
@@ -216,14 +216,14 @@ As an example, we modify the \li{put()} and \li{take()} methods in \li{Knapsack}
 class Knapsack(Backpack):
     # ...
     def put(self, item):
-        """If the knapsack is untied, use the Backpack put() method."""
+        """If the knapsack is untied, use the Backpack.put() method."""
         if self.closed:
             print "I'm closed!"
         else:
             Backpack.put(self, item)
     
     def take(self, item):
-        """If the knapsack is untied, use the Backpack take() method."""
+        """If the knapsack is untied, use the Backpack.take() method."""
         if self.closed:
             print "I'm closed!"
         else:
@@ -430,7 +430,7 @@ Size:       <number of items in contents>
 Max Size:   <max_size>
 Contents:   [<item1>, <item2>, ...]>>
 \end{lstlisting}
-(Hint: Use the `\textbackslash{t}' tab character to help align output.)
+(Hint: Use the `\textbackslash{t}' tab and `\textbackslash{n}' newline characters to help align output.)
 \end{enumerate}
 \end{problem}
 

@@ -3,7 +3,7 @@
 Solutions file. Written by Shane McQuarrie, Spring 2015.
 """
 
-# =============================== Backpack.py =============================== #
+from math import sqrt
 
 # Problem 1: Modify this class. Add 'name' and max_size' attributes, modify
 #   the put() method, and add a dump() method. Remember to update docstrings.
@@ -18,15 +18,15 @@ class Backpack(object):
         contents (list): the contents of the backpack.
     """
 
-    def __init__(self,color='black',name='backpack',max_size=5):
-        """Constructor for a backpack object. Set the color, name, and
-        max size of the backpack. Also initialize the contents list.
+    def __init__(self, color, name, max_size=5):
+        """Set the color, name, and maximum size of the backpack.
+        Also initialize an empty contents list.
         
         Inputs:
-            color (str, opt): the color of the backpack. Defaults to 'black'.
-            name (str, opt): a label for the backpack. Defaults to 'backpack'.
-            max_size (int, opt): the maximum number of items that can fit in
-                the backpack. Defaults to 5.
+            color (str): the color of the backpack.
+            name (str): a label for the backpack.
+            max_size (int, opt): the maximum number of items that can
+                fit in the backpack. Defaults to 5.
         
         Returns:
             A backpack object wth no contents.
@@ -37,74 +37,33 @@ class Backpack(object):
         self.contents = []
     
     def put(self,item):
-        """Add an item to the backpack content list if there is room."""
+        """Add 'item' to the backpack's list of contents if there is room."""
         if len(self.contents) >= self.max_size:         # Check for overflow
-            print "Backpack Full."
+            print("I'm Full!")
         else:
             self.contents.append(item)
     
     def take(self, item):
-        """Remove an item from the backpack."""
+        """Remove 'item' from the backpack's list of contents."""
         self.contents.remove(item)
     
     def dump(self):
         """Remove all items from the backpack."""
         self.contents = []
     
-    # -------------------- Magic Methods (Problem 3) -------------------- #
+    # Magic Methods -----------------------------------------------------------
     
     def __add__(self, other):
-        """Add the contents of 'other' to the contents of 'self'.
-        Note that the contents of 'other' are unchanged.
-        
-        Inputs:
-            self (Backpack): the backpack on the left-hand side
-                of the '+' addition operator.
-            other (Backpack): The backpack on the right-hand side
-                of the '+' addition operator.
-        """
-        self.contents = self.contents + other.contents
+        """Add the number of contents of each Backpack."""
+        return len(self.contents) + len(other.contents)
     
     def __lt__(self,other):
         """Compare two backpacks. If 'self' has fewer contents
         than 'other', return True. Otherwise, return False.
-        
-        Inputs:
-            self (Backpack): the backpack on the left-hand side
-                of the '<' comparison operator.
-            other (Backpack): The backpack on the right-hand side
-                of the '<' comparison operator.
         """
         return len(self.contents) < len(other.contents)
-    
+
     # Problem 3: Write the __str__ and __eq__ methods for the Backpack class.
-    def __str__(self):
-        """String Representation: a list of the backpack's attributes.
-        
-        Examples:                           |
-            >>> b = Backpack()              |   Or,
-            >>> b.put('something')          |
-            >>> b.put('something else')     |   >>> c = Backpack('red','Bob',3)
-            >>> print(b)                    |   >>> print(c)
-            Name:           backpack        |   Name:           Bob
-            Color:          black           |   Color:          red
-            Size:           2               |   Size:           0
-            Max Size:       5               |   Max Size:       3
-            Contents:                       |   Contents:       Empty
-                            something       |
-                            something else  |
-        """
-        out = "Name:\t\t" + self.name
-        out += "\nColor:\t\t" + self.color
-        out += "\nSize:\t\t" + str(len(self.contents))
-        out += "\nMax Size:\t" + str(self.max_size)
-        out += "\nContents:"
-        if len(self.contents) == 0: out += "\tEmpty"     # Empty list
-        else:                                           # Nonempty list
-            for i in xrange(len(self.contents)):
-                out += "\n\t\t" + str(self.contents[i])
-        return out
-    
     def __eq__(self,other):
         """Two backpack objects are equal if and only if they have the same
         name, color, and contents. Note that the contents do not need to be
@@ -114,21 +73,68 @@ class Backpack(object):
             return False                                # Check name and color
         if len(self.contents) != len(other.contents):
             return False                                # Check contents size
-        l1 = list(self.contents)
-        l2 = list(other.contents)
-        l1.sort()                                       # Sort for comparison
-        l2.sort()
-        for i in xrange(len(l1)):
-            if l1[i] != l2[i]:                          # Check each entry
-                return False
-        return True
+        l1 = sorted(self.contents)                      # Sort for comparison
+        l2 = sorted(other.contents)
+        return l1 == l2                                 # Check contents
 
+    def __str__(self):
+        """String Representation: a list of the backpack's attributes."""
+        return "Name:\t\t%s\nColor:\t\t%s\nSize:\t\t%d\nMax Size:\t%d\nContents:\t%s"%(self.name,
+            self.color, len(self.contents), self.max_size, self.contents)
+        # Or, a slightly longer way:
+        out = "Name:\t\t" + self.name
+        out += "\nColor:\t\t" + self.color
+        out += "\nSize:\t\t" + str(len(self.contents))
+        out += "\nMax Size:\t" + str(self.max_size)
+        out += "\nContents:\t" + str(self.contents)
+        return out
 
-# ============================== Solutions.py =============================== #
+# Study this example of inheritance. You are not required to modify it.
+class Knapsack(Backpack):
+    """A Knapsack object class. Inherits from the Backpack class.
+    A knapsack is smaller than a backpack and can be tied closed.
+    
+    Attributes:
+        color (str): the color of the knapsack.
+        name (str): the name of the knapsack.
+        max_size (int): the maximum number of items that can fit
+            in the knapsack.
+        contents (list): the contents of the backpack.
+        closed (bool): whether or not the knapsack is tied shut.
+    """
+    
+    def __init__(self, color, name, max_size=3):
+        """Use the Backpack constructor to initialize the name and
+        max_size attributes. A knapsack only holds 3 item by default
+        instead of 5. 
+        
+        Inputs:
+            color (str): the color of the knapsack.
+            name (str): the name of the knapsack.
+            max_size (int, opt): the maximum number of items that can be
+                stored in the knapsack. Defaults to 3.
+        
+        Returns:
+            A knapsack object with no contents.
+        """
+        
+        Backpack.__init__(self, color, name, max_size)
+        self.closed = True
+    
+    def put(self, item):
+        """If the knapsack is untied, use the Backpack.put() method."""
+        if self.closed:
+            print "I'm closed!"
+        else:
+            Backpack.put(self, item)
+    
+    def take(self, item):
+        """If the knapsack is untied, use the Backpack.take() method."""
+        if self.closed:
+            print "I'm closed!"
+        else:
+            Backpack.take(self, item)
 
-# Students should import their Backpack class from Backpack.py:
-# from Backpack import Backpack
-from math import sqrt
 
 # Problem 2: Write a 'Jetpack' class that inherits from the 'Backpack' class.
 class Jetpack(Backpack):
@@ -139,32 +145,30 @@ class Jetpack(Backpack):
     Attributes:
         color (str): the color of the jetpack.
         name (str): the name of the jetpack.
-        max_size (int): the maximum number of items that can fit in the
-            jetpack.
+        max_size (int): the maximum number of items that can fit
+            in the jetpack.
         contents (list): the contents of the jetpack.
         fuel (int): the amount of fuel in the jetpack's tank.
     """
 
-    def __init__(self,color='silver',name='jetpack',max_size=2,fuel=10):
+    def __init__(self, color, name, max_size=2, fuel=10):
         """Constructor for a jetpack object. A jetpack only holds 2 items
         by default instead of 5, and has an additional attribute for fuel.
         
         Inputs:
-            color (str, opt): the color of the knapsack. Defaults to 'brown'.
-            name (str, opt): the name of the knapsack. Defaults to 'knapsack'.
-            max_size (int, opt): the maximum number of items that can be stored
-                in the jetpack. Defaults to 2.
+            color (str): the color of the jetpack..
+            name (str): the name of the jetpack.
+            max_size (int, opt): the maximum number of items that can
+                be stored in the jetpack. Defaults to 2.
             fuel (int, opt): the starting amount of fuel. Defaults to 10.
         
         Returns:
             A jetpck object with no contents and 10 units of fuel.
         """
-        
         Backpack.__init__(self, color, name, max_size)
         self.fuel = fuel
-        # Or self.fuel = 10, without fuel as an argument for __init__().
     
-    def fly(self,amount):
+    def fly(self, amount):
         """Fly by using 'amount' units of fuel."""
         if amount > self.fuel:                      # Check current fuel
             print "Not enough fuel!"
@@ -173,8 +177,7 @@ class Jetpack(Backpack):
     
     def dump(self):
         """Empty the contents of the jetpack and dump out all the fuel."""
-        Backpack.dump(self)
-        # Or self.contents = []
+        Backpack.dump(self)                         # Or self.contents = []
         self.fuel = 0                               # Reset fuel to 0
 
 
@@ -199,26 +202,31 @@ class ComplexNumber(object):
         """Return a ComplexNumber object of the complex conjugate."""
         return ComplexNumber(self.real, -1*self.imag)
     
-    def norm(self):
-        """Return the magnitude of the complex number."""
+    def __abs__(self):
+        """Return the magnitude of the complex number.
+        |a+bi| = sqrt{a^2 + b^2}.
+        """
         return sqrt(self.real**2 + self.imag**2)
     
     def __add__(self, other):
+        """(a+bi) + (c+di) = (a+c) + (b+d)i"""
         return ComplexNumber(self.real + other.real, self.imag + other.imag)
     
     def __sub__(self, other):
+        """(a+bi) - (c+di) = (a-c) + (b-d)i"""
         return ComplexNumber(self.real - other.real, self.imag - other.imag)
     
     def __mul__(self, other):
+        """(a+bi)*(c+di) = (ac-bd) + (ad+bc)i"""
         real = (self.real * other.real) - (self.imag * other.imag)
         imag = (self.real * other.imag) + (self.imag * other.real)
         return ComplexNumber(real, imag)
     
     def __div__(self,other):
         """Do a little algebra before implementing:
-        (a + bj)/(c + dj)
-        = (a + bj)(c - dj)/(c + dj)(c - dj)         # Multiply by conjugate
-        = ((ac + bd) + (bc - ad)j)/(c**2 + d**2)    # Distribute
+        (a+bi) / (c+di)
+        = (a+bi)*(c-di) / (c+di)*(c-di)             # Multiply by conjugate
+        = ((ac+bd) + (bc-ad)i) / (c**2 + d**2)      # Distribute
         """
         denom = float(other.real**2 + other.imag**2)
         real = ((self.real * other.real) + (self.imag * other.imag))/denom
@@ -227,7 +235,7 @@ class ComplexNumber(object):
 
 # ============================ END OF SOLUTIONS ============================= #
 
-
+# Test script
 def test(student_module, late=False):
     """Test script. You must import the students file as a module.
     
