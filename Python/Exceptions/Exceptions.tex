@@ -212,7 +212,7 @@ Traceback (most recent call last):
 ValueError: This is a ValueError!>>
 \end{lstlisting}
 
-Complete documentation on raising and handling exceptions can be found at \url{https://docs.python.org/2/tutorial/errors.html}.
+More examples of raising and handling exceptions can be found at \url{https://docs.python.org/2/tutorial/errors.html}.
 
 % Catch a KeyboardInterrupt.
 % This example is very simple; it could be expanded to a simple random walk.
@@ -401,78 +401,121 @@ True
 \begin{problem}
 Write a \li{ContentFilter} class.
 The constructor should accept the name of a file to be read.
-Open the file, read in its contents, and store the data in the class.
+Store the name of the file and its contents as class attributes.
 Remember to securely close the file.
 
 If the filename argument is not a string, raise a \li{TypeError}.
-If the file does not exist, ensure that an \li{IOError} is raised.
 \end{problem}
 
 \subsection*{String Formatting}
 
-Talk about the is stuff (\li{isalnum}/\li{isspace}), formatting (\li{capitalize}/\li{lower}/\li{swapcase}), and \li{split} and \li{strip}. 
+% \begin{table}
+% \begin{tabular}{|l|l|}
+%  \hline
+% Method & Returns \\
+% \hline
+% \li{isalpha()} & True if all characters in the string are alphabetic. \\
+% \li{isdigit()} & True if all characters in the string are digits. \\
+% \li{isspace()} & True if all characters in the string are whitespace (\li{" "}, \li{\\t}, \li{\\n}, etc). \\
+% \li{capitalize()} & A copy of the string with only its first character capitalized. \\
+% \li{lower()} & A copy of the string converted to lowercase. \\
+% \li{upper()} & A copy of the string converted to uppercase. \\
+% \li{split()} & A list of segments of the string, using a given character or string \\
+%  & as a delimiter. The default is to separate on whitespace. \\
+% \li{strip()} & A copy of the string with leading and trailing whitespace removed. \\
+% \hline
+% \end{tabular}
+% \caption{Some of the important \li{str} object methods.}
+% \label{table:strmethods}
+% \end{table}
+
+%A few of the more useful methods are listed in Table \ref{table:strmethods}.
+%Talk about the is stuff (\li{isalnum}/\li{isspace}), formatting (\li{capitalize}/\li{lower}/\li{swapcase}), and \li{split} and \li{strip}.
+
+
+Python's \li{str} class has several useful methods for formatting and arranging strings.
+They are particularly useful for processing data from a source file.
+As always, IPython's object introspection allows us to learn about these methods quickly.
+
+\begin{lstlisting}
+In [1]: str.    # Press 'tab'.
+<<str.capitalize  str.isalnum     str.lstrip      str.splitlines
+str.center      str.isalpha     str.partition   str.startswith
+str.count       str.isdigit     str.replace     str.strip
+str.decode      str.islower     str.rfind       str.swapcase
+str.encode      str.isspace     str.rindex      str.title
+str.endswith    str.istitle     str.rjust       str.translate
+str.expandtabs  str.isupper     str.rpartition  str.upper
+str.find        str.join        str.rsplit      str.zfill
+str.format      str.ljust       str.rstrip      
+str.index       str.lower       str.split>>
+
+In [1]: str.upper?
+Docstring:
+S.upper() -> string
+
+Return a copy of the string S converted to uppercase.
+Type:      method_descriptor
+
+In [2]: str.isupper?
+<<Docstring:
+S.isupper() -> bool
+
+Return True if all cased characters in S are uppercase and there is
+at least one cased character in S, False otherwise.
+Type:      method_descriptor>>
+\end{lstlisting}
+
+Use IPython to learn about and get a feel for the following \li{str} methods: \li{isalpha()}, \li{isdigit()}, \li{isspace()}, \li{join()}, \li{lower()}, \li{replace()}, \li{split()}, \li{strip()}, and \li{upper()}.
+
+Below, we demostrate the \li{join()} and \li{split()} methods.
+
+\begin{lstlisting}
+# str.join() puts the string between the entries of a list.
+>>> words = ["state", "of", "the", "art"]
+>>> "-".join(words)
+'state-of-the-art'
+
+# str.split() creates a list out of a string, given a delimiter.
+>>> "One fish\nTwo fish\nRed fish\nBlue fish\n".split('\n')
+['One fish', 'Two fish', 'Red fish', 'Blue fish', '']
+\end{lstlisting}
 
 % Problem 5: Add methods to the ContentFilter class.
 \begin{problem}
-Add methods to the \li{ContentFilter} class for writing the stored data to new files.
-Each method should accept a filename to write to and a keyword argument \li{mode} that specifies the access mode (\li{'w'} or \li{'a'}), defaulting to \li{'w'}.
-If \li{mode} is not either \li{'a'} or \li{'w'}, raise an \li{InvalidOptionError} with an informative message.
+Add the following methods to the \li{ContentFilter} class for writing the contents of the original file to new files.
+Each method should accept a filename to write to and a keyword argument \li{mode} that specifies the file access mode, defaulting to \li{'w'}.
+If \li{mode} is not either \li{'w'} or \li{'a'}, raise an \li{InvalidOptionError} with an informative message.
 
-Include the following methods.
 \begin{enumerate}
-\item \li{upper_case()}: write the all-caps version of the data to the outfile.
-\item \li{lower_case()}: same as \li{upper_case()}, but with lower case.
-\item \li{reverse()}: write the data to the outfile in reverse order. Include an additional keyword argument, \li{unit}, that specifies how the reversal it to be done. Possible values include \li{'char'}, \li{'word'}, or \li{'line'}. If \li{unit} is not one of these three values, raise an \li{InvalidOptionError}.
 
-\item \li{transpose()}: write the ``transposed'' version of the data to the outfile. That is, write the first word of each line of the data to the first line of the new file, the second word of each line of the data to the second line of the new file, and so on. 
+\item \li{hyphenate()}: write the data to the outfile in a single line, with \li{"-"} placed between each word and line.
+
+\item \li{uniform()}: write the data to the outfile with uniform case. Include an additional keyword argument, \li{case}, that defaults to \li{'upper'}.
+
+If \li{case='upper'}, write the data in upper case. If \li{case='lower'}, write the data in lower case. If \li{case} is not one of these two values, raise an \li{InvalidOptionError}.
+
+\item \li{reverse()}: write the data to the outfile in reverse order. Include an additional keyword argument \li{unit} that defaults to \li{'line'}.
+
+If \li{unit='word'}, reverse the ordering of the words in each line, but write the lines in the same order as the original file. If \li{unit='line'}, reverse the ordering of the lines, but do not change the ordering of the words on each individual line. If \li{unit} is not one of these two values, raise an \li{InvalidOptionError}.
+
+\item \li{transpose()}: write a ``transposed'' version of the data to the outfile. That is, write the first word of each line of the data to the first line of the new file, the second word of each line of the data to the second line of the new file, and so on.
 \end{enumerate}
 
-As an example, suppose the file \texttt{example.txt} includes the following:
+Also implement the \li{__str__()} magic method so that printing a \li{ContentFilter} object yields the following output:
 \begin{lstlisting}
-a B c D e F g
-H i J k L m N
-o P q R s T u
-V w X y Z
-\end{lstlisting}
-
-Then after executing this code,
-\begin{lstlisting}
->>> example_filter = ContentFilter('example.txt')
->>> example_filter.upper_case('test.txt')
->>> example_filter.lower_case('test.txt', 'a')
->>> example_filter.reverse('test.txt', mode='a', unit='line')
->>> example_filter.transpose('test.txt', 'a')
-\end{lstlisting}
-
-The file \texttt{test.txt} should be:
-\begin{lstlisting}
-A B C D E F G
-H I J K L M N
-O P Q R S T U
-V W X Y Z
-a b c d e f g
-h i j k l m n
-o p q r s t u
-v w x y z
-V w X y Z
-o P q R s T u
-H i J k L m N
-a B c D e F g
-a H o V
-B i P w
-c J q X
-D k R y
-e L s Z
-F m T
-g N u
+<<Source file:              <filename>
+Total characters:         <The total number of characters in the file>
+Alphabetic characters:    <The number of letters>
+Numerical characters:     <The number of digits>
+Whitespace characters:    <The number of spaces, tabs, and newlines>
+Number of lines:          <The number of lines>>>
 \end{lstlisting}
 \end{problem}
 
 % These sections are incomplete. If desired, it needs some serious attention first.
 \begin{comment}
 \section*{Additional / Advanced Material}
-
-% The finally block
 
 \subsection*{The Finally Block}
 Another optional block after a \li{try} block with the header \li{finally}.
@@ -493,7 +536,6 @@ It is \textbf{always} executed, even if there is another exception raised in the
 'input'>>
 \end{lstlisting}
 
-% If this is going in, it needs some serious attention.
 \subsection*{Function Wrappers}
 A \emph{function wrapper} or \emph{decorator} is a function that is meant to ``wrap'' another function by being called on top of the target function.
 That is, if we have a function $f$, wrapped by function $g$, then whenever $f$ is called, we actually are calling $f(g(x))$. % Or is it the other way around?
