@@ -1,7 +1,5 @@
 # solutions.py
-"""Volume I Lab 1: Getting Started
-Written Summer 2015 (Tanner Christensen, Shane McQuarrie)
-"""
+"""Getting Started solutions file."""
 
 # Problem 1: Modify this file so that it prints out "Hello, world!"
 #  when it is run from the terminal or from a Python interpreter.
@@ -143,7 +141,7 @@ from numpy.random import randint
 
 # Test script        
 def test(student_module):
-    """Test script. Import the students file as a module.
+    """Test script. Import the student's solutions file as a module.
     
      5 points for problem 1
      5 points for problem 2
@@ -167,135 +165,97 @@ def test(student_module):
     return tester.score, tester.feedback
 
 class _testDriver(object):
-    """Class for testing a student's work. See test.__doc__ for more info."""
+    """Class for testing a student's work. See test.__doc__ for more info.
 
-    # Constructor
+    This and all other test drivers can be used to grade the entire lab
+    assignment at once via test_all(), or to grade one problem at a time
+    via the different problemX() functions.
+
+    The point distribution is only a suggestion; the instructor may alter
+    the weight of each problem as they see fit.
+    """
+
+    # Constructor -------------------------------------------------------------
     def __init__(self):
+        """Initialize the feedback attribute."""
         self.feedback = ""
 
-    # Main routine
-    def test_all(self, student_module):
+    # Main routine -----------------------------------------------------------
+    def test_all(self, student_module, total=55):
+        """Grade the provided module on each problem and compile feedback."""
+        # Reset feedback and score.
         self.feedback = ""
-        score = 0
+        self.score = 0
 
-        try:    # Problem 1: 5 points
-            self.feedback += "\n\nProblem 1 (5 points):"
-            points = self.problem1(student_module)
-            score += points
-            self.feedback += "\nScore += " + str(points)
-        except BaseException as e:
-            self.feedback += "\nError: " + e.message
-        
-        try:    # Problem 2: 5 points
-            self.feedback += "\n\nProblem 2 (5 points):"
-            points = self.problem2(student_module)
-            score += points
-            self.feedback += "\nScore += " + str(points)
-        except BaseException as e:
-            self.feedback += "\nError: " + e.message
+        def test_one(problem, number, value):
+            """Test a single problem, checking for errors."""
+            try:
+                self.feedback += "\n\nProblem %d (%d points):"%(number, value)
+                points = problem(student_module)
+                self.score += points
+                self.feedback += "\nScore += %d"%points
+            except BaseException as e:
+                self.feedback += "\nError: %s"%e
 
-        try:    # Problem 3: 10 points
-            self.feedback += "\n\nProblem 3 (10 points):"
-            points = self.problem3(student_module)
-            score += points
-            self.feedback += "\nScore += " + str(points)
-        except BaseException as e:
-            self.feedback += "\nError: " + e.message
-
-        try:    # Problem 4: 5 points
-            self.feedback += "\n\nProblem 4 (5 points):"
-            points = self.problem4(student_module)
-            score += points
-            self.feedback += "\nScore += " + str(points)
-        except BaseException as e:
-            self.feedback += "\nError: " + e.message
-
-        try:    # Problem 5: 5 points
-            self.feedback += "\n\nProblem 5 (5 points):"
-            points = self.problem5(student_module)
-            score += points
-            self.feedback += "\nScore += " + str(points)
-        except BaseException as e:
-            self.feedback += "\nError: " + e.message
-
-        try:    # Problem 6: 5 points
-            self.feedback += "\n\nProblem 6 (5 points):"
-            points = self.problem6(student_module)
-            score += points
-            self.feedback += "\nScore += " + str(points)
-        except BaseException as e:
-            self.feedback += "\nError: " + e.message
-
-        try:    # Problem 7: 5 points
-            self.feedback += "\n\nProblem 7 (5 points):"
-            points = self.problem7(student_module)
-            score += points
-            self.feedback += "\nScore += " + str(points)
-        except BaseException as e:
-            self.feedback += "\nError: " + e.message
-
-        try:    # Problem 8: 5 points
-            self.feedback += "\n\nProblem 8 (5 points):"
-            points = self.problem8(student_module)
-            score += points
-            self.feedback += "\nScore += " + str(points)
-        except BaseException as e:
-            self.feedback += "\nError: " + e.message
-
-        try:    # Problem 9: 5 points
-            self.feedback += "\n\nProblem 9 (10 points):"
-            points = self.problem9(student_module)
-            score += points
-            self.feedback += "\nScore += " + str(points)
-        except BaseException as e:
-            self.feedback += "\nError: " + e.message
+        # Grade each problem.
+        test_one(self.problem1, 1, 5)   # Problem 1:  5 points.
+        test_one(self.problem2, 2, 5)   # Problem 2:  5 points.
+        test_one(self.problem3, 3, 10)  # Problem 3: 10 points.
+        test_one(self.problem4, 4, 5)   # Problem 4:  5 points.
+        test_one(self.problem5, 5, 5)   # Problem 5:  5 points.
+        test_one(self.problem6, 6, 5)   # Problem 6:  5 points.
+        test_one(self.problem7, 7, 5)   # Problem 7:  5 points.
+        test_one(self.problem8, 8, 5)   # Problem 8:  5 points.
+        test_one(self.problem9, 9, 10)  # Problem 9: 10 points.
 
         # Report final score.
-        total = 55
-        percentage = (100.0 * score) / total
-        self.feedback += "\n\nTotal score: " + str(score) + "/"
-        self.feedback += str(total) + " = " + str(percentage) + "%"
-        if   percentage >=  98.0: self.feedback += "\n\nExcellent!"
-        elif percentage >=  90.0: self.feedback += "\n\nGreat job!"
+        percentage = (100. * self.score) / total
+        self.feedback += "\n\nTotal score: %d/%d = %s%%"%(
+                                    self.score, total, percentage)
+        if   percentage >=  98: self.feedback += "\n\nExcellent!"
+        elif percentage >=  90: self.feedback += "\n\nGreat job!"
 
         # Add comments (optionally).
-        print self.feedback
+        print(self.feedback)
         comments = str(raw_input("Comments: "))
         if len(comments) > 0:
-            self.feedback += '\n\n\nComments:\n\t' + comments
-        self.score = score
+            self.feedback += '\n\n\nComments:\n\t%s'%comments
 
-    # Helper functions
-    def strTest(self, correct, student, message):
-        """Test to see if correct and student have the same
-        string representation.
+    # Helper Functions --------------------------------------------------------
+    def eqTest(self, correct, student, message):
+        """Test to see if 'correct' and 'student' are equal.
+        Report the given 'message' if they are not.
         """
-        if str(correct) == str(student):
+        if correct == student:
             return 1
         else:
             self.feedback += message
-            self.feedback += "\nCorrect response:\n" + str(correct)
-            self.feedback += "\nStudent response:\n" + str(student)
+            self.feedback += "\nCorrect response:\n%s"%correct
+            self.feedback += "\nStudent response:\n%s"%student
             return 0
 
-    def grade(self, points, message):
-        """Manually grade a problem out of 'points' with error message 'm'.
-        The points earned are returned.
-        """
+    def grade(self, points, message=None):
+        """Manually grade a problem worth 'points'. Return the score."""
         credit = -1
         while credit > points or credit < 0:
             try:
-                credit = int(input("\nScore out of " + str(points) + ": "))
+                credit = int(input("\nScore out of %d: "%points))
             except:
                 credit = -1
         if credit != points:
-            self.feedback += message
+            # Comment on what was lacking (optionally).
+            comments = raw_input("Comments: ")
+            if len(comments) > 0:
+                self.feedback += "\n\t%s"%comments
+            elif message is not None:
+                self.feedback += message
         return credit
 
-    # Problems
+    # Problems ----------------------------------------------------------------
     def problem1(self, s):
         """Test Hello, world! printout. 5 points."""
 
+        print("Testing 'Hello, world!' printout:")
         system("python " + s.__file__)
         return self.grade(5, "\n\t'Hello, world!' failed to print.")
 
@@ -303,9 +263,9 @@ class _testDriver(object):
         """Test sphere_volume(). 5 Points."""
         if s.sphere_volume(1) is None:
             raise NotImplementedError("Problem 2 incomplete.")
-        points  = 2*self.strTest(sphere_volume(5), s.sphere_volume(5),
+        points  = 2*self.eqTest(sphere_volume(5), s.sphere_volume(5),
                                             "\n\tsphere_volume(5) failed")
-        points += 3*self.strTest(sphere_volume(3.14), s.sphere_volume(3.14),
+        points += 3*self.eqTest(sphere_volume(3.14), s.sphere_volume(3.14),
                                             "\n\tsphere_volume(3.14) failed")
         return points
 
@@ -313,13 +273,13 @@ class _testDriver(object):
         """Test first_half() and backward(). 10 points."""
         if s.first_half("abcde") is None:
             raise NotImplementedError("Problem 3 incomplete.")
-        points  = 2*self.strTest(first_half("abcde"), s.first_half("abcde"),
+        points  = 2*self.eqTest(first_half("abcde"), s.first_half("abcde"),
                                             "\n\tfirst_half('abcde') failed")
-        points += 3*self.strTest(first_half("TK421"), s.first_half("TK421"),
+        points += 3*self.eqTest(first_half("TK421"), s.first_half("TK421"),
                                             "\n\tfirst_half('TK421') failed")
-        points += 2*self.strTest(backward("abcde"), s.backward("abcde"),
+        points += 2*self.eqTest(backward("abcde"), s.backward("abcde"),
                                             "\n\tfirst_half('abcde') failed")
-        points += 3*self.strTest(backward("TK421"), s.backward("TK421"),
+        points += 3*self.eqTest(backward("TK421"), s.backward("TK421"),
                                             "\n\tfirst_half('TK421') failed")
         return points
 
@@ -327,10 +287,10 @@ class _testDriver(object):
         """Test list_ops(). 5 points."""
         if s.list_ops(["ant", "bear", "cat", "dog"]) is None:
             raise NotImplementedError("Problem 4 incomplete.")
-        points = 2*self.strTest(  list_ops(["ant", "bear", "cat", "dog"]),
+        points = 2*self.eqTest(  list_ops(["ant", "bear", "cat", "dog"]),
                                 s.list_ops(["ant", "bear", "cat", "dog"]),
                         '\n\tlist_ops(["ant", "bear", "cat", "dog"]) failed')
-        points +=3*self.strTest(list_ops(["ant", "beaver", "cobra", "dragon"]),
+        points +=3*self.eqTest(list_ops(["ant", "beaver", "cobra", "dragon"]),
                             s.list_ops(["ant", "beaver", "cobra", "dragon"]),
                 '\n\tlist_ops(["ant", "beaver", "cobra", "dragon"]) failed')
         return points
@@ -339,10 +299,10 @@ class _testDriver(object):
         """Test pig_latin(). 5 points."""
         if s.pig_latin("piglatin") is None:
             raise NotImplementedError("Problem 5 incomplete.")
-        points = 2*self.strTest(  pig_latin("college"),
+        points = 2*self.eqTest(  pig_latin("college"),
                                 s.pig_latin("college"),
                                             "\n\tpig_latin('college') failed")
-        points += 3*self.strTest(  pig_latin("university"),
+        points += 3*self.eqTest(  pig_latin("university"),
                                  s.pig_latin("university"),
                                         "\n\tpig_latin('university') failed")
         return points
@@ -351,10 +311,10 @@ class _testDriver(object):
         """Test int_to_string(). 5 points.""" 
         if s.int_to_string([1]) is None:
             raise NotImplementedError("Problem 6 incomplete.")
-        points = 2*self.strTest(int_to_string([1, 2, 3]),
+        points = 2*self.eqTest(int_to_string([1, 2, 3]),
                                 s.int_to_string([1, 2, 3]),
                                     "\n\tint_to_string([1, 2, 3]) failed")
-        points += 3*self.strTest(
+        points += 3*self.eqTest(
                         int_to_string([24, 25, 12, 15, 16, 8, 15, 14, 5]),
                         s.int_to_string([24, 25, 12, 15, 16, 8, 15, 14, 5]),
             "\n\tint_to_string([24, 25, 12, 15, 16, 8, 15, 14, 5]) failed")
@@ -370,24 +330,24 @@ class _testDriver(object):
             if i is None:
                 raise NotImplementedError("Problem 7 incomplete.")
             student.append(i)
-        return 5*self.strTest(correct, student, "\n\tsquares(50) failed")
+        return 5*self.eqTest(correct, student, "\n\tsquares(50) failed")
 
     def problem8(self, s):
         """Test stringify(). 5 points."""
         if s.stringify([1]) is None:
             raise NotImplementedError("Problem 8 incomplete.")
-        points = 2*self.strTest(stringify([1, 2, 3]), s.stringify([1, 2, 3]),
+        points = 2*self.eqTest(stringify([1, 2, 3]), s.stringify([1, 2, 3]),
                                             "\n\tstringify([1, 2, 3]) failed")
 
         rand_list = ['start'] + list(randint(1,10,10)) + ['end']
-        points += 3*self.strTest(stringify(rand_list), s.stringify(rand_list),
+        points += 3*self.eqTest(stringify(rand_list), s.stringify(rand_list),
                             "\n\tstringify(" + str(rand_list) + ") failed")
         return points
 
     def problem9(self, s):
         """Test alt_harmonic(). 10 points."""
-        points = 4*self.strTest(alt_harmonic(100), s.alt_harmonic(100),
+        points = 4*self.eqTest(alt_harmonic(100), s.alt_harmonic(100),
                                             "\n\talt_harmonic(100) failed")
-        points += 6*self.strTest(alt_harmonic(5000), s.alt_harmonic(5000),
+        points += 6*self.eqTest(alt_harmonic(5000), s.alt_harmonic(5000),
                                             "\n\talt_harmonic(5000) failed")
         return points
