@@ -1,12 +1,15 @@
+# solutions.py
+"""MatPlotLib solutions file."""
+
 from matplotlib import pyplot as plt
 from mayavi import mlab
 import numpy as np
 
 # Problem 1
 def curve():
-    """Plot the curve 1/(x-1) on [-2,6]. Plot the two sides of the curve separately
-    (still with a single call to plt.plot()) so that the graph looks discontinuous 
-    at x = 1.
+    """Plot the curve 1/(x-1) on [-2,6]. Plot the two sides of the
+    curve separately (still with a single call to plt.plot()) so that
+    the graph looks discontinuous at x = 1.
     """
     x1 = np.linspace(-2,.999,100)
     y1 = 1./(x1-1)
@@ -16,10 +19,11 @@ def curve():
     plt.axis([-2,6,-6,6])
     plt.show()
 
+
 # Problem 2
 def colormesh():
-    """Plot the function f(x,y) = sin(x)sin(y)/(xy) on [-2*pi, 2*pi]x[-2*pi, 2*pi].
-    Include the scale bar in your plot. 
+    """Plot the function f(x,y) = sin(x)sin(y)/(xy) on the domain
+    [-2*pi, 2*pi]x[-2*pi, 2*pi]. Include the scale bar in your plot. 
     """
     x = np.linspace(-2*np.pi,2*np.pi,300)
     y = np.linspace(-2*np.pi,2*np.pi,300)
@@ -31,10 +35,11 @@ def colormesh():
     plt.gca().set_aspect('equal')
     plt.show()
 
+
 # Problem 3
 def histogram():
-    """Plot a histogram and a scatter plot of 50 random numbers chosen in the
-    interval [0,1)
+    """Plot a histogram and a scatter plot of 50 random numbers chosen
+    in the interval [0,1)
     """
     y = np.random.rand(50)
     plt.subplot(1,2,1)
@@ -47,6 +52,7 @@ def histogram():
     z = np.ones(len(x))*z
     plt.plot(x,z,color='r')
     plt.show()
+
     
 # Problem 4
 def ripple():
@@ -56,151 +62,167 @@ def ripple():
     mlab.surf(X,Y,Z)
     mlab.show()
     
-# ============= END OF SOLUTIONS =================== #
+# END OF SOLUTIONS ============================================================
+
 import inspect
-import os
 
 # Test script
-def test(student_module, late=False):
-
-
-    """Test script. You must import the students file as a module.
+def test(student_module):
+    """Test script. Import the student's solutions file as a module.
     
     10 points for problem 1
     10 points for problem 2
     10 points for problem 3
     10 points for problem 4
     
-    Parameters:
+    Inputs:
         student_module: the imported module for the student's file.
-        late (bool, opt): if True, half credit is awarded.
     
     Returns:
-        score (int): the student's score, out of 20
+        score (int): the student's score, out of 40.
         feedback (str): a printout of test results for the student.
     """
+    tester = _testDriver()
+    tester.test_all(student_module)
+    return tester.score, tester.feedback
 
-    s = student_module
-    sFile = s.__file__    
-    if os.system('ls ' + sFile):
-        return
+def _autoclose(func):
+    """decorator for closing figures automatically during grading."""
+    def wrapper(*args, **kwargs):
+        plt.close('all')
+        result = func(*args, **kwargs)
+        plt.close('all')
+        return result
+    return wrapper
 
-    score = 0
-    total = 40
-    feedback = ""
+class _testDriver(object):
+    """Class for testing a student's work. See test.__doc__ for more info."""
 
-    def strTest(x,y,m):
-        """Test to see if x and y have the same string representation. If
-        correct, award a points and return no message. If incorrect, return
-        0 and return 'm' as feedback.
-        """
-        if str(x) == str(y): return 1, ""
-        else:
-            m += "\n\t\tCorrect response: " + str(x)
-            m += "\n\t\tStudent response: " + str(y)
-            return 0, m
-    
-    def grade(p,m):
-        """Manually grade a problem worth 'p' points with error message 'm'."""
-        part = -1
-        while part > p or part < 0:
-            part = int(input("\nScore out of " + str(p) + ": "))
-        if part == p: return p,""
-        else: return part,m
-    
-    try:    # Problem 1: 10 points
-        feedback += "\n\nProblem 1 (10 points):"
+    # Constructor -------------------------------------------------------------
+    def __init__(self):
+        """Initialize the feedback attribute."""
+        self.feedback = ""
+
+    # Main routine -----------------------------------------------------------
+    def test_all(self, student_module, total=40):
+        """Grade the provided module on each problem and compile feedback."""
+        # Reset feedback and score.
+        self.feedback = ""
+        self.score = 0
+
+        def test_one(problem, number, value):
+            """Test a single problem, checking for errors."""
+            try:
+                self.feedback += "\n\nProblem %d (%d points):"%(number, value)
+                points = problem(student_module)
+                self.score += points
+                self.feedback += "\nScore += %d"%points
+            except BaseException as e:
+                self.feedback += "\nError: %s"%e
+
+        # Grade each problem.
+        test_one(self.problem1, 1, 10)   # Problem 1: 10 points.
+        test_one(self.problem2, 2, 10)   # Problem 2: 10 points.
+        test_one(self.problem3, 3, 10)   # Problem 2: 10 points.
+        test_one(self.problem4, 4, 10)   # Problem 2: 10 points.
+
+        # Report final score.
+        percentage = (100. * self.score) / total
+        self.feedback += "\n\nTotal score: %d/%d = %s%%"%(
+                                    self.score, total, percentage)
+        if   percentage >=  98: self.feedback += "\n\nExcellent!"
+        elif percentage >=  90: self.feedback += "\n\nGreat job!"
+
+        # Add comments (optionally).
+        print(self.feedback)
+        comments = str(raw_input("Comments: "))
+        if len(comments) > 0:
+            self.feedback += '\n\n\nComments:\n\t%s'%comments
+
+    # Helper Function ---------------------------------------------------------
+    def grade(self, points, message=None):
+        """Manually grade a problem worth 'points'. Return the score."""
+        credit = -1
+        while credit > points or credit < 0:
+            try:
+                credit = int(input("Score out of %d: "%points))
+            except:
+                credit = -1
+        if credit != points:
+            # Add comments (optionally),
+            comments = raw_input("Comments: ")
+            if len(comments) > 0:
+                self.feedback += "\n\t%s"%comments
+            # Or add a predetermined error message.
+            elif message is not None:
+                self.feedback += message
+        return credit
+
+    # Problems ----------------------------------------------------------------
+    @_autoclose
+    def problem1(self, s):
+        """Test curve(). 10 points."""
         points = 0
 
-        # check that they only used 1 plot command.
-        lines = inspect.getsourcelines(s.curve)[0]
-        print "\nOnly use plt.plot() once. \nStudent Code:"
-        for i in lines:
-            print i[:-1]
-        p,f = grade(5, "Only call plt.plot() once.")
-        points += p; feedback += f
+        # Check that they only used 1 plot command.
+        doclength = len(s.curve.__doc__.split('\n'))
+        lines = inspect.getsourcelines(s.curve)[0][doclength:]
+        print(lines)
+        count = sum([line.count('plot') for line in lines])
+        print("COUNT: %d"%count)
+        if count == 1:
+            points += 3
+        elif count > 1:
+            print("\Ensure that plt.plot() is only used once. \nStudent Code:")
+            for i in lines:
+                print i[:-1]
+            points += self.grade(3, "Only call plt.plot() once.")
         
-        # check the plot output.
-        print """
-        Specifications:
+        # Check the plot output.
+        print("""\nSpecifications:
         - Discontinuous
         - think, magenta, dotted line
-        - window should be [-2,6]x[-6,6]
-        """
+        - window should be [-2,6]x[-6,6]""")
         plt.ion()   # turn on interactive plotting
         s.curve()
-        p,f = grade(5, "Plot does not match specifications")
-        points += p; feedback += f
+        points += self.grade(7, "curve() plot does not match specifications")
+        return points
 
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
+    @_autoclose
+    def problem2(self, s):
+        """Test colormesh(). 10 points."""
 
-    try:    # Problem 2: 10 points
-        feedback += "\n\nProblem 2 (10 points):"
-        points = 0
-        
-        plt.close('all')
         s.colormesh()
-        print "\nOverall appearance."
-        p,f = grade(8, "Plot does not match specifications")
-        points += p; feedback += f
-        print "\nNot pixelated."
-        p,f = grade(2, "adjust plot so it is not pixelated.")
-        points += p; feedback += f
+        print("\nOverall appearance\t"),
+        points  = self.grade(8, "\n\tPlot does not match specifications")
         
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
-        
-    try:    # Problem 3: 10 points
-        feedback += "\n\nProblem 3 (10 points):"
-        points = 0
-        
-        plt.close('all')
+        print("Not pixelated\t\t"),
+        points += self.grade(2, "\n\tPlot should not be so pixelated")
+        return points
+
+    @_autoclose
+    def problem3(self, s):
+        """Test histogram(). 10 points."""
+
         s.histogram()
-        # histogram
-        print "\nHistogram with 5 bins"
-        p,f = grade(4, "Histogram does not match specifications")
-        points += p; feedback += f
+        print("\nHistogram with 5 bins\t"),
+        points  = self.grade(4, "\n\tHistogram does not match specifications")
         
-        # scatterplot
-        print "\nScatter plot"
-        p,f = grade(4, "Scatter plot does not match specifications.")
-        points += p; feedback += f
+        print("Scatter plot\t\t"),
+        points += self.grade(4,
+                        "\n\tScatter plot does not match specifications.")
         
-        # average
-        print "\nAverage"
-        p,f = grade(2, "Average not displayed on scatter plot correctly.")
-        points += p; feedback += f
-        plt.close('all')
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
-        
-    try:    # Problem 4: 10 points
-        feedback += "\n\nProblem 4 (10 points):"
-        points = 0
-        
+        print("Average line\t\t"),
+        points += self.grade(2,
+                    "\n\tAverage not displayed on scatter plot correctly.")
+        return points
+
+    @_autoclose
+    def problem4(self, s):
+        """Test ripple(). 10 points."""
         s.ripple()
-        p,f = grade(10, "Ripple plot does not match specifications.")
-        points += p; feedback += f
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
-    
-    # Late submission penalty
-    if late:
-        feedback += "\n\nHalf credit for late submission."
-        feedback += "\nRaw score: " + str(score) + "/" + str(total)
-        score *= .5
-    
-    # Report final score
-    feedback += "\n\nTotal score: " + str(score) + "/" + str(total)
-    percentage = (100.0 * score) / total
-    feedback += " = " + str(percentage) + "%"
-    if   percentage >= 100.0: feedback += "\n\nExcellent!"
-    elif percentage >=  90.0: feedback += "\n\nGreat job!"
-    feedback += "\n\n-------------------------------------------------------\n"
-    return score, feedback
+        return self.grade(10,
+                        "\n\tripple() plot does not match specifications.")
+
 
 # ============================== END OF FILE ================================ #
-
