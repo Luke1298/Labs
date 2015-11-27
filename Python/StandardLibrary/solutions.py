@@ -1,7 +1,5 @@
 # solutions.py
-"""Volume II Lab 1: The Standard Library
-Solutions file. Written by Shane McQuarrie, Summer 2015.
-"""
+"""The Standard Library solutions file."""
 
 # In several labs, students will submit multiple files.
 # Every solutions file contains all of the code that students will write,
@@ -18,9 +16,7 @@ def mult(x,y):
 
 def sqrt(x):
     return x**.5
-    # or, import math at the top and return math.sqrt(x)
-
-# Or "sqrt = math.sqrt"
+    # or, from math import sqrt at the top.
 
 # matrix_multiply.py ======================================================== #
 # This module is provided to students and used to complete problem 4.
@@ -58,6 +54,7 @@ def method2(A,B):
     
     return product_matrix
 
+
 def method3(A,B):
     """Use numpy's matrix multiplication method for maximum speed."""
     
@@ -66,7 +63,10 @@ def method3(A,B):
 
 # solutions.py ============================================================== #
 # The students are provided a specifications file called 'spec.py' with the
-# following functions. They are to rename the file 'solutions.py'.
+# following functions. They are to rename the file as the instructor specifies.
+
+import sys
+import time
 
 # Problem 1: Implement this function.
 def prob1(l):
@@ -135,7 +135,7 @@ def prob2():
         print("Immutable")
 
 
-# Problem 3: Create a 'calculator' module and use it to implement this function.
+# Problem 3: Write a 'calculator' module and use it to implement this function.
 def prob3(a,b):
     """Calculate and return the length of the hypotenuse of a right triangle.
     Do not use any methods other than those that are imported from the
@@ -197,124 +197,148 @@ if __name__ == "__main__":
 # ============================ END OF SOLUTIONS ============================= #
 
 import os
+from numpy.random import randint
 
 # Test script
-def test(student_module, late=False):
-    """Test script. You must import the students file as a module.
+def test(student_module):
+    """Test script. Import the student's solutions file as a module.
     
     3 points for problem 1
     5 points for problem 2
-    5 points for problem 3
-    7 points for problem 4
+    5 points for problem 2
+    7 points for problem 2
     
-    Parameters:
+    Inputs:
         student_module: the imported module for the student's file.
-        late (bool, opt): if True, half credit is awarded.
     
     Returns:
-        score (int): the student's score, out of 20
+        score (int): the student's score, out of 'total'.
         feedback (str): a printout of test results for the student.
     """
+    tester = _testDriver()
+    tester.test_all(student_module)
+    return tester.score, tester.feedback
 
-    s = student_module
-    sFile = s.__file__    
-    if os.system('ls ' + sFile):
-        return
+class _testDriver(object):
+    """Class for testing a student's work. See test.__doc__ for more info."""
 
-    score = 0
-    total = 20
-    feedback = ""
+    # Constructor -------------------------------------------------------------
+    def __init__(self):
+        """Initialize the feedback attribute."""
+        self.feedback = ""
 
-    def strTest(x,y,m):
-        """Test to see if x and y have the same string representation. If
-        correct, award a points and return no message. If incorrect, return
-        0 and return 'm' as feedback.
+    # Main routine -----------------------------------------------------------
+    def test_all(self, student_module, total=20):
+        """Grade the provided module on each problem and compile feedback."""
+        # Reset feedback and score.
+        self.feedback = ""
+        self.score = 0
+
+        def test_one(problem, number, value):
+            """Test a single problem, checking for errors."""
+            try:
+                self.feedback += "\n\nProblem %d (%d points):"%(number, value)
+                points = problem(student_module)
+                self.score += points
+                self.feedback += "\nScore += %d"%points
+            except BaseException as e:
+                self.feedback += "\nError: %s"%e
+
+        # Grade each problem.
+        test_one(self.problem1, 1, 3)   # Problem 1: 3 points.
+        test_one(self.problem2, 2, 5)   # Problem 2: 5 points.
+        test_one(self.problem3, 3, 5)   # Problem 2: 5 points.
+        test_one(self.problem4, 4, 7)   # Problem 2: 7 points.
+
+        # Report final score.
+        percentage = (100. * self.score) / total
+        self.feedback += "\n\nTotal score: %d/%d = %s%%"%(
+                                    self.score, total, percentage)
+        if   percentage >=  98: self.feedback += "\n\nExcellent!"
+        elif percentage >=  90: self.feedback += "\n\nGreat job!"
+
+        # Add comments (optionally).
+        print(self.feedback)
+        comments = str(raw_input("Comments: "))
+        if len(comments) > 0:
+            self.feedback += '\n\n\nComments:\n\t%s'%comments
+
+    # Helper Functions --------------------------------------------------------
+    def eqTest(self, correct, student, message):
+        """Test to see if 'correct' and 'student' are close to each other.
+        Report the given 'message' if they are not.
         """
-        if str(x) == str(y): return 1, ""
+        if abs(correct - student) < 1e-12:
+            return 1
         else:
-            m += "\n\t\tCorrect response: " + str(x)
-            m += "\n\t\tStudent response: " + str(y)
-            return 0, m
-    
-    def grade(p,m):
-        """Manually grade a problem worth 'p' points with error message 'm'."""
-        part = -1
-        while part > p or part < 0:
-            part = int(input("\nScore out of " + str(p) + ": "))
-        if part == p: return p,""
-        else: return part,m
-    
-    try:    # Problem 1: 3 points
-        feedback += "\n\nProblem 1 (3 points):"
-        points = 0
-        l = [192102312,-234892,9423,1220002,82,3432,23892,100000,-123812]
-        ans =   prob1(l)
-        std = s.prob1(l)
-        if not std: raise NotImplementedError("Problem 1 incomplete")
-        p,f = strTest(ans[0], std[0], "\n\tincorrect maximum")
-        points += p; feedback += f
-        p,f = strTest(ans[1], std[1], "\n\tincorrect minimum")
-        points += p; feedback += f
-        p,f = strTest(ans[2], std[2], "\n\tincorrect average")
-        points += p; feedback += f
+            self.feedback += message
+            self.feedback += "\nCorrect response:\n%s"%correct
+            self.feedback += "\nStudent response:\n%s"%student
+            return 0
 
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
+    def grade(self, points, message=None):
+        """Manually grade a problem worth 'points'. Return the score."""
+        credit = -1
+        while credit > points or credit < 0:
+            try:
+                credit = int(input("\nScore out of %d: "%points))
+            except:
+                credit = -1
+        if credit != points:
+            # Add comments (optionally),
+            comments = raw_input("Comments: ")
+            if len(comments) > 0:
+                self.feedback += "\n\t%s"%comments
+            # Or add a predetermined error message.
+            elif message is not None:
+                self.feedback += message
+        return credit
 
-    try:    # Problem 2: 5 points
-        feedback += "\n\nProblem 2 (5 points):"
-        points = 0
+    # Problems ----------------------------------------------------------------
+    def problem1(self, s):
+        """Test prob1() (built-in functions). 3 points."""
+
+        l = list(randint(-50,50,10))
+        correct, response = prob1(l), s.prob1(l)
+        if response is None:
+            raise NotImplementedError("Problem 1 Incomplete.")
+
+        points  = self.eqTest(correct[0], response[0], "\n\tIncorrect maximum")
+        points += self.eqTest(correct[1], response[1], "\n\tIncorrect minimum")
+        points += self.eqTest(correct[2], response[2], "\n\tIncorrect average")
+
+        return points
+
+    def problem2(self, s):
+        """Test prob2() (mutable vs. immutable objects). 5 points."""
+
         print"\nCorrect output:";   prob2()
         print"\nStudent output:"; s.prob2()
-        p,f = grade(5, "\n\tincorrect response(s)"
-            + "\n\t\t(Hint: 3 are immutable and 2 are mutable)")
-        points += p; feedback += f
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
-        
-    try:    # Problem 3: 5 points
-        feedback += "\n\nProblem 3 (5 points):"
-        points = 0
-        p,f = strTest(s.prob3(5,12), prob3(5,12),
-                                "\n\tincorrect hypotenuse length")
-        points += (p * 2); feedback += f
-        p,f = strTest(s.prob3(6,7), prob3(6,7),
-                                "\n\tincorrect hypotenuse length")
-        points += (p * 3); feedback += f
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
-        
-    try:    # Problem 4: 7 points
-        feedback += "\n\nProblem 4 (7 points):"
-        points = 0
-        print("\nCorrect output:")
+        return self.grade(5, "\n\tIncorrect response(s)"
+                     "\n\t(Hint: 3 are immutable and 2 are mutable).")
+
+    def problem3(self, s):
+        """Test prob3() (make and use the calculator module). 5 points."""
+
+        points  = 2*self.eqTest(prob3(5,12), s.prob3(5,12),
+                                "\n\tIncorrect hypotenuse length")
+        a, b = randint(1,50,2)
+        points += 3*self.eqTest(prob3(a,b), s.prob3(a,b),
+                                "\n\tIncorrect hypotenuse length")
+        return points
+
+    def problem4(self, s):
+        """Test prob4() (using another module). 7 points."""
+
+        print("Testing Problem 4")
+        print("Correct outputs:")
         os.system("python " + __file__)
         os.system("python " + __file__ + " Wrong Name")
         os.system("python " + __file__ + " matrices.npz")
-        print("\nStudent output:")
-        os.system('python ' + sFile)
-        os.system('python ' + sFile + ' "Wrong Name"')
-        os.system('python ' + sFile + ' "matrices.npz"')
-        p,f = grade(7, "\n\tincorrect outputs")
-        points += p; feedback += f
-        
-        score += points; feedback += "\nScore += " + str(points)
-    except Exception as e: feedback += "\nError: " + e.message
-    
-    # Late submission penalty
-    if late:
-        feedback += "\n\nHalf credit for late submission."
-        feedback += "\nRaw score: " + str(score) + "/" + str(total)
-        score *= .5
-    
-    # Report final score
-    feedback += "\n\nTotal score: " + str(score) + "/" + str(total)
-    percentage = (100.0 * score) / total
-    feedback += " = " + str(percentage) + "%"
-    if   percentage >= 100.0: feedback += "\n\nExcellent!"
-    elif percentage >=  90.0: feedback += "\n\nGreat job!"
-    return score, feedback
+        print("\nStudent outputs:")
+        os.system('python ' + s.__file__)
+        os.system('python ' + s.__file__ + ' "Wrong Name"')
+        os.system('python ' + s.__file__ + ' "matrices.npz"')
+        return self.grade(7, "\n\tIncorrect outputs")
 
 # ============================== END OF FILE ================================ #
