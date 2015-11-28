@@ -517,10 +517,7 @@ class _testDriver(object):
         print("\nTest Backpack.__str__() on a Backpack with no contents.")
         print("\nCorrect output:"); print(b1)
         print("\nStudent output:"); print(b2)
-        p = self._grade(4, "Incorrect Backpack.__str__() output")
-        if p < 4:
-            self.feedback += "\nBackpack.__str__():\n%s\n"%b2
-        points += p
+        points += self._grade(4, "Incorrect Backpack.__str__():\n\n%s\n\n"%b2)
         
         # Test Backpack.__str__() on a Backpack with contents (4 points).
         b1 =   Backpack("Master Yoda", "tan", 7)
@@ -530,10 +527,7 @@ class _testDriver(object):
         print("\nTest Backpack.__str__() on a Backpack with some contents.")
         print("\nCorrect output:"); print(b1)
         print("\nStudent output:"); print(b2)
-        p = self._grade(4, "Incorrect Backpack.__str__() output")
-        if p < 4:
-            self.feedback += "\nBackpack.__str__()):\n%s\n"%b2
-        points += p
+        points += self._grade(4, "Incorrect Backpack.__str__():\n\n%s\n\n"%b2)
 
         return points
 
