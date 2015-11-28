@@ -110,6 +110,16 @@ def test(student_module):
     tester.test_all(student_module)
     return tester.score, tester.feedback
 
+def _autoclose(func):
+    """function decorator for closing figures automatically."""
+    def wrapper(*args, **kwargs):
+        plt.ion()
+        plt.close('all')
+        result = func(*args, **kwargs)
+        plt.close('all')
+        return result
+    return wrapper
+
 class _testDriver(object):
     """Class for testing a student's work. See test.__doc__ for more info."""
 
@@ -133,7 +143,7 @@ class _testDriver(object):
                 self.score += points
                 self.feedback += "\nScore += %d"%points
             except BaseException as e:
-                self.feedback += "\nError: %s"%e
+                self.feedback += "\n%s: %s"%(self._errType(e),e)
 
         # Grade each problem.
         test_one(self.problem1, 1, 5)   # Problem 1:  5 points.
@@ -157,31 +167,39 @@ class _testDriver(object):
             self.feedback += '\n\n\nComments:\n\t%s'%comments
 
     # Helper Functions --------------------------------------------------------
-    def arrTest(self, correct, student, message):
+    @staticmethod
+    def _errType(error):
+        """Get just the name of the exception 'error' in string format."""
+        if isinstance(error, BaseException):
+            return str(type(error)).lstrip("<type 'exceptions.").rstrip("'>")
+        else:
+            return str(error)
+
+    def _arrTest(self, correct, student, message):
         """Test to see if the arrays 'correct' and 'student' are equal.
         Report the given 'message' if they are not.
         """
         if np.allclose(correct, student):
             return 1
         else:
-            self.feedback += message
+            self.feedback += "\n\t%s"%message
             self.feedback += "\nCorrect response:\narray(%s)"%correct
             self.feedback += "\nStudent response:\narray(%s)"%student
             return 0
 
-    def eqTest(self, correct, student, message, tol):
+    def _eqTest(self, correct, student, message, tol):
         """Test to see if 'correct' and 'student' are within a tolerance of
         each other. Report the given 'message' if they are not.
         """
         if abs(correct - student) < tol:
             return 1
         else:
-            self.feedback += message
-            self.feedback += "\nCorrect response: %s"%correct
-            self.feedback += "\nStudent response: %s"%student
+            self.feedback += "\n%s"%message
+            self.feedback += "\n\tCorrect response: %s"%correct
+            self.feedback += "\n\tStudent response: %s"%student
             return 0
 
-    def grade(self, points, message=None):
+    def _grade(self, points, message=None):
         """Manually grade a problem worth 'points'. Return the score."""
         credit = -1
         while credit > points or credit < 0:
@@ -196,46 +214,61 @@ class _testDriver(object):
                 self.feedback += "\n\t%s"%comments
             # Or add a predetermined error message.
             elif message is not None:
-                self.feedback += message
+                self.feedback += "\n\t%s"%message
         return credit
 
     # Problems ----------------------------------------------------------------
     def problem1(self, s):
-        """Test Problem 1. 5 points."""
-        return 5*self.arrTest(product, s.product, "\n\tIncorrect product.")
+        """Test 'product'. 5 points."""
+        if not hasattr(s, "product"):
+            raise NotImplementedError("Problem 1 Incomplete")
+        return 5*self._arrTest(product, s.product, "Incorrect product.")
 
     def problem2(self, s):
         """Test nonnegative(). 5 points."""
+        if not hasattr(s, "nonnegative"):
+            raise NotImplementedError("Problem 2 Incomplete")
 
         first = np.array([-3,-1,3])
-        points = 2*self.arrTest(nonnegative(first.copy()),
+        points = 2*self._arrTest(nonnegative(first.copy()),
                                 s.nonnegative(first.copy()),
-                                "\n\tnonnegative(array(%s)) failed"%first)
+                                "nonnegative(array(%s)) failed"%first)
         
         second = randint(-50,50,10)
-        points += 3*self.arrTest(nonnegative(second.copy()),
+        points += 3*self._arrTest(nonnegative(second.copy()),
                                 s.nonnegative(second.copy()), 
-                                "\n\tnonnegative(array(%s)) failed"%second)
+                                "nonnegative(array(%s)) failed"%second)
         return points
 
     def problem3(self, s):
         """Test normal_var(). 10 points."""
-        points  = 4*self.eqTest(normal_var(100), s.normal_var(100),
-                             "\n\tnormal_var(100) failed", tol=.01)
-        points += 6*self.eqTest(normal_var(1000), s.normal_var(1000),
-                             "\n\tnormal_var(1000) failed", tol=.0005)
+        if not hasattr(s, "normal_var"):
+            raise NotImplementedError("Problem 3 Incomplete")
+
+        points  = 4*self._eqTest(normal_var(100), s.normal_var(100),
+                                    "normal_var(100) failed", tol=.01)
+        points += 6*self._eqTest(normal_var(1000), s.normal_var(1000),
+                                    "normal_var(1000) failed", tol=.0005)
         return points
 
+    @_autoclose
     def problem4(self, s):
         """Test laplace_plot(). 10 points."""
-        print("Generating laplace plot...")
-        s.laplace_plot()
-        return self.grade(10, "Incorrect plot.")
+        if not hasattr(s, "laplace_plot"):
+            raise NotImplementedError("Problem 4 Incomplete")
 
+        print("\nGenerating laplace plot...")
+        s.laplace_plot()
+        return self._grade(10, "Incorrect plot.")
+
+    @_autoclose
     def problem5(self, s):
         """Test blue_shift_plot(). 10 points."""
-        print("Generating blue shift plot...")
+        if not hasattr(s, "blue_shift_plot"):
+            raise NotImplementedError("Problem 5 Incomplete")
+
+        print("\nGenerating blue shift plot...")
         s.blue_shift_plot()
-        return self.grade(10, "Incorrect plot.")
+        return self._grade(10, "Incorrect plot.")
 
 # END OF FILE =================================================================

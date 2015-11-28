@@ -89,6 +89,7 @@ def test(student_module):
 def _autoclose(func):
     """decorator for closing figures automatically during grading."""
     def wrapper(*args, **kwargs):
+        plt.ion()
         plt.close('all')
         result = func(*args, **kwargs)
         plt.close('all')
@@ -118,7 +119,7 @@ class _testDriver(object):
                 self.score += points
                 self.feedback += "\nScore += %d"%points
             except BaseException as e:
-                self.feedback += "\nError: %s"%e
+                self.feedback += "\n%s: %s"%(self._errType(e),e)
 
         # Grade each problem.
         test_one(self.problem1, 1, 10)   # Problem 1: 10 points.
@@ -140,7 +141,15 @@ class _testDriver(object):
             self.feedback += '\n\n\nComments:\n\t%s'%comments
 
     # Helper Function ---------------------------------------------------------
-    def grade(self, points, message=None):
+    @staticmethod
+    def _errType(error):
+        """Get just the name of the exception 'error' in string format."""
+        if isinstance(error, BaseException):
+            return str(type(error)).lstrip("<type 'exceptions.").rstrip("'>")
+        else:
+            return str(error)
+
+    def _grade(self, points, message=None):
         """Manually grade a problem worth 'points'. Return the score."""
         credit = -1
         while credit > points or credit < 0:
@@ -155,74 +164,79 @@ class _testDriver(object):
                 self.feedback += "\n\t%s"%comments
             # Or add a predetermined error message.
             elif message is not None:
-                self.feedback += message
+                self.feedback += "\n\t%s"%message
         return credit
 
     # Problems ----------------------------------------------------------------
     @_autoclose
     def problem1(self, s):
         """Test curve(). 10 points."""
+        if not hasattr(s, "curve"):
+            raise NotImplementedError("Problem 1 Incomplete")
         points = 0
 
         # Check that they only used 1 plot command.
         doclength = len(s.curve.__doc__.split('\n'))
         lines = inspect.getsourcelines(s.curve)[0][doclength:]
-        print(lines)
         count = sum([line.count('plot') for line in lines])
-        print("COUNT: %d"%count)
         if count == 1:
             points += 3
         elif count > 1:
             print("\Ensure that plt.plot() is only used once. \nStudent Code:")
             for i in lines:
                 print i[:-1]
-            points += self.grade(3, "Only call plt.plot() once.")
+            points += self._grade(3, "Only call plt.plot() once.")
         
         # Check the plot output.
         print("""\nSpecifications:
         - Discontinuous
         - think, magenta, dotted line
         - window should be [-2,6]x[-6,6]""")
-        plt.ion()   # turn on interactive plotting
         s.curve()
-        points += self.grade(7, "curve() plot does not match specifications")
+        points += self._grade(7, "curve() plot does not match specifications")
         return points
 
     @_autoclose
     def problem2(self, s):
         """Test colormesh(). 10 points."""
+        if not hasattr(s, "colormesh"):
+            raise NotImplementedError("Problem 2 Incomplete")
 
         s.colormesh()
         print("\nOverall appearance\t"),
-        points  = self.grade(8, "\n\tPlot does not match specifications")
+        points  = self._grade(8, "Plot does not match specifications")
         
         print("Not pixelated\t\t"),
-        points += self.grade(2, "\n\tPlot should not be so pixelated")
+        points += self._grade(2, "Plot should not be so pixelated")
         return points
 
     @_autoclose
     def problem3(self, s):
         """Test histogram(). 10 points."""
+        if not hasattr(s, "histogram"):
+            raise NotImplementedError("Problem 1 Incomplete")
 
         s.histogram()
         print("\nHistogram with 5 bins\t"),
-        points  = self.grade(4, "\n\tHistogram does not match specifications")
+        points  = self._grade(4, "Histogram does not match specifications")
         
         print("Scatter plot\t\t"),
-        points += self.grade(4,
-                        "\n\tScatter plot does not match specifications.")
+        points += self._grade(4, "Scatter plot does not match specifications.")
         
         print("Average line\t\t"),
-        points += self.grade(2,
-                    "\n\tAverage not displayed on scatter plot correctly.")
+        points += self._grade(2,
+                            "Average not displayed on scatter plot correctly.")
         return points
 
     @_autoclose
     def problem4(self, s):
         """Test ripple(). 10 points."""
+        if not hasattr(s, "ripple"):
+            raise NotImplementedError("Problem 4 Incomplete")
+
         s.ripple()
-        return self.grade(10,
-                        "\n\tripple() plot does not match specifications.")
+        return self._grade(10,
+                        "ripple() plot does not match specifications.")
 
 
 # ============================== END OF FILE ================================ #

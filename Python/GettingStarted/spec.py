@@ -83,20 +83,7 @@ def int_to_string(my_list):
     pass
 
 
-# Problem 7: Implement this generator.
-def squares(n):
-    """Yield all squares less than 'n'.
-
-    Example:
-        >>> for i in squares(10):
-        ...     print(i),
-        ... 
-        0 1 4 9
-    """
-    pass
-
-
-# Problem 8: Implement this function.
+# Problem 7: Implement this function.
 def stringify(my_list):
     """Using a list comprehension, convert the list of integers 'my_list'
     to a list of strings. Return the new list.
@@ -108,7 +95,7 @@ def stringify(my_list):
     pass
 
 
-# Problem 9: Implement this function and use it to approximate ln(2).
+# Problem 8: Implement this function and use it to approximate ln(2).
 def alt_harmonic(n):
     """Use a list comprehension to calculate the sum of the
     first n terms of the alternating harmonic series.

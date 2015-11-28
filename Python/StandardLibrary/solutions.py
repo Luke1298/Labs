@@ -242,7 +242,7 @@ class _testDriver(object):
                 self.score += points
                 self.feedback += "\nScore += %d"%points
             except BaseException as e:
-                self.feedback += "\nError: %s"%e
+                self.feedback += "\n%s: %s"%(self._errType(e),e)
 
         # Grade each problem.
         test_one(self.problem1, 1, 3)   # Problem 1: 3 points.
@@ -264,7 +264,15 @@ class _testDriver(object):
             self.feedback += '\n\n\nComments:\n\t%s'%comments
 
     # Helper Functions --------------------------------------------------------
-    def eqTest(self, correct, student, message):
+    @staticmethod
+    def _errType(error):
+        """Get just the name of the exception 'error' in string format."""
+        if isinstance(error, BaseException):
+            return str(type(error)).lstrip("<type 'exceptions.").rstrip("'>")
+        else:
+            return str(error)
+
+    def _eqTest(self, correct, student, message):
         """Test to see if 'correct' and 'student' are close to each other.
         Report the given 'message' if they are not.
         """
@@ -272,11 +280,11 @@ class _testDriver(object):
             return 1
         else:
             self.feedback += message
-            self.feedback += "\nCorrect response:\n%s"%correct
-            self.feedback += "\nStudent response:\n%s"%student
+            self.feedback += "\n\tCorrect response: %s"%correct
+            self.feedback += "\n\tStudent response: %s"%student
             return 0
 
-    def grade(self, points, message=None):
+    def _grade(self, points, message=None):
         """Manually grade a problem worth 'points'. Return the score."""
         credit = -1
         while credit > points or credit < 0:
@@ -299,13 +307,13 @@ class _testDriver(object):
         """Test prob1() (built-in functions). 3 points."""
 
         l = list(randint(-50,50,10))
-        correct, response = prob1(l), s.prob1(l)
+        key, response = prob1(l), s.prob1(l)
         if response is None:
-            raise NotImplementedError("Problem 1 Incomplete.")
+            raise NotImplementedError("Problem 1 Incomplete")
 
-        points  = self.eqTest(correct[0], response[0], "\n\tIncorrect maximum")
-        points += self.eqTest(correct[1], response[1], "\n\tIncorrect minimum")
-        points += self.eqTest(correct[2], response[2], "\n\tIncorrect average")
+        points  = self._eqTest(key[0], response[0], "\nIncorrect maximum")
+        points += self._eqTest(key[1], response[1], "\nIncorrect minimum")
+        points += self._eqTest(key[2], response[2], "\nIncorrect average")
 
         return points
 
@@ -314,17 +322,17 @@ class _testDriver(object):
 
         print"\nCorrect output:";   prob2()
         print"\nStudent output:"; s.prob2()
-        return self.grade(5, "\n\tIncorrect response(s)"
-                     "\n\t(Hint: 3 are immutable and 2 are mutable).")
+        return self._grade(5, "\n\tIncorrect response(s)"
+                     "\n\t(Hint: 3 are immutable and 2 are mutable)")
 
     def problem3(self, s):
         """Test prob3() (make and use the calculator module). 5 points."""
 
-        points  = 2*self.eqTest(prob3(5,12), s.prob3(5,12),
-                                "\n\tIncorrect hypotenuse length")
+        points  = 2*self._eqTest(prob3(5,12), s.prob3(5,12),
+                                "\nIncorrect hypotenuse length")
         a, b = randint(1,50,2)
-        points += 3*self.eqTest(prob3(a,b), s.prob3(a,b),
-                                "\n\tIncorrect hypotenuse length")
+        points += 3*self._eqTest(prob3(a,b), s.prob3(a,b),
+                                "\nIncorrect hypotenuse length")
         return points
 
     def problem4(self, s):
@@ -339,6 +347,6 @@ class _testDriver(object):
         os.system('python ' + s.__file__)
         os.system('python ' + s.__file__ + ' "Wrong Name"')
         os.system('python ' + s.__file__ + ' "matrices.npz"')
-        return self.grade(7, "\n\tIncorrect outputs")
+        return self._grade(7, "\n\tIncorrect outputs")
 
 # ============================== END OF FILE ================================ #
