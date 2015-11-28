@@ -341,9 +341,9 @@ class _testDriver(object):
         if correct == student:
             return 1
         else:
-            self.feedback += message
-            self.feedback += "\nCorrect response:\n%s"%correct
-            self.feedback += "\nStudent response:\n%s"%student
+            self.feedback += "\n%s"%message
+            self.feedback += "\n\tCorrect response: %s"%correct
+            self.feedback += "\n\tStudent response: %s"%student
             return 0
 
     def _evalTest(self, expression, correct, message):
@@ -351,10 +351,10 @@ class _testDriver(object):
         if expression is correct:
             return 1
         else:
-            self.feedback += message
+            self.feedback += "\n%s"%message
             return 0
 
-    def _grade(self, points):
+    def _grade(self, points, message=None):
         """Manually grade a problem worth 'points'. Return the score."""
         credit = -1
         while credit > points or credit < 0:
@@ -363,9 +363,13 @@ class _testDriver(object):
             except:
                 credit = -1
         if credit != points:
-            comments = raw_input("Feedback: ")
+            # Add comments (optionally),
+            comments = raw_input("Comments: ")
             if len(comments) > 0:
-                self.feedback += "\n\t%s"%comments
+                self.feedback += "\n%s"%comments
+            # Or add a predetermined error message.
+            elif message is not None:
+                self.feedback += "\n%s"%message
         return credit
 
     # Problems ----------------------------------------------------------------
@@ -384,26 +388,28 @@ class _testDriver(object):
         for item in ['this', 'is', 'a', 'test', '...']:
             b1.put(item); b2.put(item)
         points += self._eqTest(b1.contents, b2.contents,
-            "\n\tBackpack.put() failed to update Backpack.contents correctly")
+            "Backpack.put() failed to update Backpack.contents correctly")
         print("\nTest that Backpack.put() doesn't go over the max_size.")
         print("Correct output:\t"),; b1.put('this should not fit')
         print("Student output:\t"),; b2.put('this should not fit')
-        points += self._grade(1)
+        points += self._grade(1,
+                        "'No Room!' failed to print (check Backpack.put())")
         points += self._eqTest(b1.contents, b2.contents,
-            "\n\tBackpack.put() failed to update Backpack.contents correctly")
+            "Backpack.put() failed to update Backpack.contents correctly")
         b1.max_size = 1; b1.dump(); b2 = s.Backpack("Student", "green", 1)
         b1.put("Testing..."); b2.put("Testing...")
         print("\nTest that Backpack.put() doesn't go over the max_size.")
         print("Correct output:\t"),; b1.put('this should not fit')
         print("Student output:\t"),; b2.put('this should not fit')
-        points += self._grade(1)
+        points += self._grade(1,
+                        "'No Room!' failed to print (check Backpack.dump())")
         points += 2*self._eqTest(b1.contents, b2.contents,
-            "\n\tBackpack.put() failed to update Backpack.contents correctly")
+            "Backpack.put() failed to update Backpack.contents correctly")
 
         # Test dump().
         b1.dump(); b2.dump()
         points += 2*self._eqTest(b1.contents, b2.contents,
-                            "\n\tBackpack.dump() failed to empty contents")
+                            "Backpack.dump() failed to empty contents")
         return points
 
     def problem2(self, s):
@@ -419,37 +425,41 @@ class _testDriver(object):
         for item in ['Testing', 'testing']:
             j1.put(item); j2.put(item)
         points += self._eqTest(j1.contents, j2.contents,
-                                            "\n\tJetpack.put() failed.")
+                                            "Jetpack.put() failed.")
         print("\nTest that Jetpack.put() doesn't go over the max_size.")
         print("Correct output:\t"),; j1.put('this should not fit')
         print("Student output:\t"),; j2.put('this should not fit')
-        points += self._grade(1)
+        points += self._grade(1,
+                        "'No Room!' failed to print (check Jetpack.put()")
         points += self._eqTest(j1.contents, j2.contents,
-            "\n\tJetpack.put() failed to update Jetpack.contents correctly")
+            "Jetpack.put() failed to update Jetpack.contents correctly")
         j1.max_size = 1; j1.dump(); j2 = s.Jetpack("Student", "green", 1)
         j1.put("Testing..."); j2.put("Testing...")
         print("\nTest that Jetpack.put() doesn't go over the max_size.")
         print("Correct output:\t"),; j1.put('this should not fit')
         print("Student output:\t"),; j2.put('this should not fit')
-        points += self._grade(1)
+        points += self._grade(1,
+                        "'No Room!' failed to print (check Jetpack.put())")
         points += self._eqTest(j1.contents, j2.contents,
-            "\n\tJetpack.put() failed to update Jetpack.contents correctly")
+            "Jetpack.put() failed to update Jetpack.contents correctly")
 
         # Test fly().
         print("\nTest that fly(amount) doesn't work if amount > fuel.")
         print("Correct output:\t"),; j1.fly(11)
         print("Student output:\t"),; j2.fly(11)
-        points += self._grade(1)
+        points += self._grade(1,
+                "'Not Enough Fuel!' failed to print (check Jetpack.fly())")
         
         # Test dump().
         j1.dump(); j2.dump()
         print("\nTest that Jetpack.dump() sets the fuel to zero.")
         print("Correct output:\t"),; j1.fly(1)
         print("Student output:\t"),; j2.fly(1)
-        points += 2*self._grade(1)
+        points += 2*self._grade(1,
+                "'Not Enough Fuel!' failed to print (check Jetpack.dump())")
 
         if not issubclass(s.Jetpack, s.Backpack):
-            self.feedback += "\n\tThe Jetpack class must inherit from the "
+            self.feedback += "The Jetpack class must inherit from the "
             self.feedback += "Backpack class!"
             points = 0
 
@@ -465,12 +475,12 @@ class _testDriver(object):
             raise NotImplementedError("Problem 3 Incomplete: %s"%e)
         b2 = s.Backpack("Name2", "Color", 10)
         points = self._evalTest(b1==b2, False,
-                    "\n\tBackpack.__eq__() failed on different names")
+                    "Backpack.__eq__() failed on different names")
         
         b1 = s.Backpack("Name", "Color1", 10)
         b2 = s.Backpack("Name", "Color2", 10)
         points += self._evalTest(b1==b2, False,
-                    "\n\tBackpack.__eq__() failed on different colors")
+                    "Backpack.__eq__() failed on different colors")
 
         b1 = s.Backpack("Name", "Color", 10)
         b2 = s.Backpack("Name", "Color", 10)
@@ -478,28 +488,28 @@ class _testDriver(object):
             b1.put(item); b2.put(item)
         b2.put(4)
         points += self._evalTest(b1==b2, False,
-                    "\n\tBackpack.__eq__() failed on different contents")
+                    "Backpack.__eq__() failed on different contents")
         b1.put(5)
         points += self._evalTest(b1==b2, False,
-                    "\n\tBackpack.__eq__() failed on different contents")
+                    "Backpack.__eq__() failed on different contents")
 
         # Test Backpack.__eq__() in True case (3 points).
         b1 = s.Backpack("Name", "Color", 100)
         b2 = s.Backpack("Name", "Color", 10)
         points += self._evalTest(b1==b2, True,
-                    "\n\tBackpack.__eq__() failed on equal objects.")
+                    "Backpack.__eq__() failed on equal objects.")
         
         for item in ["apple", "banana", "carrot"]:
             b1.put(item); b2.put(item)
         points += self._evalTest(b1==b2, True,
-                    "\n\tBackpack.__eq__() failed on equal objects.")
+                    "Backpack.__eq__() failed on equal objects.")
 
         b1.put("mango"); b1.put("salsa"); b2.put("salsa"); b2.put("mango")
         points += self._evalTest(b1==b2, True,
-                    "\n\tBackpack.__eq__() failed on equal objects.")
+                    "Backpack.__eq__() failed on equal objects.")
         if not b1==b2:
-            self.feedback += "\n\t(Hint: Backpack1.contents: %s"%b1.contents
-            self.feedback += "\n\tBackpack2.contents: %s)"%b2.contents
+            self.feedback += "(Hint: Backpack1.contents: %s"%b1.contents
+            self.feedback += "Backpack2.contents: %s)"%b2.contents
         
         # Test Backpack.__str__() on an empty Backpack (4 points).
         b1 =   Backpack("Student", "green", 4)
@@ -507,7 +517,7 @@ class _testDriver(object):
         print("\nTest Backpack.__str__() on a Backpack with no contents.")
         print("\nCorrect output:"); print(b1)
         print("\nStudent output:"); print(b2)
-        p = self._grade(4)
+        p = self._grade(4, "Incorrect Backpack.__str__() output")
         if p < 4:
             self.feedback += "\nBackpack.__str__():\n%s\n"%b2
         points += p
@@ -520,7 +530,7 @@ class _testDriver(object):
         print("\nTest Backpack.__str__() on a Backpack with some contents.")
         print("\nCorrect output:"); print(b1)
         print("\nStudent output:"); print(b2)
-        p = self._grade(4)
+        p = self._grade(4, "Incorrect Backpack.__str__() output")
         if p < 4:
             self.feedback += "\nBackpack.__str__()):\n%s\n"%b2
         points += p
@@ -536,11 +546,11 @@ class _testDriver(object):
         a, b = randint(-50, 50, 2)
         cn = s.ComplexNumber(a, b)
         if not hasattr(cn, "real") or not hasattr(cn, "imag"):
-            self.feedback += "\n\tComplexNumber class must have attributes "
+            self.feedback += "ComplexNumber class must have attributes "
             self.feedback += "'real' and 'imag'!"
             return 0
-        points  = self._eqTest(a, cn.real, "\n\tComplexNumber.real failed")
-        points += self._eqTest(b, cn.imag, "\n\tComplexNumber.imag failed")
+        points  = self._eqTest(a, cn.real, "ComplexNumber.real failed")
+        points += self._eqTest(b, cn.imag, "ComplexNumber.imag failed")
 
         # Check for cheating.
         if s.ComplexNumber is complex:
@@ -550,83 +560,83 @@ class _testDriver(object):
         # Test ComplexNumber.conjugate() (2 points).
         cn2 = cn.conjugate()
         if not isinstance(cn2, s.ComplexNumber):
-            self.feedback += "\n\tComplexNumber.conjugate() should return a "
+            self.feedback += "ComplexNumber.conjugate() should return a "
             self.feedback += "new ComplexNumber object."
         else:
             points += self._eqTest(a, cn2.real,
-                        "\n\tComplexNumber.conjugate() failed on real part")
+                        "ComplexNumber.conjugate() failed on real part")
             points += self._eqTest(-1*b, cn2.imag,
-                        "\n\tComplexNumber.conjugate() failed on imag part")
+                        "ComplexNumber.conjugate() failed on imag part")
 
         # Test ComplexNumber.__abs__() (1 point).
         a, b = randint(-50, 50, 2)
         cn = s.ComplexNumber(a, b)
         points += self._evalTest(abs(sqrt(a**2 + b**2) - abs(cn)) < 1e-8,
-                                True, "\n\tComplexNumber.__abs__() failed")
+                                True, "ComplexNumber.__abs__() failed")
 
         # Test ComplexNumber.__lt__() (2 points).
         cn1, cn2 = s.ComplexNumber(5, 7), s.ComplexNumber(1, 2)
         points += self._evalTest(cn1 < cn2, False,
-                                "\n\tComplexNumber.__lt__() failed")
+                                "ComplexNumber.__lt__() failed")
         points += self._evalTest(cn2 < cn1, True,
-                                "\n\tComplexNumber.__lt__() failed")
+                                "ComplexNumber.__lt__() failed")
 
         # Test ComplexNumber.__gt__() (2 points).
         cn1, cn2 = s.ComplexNumber(1, 2), s.ComplexNumber(3, 4)
         points += self._evalTest(cn1 > cn2, False,
-                                "\n\tComplexNumber.__gt__() failed")
+                                "ComplexNumber.__gt__() failed")
         points += self._evalTest(cn2 > cn1, True,
-                                "\n\tComplexNumber.__gt__() failed")
+                                "ComplexNumber.__gt__() failed")
 
         # Test ComplexNumber.__eq__() (2 points).
         cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 4)
         points += self._evalTest(cn1 == cn2, False,
-                        "\n\tComplexNumber.__eq__() failed on nonequal")
+                        "ComplexNumber.__eq__() failed on nonequal")
         cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 3)
         points += self._evalTest(cn2 == cn1, True,
-                        "\n\tComplexNumber.__eq__() failed on equal")
+                        "ComplexNumber.__eq__() failed on equal")
 
         # Test ComplexNumber.__ne__() (2 points).
         cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 4)
         points += self._evalTest(cn1 != cn2, True,
-                        "\n\tComplexNumber.__ne__() failed on nonequal")
+                        "ComplexNumber.__ne__() failed on nonequal")
         cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 3)
         points += self._evalTest(cn2 != cn1, False,
-                        "\n\tComplexNumber.__ne__() failed on equal")
+                        "ComplexNumber.__ne__() failed on equal")
 
         # Test ComplexNumber.__add__() (2 points).
         a, b, c, d = randint(-50, 50, 4)
         cn = s.ComplexNumber(a, b) + s.ComplexNumber(c, d)
         points += self._eqTest(a+c, cn.real,
-                    "\n\tComplexNumber.__add__() failed on real part")
+                    "ComplexNumber.__add__() failed on real part")
         points += self._eqTest(b+d, cn.imag,
-                    "\n\tComplexNumber.__add__() failed on imag part")
+                    "ComplexNumber.__add__() failed on imag part")
 
         # Test ComplexNumber.__sub__() (2 points).
         a, b, c, d = randint(-50, 50, 4)
         cn = s.ComplexNumber(a, b) - s.ComplexNumber(c, d)
         points += self._eqTest(a-c, cn.real,
-                    "\n\tComplexNumber.__sub__() failed on real part")
+                    "ComplexNumber.__sub__() failed on real part")
         points += self._eqTest(b-d, cn.imag,
-                    "\n\tComplexNumber.__sub__() failed on real part")
+                    "ComplexNumber.__sub__() failed on real part")
 
         # Test ComplexNumber.__mul__() (4 points).
         a, b, c, d = randint(-50, 50, 4)
         cn1 =   ComplexNumber(a, b) *   ComplexNumber(c, d)
         cn2 = s.ComplexNumber(a, b) * s.ComplexNumber(c, d)
         points += 2*self._eqTest(cn1.real, cn2.real,
-                    "\n\tComplexNumber.__mul__() failed on real part")
+                    "ComplexNumber.__mul__() failed on real part")
         points += 2*self._eqTest(cn1.imag, cn2.imag,
-                    "\n\tComplexNumber.__mul__() failed on imag part")
+                    "ComplexNumber.__mul__() failed on imag part")
         
         # Test ComplexNumber.__div__() (4 points).
         a, b, c, d = randint(-50, 50, 4)
         cn1 =   ComplexNumber(a, b) /   ComplexNumber(c, d)
         cn2 = s.ComplexNumber(a, b) / s.ComplexNumber(c, d)
         points += 2*self._eqTest(cn1.real, cn2.real,
-                    "\n\tComplexNumber.__div__() failed on real part")
+                    "ComplexNumber.__div__() failed on real part")
         points += 2*self._eqTest(cn1.imag, cn2.imag,
-                    "\n\tComplexNumber.__div__() failed on imag part")
+                    "ComplexNumber.__div__() failed on imag part")
 
         return points
 
