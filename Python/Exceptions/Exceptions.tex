@@ -229,11 +229,11 @@ def forever(max_iters=1000000000):
         iters += 1
         if iters >= max_iters:
             break
-    print "Process Terminated."
+    print "Process Completed."
     return iters
 \end{lstlisting}
 Modify \li{forever()} so that if the user raises a \li{KeyboardInterrupt} before \li{iters} reaches \li{max_iters}, the function prints ``Process Interrupted'' and returns the current value of \li{iters}.
-If no \li{KeyboardInterrupt} is raised, the function should still print ``Process Terminated'' and return \li{iters} as before.
+If no \li{KeyboardInterrupt} is raised, the function should still print ``Process Completed'' and return \li{iters} as before.
 \end{problem}
 
 % TODO: For Python 3, discuss chaining Exceptions.
