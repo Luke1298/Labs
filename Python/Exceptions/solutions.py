@@ -161,7 +161,7 @@ class ContentFilter(object):
 # END OF SOLUTIONS ============================================================
 
 import signal
-from sys import stdout
+from os import system
 
 # Test script
 def test(student_module):
@@ -212,7 +212,7 @@ class _testDriver(object):
                 self.score += points
                 self.feedback += "\nScore += %d"%points
             except BaseException as e:
-                self.feedback += "\nError: %s"%e
+                self.feedback += "\n%s: %s"%(self._errType(e),e)
 
         # Grade each problem.
         test_one(self.problem1, 1, 5)   # Problem 1:  5 points.
@@ -235,7 +235,15 @@ class _testDriver(object):
             self.feedback += '\n\n\nComments:\n\t%s'%comments
 
     # Helper Functions --------------------------------------------------------
-    def eqTest(self, correct, student, message):
+    @staticmethod
+    def _errType(error):
+        """Get just the name of the exception 'error' in string format."""
+        if isinstance(error, BaseException):
+            return str(type(error)).lstrip("<type 'exceptions.").rstrip("'>")
+        else:
+            return str(error)
+
+    def _eqTest(self, correct, student, message):
         """Test to see if 'correct' and 'student' are equal.
         Report the given 'message' if they are not.
         """
@@ -247,7 +255,7 @@ class _testDriver(object):
             self.feedback += "\nStudent response:\n%s"%student
             return 0
 
-    def strTest(self, correct, student, message):
+    def _strTest(self, correct, student, message):
         """Test to see if 'correct' and 'student' have the same string
         representation. Report the given 'message' if they are not.
         """
@@ -260,7 +268,7 @@ class _testDriver(object):
             return 0
 
     # used
-    def grade(self, points, message=None):
+    def _grade(self, points, message=None):
         """Manually grade a problem worth 'points'. Return the score."""
         credit = -1
         while credit > points or credit < 0:
@@ -281,6 +289,8 @@ class _testDriver(object):
     # Problems ----------------------------------------------------------------
     def problem1(self, s):
         """Test Problem 1. X points."""
+        if not hasattr(s, "my_func"):
+            raise NotImplementedError("Problem 1 Incomplete")
 
         def test_my_func(arg, a, b, c, d, e):
             print("\nTesting my_func() with bad %s argument..."%arg)
@@ -288,14 +298,16 @@ class _testDriver(object):
                 s.my_func(a, b, c, d, e)
             except TypeError as e:
                 print("Student Error message: %s"%e)
-                return self.grade(1,
+                return self._grade(1,
                             "\n\tInclude a more informative error message")
             except BaseException as e:
                 self.feedback += "\n\tFailed to raise a TypeError "
-                self.feedback += "(got a %s instead)"%type(e)
+                self.feedback += "(got a %s instead)"%self._errType(e)
             else:
                 self.feedback += "\n\tFailed to raise a TypeError"
+            return 0
 
+        # Test my_func() with different bad inputs (5 points).
         points  =   test_my_func("1st", 1, 2, 3, 4, 5)
         points += 2*test_my_func("3rd", 'a', 2, 'c', 4, 5)
         points += 2*test_my_func("4th/5th", 'a', 2, 3, 'd', 5)
@@ -303,63 +315,153 @@ class _testDriver(object):
 
     def problem2(self, s):
         """Test Problem 2. 5 points."""
+        if not hasattr(s, "forever"):
+            raise NotImplementedError("Problem 2 Incomplete")
 
         def _handle(signum, frame):
             raise KeyboardInterrupt("Arificial KeyboardInterrupt")
 
-        print("Testing forever() to completion..."),; stdout.flush()
-        points = self.eqTest(s.forever(10),10,
+        # Test forever(), letting it run to completion (2 points).
+        print("\nCorrect Output:\tProcess Completed\nStudent Output:\t"),
+        points = self._eqTest(s.forever(10),10,
                                 "\n\tforever(10) didn't return 10.")
-        points += self.grade(1, "\n\t'Process Completed' not printed")
+        points += self._grade(1, "\n\t'Process Completed' not printed")
 
-        print("Testing forever() with a KeyboardInterrupt..."),
-        stdout.flush()
-        signal.signal(signal.SIGALRM, _handle)
-        signal.alarm(1)
+        # Test forever(), interrupting it with a KeyboardInterrupt (3 points).
+        print("\nCorrect Output:\tProcess Interrupted\nStudent Output:\t"),
+        signal.signal(signal.SIGALRM, _handle); signal.alarm(1)
         try:
             x = s.forever(1000000000)
         except KeyboardInterrupt:
             self.feedback += "\n\tKeyboardInterrupt not caught"
         else:
             points += 2
-        points += self.grade(1, "\n\t'Process Interrupted' not printed")
+        points += self._grade(1, "\n\t'Process Interrupted' not printed")
 
         return points
 
     def problem3(self, s):
         """Test InvalidOptionError. 5 points."""
-        points = 0
-
-        try:
-            if issubclass(s.InvalidOptionError, Exception):
-                points += 1
-        except AttributeError:
+        if not hasattr(s, "InvalidOptionError"):
             raise NotImplementedError("Problem 3 Incomplete")
 
+        # Check that InvalidOptionError inherits from Exception (1 point).
+        points = 0
+        if issubclass(s.InvalidOptionError, Exception):
+            points += 1
+
+        # Check that InvalidOptionError behaves like Exception (4 points).
         try:
             raise s.InvalidOptionError("This", "is", "a", "test")
         except s.InvalidOptionError as e:
             points += 4
         except BaseException as e:
             self.feedback += "\n\tFailed to raise an InvalidOptionError "
-            self.feedback += "(got a %s instead)"%type(e)
+            self.feedback += "(got a %s instead)"%self._errType(e)
 
         return points
 
     def problem4(self, s):
         """Test ContentFilter.__init__(). 5 points."""
 
+        if not hasattr(s, "ContentFilter"):
+            raise NotImplementedError("Problem 4 Incomplete")
         points = 0
 
-        # try to initialize a CF object without a string argument
+        # Test faulty initialization (2 points).
+        try:
+            x = s.ContentFilter(123456789)
+        except TypeError as e:
+            points += 2
+        except BaseException as e:
+            self.feedback += "\n\tFailed to raise a TypeError "
+            self.feedback += "(got a %s instead)"%self._errType(e)
+        else:
+            self.feedback += "\n\tFailed to raise a TypeError"
 
-        # try to initialize a CF object correctly.
-        
-        return points
+        # Test proper initialization (3 points).
+        x = s.ContentFilter("contentfilter_test.txt")
+        return points + 3
 
-    def problem5(self, s):
+    def problem5(self, s, sourcefile="contentfilter_test.txt"):
         """Test the ContentFilter class's methods. 20 points."""
+        if not hasattr(s, "ContentFilter"):
+            raise NotImplementedError("Problem 5 Incomplete")
+        sFilter = s.ContentFilter(sourcefile)
 
-        points = 0
-        
+        def test_bad(x, statement, method):
+            """Test that eval(statement) raises an InvalidOptionError."""
+            try:
+                eval(statement)
+            except s.InvalidOptionError:
+                return 1
+            except BaseException as e:
+                print(e)
+                self.feedback += "\n\tContentFilter.%s() "%method
+                self.feedback += "failed to raise an InvalidOptionError "
+                self.feedback += "(got a %s instead)"%self._errType(e)
+            else:
+                self.feedback += "\n\tFailed to raise an InvalidOptionError"
+            return 0
+
+        # Test that each method raises an InvalidOptionError for bad 'mode'.
+        points  = test_bad(sFilter, 'x.hyphenate("out.txt", mode="z")',
+                                                                "hyphenate")
+        points += test_bad(sFilter, 'x.uniform("out.txt", mode="z")',
+                                                                "uniform")
+        points += test_bad(sFilter, 'x.reverse("out.txt", mode="z")',
+                                                                "reverse")
+        points += test_bad(sFilter, 'x.transpose("out.txt", mode="z")',
+                                                                "transpose")
+
+        # Test that uniform() and reverse() raise InvalidOptionErrors correctly
+        points += test_bad(sFilter, 'x.uniform("out.txt", case="middle")',
+                                                                    'uniform')
+        points += test_bad(sFilter, 'x.reverse("out.txt", unit="chunk")',
+                                                                    'reverse')
+
+        def test_good(x, statement, method, value):
+            """Test a ContentFilter method with correct usage."""
+            print("\nOutput of ContentFilter.%s:\n"%method)
+            filename = "temporary_outfile.txt"
+            eval(statement)
+            with open(filename, 'r') as f:
+                for line in f:
+                    print(line.rstrip())
+            return self._grade(value, "\n\tContentFilter.%s failed"%method)
+
+        # Test each method with correct usage (11 points).
+        print("\nSource file for testing ContentFilter class:\n")
+        with open(sourcefile) as f:
+            for line in f:
+                print(line.rstrip())
+
+        points += test_good(sFilter, 'x.hyphenate(filename, mode="w")',
+                                                        'hyphenate()', 2)
+        points += test_good(sFilter,
+                            'x.uniform(filename, mode="w", case="upper")',
+                                                'uniform(case="upper")', 1)
+        points += test_good(sFilter,
+                            'x.uniform(filename, mode="w", case="lower")',
+                                                'uniform(case="lower")', 1)
+        points += test_good(sFilter,
+                            'x.reverse(filename, mode="w", unit="word")',
+                                                'reverse(unit="word")', 2)
+        points += test_good(sFilter,
+                            'x.reverse(filename, mode="w", unit="line")',
+                                                'reverse(unit="line")', 2)
+        points += test_good(sFilter, 'x.transpose(filename, mode="w")',
+                                                        'transpose()', 3)
+        system("rm temporary_outfile.txt")
+
+        # Test ContentFilter.__str__() (3 points).
+        template = ContentFilter(sourcefile)
+        print("\nCorrect ContentFilter.__str__() output:\n")
+        print(template)
+        print("\nStudent ContentFilter.__str__() output:\n")
+        print(sFilter)
+        points += self._grade(3, "\n\tContentFilter.__str__() failed")
+
         return points
+
+# END OF FILE =================================================================
