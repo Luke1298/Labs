@@ -247,24 +247,12 @@ class _testDriver(object):
         """Test to see if 'correct' and 'student' are equal.
         Report the given 'message' if they are not.
         """
-        if correct == student:
+        if correct != student:
             return 1
         else:
-            self.feedback += message
-            self.feedback += "\nCorrect response:\n%s"%correct
-            self.feedback += "\nStudent response:\n%s"%student
-            return 0
-
-    def _strTest(self, correct, student, message):
-        """Test to see if 'correct' and 'student' have the same string
-        representation. Report the given 'message' if they are not.
-        """
-        if str(correct) == str(student):
-            return 1
-        else:
-            self.feedback += message
-            self.feedback += "\nCorrect response:\n%s"%correct
-            self.feedback += "\nStudent response:\n%s"%student
+            self.feedback += "\n%s"%message
+            self.feedback += "\n\tCorrect response: %s"%correct
+            self.feedback += "\n\tStudent response: %s"%student
             return 0
 
     # used
@@ -280,10 +268,10 @@ class _testDriver(object):
             # Add comments (optionally),
             comments = raw_input("Comments: ")
             if len(comments) > 0:
-                self.feedback += "\n\t%s"%comments
+                self.feedback += "\n%s"%comments
             # Or add a predetermined error message.
             elif message is not None:
-                self.feedback += message
+                self.feedback += "\n%s"%message
         return credit
 
     # Problems ----------------------------------------------------------------
@@ -299,12 +287,12 @@ class _testDriver(object):
             except TypeError as e:
                 print("Student Error message: %s"%e)
                 return self._grade(1,
-                            "\n\tInclude a more informative error message")
+                            "Include a more informative error message")
             except BaseException as e:
-                self.feedback += "\n\tFailed to raise a TypeError "
+                self.feedback += "\nFailed to raise a TypeError "
                 self.feedback += "(got a %s instead)"%self._errType(e)
             else:
-                self.feedback += "\n\tFailed to raise a TypeError"
+                self.feedback += "\nFailed to raise a TypeError"
             return 0
 
         # Test my_func() with different bad inputs (5 points).
@@ -324,8 +312,8 @@ class _testDriver(object):
         # Test forever(), letting it run to completion (2 points).
         print("\nCorrect Output:\tProcess Completed\nStudent Output:\t"),
         points = self._eqTest(s.forever(10),10,
-                                "\n\tforever(10) didn't return 10.")
-        points += self._grade(1, "\n\t'Process Completed' not printed")
+                                "forever() returned incorrect value")
+        points += self._grade(1, "'Process Completed' failed to print")
 
         # Test forever(), interrupting it with a KeyboardInterrupt (3 points).
         print("\nCorrect Output:\tProcess Interrupted\nStudent Output:\t"),
@@ -333,10 +321,10 @@ class _testDriver(object):
         try:
             x = s.forever(1000000000)
         except KeyboardInterrupt:
-            self.feedback += "\n\tKeyboardInterrupt not caught"
+            self.feedback += "\nKeyboardInterrupt not caught in forever()"
         else:
             points += 2
-        points += self._grade(1, "\n\t'Process Interrupted' not printed")
+        points += self._grade(1, "'Process Interrupted' failed to print")
 
         return points
 
@@ -356,7 +344,7 @@ class _testDriver(object):
         except s.InvalidOptionError as e:
             points += 4
         except BaseException as e:
-            self.feedback += "\n\tFailed to raise an InvalidOptionError "
+            self.feedback += "\nFailed to raise an InvalidOptionError "
             self.feedback += "(got a %s instead)"%self._errType(e)
 
         return points
@@ -374,10 +362,10 @@ class _testDriver(object):
         except TypeError as e:
             points += 2
         except BaseException as e:
-            self.feedback += "\n\tFailed to raise a TypeError "
+            self.feedback += "\nFailed to raise a TypeError "
             self.feedback += "(got a %s instead)"%self._errType(e)
         else:
-            self.feedback += "\n\tFailed to raise a TypeError"
+            self.feedback += "\nFailed to raise a TypeError"
 
         # Test proper initialization (3 points).
         x = s.ContentFilter("contentfilter_test.txt")
@@ -396,12 +384,12 @@ class _testDriver(object):
             except s.InvalidOptionError:
                 return 1
             except BaseException as e:
-                print(e)
-                self.feedback += "\n\tContentFilter.%s() "%method
+                self.feedback += "\nContentFilter.%s() "%method
                 self.feedback += "failed to raise an InvalidOptionError "
                 self.feedback += "(got a %s instead)"%self._errType(e)
             else:
-                self.feedback += "\n\tFailed to raise an InvalidOptionError"
+                self.feedback += "\nContentFilter.%s() "%method
+                self.feedback += "failed to raise an InvalidOptionError"
             return 0
 
         # Test that each method raises an InvalidOptionError for bad 'mode'.
@@ -428,7 +416,7 @@ class _testDriver(object):
             with open(filename, 'r') as f:
                 for line in f:
                     print(line.rstrip())
-            return self._grade(value, "\n\tContentFilter.%s failed"%method)
+            return self._grade(value, "ContentFilter.%s failed"%method)
 
         # Test each method with correct usage (11 points).
         print("\nSource file for testing ContentFilter class:\n")
@@ -460,8 +448,8 @@ class _testDriver(object):
         print(template)
         print("\nStudent ContentFilter.__str__() output:\n")
         print(sFilter)
-        points += self._grade(3, "\n\tContentFilter.__str__() failed")
-
+        points += self._grade(3,
+                        "ContentFilter.__str__() failed:\n\n%s\n"%sFilter)
         return points
 
 # END OF FILE =================================================================
