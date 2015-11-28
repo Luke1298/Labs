@@ -40,7 +40,7 @@ class Backpack(object):
     def put(self,item):
         """Add 'item' to the backpack's list of contents if there is room."""
         if len(self.contents) >= self.max_size:         # Check for overflow
-            print("I'm Full!")
+            print("No Room!")
         else:
             self.contents.append(item)
     
@@ -289,12 +289,13 @@ class _testDriver(object):
     that way in the example code.
     """
 
-    # Constructor
+    # Constructor -------------------------------------------------------------
     def __init__(self):
+        """Initialize the feedback attribute."""
         self.feedback = ""
 
-    # Main routine
-    def test_all(self, student_module):
+    # Main routine ------------------------------------------------------------
+    def test_all(self, student_module, total=60):
         """Grade the provided module on each problem and compile feedback."""
         self.feedback = ""
         self.score = 0
@@ -314,7 +315,6 @@ class _testDriver(object):
         test_one(self.problem4, 4, 25)  # Problem 4: 25 points.
 
         # Report final score.
-        total = 60
         percentage = (100. * self.score) / total
         self.feedback += "\n\nTotal score: %d/%d = %s%%"%(
                                     self.score, total, percentage)
