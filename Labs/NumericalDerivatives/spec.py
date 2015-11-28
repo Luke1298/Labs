@@ -14,20 +14,8 @@ def centered_difference_quotient(f,pts,h = 1e-5):
     '''
     raise NotImplementedError("Problem 1 Incomplete")
 
-# Problem 2: Implement this function.
-def calculate_errors(f,pts,h = 1e-5):
-    '''
-    Compute the errors using the centered difference quotient approximation.
-    Inputs:
-        f (function): the function for which the derivative will be approximated
-        pts (array): array of values to calculate the derivative
-    Returns:
-        errors (array): array of the errors for the centered difference quotient
-            approximation
-    '''
-    raise NotImplementedError("Problem 2 Incomplete")
 
-# Problem 3: Implement this function.
+# Problem 2: Implement this function.
 def jacobian(f,n,m,pt,h = 1e-5):
     '''
     Compute the approximate Jacobian matrix of f at pt using the centered
@@ -42,9 +30,10 @@ def jacobian(f,n,m,pt,h = 1e-5):
     Returns:
         Jacobian matrix of f at pt using the centered difference quotient.
     '''
-    raise NotImplementedError("Problem 3 Incomplete")
+    raise NotImplementedError("Problem 2 Incomplete")
 
-# Problem 4: Implement this function.
+
+# Problem 3: Implement this function.
 def findError():
     '''
     Compute the maximum error of your jacobian function for the function
@@ -52,11 +41,10 @@ def findError():
     Returns:
         Maximum error of your jacobian function.
     '''
-    raise NotImplementedError("Problem 4 Incomplete")
+    raise NotImplementedError("Problem 3 Incomplete")
     
-    
-    
-# Problem 5: Implement this function.
+        
+# Problem 4: Implement this function.
 def Filter(image,F):
     '''
     Applies the filter to the image.
@@ -66,9 +54,10 @@ def Filter(image,F):
     Returns:
         The filtered image.
     '''
-    raise NotImplementedError("Problem 5 Incomplete")
+    raise NotImplementedError("Problem 4 Incomplete")
 
-# Problem 6: Implement this function.
+
+# Problem 5: Implement this function.
 def sobelFilter(image):
     '''
     Applies the Sobel filter to the image
@@ -77,4 +66,4 @@ def sobelFilter(image):
     Returns:
         The Sobel Filter applied to the image.
     '''
-    raise NotImplementedError("Problem 6 Incomplete")
+    raise NotImplementedError("Problem 5 Incomplete")

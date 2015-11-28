@@ -123,10 +123,12 @@ Write a function that accepts as input a callable function object \li{f}, an arr
 a keyword argument \li{h} that defaults to \li{1e-5}. 
 Return an array of the \emph{centered difference quotients} of \li{f} at each point in \li{pts} with the specified value of \li{h}.
 \end{problem}
+\begin{comment}
 \begin{problem}
 Write a function that accepts as input a callable function object \li{f}, an array of points \li{pts}, and
 a keyword argument \li{h} that defaults to \li{1e-5}.  Return an array of the errors for the \emph{centered difference quotients} at each point in \li{pts} with the specified value of \li{h}.
 \end{problem}
+\end{comment}
 
 You may wonder if the forward or backward difference quotients are ever used, since the centered difference quotient is a more accurate approximation of the derivative.
 In fact, there are some functions that in practice do not behave well under centered difference quotients.
