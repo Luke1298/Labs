@@ -13,7 +13,7 @@ f'(x_0) = \lim_{h\rightarrow 0} \frac{f(x_0 + h)-f(x_0)}{h}.
 In this lab, we will investigate one way a computer can calculate $f'(x_0)$. 
 
 \subsection*{Forward Difference Quotient}
-Suppose that in Equation \ref{eqn:deriv}, instead of taking a limit, we just pick a small value for $h$. 
+Suppose that in Equation \eqref{eqn:deriv}, instead of taking a limit, we just pick a small value for $h$. 
 Then we would expect $f'(x_0)$ to be close to the quantity
 \begin{equation}\label{equ:forward_diff}
  \frac{f(x_0 + h)-f(x_0)}{h}.
@@ -49,7 +49,7 @@ Evaluate Taylor's formula at $x_0-h$ to derive
 \begin{equation}\label{equ:backwards_diff_with_remainder}
 f'(x_0) = \frac{f(x_0)-f(x_0-h)}{h} + \frac{R_2(-h)}{h}.
 \end{equation}
-The quotient that is the first term on the right hand side of \eqref{equ:backwards_diff_with_remainder} is called the \emph{backward difference quotient.} 
+The first term on the right hand side of \eqref{equ:backwards_diff_with_remainder} is called the \emph{backward difference quotient.} 
 This quotient also approximates $f'(x_0)$ to first order, so it is not the quotient we are looking for.
 When we add \eqref{equ:forward_diff_with_remainder} and \eqref{equ:backwards_diff_with_remainder} and solve for $f'(x_0)$ (by dividing by 2), we get
 \begin{equation}\label{equ:centered_diff}
@@ -376,7 +376,7 @@ The forward difference quotient for approximating a partial derivative is
 \begin{equation*}
 \frac{\partial f}{\partial x_j} (x_0) \approx \frac{f(x_0+h e_j)-f(x_0)}{h},
 \end{equation*}
-where $e_j$ the $j^{th}$ standard basis vector. 
+where $e_j$ is the $j^{th}$ standard basis vector. 
 Similarly, the centered difference approximation is
 \begin{equation*}
 \frac{\partial f}{\partial x_j} (x_0) \approx \frac{\frac{1}{2}f(x_0+h e_j)-\frac{1}{2}f(x_0-h e_j)}{h}.
@@ -389,8 +389,8 @@ Write a function that accepts
 \item a function handle \li{f},
 \item an integer \li{n} that is the dimension of the domain of \li{f},
 \item an integer \li{m} that is the dimension of the range of \li{f},
-\item an \li{n}-dimensional NumPy array \li{pt} representing a point in $\mathbb{R}^n$, and
-\item an keyword argument \li{h} that defaults to \li{1e-5}.
+\item an \li{1 x n}-dimensional NumPy array \li{pt} representing a point in $\mathbb{R}^n$, and
+\item a keyword argument \li{h} that defaults to \li{1e-5}.
 \end{enumerate}
 Return the approximate Jacobian matrix of \li{f} at \li{pt} using the centered difference quotient.
 \end{problem}
@@ -553,7 +553,7 @@ We want to do this in general in our function.  Note that the number of zeros we
 
 Finally, we iterate through the image to compute each entry of the convolution matrix.
 \begin{lstlisting}
-7.    C = np.zeros(image)
+7.    C = np.zeros(image.shape)
 8.    for i in range(m):
 9.        for j in range(n):
 10.            C[i,j] = # Compute C[i, j]
@@ -610,7 +610,7 @@ A database of such images can be downloaded from \url{http://www.imageprocessing
 
 \subsection*{Edge Detection}
 
-Automatically detecting edges in an image can be used to segment or sharpen the image. 
+Automatic detection of edges in an image can be used to segment or sharpen the image. 
 We will find edges with the Sobel filter, which computes the gradient of the image at each pixel. 
 The magnitude of the gradient tells us the rate of change of the pixel values, and so large magnitudes should
 correspond to edges within the image. 
