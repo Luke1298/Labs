@@ -1,7 +1,5 @@
 # solutions.py
-"""Object Oriented Programming solutions file.
-Written by Shane McQuarrie, Fall 2015.
-"""
+"""Object Oriented Programming solutions file."""
 
 from math import sqrt
 
@@ -347,7 +345,7 @@ class _testDriver(object):
             return 0
 
     def _evalTest(self, expression, correct, message):
-        """Test a boolean to see if it is correct (for Backpack.__eq__())."""
+        """Test a boolean to see if it is correct."""
         if expression is correct:
             return 1
         else:
@@ -508,8 +506,8 @@ class _testDriver(object):
         points += self._evalTest(b1==b2, True,
                     "Backpack.__eq__() failed on equal objects.")
         if not b1==b2:
-            self.feedback += "(Hint: Backpack1.contents: %s"%b1.contents
-            self.feedback += "Backpack2.contents: %s)"%b2.contents
+            self.feedback += "\n\t(Hint: Backpack1.contents: %s"%b1.contents
+            self.feedback += "\n\t       Backpack2.contents: %s)"%b2.contents
         
         # Test Backpack.__str__() on an empty Backpack (4 points).
         b1 =   Backpack("Student", "green", 4)
@@ -565,8 +563,8 @@ class _testDriver(object):
         # Test ComplexNumber.__abs__() (1 point).
         a, b = randint(-50, 50, 2)
         cn = s.ComplexNumber(a, b)
-        points += self._evalTest(abs(sqrt(a**2 + b**2) - abs(cn)) < 1e-8,
-                                True, "ComplexNumber.__abs__() failed")
+        points += self._eqTest(sqrt(a**2 + b**2), abs(cn),
+                                        "ComplexNumber.__abs__() failed")
 
         # Test ComplexNumber.__lt__() (2 points).
         cn1, cn2 = s.ComplexNumber(5, 7), s.ComplexNumber(1, 2)
@@ -583,7 +581,7 @@ class _testDriver(object):
                                 "ComplexNumber.__gt__() failed")
 
         # Test ComplexNumber.__eq__() (2 points).
-        cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 4)
+        cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(3, 2)
         points += self._evalTest(cn1 == cn2, False,
                         "ComplexNumber.__eq__() failed on nonequal")
         cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 3)
@@ -591,7 +589,7 @@ class _testDriver(object):
                         "ComplexNumber.__eq__() failed on equal")
 
         # Test ComplexNumber.__ne__() (2 points).
-        cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 4)
+        cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(3, 2)
         points += self._evalTest(cn1 != cn2, True,
                         "ComplexNumber.__ne__() failed on nonequal")
         cn1, cn2 = s.ComplexNumber(2, 3), s.ComplexNumber(2, 3)
@@ -634,4 +632,4 @@ class _testDriver(object):
 
         return points
 
-# =============================== END OF FILE =============================== #
+# END OF FILE =================================================================
