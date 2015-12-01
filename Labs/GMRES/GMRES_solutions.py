@@ -2,17 +2,17 @@ import numpy as np
 import math
 from scipy import linalg as la
 
-def gmres(Amul,b, k=100, tol=1e-8):
+def gmres(A,b, k=100, tol=1e-8):
     """
     Calculate approximate solution of Ax = b using GMRES algorithm.
     Inputs:
-        Amul -- callable function that calculates Ax for any input vector x.
+        A -- callable function that calculates Ax for any input vector x.
         b -- numpy array of length m
-        k -- max number of iterations to run
-        tol -- threshold for detecting convergence
+        k -- Maximum number of iterations of the GMRES algorithm. Defaults to 100.
+        tol -- Stop iterating if the residual is less than `tol'. Defaults to 1e-8.
     Returns:
-        x -- numpy array of length m, the appoximate solution
-        res -- float, giving the residual
+        Return (y, res) where 'y' is an approximate solution to Ax=b and 'res'
+    is the residual.
     """
     # initialization steps
     m = b.size
@@ -25,7 +25,7 @@ def gmres(Amul,b, k=100, tol=1e-8):
 
     for j in xrange(k-1):
         # Arnoldi iteration
-        q = Amul(Q[:,j])
+        q = A(Q[:,j])
         for i in xrange(j+1):
             H[i,j] = np.inner(Q[:,i],q)
             q -= H[i,j]*Q[:,i]

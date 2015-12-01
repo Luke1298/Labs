@@ -173,19 +173,17 @@ It iterates $k$ times or until the residual is less than $tol$, returning an app
 \begin{problem}
 Use Algorithm \ref{alg:gmres} to complete the following Python function implementing the GMRES algorithm.
 \begin{lstlisting}
-def gmres(b, Amul, k=100, tol=1E-8):
-    '''Use the GMRES algorithm to approximate the solution to Ax=b, where A is the linear operator defined by `Amul'.
+def gmres(b, Amul, k=100, tol=1e-8):
+    '''Calculate approximate solution of Ax = b using GMRES algorithm.
     
     INPUTS:
-    b    - A NumPy array.
-    Amul - A function handle. Should describe a linear operator.
-    k    - Maximum number of iterations of the GMRES algorithm. Defaults 
-           to 100.
-    tol  - Stop iterating if the residual is less than `tol'. Defaults to 
-           1E-8.
+    A - callable function that calculates Ax for any input vector x.
+    b    - A NumPy array of length m.
+    k    - Maximum number of iterations of the GMRES algorithm. Defaults to 100.
+    tol  - Stop iterating if the residual is less than `tol'. Defaults to 1e-8.
     
     RETURN:
-    Return (y, res) where `y' is an approximate solution to Ax=b and `res' 
+    Return (y, res) where 'y' is an approximate solution to Ax=b and 'res' 
     is the residual.
     
     Examples:
@@ -196,9 +194,9 @@ def gmres(b, Amul, k=100, tol=1E-8):
     (array([ 1.,  2.,  2.]), 1.5083413465299765e-17)
     '''
 \end{lstlisting}
-You make make the following assumptions:
+You may make the following assumptions:
 \begin{enumerate}
-\item The input \li{b} is a real array and the function \li{Amul()} always outputs real arrays.
+\item The input \li{b} is a real array and the function \li{A()} always outputs real arrays.
 \item The vectors found by the Arnoldi iteration will never be zero. In other words, $\b$ will never be in a proper invariant subspace of $A$.
 \end{enumerate}
 
