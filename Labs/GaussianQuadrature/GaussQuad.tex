@@ -186,7 +186,13 @@ When $n=5$, do they match the ones given in the first part of this lab?
 
 \end{problem}
 
-%Another exercise could be Chebyshev polynomials.  See wikipedia for the weight function.
+% Problem: integrate!
+\begin{problem}
+Write a new function that accepts a function $f$, bounds $a$ and $b$, and $n$ for the number of points to use.
+Use the previously defined functions to estimate $\int_a^b f(x)dx$ using the coefficients of the Legendre polynomials.
+
+This completes our implementation of the Gaussian Quadrature for a particular set orthogonal polynomials.
+\end{problem}
 
 \section*{scipy.integrate}
 
@@ -217,3 +223,12 @@ N = norm()
 N.cdf(1)
 \end{lstlisting}
 \end{problem}
+
+\begin{comment}
+%Another exercise could be Chebyshev polynomials.  See wikipedia for the weight function.
+\section*{Additional Material}
+
+\begin{problem}
+Gauss Quadrature with Chebyshev polynomials.
+\end{problem}
+\end{comment}
