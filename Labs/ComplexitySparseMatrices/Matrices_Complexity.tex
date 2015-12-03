@@ -219,7 +219,7 @@ The SciPy module \li{sparse} has storage methods to reduce the temporal and spat
 When we are not using these special methods, we say we are storing the \emph{full} matrix. 
 We can also use \li{sparse} methods on dense matrices (matrices with mostly nonzero entries), but doing so will take longer than using the usual methods for handling full matrices. 
 
-The difference in spatial complexity occurs because a full array occupies a block of memory for each entry, so a $n \times n$ array requires $n^2$ blocks of memory. 
+The difference in spatial complexity occurs because a full array occupies a block of memory for each entry, so an $n \times n$ array requires $n^2$ blocks of memory. 
 By contrast, SciPy's \li{sparse} methods store only the nonzero entries and their locations in the array. 
 As long as most entries are 0 (i.e., the matrix is sparse), this decreases spatial complexity. 
 You minimize spatial complexity when you store a sparse matrix with the \li{sparse} module and a dense matrix as a full (or ``regular'') matrix.
@@ -328,7 +328,7 @@ matrix([[ 1,  2,  0,  0],
         [ 0,  0,  9, 10]])
 \end{lstlisting}
 
-The final matrix \li{B} in the example above is a special kind of matrix called a \emph{banded} matrix. 
+The final matrix $B$ in the example above is a special kind of matrix called a \emph{banded} matrix. 
 A banded matrix is a sparse matrix whose only non-zero entries are on the main diagonal and some diagonals on either side. 
 In fact, $B$ is an example of a \emph{tri-diagonal} matrix, because its nonzero entries are confined to the three central diagonals. 
 Banded matrices arise naturally in many applications, including numerical methods for solving differential equations. 
@@ -401,7 +401,7 @@ the two sub-diagonals above and below the diagonal.
 
 \subsection*{Manipulating Sparse Matrices}
 Scipy's \li{sparse} matrices behave a little differently than NumPy arrays.
-You can multiply two sparse matrices elementwise with the \li{multiply()} method of one of the sparse matrices.
+You can multiply two sparse matrices element-wise with the \li{multiply()} method of one of the sparse matrices.
 \begin{lstlisting}
 >>> D = sparse.spdiags([2,3,4],0,3,3)
 >>> C = sparse.spdiags(np.ones((3,3)), [-1,0,1], 3, 3)
