@@ -21,7 +21,7 @@
 The \emph{condition number} of a function measures how sensitive that function is to changes in the input.
 On the other hand, the \emph{stability} of an algorithm measures how well that algorithm computes the value of a function from exact input.
 
-\section*{Condition number of a function}
+\section*{Condition Number of a Function}
 
 The (absolute) condition number of a function $f: \mathbb{R}^m \rightarrow \mathbb{R}^n$ is
  \begin{equation}\label{equ:abs_cond}
@@ -44,7 +44,7 @@ A function is \emph{ill-conditioned} if its condition number is large.
 Small changes to the input of an ill-conditioned function produce large changes in output.
 In applications, it is important to know if a function is ill-conditioned because there is usually some error in the parameters passed to the function.
 
-\subsection*{Example: the Wilkinson polynomial}
+\subsection*{Example: the Wilkinson Polynomial}
 Let $f:\mathbb{C}^{n+1} \rightarrow \mathbb{C}^n$ be the function that sends $(a_1, \ldots, a_{m+1})$ to the roots of $a_1x^n+a_2x^{n-1}+\ldots+a_nx+a_{n+1}$.
 In other words, this function describes the problem of finding the roots of a polynomial.
 Unfortunately, root finding is extremely ill-conditioned.
@@ -159,7 +159,7 @@ This figure replicates Figure 12.1 on p. 93 of \emph{Numerical Linear Algebra} b
 
 % In introductory discussion, compute the condition number of the problem. Explain why we use the infinity norm.
 
-\subsection*{Example: calculating eigenvalues}
+\subsection*{Example: Calculating Eigenvalues}
 Let $f:\mathbb{C}^{n^2} \rightarrow \mathbb{C}^n$ be the function that sends an $n \times n$ matrix to its $n$ eigenvalues.
 This problem is well-conditioned for symmetric matrices, but can be extremely ill-conditioned for non-symmetric matrices.
 
@@ -284,7 +284,7 @@ We sort the roots to ensure they are in the same order, then compute the absolut
 This analysis gives us hope that questions of stability did not interfere too much with our experiments in Problem \ref{prob:wilk}.
 
 \subsection*{Catastrophic Cancellation}
-\emph{Catastrphic Cancellation} is a term for when a computer takes the difference of two very similar numbers, and the result is stored with a small number of significant digits.
+\emph{Catastrophic Cancellation} is a term for when a computer takes the difference of two very similar numbers, and the result is stored with a small number of significant digits.
 Because of the way computers store and perform arithmetic on numbers, future computations can amplify a catastrophic cancellation into a huge error.
 
 You are at risk for catastrophic cancellation whenever you subtract floats or large integers that are very close to each other.
@@ -296,7 +296,7 @@ Suppose we wish to compute $\sqrt{a}-\sqrt{b}$. We can either do this subtractio
 \sqrt{a}-\sqrt{b} = (\sqrt{a}-\sqrt{b})\frac{\sqrt{a}+\sqrt{b}}{\sqrt{a}+\sqrt{b}} = \frac{a-b}{\sqrt{a}+\sqrt{b}}=\frac{1}{\sqrt{a}+\sqrt{b}}.
 \]
 
-Let us perform this computation both ways in NumPy with $a=10^20+1$ and $b=10^20$.
+Let us perform this computation both ways in NumPy with $a=10^{20}+1$ and $b=10^{20}$.
 \begin{lstlisting}
 >>> np.sqrt(1e20+1)-np.sqrt(1e20)
 0.0
