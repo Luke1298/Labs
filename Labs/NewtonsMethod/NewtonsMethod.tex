@@ -1,15 +1,15 @@
 \lab{Newton's Method and Basins of Attraction}{Newton's Method}
 \label{lab:NewtonsMethod}
-\objective{Understand Newton's Method. Understand definition of basin of attraction.}
+\objective{Understand Newton's Method. Understand the definition of a basin of attraction.}
 
-Newton's method finds the zeros of functions; i.e., Newton's method finds $\overline{x}$ such that $f\left(\overline{x}\right) = 0$.
+Newton's method finds the zeros of functions; that is, Newton's method finds $\overline{x}$ such that $f\left(\overline{x}\right) = 0$.
 This method can be used to optimize functions (find their maxima and minima).  For example, it can be used to find the zeros of the first derivative.
 
 \section*{Newton's Method}
 Newton's method begins with an initial guess $x_0$. 
 Then recursively define a sequence by
 \[
-x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
+x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.
 \]
 In other words, Newton's method approximates a function by its tangent line, and then uses the zero of the tangent line as the next guess for $x_n$ (see Figure \ref{fig:newton}).
 
@@ -17,16 +17,16 @@ The sequence $\{x_n\}$ will converge to the zero $\overline{x}$ of $f$ if
 \begin{enumerate}
 \item $f$, $f'$, and $f''$ exist and are continuous,
 \item $f'(\overline{x})\neq0$, and
-\item $\overline{x}$ is ``sufficiently close'' to $x_0$.
+\item $x_0$ is ``sufficiently close'' to $\overline{x}$.
 \end{enumerate}
 In applications, the first two conditions usually hold.
-However, if $\overline{x}$ and $x_0$ are not ``sufficiently close'', Newton's method may converge very slowly, or it may not converge at all.
+However, if $\overline{x}$ and $x_0$ are not ``sufficiently close,'' Newton's method may converge very slowly, or it may not converge at all.
 
 \begin{figure}[h]
+\label{fig:newton}
 \centering
 \includegraphics[width=\textwidth]{newton_iters}
-\label{fig:newton}
-\caption{An illustration of how one iteration of Newton's method works}
+\caption{An illustration of how one iteration of Newton's method works.}
 \end{figure}
 
 Newton's method is powerful because given the three conditions above, it converges quickly.
@@ -85,14 +85,14 @@ def Newtons_method(f, x0, Df, iters=15, tol=.002):
 \end{lstlisting}
 
 \item Run \li{Newtons_method()} on $f=\cos(x)$ with $x_0=1$ and $x_0=2$. 
-How many iterations are required to get 5 digits of accuracy?
+How many iterations are required to acheive tolerance of $10^{-5}$?
 \item Newton's method can be used to find zeros of functions that are hard to solve for analytically.
 Plot $f(x) = \frac{sin(x)}{x}-x$ on $[-4, 4]$. 
 Note that this function can be made continuous on this domain by defining $f(0)=1$. 
-Use your function \li{Newtons_method()} to compute the zero of this function to 7 digits of accuracy.
-\item Run \li{Newtons_method()} on $f(x)=x^9$ with $x_0=1$. 
-How many iterations are required to get 2 digit of accuracy? 
-What is the reason for this slow convergence?
+Use your function \li{Newtons_method()} to compute the zero of this function with a tolerance of $10^{-7}$.
+\item Run \li{Newtons_method()} on $f(x)=x^9$ with $x_0=1$ and \li{tol}$=10^{-5}$. 
+How many iterations are performed, and what is the final approximation? 
+What can be changed to fix this?
 \item Run \li{Newtons_method()} on $f(x)=x^{1/3}$ with $x_0=.01$. 
 What happens and why?
 Hint: The command \li{x**(1/3)} will not work when \li{x} is negative. 
@@ -237,7 +237,7 @@ This means that if two roots of \li{f} have the same real part, their basins wil
 
 One way to fix this problem is to compute \li{Xnew} as usual.
 Then iterate through the entries of \li{Xnew} and identify which root each entry is closest to using the input \li{roots}.
-Finally, create a new array whose entries are integers corresponding to these roots.
+Finally, create a new array whose entries are integers corresponding to the indices of these roots.
 Plot the array of integers to view the basins of attraction.  Hint: The roots of $f(x) = x^3-x$ are $[0,1,-1]$.
 
 
