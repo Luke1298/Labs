@@ -85,7 +85,7 @@ f(x,y) = \begin{cases} 1 &\mbox{ if $(x$,$y)$ is in the unit circle} \\ 0 &\mbox
 %$
 
 We can use a random-points method as above to approximate any integral.
-Suppose we with to evaluate
+Suppose we wish to evaluate
 \[
 \int_\Omega f(x) dV.
 \]
@@ -94,7 +94,7 @@ We can approximate this integral using the formula
 \int_\Omega f(x) dV \approx V(\Omega) \frac{1}{N} \sum_{i=1}^N f(x_i),
 \end{equation}
 where $x_i$ are uniformly distributed random vectors in $\Omega$ and $V(\Omega)$ is the volume of $\Omega$.
-This is the formula for Monte-Carlo Integration. 
+This is the formula for Monte-Carlo integration. 
 
 
 In our example, $\Omega$ was the box $[-1,1] \times [-1,1]$ and $f$ was the function defined in \eqref{equ:mc_func}.
@@ -250,9 +250,9 @@ with MC integragtion using the following code.
 21.237332864358656
 \end{lstlisting}
 
-Since this code returns a finite value, so we could assume that this integral has a finite value.
+Since this code returns a finite value, we could assume that this integral has a finite value.
 In fact, the integral is infinite.
-We could discover this emprically by using larger and larger values of $k$, and noting that MC integration returns larger and larger values.
+We could discover this empirically by using larger and larger values of $k$, and noting that MC integration returns larger and larger values.
 
 
 \begin{comment}
