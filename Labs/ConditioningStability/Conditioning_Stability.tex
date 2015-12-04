@@ -171,7 +171,7 @@ First we check that the eigenvalue solver is stable here.
 >>> eigs
 array([ 1.+0.j,  1.+0.j])
 \end{lstlisting}
-Now we perturb \li{M} by adding a matrix drawn from a random normal distribution over the complex numbers.
+Now we perturb $M$ by adding a matrix drawn from a random normal distribution over the complex numbers.
 We calculate the eigenvalues of the perturbed matrix.
 \begin{lstlisting}
 >>> perturb = perturb = np.random.normal(0, 1e-10, M.shape) + np.random.normal(0,1e-10, M.shape)*1j
@@ -224,7 +224,6 @@ What can you conclude about the condition number of the eigenvalue problem at a 
 \begin{figure}[H]
 \includegraphics[height=3in]{eigenvalue_conditioning.png}
 \caption{Output of \li{plot_eig_condit(res=200)}.}
-\label{fig:wilkinsonpolynomial_many}
 \end{figure}
 \end{problem}
 
