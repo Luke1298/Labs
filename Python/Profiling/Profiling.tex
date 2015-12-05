@@ -3,8 +3,8 @@
 \label{lab:ProfilingCode}
 
 The best code goes through multiple drafts.
-In a first draft, you should focus on writing code that does what is is supposed to and is easy to read.
-After writing a fist draft, you may find that your code does not run as quickly as you need it to.
+In a first draft, you should focus on writing code that does what it is supposed to and is easy to read.
+After writing a first draft, you may find that your code does not run as quickly as you need it to.
 Then it is time to \emph{optimize} the most time consuming parts of your code so that they run as quickly as possible.
 
 In this lab we will optimize the function \texttt{qr1()} that computes the QR decomposition of a matrix via the modified Gram-Schmidt algorithm (see Lab \ref{lab:QRdecomp}).
@@ -25,7 +25,7 @@ def qr1(A):
     return Q, R
 \end{lstlisting}
 
-\section*{What to optimize}
+\section*{What to Optimize}
 Python provides a \emph{profiler} that can identify where code spends most of its runtime.
 The output of the profiler will tell you where to begin your optimization efforts.
 
@@ -84,7 +84,7 @@ Once you have identified those parts of your code that take the most time, how d
 This section lists a few ideas.
 Always, you should use the profiling and timing functions to help you decide when an optimization is actually useful.
 
-\subsection*{Avoid recomputing values}
+\subsection*{Avoid Recomputing Values}
 In our function \texttt{qr1()}, we can avoid recomputing \texttt{R[i,i]} in the outer loop and \texttt{R[i,j]} in the inner loop.
 The rewritten function is as follows:
 \begin{lstlisting}
@@ -134,16 +134,16 @@ Our optimization reduced almost every kind of function call by half, and reduced
 Some less obvious ways to eliminate excess computations include moving computations out of loops, not copying large data structures, and simplifying mathematical expressions.
 
 
-\subsection*{Avoid nested loops}
+\subsection*{Avoid Nested Loops}
 The best way to do this is to use NumPy array operations instead of iterating through arrays.
 If you must use nested loops, focus your optimization efforts on the innermost loop, which gets called the most times.
 
-\subsection*{Use existing functions instead of writing your own}
+\subsection*{Use Existing Functions Instead of Writing Your Own}
 If there is an intuitive operation you would like to perform on an array, chances are that NumPy or another library already has a function that does it.
 Python and NumPy functions have already been optimized, and are usually many times faster than the equivalent you might write.
 We saw an example of this in Lab \ref{} where we compared NumPy array multiplication with our own matrix multiplication implemented in Python.
 
-\subsection*{Use generators when possible}
+\subsection*{Use Generators When Possible}
 When you are iterating through a list, you can often replace the list with a \emph{generator}.
 Instead of storing the entire list in memory, a generator computes each item as it is needed. 
 For example, the code
@@ -166,7 +166,7 @@ See \url{https://docs.python.org/2/tutorial/classes.html#generators} and \url{ht
 
 In our example, replacing each \texttt{range} with \texttt{xrange} does not speed up \texttt{qr2()} by a noticeable amount.
 
-\subsection*{Avoid excessive function calls}
+\subsection*{Avoid Excessive Function Calls}
 Function calls take time.
 Moreover, looking up methods associated with objects takes time.
 Removing ``dots'' can significantly speed up execution time.
@@ -190,7 +190,7 @@ def qr2(A):
 Once again, an analysis with \texttt{\%prun} reveals that this optimization does not help significantly in this case.
 
 
-\subsection*{Write Pythonic code}
+\subsection*{Write Pythonic Code}
 Several special features of Python allow you to write fast code easily.
 First, list comprehensions are much faster than for loops.
 For example, replace
@@ -231,7 +231,7 @@ use
 \subsection*{Use Cython}
 We will discuss Cython at the end of this lab.
 
-\subsection*{Use a more efficient algorithm}
+\subsection*{Use a More Efficient Algorithm}
 The optimizations discussed thus far will speed up your code at most by a constant.
 They will not change the complexity of your code.
 In order to reduce the complexity (say from $O(n^2)$ to $O(n \log(n))$), you typically need to change your algorithm.
@@ -290,7 +290,7 @@ You can import \texttt{cymodule} just as if it were a Python module.
 >>> cymodule.qr(A)
 \end{lstlisting}
 
-\subsection*{Speeding up Cython with type declarations}
+\subsection*{Speeding up Cython with Type Declarations}
 So far, our Cythonized \texttt{qr()} function does not run any faster than the Python version.
 \footnote{Sometimes you will see speedup immediately after Cythonizing a Python function.}
 The simplest way to take advantage of the C-compilation is to declare data types, as you would in a C program.
@@ -353,7 +353,7 @@ def myfunction(double arg1, int arg2, arg3):
 \end{lstlisting}
 
 
-\subsection*{A caution}
+\subsection*{A Caution}
 NumPy's array methods are usually faster than a Cython equivalent you could code yourself.
 If you are unsure which method is fastest, time them.
 
@@ -526,7 +526,7 @@ Cython has many other compiler directives, including \li{cdivision}.
 When \li{cdivision} is set to \li{True}, the \li{\%} operator returns a number with the sign of the first argument (like in C).
 Also, division by 0 will no longer raise a \li{ZeroDivisionError}, which will increase the speed of your program.
 
-\subsection*{More on functions in Cython}
+\subsection*{More on Functions in Cython}
 Speed up function calls in Cython by declaring the types of some or all of the arguments.
 \begin{lstlisting}
 def myfunction(double[:] X, int n, double h, items):
@@ -547,7 +547,7 @@ cpdef int myfunction(double[:] X, int n, double h, items):
     ...
 \end{lstlisting}
 
-\subsection*{Some examples}
+\subsection*{Some Examples}
 The following Python function computes the dot product of two 1-D arrays.
 \begin{lstlisting}
 def pydot(A, B):
@@ -575,7 +575,7 @@ Figure \ref{cython:dot} compares the speed of \li{pydot()}, \li{cydot()}, and th
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{dot.pdf}
-\caption{The running times of\li{pydot()}, \li{cydot()}, and the \li{dot()} method of a NumPy array on vectors of length ``Array Size.''
+\caption{The running times of \li{pydot()}, \li{cydot()}, and the \li{dot()} method of a NumPy array on vectors of length ``Array Size.''
 The Cython version runs almost as fast as the version built into NumPy.}
 \label{cython:dot}
 \end{figure}
