@@ -89,11 +89,12 @@ def test(student_module):
 def _autoclose(func):
     """decorator for closing figures automatically during grading."""
     def wrapper(*args, **kwargs):
-        plt.ion()
-        plt.close('all')
-        result = func(*args, **kwargs)
-        plt.close('all')
-        return result
+        try:
+            plt.ion()
+            return func(*args, **kwargs)
+        finally:
+            plt.close('all')
+            plt.ioff()
     return wrapper
 
 class _testDriver(object):
