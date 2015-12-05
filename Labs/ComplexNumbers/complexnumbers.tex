@@ -66,7 +66,7 @@ The difficulty is that $\mathbb{C}$ has 2 real dimensions, so the graph of $f$ s
  Since we already have ways to visualize 3 dimensions, we should choose one dimension to ignore. 
  We will ignore the magnitude $r = |f(z)|$ of the output.
 
-To visualize $f$, we will asign a color to each point $z \in \mathbb{C}$. 
+To visualize $f$, we will assign a color to each point $z \in \mathbb{C}$. 
 The color will correspond to the angle $\theta$ of the output $f(z)$. 
 As an example, we have plotted the identity function $f(z)=z$ in Figure \ref{fig:identity}.
 As $\theta$ goes from 0 to $2\pi$, the colors cycle smoothly counterclockwise from red to green to purple and back to red.
@@ -227,7 +227,7 @@ Because the singularity is essential, the colors repeat infinitely many times.}
 \label{fig:essential_singularity}
 \end{figure}
 
-\subsection*{Using plots to estimate poles and zeros}
+\subsection*{Using Plots to Estimate Poles and Zeros}
 To summarize, you can use the plot of a complex function to estimate its poles and zeros with the following rules.
 \begin{itemize}
 \item Colors circle around zeros in the ``forwards direction''.
@@ -345,8 +345,8 @@ In the Real numbers we worked with functions like this by simply restricting the
 We can do a similar thing in the Complex plane.
 Loosely speaking, such a restriction is called a branch.
 Computationally we restrict the output to a single portion of the actual possible values of the multifunction.
-We call inverse functions that have multiple values like this ``multi-valued functions" or ``multifuctions."
-Numpy automatically restricts the output of multi-valued functions. So to get other cuts you have to modify the function to get the cut you want, like multiplying the output of the $\sqrt{x}$ by $-1$.
+We call inverse functions that have multiple values like this ``multi-valued functions" or ``multifunctions."
+NumPy automatically restricts the output of multi-valued functions. So to get other cuts you have to modify the function to get the cut you want, like multiplying the output of the $\sqrt{x}$ by $-1$.
 Figure \ref{fig:sqrt} shows the two cuts surfaces for $\sqrt{z}$ in the complex plane.
 
 \begin{figure}
@@ -356,12 +356,12 @@ Figure \ref{fig:sqrt} shows the two cuts surfaces for $\sqrt{z}$ in the complex 
 \begin{subfigure}{.49\textwidth}
 \includegraphics[width=\textwidth]{negsqrt.png}
 \end{subfigure}
-\caption{The positive and negative cut respectiviely of the function $\sqrt{z}$.}
+\caption{The positive and negative cut respectively of the function $\sqrt{z}$.}
 \label{fig:sqrt}
 \end{figure}
 
 These are some very basic examples.
-Another simple example is $\ln\left(z\right)$ which has a single value for the real part and infinitely many possible values for its imaginary part.
+Another simple example is $\ln\left(z\right)$, which has a single value for the real part and infinitely many possible values for its imaginary part.
 This is because for any complex $z\neq 0$, we have $e^z=e^{z+2n\pi}$ where $n$ is any integer.
 
 \begin{problem}
@@ -373,13 +373,13 @@ When Integrating such functions, be careful about integrating across such cuts i
 
 
 \begin{problem}
-Write two functions, both accepting accept a natural number $n$.
-Have one function plot the riemann surface for the real part $f(z)=\sqrt[n]{z}$ and the other plot the imaginary part.
+Write two functions, both accepting a natural number $n$.
+Have one function plot the Riemann surface for the real part $f(z)=\sqrt[n]{z}$ and the other plot the imaginary part.
 
 Hint: Convert $z$ in $f(z)=\sqrt[n]{z}$ to polar form as $z=re^{\theta + 2k\pi}$
 If you then plug this into $\sqrt[n]{z}$ the function takes the form
 \[f(z)=\sqrt[n]{r} e^{i \frac{\theta + 2 \pi k}{n}}\]
-Notice that here $f(z)$ has distinct values for $k = 0, 1, \dots, n-1$ a total of $n$ different values). Each value of $k$ corresponds to a different branch, which you can plot as $n$ separate surfaces.
+Notice that here $f(z)$ has distinct values for $k = 0, 1, \dots, n-1$ (a total of $n$ different values). Each value of $k$ corresponds to a different branch, which you can plot as $n$ separate surfaces.
 
 If you use just one surface to plot each branch you will get erroneous vertical lines from jump discontinuities. Split each branch into two surfaces to get rid of these lines. You can investigate where the discontinuities occur by first plotting it as just one surface. The discontinuities happen at the same place for all $n$;
 \end{problem}
@@ -388,7 +388,7 @@ If you use just one surface to plot each branch you will get erroneous vertical 
 \section*{Contour Integrals in the Complex Plane}
 
 From multivariable calculus, you may recall that an integral may be taken along a path.
-This is very similar to what we can be done in the complex plane.
+This is very similar to what can be done in the complex plane.
 Consider the function $f(z)$ on the complex plane.
 Let $z=x+iy$.
 Let $u$ and $v$ be the real and imaginary parts of $f$ respectively.
@@ -447,8 +447,8 @@ A related theorem (the Morera theorem) states that if some function $f$ is conti
 
 \begin{problem}
 Using Cauchy's Integral Formula, write a python function which returns a callable function which evaluates a complex function $f$ along the interior of a contour $C$.
-It should accept a callable function for the paramaterization of $C$, a callable function for the values of $f$ along $C$, and the bounds on the parameter used.
-Assume in your function that $C$ begins and ends at the same point and that $f$ also begins and ends at the same value (so that $f$ is continous along $C$)
+It should accept a callable function for the parameterization of $C$, a callable function for the values of $f$ along $C$, and the bounds on the parameter used.
+Assume in your function that $C$ begins and ends at the same point and that $f$ also begins and ends at the same value (so that $f$ is continuous along $C$)
 Try it out on simple functions like $e^x$ with complex values and compare what you get with what calling the functions normally gives you.
 \end{problem}
 
@@ -459,7 +459,7 @@ We will discuss these properties later on.
 
 \end{comment}
 
-\subsection*{Multi-valued functions}
+\subsection*{Multi-Valued Functions}
 Every complex number has two complex square roots, since if $w^2=z$, then also $(-w)^2=z$.
 If $z$ is not zero, these roots are distinct.
 

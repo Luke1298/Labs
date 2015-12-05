@@ -27,10 +27,10 @@ Isolated singular points can be classified as removable singular points, poles, 
 These definitions will also be discussed in greater detail in the text.
 Here we will show another method for visualizing complex functions.
 In Lab \ref{Lab:complex_intro} we presented color plots as a useful method functions in the complex plane. 
-Here we will also show how to use surface plots to visualize the modulous of complex functions.
+Here we will also show how to use surface plots to visualize the modulus of complex functions.
 
 Now you have to take care when a surface plot is about a singularity, we must account for the fact that the function is not going to be defined at all of the points we use in our graph.
-We will also have to limit the $z$ axis on the plot to avoid creating a plot that is dominated exclusively by the extremely large and extremely small values in of the function.
+We will also have to limit the $z$ axis on the plot to avoid creating a plot that is dominated exclusively by the extremely large and extremely small values of the function.
 Plotting libraries like Mayavi and Matplotlib do allow thresholding of 3D plots via the use of floating point values of \li{nan}, but doing this may result in graphs having jagged edges where they have been cut.
 We can avoid the jagged edges by artificially adding a small lip of constant values to the plot as well.
 This can be done with Matplotlib as follows:
@@ -79,7 +79,7 @@ Figures \ref{fig:inv_surfaces} show surface plots of some relatively well-behave
 \end{figure}
 
 \begin{problem}
-Write a function that takes in a function, x and y bounds and a resolution and plots the modulus of the function as a 3d plot. Remember to take in account that it may be around a singularity.
+Write a function that takes in a function, x and y bounds, and a resolution and plots the modulus of the function as a 3d plot. Remember to take in account that it may be around a singularity.
 \end{problem} 
 
 \begin{comment}
@@ -198,7 +198,7 @@ As a consequence of this,
 \end{comment}
 We will not consider functions that have a singularity on the real line. So for a function $f$ on $\mathbb{C}$ with only zeros of at most order $1$ on $\mathbb{R}$, where $A$ is the sum of the residues of $f$ on the upper half plane,
 \[\int_{-\infty}^{\infty} f(z) dz = 2\pi i A\]
-Whenever this integral exists.
+whenever this integral exists.
 When we can say that the integral of $f$ over the upper half of a circle centered at $0$ goes to $0$ as the radius of the circle increases and we can also say that the Cauchy principal value of the integral of $f$ over $\mathbb{R}$ exists, this formula will give us a proper numerical value for the Cauchy principal value of the integral of $f$ over $\mathbb{R}$.
 
 \begin{problem}
@@ -213,7 +213,7 @@ An immediate consequence of that theorem is that, for a meromorphic function $f$
 \[\int_\gamma \frac{f'\left(z\right)}{f\left(z\right)} dz = 2 \pi i \left(a - b\right)\]
 where $a$ is the number of zeros on the interior of $\gamma$ (counting multiplicities) and $b$ is the number of poles of $f$ on the interior of $\gamma$ (also counting multiplicities).
 
-This formula gives another possible way to count the number of zeros of a polynomial on the interior of a given contour along with looking at the color plots and manually count them as taught in the previous lab.
+This formula gives another possible way to count the number of zeros of a polynomial on the interior of a given contour along with looking at the color plots and manually counting them as taught in the previous lab.
 
 Write a Python function that counts the number of zeros of a polynomial on the interior of the unit circle then plots the color plot of the function on the unit square.
 \end{problem}
