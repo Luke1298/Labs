@@ -66,8 +66,8 @@ def joint_normal(mins, maxs):
             using 'numPoints' = {10,100,1000,10000}
     """
     # define means and covs
-    means = np.zeros(4)
-    covs = np.eye(4)
+    means = np.zeros(len(mins))
+    covs = np.eye(len(mins))
 
     #calculate integral using SciPy
     value, inform = stats.mvn.mvnun(mins, maxs, means, covs)

@@ -8,11 +8,10 @@ For example, the integral of the joint normal distribution
 \]
 is ubiquitous in statistics.
 However, the integrand does not have a symbolic antiderivative.
-This means we must use numerical methods to evaluate this integral.
+This means we must use numerical methods to evaluate this integral. The standard technique for numerically evaluating multivariable integrals is \emph{Monte-Carlo Integration}. In the next lab, we will approximate this integral using a modified version of Monte-Carlo Integration. In this lab, we address the basics of Monte-Carlo Integration.
 
-The standard technique for numerically evaluating multivariable integrals is \emph{Monte-Carlo Integration}.
 Monte-Carlo (MC) integration is radically different from 1-dimensional techniques like Simpson's rule, relying on probability to calculate the integral.
-Although it converges slowly, MC integration is frequently used to evaluate multivariable integrals because the higher-dimensional analogs of methods like Simpson's rule are inefficient. 
+Although it converges slowly, MC integration is frequently used to evaluate multivariable integrals because the higher-dimensional analogs of methods like Simpson's rule are inefficient.
 
 \section*{A Motivating Example}
 Suppose we want to numerically compute the area of a circle of radius 1.
@@ -51,10 +50,9 @@ Finally, we approximate the area.
 \end{lstlisting}
 This differs from $\pi$ by about 0.117.
 
-
-
-
-
+\begin{problem}
+Estimate the volume of the unit sphere using 10000 sample points from $[-1,1]\times[-1,1]\times[-1,1]$. Your answer should be approximately 4.189.
+\end{problem}
 
 We analyze the error of the MC method by repeating this experiment for many values of \li{numPoints} and plotting the errors.
 The result is the blue line in Figure \ref{fig:mc_error}.
@@ -63,13 +61,13 @@ This means that to divide the error by 10, we must sample \emph{100 times} more 
 
 \begin{figure}
 \includegraphics[width=.7\textwidth]{mc_error.pdf}
-\caption{The Monte-Carlo integration method was used to compute the area of a circle of radius 1. 
+\caption{The Monte-Carlo integration method was used to compute the area of a circle of radius 1.
 The blue line plots the average error in 100 runs of the MC method on $N$ sample points, where $N$ appears on the horizontal axis.
 The green line is a plot of $1/\sqrt{N}$. }
 \label{fig:mc_error}
 \end{figure}
 
-This is a slow convergence rate, but it is independent of the number of dimensions of the problem. 
+This is a slow convergence rate, but it is independent of the number of dimensions of the problem.
 This dimension independence is what makes the MC method useful for multivariable integrals.
 
 \section*{Monte-Carlo Integration}
@@ -94,7 +92,7 @@ We can approximate this integral using the formula
 \int_\Omega f(x) dV \approx V(\Omega) \frac{1}{N} \sum_{i=1}^N f(x_i),
 \end{equation}
 where $x_i$ are uniformly distributed random vectors in $\Omega$ and $V(\Omega)$ is the volume of $\Omega$.
-This is the formula for Monte-Carlo integration. 
+This is the formula for Monte-Carlo integration.
 
 
 In our example, $\Omega$ was the box $[-1,1] \times [-1,1]$ and $f$ was the function defined in \eqref{equ:mc_func}.
@@ -103,41 +101,45 @@ Then $\sum_{i=1}^N f(x_i)$ is the number of points in the unit circle, $N$ is th
 The intuition behind \eqref{equ:mc_eq} is that $\frac{1}{N} \sum_{i=1}^N f(x_i)$ approximates the average value of $f$ on $\Omega$.
 We multiply this (approximate) average value by the volume of $\Omega$ to get the (approximate) integral of $f$ on $\Omega$.
 
-As an 1-dimensional example consider the integral 
+As an 1-dimensional example consider the integral
 \[
 \int_0^1 x dx \approx (1-0)\frac{1}{N} \sum_{i=1}^N x_i=\frac{1}{N} \sum_{i=1}^N x_i.
 \]
 
-The integral on the left-hand-side is $1/2$. 
-In the approximation on the right-hand-side, $x_i$ is drawn from a uniform distribution on $[0,1]$. 
-The average of $N$ such draws will converge to $1/2$. 
+The integral on the left-hand-side is $1/2$.
+In the approximation on the right-hand-side, $x_i$ is drawn from a uniform distribution on $[0,1]$.
+The average of $N$ such draws will converge to $1/2$.
+
+\begin{problem}
+Monte-Carlo Integration is particularly useful when trying to approximate integrals that would be difficult to calculate otherwise. Approximate the following integral:
+$$\int_{1}^{5} \left | \text{sin}(10x)\text{cos}(10x) + \sqrt{x}\text{sin}(3x) \right | dx$$
+Your answer should be approximately $4.502$.
+\end{problem}
 
 \begin{problem}
 \label{prob:mc}
-Implement Monte-Carlo integration with the following function.
-Your implementation should run the Monte-Carlo algorithm several times 
-and return the average of those runs. Implement your function so it can work 
-in $\mathbb{R}^n$. Test your function by estimating the volume of the unit sphere. 
-You answer should be near $4.189$.
+Implement Monte-Carlo integration with the following function. Your implementation should be robust enough to integrate any function $f$ in $\mathbb{R}^n$ over any interval in $\mathbb{R}^n$.
+Your implementation should run the Monte-Carlo algorithm several times
+and return the average of those runs. Test your function by recalculating Problem 1 and 2.
 \begin{lstlisting}
 def mc_int(f, mins, maxs, numPoints=500, numIters=100):
     """Use Monte-Carlo integration to approximate the integral of f
     on the box defined by mins and maxs.
-    
+
     Inputs:
-        f (function) - The function to integrate. This function should 
+        f (function) - The function to integrate. This function should
             accept a 1-D NumPy array as input.
         mins (1-D np.ndarray) - Minimum bounds on integration.
         maxs (1-D np.ndarray) - Maximum bounds on integration.
-        numPoints (int, optional) - The number of points to sample in 
+        numPoints (int, optional) - The number of points to sample in
             the Monte-Carlo method. Defaults to 500.
-        numIters (int, optional) - An integer specifying the number of 
+        numIters (int, optional) - An integer specifying the number of
             times to run the Monte Carlo algorithm. Defaults to 100.
-        
+
     Returns:
-        estimate (int) - The average of 'numIters' runs of the 
+        estimate (int) - The average of 'numIters' runs of the
             Monte-Carlo algorithm.
-                
+
     Example:
         >>> f = lambda x: np.hypot(x[0], x[1]) <= 1
         >>> # Integral over the square [-1,1] x [-1,1]. Should be pi.
@@ -163,23 +165,18 @@ array([ 1.73205081,  2.23606798,  0.8660254 ,  1.41421356])
 \end{enumerate}
 \end{problem}
 
-\begin{comment}
 \begin{problem}
 \label{prob:mc_test}
 The exact value of the integral of
 \[
 f(w,x,y,z) = sin(x) y^5 -y^3 + zw + yz^3
 \]
-on $[-1,1]x[-1,1]x[-1,1]x[-1,1]$ is 0.
-\begin{enumerate}
-\item Run the function \li{mc_int()} you wrote in Problem \ref{prob:mc} on $f$ 10 sample points.
-Do this 100 times and take the average. What is the error?
-\item Repeat part (1) of this problem with 100, 1000, and 10000 sample points. 
+on $[-1,1]\times[-1,1]\times[-1,1]\times[-1,1]$ is 0.
+Run the function \li{mc_int()} you wrote in Problem \ref{prob:mc} on $f$ with 100, 1000, and 10000 sample points.
 Plot the errors of your estimates.
-\end{enumerate}
 \end{problem}
-\end{comment}
 
+\begin{comment}
 One application of Monte Carlo integration is integrating probability density functions that do not have closed form solutions.
 
 \begin{comment}
@@ -200,7 +197,7 @@ N = norm()
 N.cdf(1)
 \end{lstlisting}
 \end{problem}
-\end{comment}
+
 
 \begin{problem}
 The joint normal distribution of $N$ independent random variables with mean 0 and variance 1 is
@@ -231,7 +228,7 @@ However, $f(\x)$ does not have a symbolic antiderivative.
 Then \li{value} is the integral of $f(\x)$ on $B$.
 Use SciPy to integrate $f(\x)$ on $\Omega=[-0.5, 0.75]\times[0,1]\times[0, 0.5]\times[0,1] \subset \mathbb{R}^4$.
 
-\item Use the function \li{mc_int()} you wrote in Problem \ref{prob:mc} to integrate $f(\x)$ on $\Omega$ with 10, 100, 1000, and 10,000 sample points. 
+\item Use the function \li{mc_int()} you wrote in Problem \ref{prob:mc} to integrate $f(\x)$ on $\Omega$ with 10, 100, 1000, and 10,000 sample points.
 Compare the errors of your estimates to the result you got from the SciPy package.
 \end{enumerate}
 \end{problem}
@@ -252,12 +249,13 @@ with MC integragtion using the following code.
 
 Since this code returns a finite value, we could assume that this integral has a finite value.
 In fact, the integral is infinite.
-We could discover this empirically by using larger and larger values of $k$, and noting that MC integration returns larger and larger values.
 
+We could discover this emprically by using larger and larger values of $k$, and noting that MC integration returns larger and larger values.
+\end{comment}
 
 \begin{comment}
 \begin{problem}
 \label{prob:mc_flawed}
-Create a new function (based upon the function from Problem \ref{prob:mc}) that uses a ``flawed'' random number generator that doesn't produce numbers between $-.95$ and $-1$. Test your method on the function from Problem \ref{prob:mc_test}. How bad is the error? 
+Create a new function (based upon the function from Problem \ref{prob:mc}) that uses a ``flawed'' random number generator that doesn't produce numbers between $-.95$ and $-1$. Test your method on the function from Problem \ref{prob:mc_test}. How bad is the error?
 \end{problem}
 \end{comment}
