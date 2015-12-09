@@ -2,7 +2,7 @@
 \label{lab:GMRES}
 \objective{In this lab we will learn how to use the GMRES algorithm.}
 
-The GMRES (``Generalized Minimal Residuals") algorithm is an effecient way to solve large linear systems.
+The GMRES (``Generalized Minimal Residuals") algorithm is an efficient way to solve large linear systems.
 It is an iterative method that uses Krylov subspaces to reduce a high-dimensional problem to a sequence of smaller dimensional
 problems.
 
@@ -123,7 +123,7 @@ At each iteration, we compute the \emph{residual}, or error between the least sq
 The algorithm returns when this residual is sufficiently small.
 In good circumstances, this will happen when $n$ is still much less than $m$.
 
-The GMRES algorithm is integrated with the Arnoldi iteration for numerical stabiility, so that instead of solving \eqref{eq:GMRES_lstsq1}, at the $n^{th}$ iteration we solve
+The GMRES algorithm is integrated with the Arnoldi iteration for numerical stability, so that instead of solving \eqref{eq:GMRES_lstsq1}, at the $n^{th}$ iteration we solve
 \begin{equation}
 \underset{\y \in \mathbb{F}^n}{\text{minimize}}\qquad \|H_n \y - \|\b\|_2\e_1\|_2.
 \label{eq:GMRES_lstsq2}
@@ -177,7 +177,7 @@ def gmres(b, Amul, k=100, tol=1e-8):
     '''Calculate approximate solution of Ax = b using GMRES algorithm.
     
     INPUTS:
-    A - callable function that calculates Ax for any input vector x.
+    A    - Callable function that calculates Ax for any input vector x.
     b    - A NumPy array of length m.
     k    - Maximum number of iterations of the GMRES algorithm. Defaults to 100.
     tol  - Stop iterating if the residual is less than `tol'. Defaults to 1e-8.
@@ -313,12 +313,12 @@ In many situations, the simple technique of the next section will keep $n$ low e
  Run both programs on a series of five random $100\times 100$ matrices and compare the time each requires.
  Are the gains substantial?
  Try it again matrices of size $1000\times 1000$ or larger, and see how substantial the difference becomes.
- Try the same thing using the techniqes of the next section.
+ Try the same thing using the techniques of the next section.
  Explain why the difference in performance is less dramatic this time.
  \end{problem}
 \end{comment}
 
-\subsection*{GMRES with restarts}
+\subsection*{GMRES with Restarts}
 The first few iterations of GMRES have low spatial and temporal complexity. 
 However, as $k$ increases, the $k^{th}$ iteration of GMRES becomes more expensive in both time and memory.
 In fact, computing the $k^{th}$ iteration of GMRES for very large $k$ can be prohibitively complex.
