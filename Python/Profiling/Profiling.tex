@@ -141,7 +141,7 @@ If you must use nested loops, focus your optimization efforts on the innermost l
 \subsection*{Use Existing Functions Instead of Writing Your Own}
 If there is an intuitive operation you would like to perform on an array, chances are that NumPy or another library already has a function that does it.
 Python and NumPy functions have already been optimized, and are usually many times faster than the equivalent you might write.
-We saw an example of this in Lab \ref{} where we compared NumPy array multiplication with our own matrix multiplication implemented in Python.
+We saw an example of this in Lab \ref{lab:NumPyArrays} where we compared NumPy array multiplication with our own matrix multiplication implemented in Python.
 
 \subsection*{Use Generators When Possible}
 When you are iterating through a list, you can often replace the list with a \emph{generator}.
@@ -436,11 +436,11 @@ Cython code can be compiled and imported to IPython with the Cython magic functi
 Load this function with the following command.
 \footnote{In older versions of IPython and Cython, you may need to use the command \li{\%load_ext cythonmagic}.}
 \begin{lstlisting}
->>> \%load_ext Cython
+>>> %load_ext Cython
 \end{lstlisting}
 Now you can define any Cython function in the command line by prefacing it with \li{\%\%cython}.
 \begin{lstlisting}
->>> \%\%cython
+>>> %%cython
 >>> import numpy as np
 >>> from scipy import linalg as la
 >>> def qr():
