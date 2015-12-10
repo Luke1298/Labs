@@ -29,7 +29,7 @@ Here we will show another method for visualizing complex functions.
 In Lab \ref{Lab:complex_intro} we presented color plots as a useful method functions in the complex plane. 
 Here we will also show how to use surface plots to visualize the modulus of complex functions.
 
-Now you have to take care when a surface plot is about a singularity, we must account for the fact that the function is not going to be defined at all of the points we use in our graph.
+Now you have to take care when a surface plot is about a singularity.  We must account for the fact that the function is not going to be defined at all of the points we use in our graph.
 We will also have to limit the $z$ axis on the plot to avoid creating a plot that is dominated exclusively by the extremely large and extremely small values of the function.
 Plotting libraries like Mayavi and Matplotlib do allow thresholding of 3D plots via the use of floating point values of \li{nan}, but doing this may result in graphs having jagged edges where they have been cut.
 We can avoid the jagged edges by artificially adding a small lip of constant values to the plot as well.
@@ -113,7 +113,7 @@ Suppose that $z_0$ is a pole of order $1$ of $f$.
 Then
 \[\Res{z=z_0} f(z) = \frac{p(z_0)}{q'(z_0)}\]
 
-A natural consequence of the Laurent series expansion of $f(z)$ and $f'(z)$ at a pole $z_0$ is that, where $d$ is the degree of the pole at $z_0$ is that
+A natural consequence of the Laurent series expansion of $f(z)$ and $f'(z)$ at a pole $z_0$ is that, where $d$ is the degree of the pole at $z_0$,
 \[- \Res{z=z_0} \frac{f'(z)}{f(z)} = d\]
 This is a useful bit of information that may be used to simplify computation of residues or of the Laurent series expansion of a function since it allows us to avoid evaluating a long series of integrals we already know will evaluate to $0$.
 
