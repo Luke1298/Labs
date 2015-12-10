@@ -12,13 +12,13 @@ Let $\sigma(A)$ be point spectrum, of a matrix $A$, which can be defined by
 	&=\{\text{points where }(zI-A)^{-1} \text{ is undefined}\}.
 \end{align}
 By convention, if $z$ is an eigenvalue of $A$, then $\|(zI-A)^{-1}\|=\infty$.
-The psuedospectrum of a matrix is a generalization of its point spectrum. The $\epsilon$-psuedospectrum of the matrix $A$ is defined as
+The pseudospectrum of a matrix is a generalization of its point spectrum. The $\epsilon$-pseudospectrum of the matrix $A$ is defined as
 \begin{equation}
 	\sigma_{\epsilon}(A)=\{z \in \mathbb{C}:\|(zI-A)^{-1}\| > \epsilon^{-1}\}.
 \end{equation}
 Note that this definition requires the use of a matrix norm. Any matrix norm can be used, but in this Lab, we will use the norm induced by the 2-norm.\\
 
-In the case of the 2-norm, the psuedospectrum has an equivalent definition:
+In the case of the 2-norm, the pseudospectrum has an equivalent definition:
 \begin{equation}
 	\sigma_{\epsilon}(A)=\{z \in \mathbb{C}: z \in \sigma(A+E) \text{ for some $E$ with } \|E\|<\epsilon\}.
 \end{equation}
@@ -61,7 +61,7 @@ def ps_scatter_plot(A, epsilon=.001, num_pts=20):
     '''
 \end{lstlisting}
 
-To get random matrices of the right norm generate random matrices than divide by the 2-norm and then multiply by epsilon.
+To get random matrices of the right norm generate random matrices then divide by the 2-norm and then multiply by epsilon.
 Have your code also plot the eigenvalues of $A$ in a different color. Test your code on the 120x120 matrix:
 \begin{equation}
 	\begin{pmatrix}
@@ -149,7 +149,7 @@ Note that while this algorithm gives better results than our previous method of 
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{ps_contour}
-\caption{Contour plot of the $\epsilon$-psuedospectrum of the matrix given in Problem 1, with $\epsilon=10^{-2},10^{-3},\cdots,10^{-7}$. }
+\caption{Contour plot of the $\epsilon$-pseudospectrum of the matrix given in Problem 1, with $\epsilon=10^{-2},10^{-3},\cdots,10^{-7}$. }
 \label{fig:ps_contour}
 \end{center}
 \end{figure}
@@ -196,7 +196,7 @@ Figure \ref{fig:ps_normal} provides an example of this. The plots show the pseud
 	\end{pmatrix}.
 \end{equation}
 
-Note that these matrices have the same same set of eigenvalues, and that $B$ is normal, while $B'$ is not. The plot of the pseudospectrum of $B$ shows the expected circular regions, but the plot for $B'$ lacks such symmetry. Another example of this can be seen in Figure \ref{fig:ps_scatter}. The pseudospectrum does not expand out from all of the eigenvalues evenly. Most of the region contained in the pseudospectrum lies on the sides of the plot, and not close to the center.\\
+Note that these matrices have the same set of eigenvalues, and that $B$ is normal, while $B'$ is not. The plot of the pseudospectrum of $B$ shows the expected circular regions, but the plot for $B'$ lacks such symmetry. Another example of this can be seen in Figure \ref{fig:ps_scatter}. The pseudospectrum does not expand out from all of the eigenvalues evenly. Most of the region contained in the pseudospectrum lies on the sides of the plot, and not close to the center.\\
 
 Because the pseudospectra of normal matrices behave so consistently, the study of pseudospectra focuses on nonnormal matrices. Pseudospectra can also be used to study infinite-dimensional linear operators, but different methods are required for plotting their pseudospectra.
 
