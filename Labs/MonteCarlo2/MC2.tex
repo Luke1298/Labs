@@ -62,11 +62,11 @@ The corresponding estimator is,
 \begin{equation*}
 \begin{split}
 \widehat{E}[h(X);f_X] & = \widehat{E}\left [ \frac{h(X)f_X(X)}{g_X(X)} ; g_X \right ] \\
-& = \frac{1}{N}\sum_{i = 1}^{N}\frac{h(x_i)f(x_i)}{g_X(x_i)}
+& = \frac{1}{N}\sum_{i = 1}^{N}\frac{h(x_i)f_X(x_i)}{g_X(x_i)}
 \end{split}
 \end{equation*}
 
-The function $f_X$ is the p.d.f of the \emph{target distribution}. The function $g_X$ is the p.d.f of the \emph{importance distribution}. The fraction $\frac{f_X(X)}{g_X(X)}$ is called the \emph{importance weight}. This allows us to draw a sample from any distribution as long as we multiply $h(X)$ by the likelihood ratio. We will solve the same problem as in Problem \ref{prob:mc} using importance sampling. We will choose $g_X$ to be the normal distribution with $\mu = 4$ and $\sigma = 1$. We have chosen this distribution because it will give us more points closer to and greater than 3.
+The function $f_X$ is the p.d.f of the \emph{target distribution}. The function $g_X$ is the p.d.f of the \emph{importance distribution}. The fraction $\frac{f_X(X)}{g_X(X)}$ is called the \emph{importance weight}. This allows us to draw a sample from any distribution as long as we multiply $h(X)$ by the importance weight. We will solve the same problem as in Problem \ref{prob:mc} using importance sampling. We will choose $g_X$ to be the normal distribution with $\mu = 4$ and $\sigma = 1$. We have chosen this distribution because it will give us more points closer to and greater than 3.
 
 \begin{lstlisting}
 >>> import scipy.stats as ss
