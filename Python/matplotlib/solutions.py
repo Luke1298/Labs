@@ -65,6 +65,7 @@ def ripple():
 # END OF SOLUTIONS ============================================================
 
 import inspect
+from functools import wraps
 
 # Test script
 def test(student_module):
@@ -87,7 +88,8 @@ def test(student_module):
     return tester.score, tester.feedback
 
 def _autoclose(func):
-    """decorator for closing figures automatically during grading."""
+    """Decorator for closing figures automatically during grading."""
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             plt.ion()

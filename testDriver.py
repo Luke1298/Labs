@@ -18,6 +18,11 @@ It should only be on a problem-grading function that uses _testDriver._grade()
 or some other pausing command (like raw_input()) so that the plot is not closed
 immediately after it is created.
 
+The @_timeout tag prevents a function from running for longer than a
+specificied number of seconds. Be careful not to use this wrapper in
+conjunction with _testDriver._grade() or another pausing command that waits
+for the grader's response. NOTE that this decorator will only work on Unix.
+
 To test a particular test driver, navigate to the solutions file and start
 IPython. Import the solutions file, and use it as the input for test().
 
@@ -33,8 +38,15 @@ $ python testDriver.py student.py
 and the resulting feedback will be printed out.
 """
 
+# Wrappers ====================================================================
+
+import signal
+from functools import wraps
+from matplotlib import pyplot as plt
+
 def _autoclose(func):
     """function decorator for closing figures automatically."""
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             plt.ion()
@@ -44,7 +56,38 @@ def _autoclose(func):
             plt.ioff()
     return wrapper
 
-# Test script
+def _timeout(seconds):
+    """Decorator for preventing a function from running for too long.
+
+    Inputs:
+        seconds (int): The number of seconds allowed.
+
+    Notes:
+        This decorator uses signal.SIGALRM, which is only available on Unix.
+    """
+    assert isinstance(seconds, int), "@timeout(sec) requires an int"
+    
+    class TimeoutError(Exception):
+        pass
+
+    def _handler(signum, frame):
+        """Handle the alarm by raising a custom exception."""
+        raise TimeoutError("Timeout after {0} seconds".format(seconds))
+
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            signal.signal(signal.SIGALRM, _handler)
+            signal.alarm(seconds)               # Set the alarm.
+            try:
+                result = func(*args, **kwargs)
+            finally:
+                signal.alarm(0)                 # Turn the alarm off.
+            return result
+        return wraps(func)(wrapper)
+    return decorator
+
+# Test Script and Class =======================================================
+
 def test(student_module):
     """Test script. Import the student's solutions file as a module.
     
@@ -62,6 +105,7 @@ def test(student_module):
     tester = _testDriver()
     tester.test_all(student_module)
     return tester.score, tester.feedback
+
 
 class _testDriver(object):
     """Class for testing a student's work. See test.__doc__ for more info."""

@@ -87,6 +87,7 @@ def blue_shift_plot():
     
 # END OF SOLUTIONS ============================================================
 
+from functools import wraps
 from numpy.random import randint
 
 # Test script
@@ -111,7 +112,8 @@ def test(student_module):
     return tester.score, tester.feedback
 
 def _autoclose(func):
-    """decorator for closing figures automatically during grading."""
+    """Decorator for closing figures automatically during grading."""
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             plt.ion()
