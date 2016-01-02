@@ -331,6 +331,7 @@ In [2]: %%cython
 \end{lstlisting}
 Note the import statements on lines 2 and 3. Even if these modules were already loaded in the current IPython session, these lines would still be necesary. Now the \li{qr()} function has been compiled in Cython and can be called from IPython just as any other function. 
 
+It can be a little frustrating to fix errors in your function if you are using the IPython shell. The IPython Notebook interface is much easier to use for these types of problems.
 We discuss how to compile Cython code from the command line in the optional section at the end of this lab. This is particularly useful if you need an optimized module that you will use over and over again.
 
 \subsubsection*{Speeding up Cython with Type Declarations}
@@ -464,7 +465,7 @@ The Cython version runs almost as fast as the version built into NumPy.}
 \begin{problem} \label{prob:add}
 \leavevmode
 \begin{enumerate}
-\item Write the following function in Python without using the sum() builtin function.
+\item Write the following function in Python without using the \li{<<sum()>>} builtin function.
 \begin{lstlisting}
 def pysum(X):
     """ Return the sum of the elements of X.
@@ -474,9 +475,9 @@ def pysum(X):
     """
 \end{lstlisting}
 
-\item Rewrite the same function in Cython using a typed for-loop, a typed memoryview of \li{X}, and appropriate compiler directives.
+\item Rewrite the same function in Cython using a typed for-loop, and a typed memoryview of \li{X}. Call this function \li{cysum()}. Assume the input array \li{X} is an array of double precision floating point numbers.
 
-\item Compare the speed of the functions you just wrote, the builtin \li{<<sum()>>} function, and the \li{<<np.sum()>>} function.
+\item Compare the \li{pysum()} function, the \li{cysum()}, the Python builtin \li{<<sum()>>} function, and the \li{<<np.sum()>>} function. Print the results to the terminal.
 \end{enumerate}
 \end{problem}
 
