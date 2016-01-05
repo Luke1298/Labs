@@ -239,7 +239,7 @@ use
 \end{lstlisting}
 
 \begin{problem}
-Using the profiling techniques discussed in this lab, find out which portions of the code below require the most runtime. Then, rewrite the function using some of the optimization techniques we have discussed thusfar.
+Using the profiling techniques discussed in this lab, find out which portions of the code below require the most runtime. Then, rewrite the function using some of the optimization techniques we have discussed thus far.
 \begin{lstlisting}
 def foo(n):
     my_list = []
@@ -250,7 +250,7 @@ def foo(n):
     for j in xrange(n):
         if j%2 == 0:
             total += my_list[j]
-    return mylist, evens
+    return my_list, evens
 \end{lstlisting}
 
 Hint: If you are unsure where to begin optimizing, walk through the code line by line to determine what the code is accomplishing. Then, write your own function to perform the same task in a more efficient way.
@@ -329,7 +329,7 @@ In [2]: %%cython
    ...:     return Q, R
    ...:
 \end{lstlisting}
-Note the import statements on lines 2 and 3. Even if these modules were already loaded in the current IPython session, these lines would still be necesary. Now the \li{qr()} function has been compiled in Cython and can be called from IPython just as any other function. 
+Note the import statements on lines 2 and 3. Even if these modules were already loaded in the current IPython session, these lines would still be necessary. Now the \li{qr()} function has been compiled in Cython and can be called from IPython just as any other function. 
 
 It can be a little frustrating to fix errors in your function if you are using the IPython shell. The IPython Notebook interface is much easier to use for these types of problems.
 We discuss how to compile Cython code from the command line in the optional section at the end of this lab. This is particularly useful if you need an optimized module that you will use over and over again.
