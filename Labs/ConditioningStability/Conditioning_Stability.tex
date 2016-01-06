@@ -135,7 +135,7 @@ Write a Python function that investigates the condition number of the Wilkinson 
 \item Perform this experiment:
 
 \begin{quote}
-Randomly perturb $w(x)$ by replacing a coefficient $a_i$ with $a_i*r_i$, where $r_i$ is drawn from a normal distribution centered at 1 with variance $e^{-10}$.
+Randomly perturb $w(x)$ by replacing a coefficient $a_i$ with $a_i*r_i$, where $r_i$ is drawn from a normal distribution centered at 1 with variance 1e-10.
 \end{quote}
 
 Plot the results of 100 such experiments in a single graphic, along with the roots of the unperturbed polynomial $w(x)$. The plot should look something like Figure \ref{fig:wilkinsonpolynomial_many}. This exercise reproduces Figure 12.1 on p. 93 of \emph{Numerical Linear Algebra} by Lloyd N. Trefethen and David Bau III.
@@ -174,7 +174,7 @@ array([ 1.+0.j,  1.+0.j])
 Now we perturb $M$ by adding a matrix drawn from a random normal distribution over the complex numbers.
 We calculate the eigenvalues of the perturbed matrix.
 \begin{lstlisting}
->>> perturb = perturb = np.random.normal(0, 1e-10, M.shape) + np.random.normal(0,1e-10, M.shape)*1j
+>>> perturb = np.random.normal(0, 1e-10, M.shape) + np.random.normal(0,1e-10, M.shape)*1j
 >>> eigsp = la.eig(M+perturb)[0]
 \end{lstlisting}
 Finally we use this data to approximate the condition number.
