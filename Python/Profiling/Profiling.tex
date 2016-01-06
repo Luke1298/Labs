@@ -327,12 +327,39 @@ In [2]: %%cython
    ...:             R[i, j] = Q[:, j].dot(Q[:, i])
    ...:             Q[:,j] = Q[:,j]-R[i, j]*Q[:,i]
    ...:     return Q, R
-   ...:
+   ...:`
 \end{lstlisting}
 Note the import statements on lines 2 and 3. Even if these modules were already loaded in the current IPython session, these lines would still be necessary. Now the \li{qr()} function has been compiled in Cython and can be called from IPython just as any other function. 
 
-It can be a little frustrating to fix errors in your function if you are using the IPython shell. The IPython Notebook interface is much easier to use for these types of problems.
-We discuss how to compile Cython code from the command line in the optional section at the end of this lab. This is particularly useful if you need an optimized module that you will use over and over again.
+It is best to use this method of compilation if you are only using your optimized funcion once or you are in the stages of developing your optimized algorithm. It can be a little frustrating to fix errors in your function if you are using the IPython shell. The IPython Notebook interface is much easier to use for these types of problems.
+
+\subsection*{Compilation from the Command Line}
+Compiling Cython from the command line is particularly useful if you need an optimized module that you will use over and over again. As we will discuss in this section, once a function is written and compiled in Cython, it can be imported as a module.
+
+Cython code is usually written in a \texttt{.pyx} file, which is then compiled to C.
+Next the C is compiled to a Python extension written in machine code.
+Figure \ref{cython:compilation} shows how Cython code is compiled and called.
+
+\begin{figure}
+\centering
+\includegraphics[width=.7\textwidth]{compilation.pdf}
+\caption{A diagram showing how Cython code is compiled and called.
+The path from calling a Cython function in a Python file to its evaluation is shown in red.}
+\label{cython:compilation}
+\end{figure}
+
+These two compilations (first to C and then to a Python extension) are accomplished by the script \texttt{setup.py} discussed earlier in this lab.
+\lstinputlisting[style=fromfile, language=Python]{setup.py}
+The call to \texttt{cythonize()} compiles \texttt{cymodule.pyx} to C, and the call to \texttt{setup()} converts the C code to a Python extension.
+
+\begin{info}
+You can learn more about the Python/C balance in your Cython file with the following line.
+\begin{lstlisting}
+$ cython -a cymodule.pyx
+\end{lstlisting}
+This will generate a \li{html} file that you can open with your web browser.
+It will show the lines that use Python in bright yellow and lines that use C in white.
+\end{info}
 
 \subsubsection*{Speeding up Cython with Type Declarations}
 So far, our Cythonized \texttt{qr()} function does not run any faster than the Python version.\footnote{Sometimes you will see speedup immediately after Cythonizing a Python function.}
@@ -742,35 +769,6 @@ Moreover, remember not to prematurely optimize your functions. Make sure the fun
 \section*{More on Cython (Optional)}
 This section has a more complete introduction to Cython. 
 For another reference, see \url{http://docs.cython.org/src/tutorial/cython_tutorial.html}.
-
-\subsection*{Compilation from the Command Line}
-
-Cython code is usually written in a \texttt{.pyx} file, which is then compiled to C.
-Next the C is compiled to a Python extension written in machine code.
-Figure \ref{cython:compilation} shows how Cython code is compiled and called.
-
-\begin{figure}
-\centering
-\includegraphics[width=.7\textwidth]{compilation.pdf}
-\caption{A diagram showing how Cython code is compiled and called.
-The path from calling a Cython function in a Python file to its evaluation is shown in red.}
-\label{cython:compilation}
-\end{figure}
-
-These two compilations (first to C and then to a Python extension) are accomplished by the script \texttt{setup.py} discussed earlier in this lab.
-\lstinputlisting[style=fromfile, language=Python]{setup.py}
-The call to \texttt{cythonize()} compiles \texttt{cymodule.pyx} to C, and the call to \texttt{setup()} converts the C code to a Python extension.
-
-\begin{info}
-You can learn more about the Python/C balance in your Cython file with the following line.
-\begin{lstlisting}
-$ cython -a cymodule.pyx
-\end{lstlisting}
-This will generate a \li{html} file that you can open with your web browser.
-It will show the lines that use Python in bright yellow and lines that use C in white.
-\end{info}
-
-
 
 \subsection*{More on Type Declarations}
 Type declarations make Cython faster than Python because a computer can process numbers faster when it knows ahead of time what type they are.
