@@ -10,7 +10,7 @@ is ubiquitous in statistics.
 However, the integrand does not have a symbolic antiderivative.
 This means we must use numerical methods to evaluate this integral. The standard technique for numerically evaluating multivariable integrals is \emph{Monte-Carlo Integration}. In the next lab, we will approximate this integral using a modified version of Monte-Carlo Integration. In this lab, we address the basics of Monte-Carlo Integration.
 
-Monte-Carlo (MC) integration is radically different from 1-dimensional techniques like Simpson's rule, relying on probability to calculate the integral.
+Monte-Carlo (MC) integration is radically different from 1-dimensional techniques like Simpson's rule. Whereas Simpson's rule is purely computational, MC integration relies on probability to calculate the integral.
 Although it converges slowly, MC integration is frequently used to evaluate multivariable integrals because the higher-dimensional analogs of methods like Simpson's rule are inefficient.
 
 \section*{A Motivating Example}
@@ -35,7 +35,7 @@ We rescale and shift these points to be uniformly distributed in $[-1,1]\times[-
 >>> points = points*2-1
 \end{lstlisting}
 Next we compute the number of points in the unit circle.
-The function \li{np.hypot(a, b)} returns the norm of the vector $(a, b)$.
+The function \li{np.hypot(a, b)} returns the norm of the vector $(a, b)$ where $a$ and $b$ are the $x$- and $y$-components, respectively.
 \begin{lstlisting}
 >>> # Create a mask of points in the circle
 >>> circleMask = np.hypot(points[0,:], points[1,:]) <= 1
@@ -171,10 +171,10 @@ array([ 1.73205081,  2.23606798,  0.8660254 ,  1.41421356])
 \label{prob:mc_test}
 The exact value of the integral of
 \[
-f(w,x,y,z) = sin(x) y^5 -y^3 + zw + yz^3
+f(w,x,y,z) = \text{sin}(x) y^5 -y^3 + zw + yz^3
 \]
 on $[-1,1]\times[-1,1]\times[-1,1]\times[-1,1]$ is 0.
-Run the function \li{mc_int()} you wrote in Problem 3 on $f$ with 100, 1000, and 10000 sample points.
+Run the function \li{mc_int()} you wrote in Problem 3 on $f$ with 100, 1000, and 10000 sample points. Use the default value of 500 iterations for your approximations.
 Plot the errors of your estimates.
 \end{problem}
 
