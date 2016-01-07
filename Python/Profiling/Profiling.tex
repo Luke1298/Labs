@@ -327,7 +327,7 @@ In [2]: %%cython
    ...:             R[i, j] = Q[:, j].dot(Q[:, i])
    ...:             Q[:,j] = Q[:,j]-R[i, j]*Q[:,i]
    ...:     return Q, R
-   ...:`
+   ...:
 \end{lstlisting}
 Note the import statements on lines 2 and 3. Even if these modules were already loaded in the current IPython session, these lines would still be necessary. Now the \li{qr()} function has been compiled in Cython and can be called from IPython just as any other function.
 
