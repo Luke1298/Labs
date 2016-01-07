@@ -16,7 +16,7 @@
 %\mathlarger{\mathlarger{\mathlarger{ \hat{f}:X \rightarrow Y }}}%\\
 %%\mathlarger{\mathlarger{\mathlarger{ \hat{f}:\hat{X} \rightarrow \hat{Y} }}}
 % \end{eqnarray}
-% 
+%
 
 The \emph{condition number} of a function measures how sensitive that function is to changes in the input.
 On the other hand, the \emph{stability} of an algorithm measures how well that algorithm computes the value of a function from exact input.
@@ -25,7 +25,7 @@ On the other hand, the \emph{stability} of an algorithm measures how well that a
 
 The (absolute) condition number of a function $f: \mathbb{R}^m \rightarrow \mathbb{R}^n$ is
  \begin{equation}\label{equ:abs_cond}
-J(\x) = \lim_{\delta \rightarrow 0} \sup_{\norm{\delta \x} \leq \delta} { \frac{\norm{\delta f}}{\norm{\delta \x}} } 
+J(\x) = \lim_{\delta \rightarrow 0} \sup_{\norm{\delta \x} \leq \delta} { \frac{\norm{\delta f}}{\norm{\delta \x}} }
 \end{equation}
 where $\delta f = f(\x+\delta\x)-f(\x)$.
 In other words, the condition number of $f$ is (the limit of) the change in output over the change of input.
@@ -49,7 +49,7 @@ Let $f:\mathbb{C}^{n+1} \rightarrow \mathbb{C}^n$ be the function that sends $(a
 In other words, this function describes the problem of finding the roots of a polynomial.
 Unfortunately, root finding is extremely ill-conditioned.
 
-A classic example is the Wilkinson polynomial 
+A classic example is the Wilkinson polynomial
 \[
 w(x) = \prod_{r=1}^{20}(x-r) = x^{20}-210x^{19}+20615x^{18}-\ldots.
 \]
@@ -94,11 +94,11 @@ We sort the roots before we compare them to ensure that they are in the same ord
 >>> la.norm(perturbed_roots-w_roots)/la.norm(perturb)
 68214100.15878984
 \end{lstlisting}
-Thus, the condition number of this problem is something like $10^7$. 
+Thus, the condition number of this problem is something like $10^7$.
 
 When we try to estimate the relative condition number, NumPy will not compute the 2-norm of \li{w_coeffs} because it is so large.
 NumPy will not compute the square root of a very large number.
-One easy solution is to use a different norm that does not require the square root. 
+One easy solution is to use a different norm that does not require the square root.
 \begin{lstlisting}
 >>> # Estimate the absolute condition number in the infinity norm
 >>> k = la.norm(perturbed_roots-w_roots, np.inf)/la.norm(perturb, np.inf)
@@ -112,7 +112,7 @@ As you can see, the order of magnitude of the absolute condition number is the s
 The relative condition number for this problem is approximately $10^{24}$.
 
 
-There are some caveats to this example. 
+There are some caveats to this example.
 First, when we compute the quotients in \eqref{equ:abs_cond} and \eqref{equ:rel_cond} for a fixed $\delta \x$, we are only \emph{approximating} the condition number.
 The actual condition number is a limit of such quotients.
 We hope that when $||\delta \x||$ is small, a random quotient is at least the same order of magnitude as the limit, but we have no way to be sure.
@@ -123,11 +123,10 @@ We will return to this issue in the next section.
 
 \begin{figure}
 \centering
-\includegraphics[height=2.5in]{wilkinsonpolynomial.pdf}
-\caption{The blue dots are the roots of $w(x)$. The red dots are the roots of the polynomial perturbed by 1e-7 in the $x^{19}$-coefficient. }
+\includegraphics[height=2.25in]{wilk2.png}
+\caption{In these images, blue is associated with $w(x)$ and red is associated with $w(x)$ perturbed by 1e-7 in the $x^{19}$-coefficient. On the left is a plot of the two polynomials. On the right is a graphical representation of the roots of the polynomials. The blue dots are the roots of $w(x)$. The red x's are the roots of the perturbed polynomial. }
 \label{fig:wilkinsonpolynomial}
 \end{figure}
-
 
 \begin{problem}\label{prob:wilk}
 Write a Python function that investigates the condition number of the Wilkinson polynomial by doing the following.
@@ -135,7 +134,7 @@ Write a Python function that investigates the condition number of the Wilkinson 
 \item Perform this experiment:
 
 \begin{quote}
-Randomly perturb $w(x)$ by replacing a coefficient $a_i$ with $a_i*r_i$, where $r_i$ is drawn from a normal distribution centered at 1 with variance 1e-10.
+Randomly perturb $w(x)$ by replacing each coefficients $a_i$ with $a_i*r_i$, where $r_i$ is drawn from a normal distribution centered at 1 with standard deviation $1e-10$.
 \end{quote}
 
 Plot the results of 100 such experiments in a single graphic, along with the roots of the unperturbed polynomial $w(x)$. The plot should look something like Figure \ref{fig:wilkinsonpolynomial_many}. This exercise reproduces Figure 12.1 on p. 93 of \emph{Numerical Linear Algebra} by Lloyd N. Trefethen and David Bau III.
@@ -144,7 +143,7 @@ Plot the results of 100 such experiments in a single graphic, along with the roo
 \begin{figure}[H]
 \includegraphics[height=3in]{wilkinsonpolynomial_many.pdf}
 \caption{Sample result of Problem \ref{prob:wilk}.
-The blue dots are the roots of $w(x)$ and the black dots are roots of random perturbations. 
+The blue dots are the roots of $w(x)$ and the black dots are roots of random perturbations.
 This figure replicates Figure 12.1 on p. 93 of \emph{Numerical Linear Algebra} by Lloyd N. Trefethen and David Bau III.}
 \label{fig:wilkinsonpolynomial_many}
 \end{figure}
@@ -196,15 +195,15 @@ Let us explore the condition number of the eigenvalue problem.
 def eig_condit(M):
     '''
     Approximate the condition number of the eigenvalue problem at M.
-    
+
     INPUT:
     M  - A 2-D NumPy array, representing a matrix.
-    
+
     RETURN:
     A tuple containing approximations to the absolute and relative condition numbers of the eigenvalue problem at M.
     '''
 \end{lstlisting}
-\item Find an example of a $2\times2$ matrix with a very large condition number. 
+\item Find an example of a $2\times2$ matrix with a very large condition number.
 (Hint: Look at matrices whose off-diagonal entries are very different in magnitude.)
 \item What is the order of magnitude of the condition number of a symmetric $2\times 2$ matrix?
 \end{enumerate}
@@ -213,7 +212,7 @@ def eig_condit(M):
 def plot_eig_condit(x0=-100, x1=100, y0=-100, y1=100, res=10):
     '''
     Plot the condition number of the eigenvalue problem on [x0, x1]x[y0,y1].
-    
+
     Specifically, use plt.pcolormesh to plot the relative condition number of the eigenvalue problem at [[1,x],[y,1]] on this domain.
     The variable `res' should be the number of sample points taken along each axis, for a total of `res'**2 points in the plot.
     '''
@@ -229,10 +228,10 @@ What can you conclude about the condition number of the eigenvalue problem at a 
 
 %\begin{example}[Condition of a System of Equations]
 %Consider the system of equations
-%\[ Ax = b \] 
+%\[ Ax = b \]
 %for an $n \times n$ matrix $A$ and $n \times 1$ vectors $x$ and $b$. If we hold $A$ fixed, consider the problem of computing $b$ with respect to small changes in $x$. Alternatively, hold $A$ fixed and consider the problem of computing $x = A^{-1} b$ with respect to small changes in $b$. Finally, we may hold $b$ fixed and consider the problem of computing $x = A^{-1}b$ with respect to small changes in $A$.
 %
-%It turns out that each of these problems has the \emph{same} relative condition number. This number is 
+%It turns out that each of these problems has the \emph{same} relative condition number. This number is
 %\[
 %\mathcal{K} (A) = \norm{A}_2 \norm{A^{-1}}_2
 %\]
@@ -247,7 +246,7 @@ What can you conclude about the condition number of the eigenvalue problem at a 
 %\end{example}
 
 \section*{Stability of an Algorithm}
-The stability of an algorithm is measured by the error in its output. 
+The stability of an algorithm is measured by the error in its output.
 Suppose we have some algorithm to compute $f: \mathbb{R}^m \rightarrow \mathbb{R}^n$.
 Let $\tilde f(\x)$ represent the value computed by the algorithm at $\x$.
 Then the \emph{forward error} of $f$ at $\x$ is $||f(\x)-\tilde f(\x)||$, and the \emph{relative forward error} of $f$ at $\x$ is
@@ -292,7 +291,7 @@ You can avoid the problem either by rewriting your program to not use subtractio
 Here is an example of catastrophic cancellation.
 Suppose we wish to compute $\sqrt{a}-\sqrt{b}$. We can either do this subtraction directly or perform the equivalent division
 \[
-\sqrt{a}-\sqrt{b} = (\sqrt{a}-\sqrt{b})\frac{\sqrt{a}+\sqrt{b}}{\sqrt{a}+\sqrt{b}} = \frac{a-b}{\sqrt{a}+\sqrt{b}}=\frac{1}{\sqrt{a}+\sqrt{b}}.
+\sqrt{a}-\sqrt{b} = (\sqrt{a}-\sqrt{b})\frac{\sqrt{a}+\sqrt{b}}{\sqrt{a}+\sqrt{b}} = \frac{a-b}{\sqrt{a}+\sqrt{b}}.
 \]
 
 Let us perform this computation both ways in NumPy with $a=10^{20}+1$ and $b=10^{20}$.
@@ -302,18 +301,18 @@ Let us perform this computation both ways in NumPy with $a=10^{20}+1$ and $b=10^
 >>> 1/(np.sqrt(1e20+1)+np.sqrt(1e20))
 5.0000000000000002e-11
 \end{lstlisting}
-Since $a \neq b$, clearly $\sqrt{a}-\sqrt{b}$ should be nonzero. 
+Since $a \neq b$, clearly $\sqrt{a}-\sqrt{b}$ should be nonzero.
 
 
 \begin{problem}
 Let $I(n) = \int_0^1 x^n e^{x - 1} dx$.
 \begin{enumerate}
 \item Prove that $0 \leq I(n) \leq 1$ for all $n$.
-\item It can be shown that for $n>1$, 
+\item It can be shown that for $n>1$,
 \[
 I(n) = \left(-1\right)^{n} !n + \left(-1\right)^{n + 1} \frac{n!}{e}
 \]
-where $!n$ is the \emph{subfactorial} of $n$. 
+where $!n$ is the \emph{subfactorial} of $n$.
 Use this formula to write the following function.
 \begin{lstlisting}
 def integral(n):
@@ -434,22 +433,22 @@ What do you observe?
 %\hline \textbf{Well-Conditioned} & \textbf{Ill-Conditioned} & \textbf{Systems of Equations} \\
 %{\parbox{0.3\textwidth}{\raggedleft
 %            \begin{itemize}[leftmargin=*]
-%                \item finding eigenvalues of a symmetric (or normal) matrix 
-%                \item calculating $e^x$ for relatively small values of $x$ 
+%                \item finding eigenvalues of a symmetric (or normal) matrix
+%                \item calculating $e^x$ for relatively small values of $x$
 %                \item calculating $\ln(x)$ for $x$ not close to $1$
-%            \end{itemize} }}           &  
-%             
+%            \end{itemize} }}           &
+%
 %{\parbox{0.3\textwidth}{\raggedleft
 %            \begin{itemize}[leftmargin=*]
-%                \item calculating $x_1 - x_2$ when $x_1 \approx x_2$ 
+%                \item calculating $x_1 - x_2$ when $x_1 \approx x_2$
 %                \item computing roots of a polynomial, given the coefficients
 %                \item computing eigenvalues of a non-symmetric matrix
-%            \end{itemize} }}              &   
-%            
+%            \end{itemize} }}              &
+%
 %{\parbox{0.3\textwidth}{
 %            \begin{itemize}[leftmargin=*]
 %                 \item relative condition number is \[ \mathcal{K} = ||A|| ||A^{-1}|| \]
-%            \end{itemize} }}   \\ \hline                      
+%            \end{itemize} }}   \\ \hline
 %\end{tabular}
 %\end{table}
 %
@@ -459,17 +458,17 @@ What do you observe?
 %\hline \textbf{Stable} & \textbf{Unstable} \\
 %{\parbox{0.45\textwidth}{\raggedleft
 %            \begin{itemize}[leftmargin=*]
-%                \item finding eigenvalues of a symmetric (or normal) matrix 
-%                \item calculating $e^x$ for relatively small values of $x$ 
+%                \item finding eigenvalues of a symmetric (or normal) matrix
+%                \item calculating $e^x$ for relatively small values of $x$
 %                \item calculating $\ln(x)$ for $x$ not close to $1$
-%            \end{itemize} }}           &  
-%             
+%            \end{itemize} }}           &
+%
 %{\parbox{0.45\textwidth}{\raggedleft
 %            \begin{itemize}[leftmargin=*]
-%                \item calculating $x_1 - x_2$ when $x_1 \approx x_2$ 
+%                \item calculating $x_1 - x_2$ when $x_1 \approx x_2$
 %                \item computing roots of a polynomial, given the coefficients
 %                \item computing eigenvalues of a non-symmetric matrix
-%            \end{itemize} }}    \\ \hline                      
+%            \end{itemize} }}    \\ \hline
 %\end{tabular}
 %\end{table}
 %
