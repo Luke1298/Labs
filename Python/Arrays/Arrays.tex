@@ -37,7 +37,7 @@ Conceptually, a 1-dimensional array (called a 1-D array) is just a list of numbe
 An $n$-dimensional array (or $n$-D array) is an array of $(n-1)$-dimensional arrays. 
 Thus, any 2-D array is conceptually a matrix, and a 3-D array is a list of matrices, which can be visualized as a cube of numbers. 
 Each dimension is called an \emph{axis}. 
-When a 2-D array is printed to the screen, the 0-axis indexes the rows and the 1-axis indexes the columns.
+When a 2-D array is printed to the screen, the 0-axis indexes the rows and the 1-axis indexes the columns. Equivalently, you can think of the 0-axis working on columns and the 1-axis working on rows. Examples of this will be addressed later in this lab.
 
 The NumPy array class is called \li{ndarray}. 
 The simplest way to create an \li{ndarray} is to define it explicitly using nested lists.
@@ -446,13 +446,13 @@ array([[0, 1, 2],
 >>> ex6.max() 
 8
 
-# Return the maximum values evaluated along the 0-axis
->>> ex6.max(axis=0)
-array([6, 7, 8])
+# Return the sum along the 0-axis (the columns)
+>>> ex6.sum(axis=0)
+array([9, 12, 15])
 
-# Return the maximum values evaluated along the 1-axis
->>> ex6.max(axis=1)
-array([2, 5, 8])
+# Return the sum along the 1-axis (the rows)
+>>> ex6.sum(axis=1)
+array([3, 12, 21])
 \end{lstlisting}
 
 
