@@ -29,7 +29,7 @@ def qr1(A):
 Python provides a \emph{profiler} that can identify where code spends most of its runtime.
 The output of the profiler will tell you where to begin your optimization efforts.
 
-In IPython\footnote{If you are not using IPython, you will need to use the \li{cProfile} module documented here: \url{https://docs.python.org/2/library/profile.html}.}, 
+In IPython\footnote{If you are not using IPython, you will need to use the \li{cProfile} module documented here: \url{https://docs.python.org/2/library/profile.html}.},
 you can profile a function from the command line with \texttt{\%prun}.
 Here we profile \texttt{qr1()} on a random $300 \times 300$ array.
 \begin{lstlisting}
@@ -66,11 +66,11 @@ On this computer, we get the following output.
 }
 
 
-The first line of the output tells us that executing \texttt{qr1(A)} results in almost 100,000 function calls.  
+The first line of the output tells us that executing \texttt{qr1(A)} results in almost 100,000 function calls.
 Then we see a table listing these functions along with data telling us how much time each takes.
 Here, \texttt{ncalls} is the number of calls to the function, \texttt{tottime} is the total time spent in the function, and \texttt{cumtime} is the amount of time spent in the function including calls to other functions.
 
-For example, the first line of the table is the function \texttt{qr1(A)} itself. 
+For example, the first line of the table is the function \texttt{qr1(A)} itself.
 This function was called once, it took 1.342s to run, and 0.344s of that was spent in calls to other functions.
 Of that 0.344s, there were 0.319s spent on 89,700 calls to \texttt{np.dot()}.
 
@@ -143,7 +143,7 @@ Some less obvious ways to eliminate excess computations include moving computati
 
 
 \subsection*{Avoid Nested Loops}
-For many algorithms, the temporal complexity of an algorithm is determined by the loops. Nested loop quickly increase the temporal complexity. 
+For many algorithms, the temporal complexity of an algorithm is determined by the loops. Nested loop quickly increase the temporal complexity.
 The best way to avoid nested loops is to use NumPy array operations instead of iterating through arrays.
 If you must use nested loops, focus your optimization efforts on the innermost loop, which gets called the most times.
 
@@ -154,23 +154,23 @@ We saw an example of this in Lab \ref{lab:NumPyArrays} where we compared NumPy a
 
 \subsection*{Use Generators When Possible}
 When you are iterating through a list, you can often replace the list with a \emph{generator}.
-Instead of storing the entire list in memory, a generator computes each item as it is needed. 
+Instead of storing the entire list in memory, a generator computes each item as it is needed.
 For example, the code
 \begin{lstlisting}
 >>> for i in range(100):
 ...     print i
 \end{lstlisting}
-stores the numbers 0 to 99 in memory, looks up each one in turn, and prints it. 
+stores the numbers 0 to 99 in memory, looks up each one in turn, and prints it.
 On the other hand, the code
 \begin{lstlisting}
 >>> for i in xrange(100):
 ...     print i
 \end{lstlisting}
-uses a generator instead of a list. 
+uses a generator instead of a list.
 This code computes the first number in the specified range (which is 0), and prints it.
 Then it computes the next number (which is 1) and prints that.
 
-It is also possible to write your own generators. 
+It is also possible to write your own generators.
 See \url{https://docs.python.org/2/tutorial/classes.html#generators} and \url{https://wiki.python.org/moin/Generators} for more information.
 
 In our example, replacing each \texttt{range} with \texttt{xrange} does not speed up \texttt{qr2()} by a noticeable amount.
@@ -208,7 +208,7 @@ For example, replace
 >>> for i in xrange(100):
 ...     mylist.append(math.sqrt(i))
 \end{lstlisting}
-with 
+with
 \begin{lstlisting}
 >>> mylist = [math.sqrt(i) for i in xrange(100)]
 \end{lstlisting}
@@ -244,13 +244,13 @@ Using the profiling techniques discussed in this lab, find out which portions of
 def foo(n):
     my_list = []
     for i in xrange(n):
-        num = np.random.randint()
+        num = np.random.randint(-9,9)
         my_list.append(num)
     evens = 0
     for j in xrange(n):
         if j%2 == 0:
-            total += my_list[j]
-    return my_list, evens
+            evens += my_list[j]
+    return mylist, evens
 \end{lstlisting}
 
 Hint: If you are unsure where to begin optimizing, walk through the code line by line to determine what the code is accomplishing. Then, write your own function to perform the same task in a more efficient way.
@@ -290,7 +290,7 @@ def qr(A):
 To compile this code as Cython, we need to write another script, call it \texttt{setup.py}.
 \lstinputlisting[style=fromfile, language=Python]{setup.py}
 To run the setup script, type the following in the command line.
-\footnote{Note that \texttt{python} in this line will need to refer to your version of Python that comes with Cython. 
+\footnote{Note that \texttt{python} in this line will need to refer to your version of Python that comes with Cython.
 Often, you will need to replace \texttt{python} with a path pointing to a specific distribution of Python.}
 \begin{lstlisting}
 $ python setup.py build_ext --inplace
@@ -329,7 +329,7 @@ In [2]: %%cython
    ...:     return Q, R
    ...:`
 \end{lstlisting}
-Note the import statements on lines 2 and 3. Even if these modules were already loaded in the current IPython session, these lines would still be necessary. Now the \li{qr()} function has been compiled in Cython and can be called from IPython just as any other function. 
+Note the import statements on lines 2 and 3. Even if these modules were already loaded in the current IPython session, these lines would still be necessary. Now the \li{qr()} function has been compiled in Cython and can be called from IPython just as any other function.
 
 It is best to use this method of compilation if you are only using your optimized funcion once or you are in the stages of developing your optimized algorithm. It can be a little frustrating to fix errors in your function if you are using the IPython shell. The IPython Notebook interface is much easier to use for these types of problems.
 
@@ -368,7 +368,7 @@ All Cython data types and their NumPy equivalents are listed in Table \ref{table
 
 \begin{warn}
 Unlike Python integers, which can be arbitrarily large, Cython integers can overflow.
-\end{warn} 
+\end{warn}
 
 \begin{table}
 \begin{center}
@@ -496,7 +496,7 @@ The Cython version runs almost as fast as the version built into NumPy.}
 \begin{lstlisting}
 def pysum(X):
     """ Return the sum of the elements of X.
-    
+
     INPUTS:
     X - a 1-D NumPy array
     """
@@ -516,7 +516,7 @@ def LU(A):
     n = A.shape[0]
     U = np.array(np.copy(A), dtype=float)
     L = np.eye(n)
-    
+
     for i in xrange(1,n):
         for j in xrange(i):
             L[i,j] = U[i,j]/U[j,j]
@@ -552,11 +552,11 @@ In the code above, for example, say that our array \li{A} was full of integers. 
 Once all the datatypes have been inferred and assigned, the code is translated to machine code by the LLVM library. Numba will then cache this compiled version of our code. This means that we can bypass this whole inference and compilation process the next time we run our function.
 
 \subsubsection*{More Control Within Numba}
-Though the inference engine within Numba does a good job, it's not always perfect. If you would like to have more control, you may specify datatypes explicity as demonstrated in the code below. 
+Though the inference engine within Numba does a good job, it's not always perfect. If you would like to have more control, you may specify datatypes explicity as demonstrated in the code below.
 
 Also, if you add the keyword argument, \li{nopython=True} to the \li{jit} decorator, an error will be raised if Numba was unable to convert everything to explicit datatypes.
 
-In this example, we will assume that the input will be doubles. Note that is necessary to import the desired datatype from the Numba module. 
+In this example, we will assume that the input will be doubles. Note that is necessary to import the desired datatype from the Numba module.
 
 \begin{lstlisting}
 from numba import double
@@ -576,14 +576,14 @@ If your function is running slower than you would expect, you can find out what 
 >>> numba_sum.inspect_types()
 \end{lstlisting}
 
-If you are trying to achieve the fastest runtimes possible, it will be worth trying both Numba and Cython. Since Numba relies on an LLVM compiler and Cython relies on a C compiler, it is possible that these two techniques will produce different results. 
+If you are trying to achieve the fastest runtimes possible, it will be worth trying both Numba and Cython. Since Numba relies on an LLVM compiler and Cython relies on a C compiler, it is possible that these two techniques will produce different results.
 
 \begin{problem}
 The code below defines a Python function which takes a matrix to the $n$th power.
 \begin{lstlisting}
 def pymatpow(X, power):
     """ Return X^{power}.
-    
+
     Inputs:
         X (array) - A square 2-D NumPy array
         power (int) - The power to which we are taking the matrix X.
@@ -671,24 +671,24 @@ The code below implements one such algorithm in Python. This is called the Thoma
 \begin{lstlisting}
 def pytridiag(a,b,c,d):
     """Solve the tridiagonal system Ax = d where A has diagonals a, b, and c.
-    
+
     Inputs:
         a, b, c, d (array) - All 1-D NumPy arrays of equal length.
     Returns:
         x (array) - solution to the tridiagonal system.
     """
     n = len(a)
-    
+
     # Make copies so the original arrays remain unchanged
     aa = np.copy(a)
     bb = np.copy(b)
     cc = np.copy(c)
     dd = np.copy(d)
-    
+
     # Forward sweep
     for i in xrange(1, n):
         temp = aa[i]/bb[i-1]
-        bb[i] = bb[i] - temp*cc[i-1] 
+        bb[i] = bb[i] - temp*cc[i-1]
         dd[i] = dd[i] - temp*dd[i-1]
 
     # Back substitution
@@ -710,15 +710,15 @@ When testing the SciPy algorithm, start with $1000 \times 1000$ systems. You may
 \begin{lstlisting}
 def init_tridiag(n):
     """Initializes a random nxn tridiagonal matrix A.
-    
+
     Inputs:
         n (int) : size of array
-    
+
     Returns:
         a (1-D array) : (-1)-th diagonal of A
         b (1-D array) : main diagonal of A
         c (1-D array) : (1)-th diagonal of A
-        A (2-D array) : nxn tridiagonal matrix defined by a,b,c. 
+        A (2-D array) : nxn tridiagonal matrix defined by a,b,c.
     """
     a = np.random.random_integers(-9,9,n).astype("float")
     b = np.random.random_integers(-9,9,n).astype("float")
@@ -737,7 +737,7 @@ Note that an efficient tridiagonal matrix solver is implemented by \li{scipy.spa
 
 \section*{When to Stop Optimizing}
 You don't need to apply every possible optimization to your code.
-When your code runs acceptably fast, stop optimizing. There is no need spending valuable time making optimizations once the speed is sufficient. 
+When your code runs acceptably fast, stop optimizing. There is no need spending valuable time making optimizations once the speed is sufficient.
 
 Moreover, remember not to prematurely optimize your functions. Make sure the function does exactly what you want it to before worrying about any kind of optimization.
 
@@ -765,9 +765,9 @@ Moreover, remember not to prematurely optimize your functions. Make sure the fun
 
 
 
-      
+
 \section*{More on Cython (Optional)}
-This section has a more complete introduction to Cython. 
+This section has a more complete introduction to Cython.
 For another reference, see \url{http://docs.cython.org/src/tutorial/cython_tutorial.html}.
 
 \subsection*{More on Type Declarations}
@@ -856,7 +856,7 @@ def pyrowdot(A):
     return B
 \end{lstlisting}
 
-Here is the Cython solution. 
+Here is the Cython solution.
 We changed the function \li{cydot()} to a C function since it will only be called by \li{cyrowdot()}.
 Also, the Cython solution uses a typed memoryview of its input.
 
