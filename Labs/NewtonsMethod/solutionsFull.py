@@ -87,6 +87,21 @@ def problemOneFive():
 # Problem 2 (Optional): Modify the function Newtons_method() to calculate the numerical
 # derivative of f using centered coefficients.
 
+def Newtons_method_mod(f, x0, Df=None, iters=15, tol=.002):
+    
+    if Df == None:
+        h = 1e-5
+        Df = lambda x: .5 * (f(x+h) - f(x-h))/h
+        
+    xold = x0
+    for numiters in range(1,iters+1):
+        xnew = xold-f(xold)*1./Df(xold)
+        if abs(xnew-xold)<tol:
+            return xnew,True,numiters
+        else:
+            xold = xnew
+    return xnew,False,numiters
+
 
 # Problem 3.1: Implement this function.
 def plot_basins(f, Df, roots, xmin, xmax, ymin, ymax, numpoints=1000,iters=15, colormap='brg'):
