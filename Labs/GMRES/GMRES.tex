@@ -117,7 +117,7 @@ The idea of the GMRES algorithm is that instead of solving $A\x = \b$ directly, 
 The algorithm returns when this residual is sufficiently small.
 In good circumstances, this will happen when $n$ is still much less than $m$.
 
-The GMRES algorithm is implemented with the Arnoldi iteration for numerical stability.  The Arnoldi iteration produces $H_n$, an $(n+1)\times n$ upper Hessenberg matrix; and $Q$, where $AQ_n = Q_{n+1}H_n$.  Since the columns of $Q$ are orthonormal, we can compute the residual equivalently as
+The GMRES algorithm is implemented with the Arnoldi iteration for numerical stability.  The Arnoldi iteration produces $H_n$, an $(n+1)\times n$ upper Hessenberg matrix; and $Q_n$, the matrix containing the basis vectors of $\mathcal{K}_n(A, \b)$.  Since the columns of $Q$ are orthonormal, and $AQ_n = Q_{n+1}H_n$, we can compute the residual equivalently as
 \begin{equation}
 \qquad \|\b - A\x_n\|_2 = \|H_n \y_n - \beta e_1\|_2.
 \label{eq:GMRES_lstsq1}
@@ -237,7 +237,7 @@ def plot_gmres(A, b, x0, tol=1e-8):
     maximum of m iterations. Then create the two following plots (subplots
     of a single figure):
      
-    1. Plot the eigenvalues of A in the complex plane
+    1. Plot the eigenvalues of A in the complex plane.
     
     2. Plot the convergence of the GMRES algorithm by plotting the
     iteration number on the x-axis and the residual on the y-axis.
@@ -249,12 +249,13 @@ Use this function to investigate the convergence of GMRES as follows.
 Define an $m\times m$ matrix
 \[A_n = nI+P,\]
  where $I$ is the $m \times m$ identity matrix and $P$ is a $m \times m$ matrix of numbers from a random normal distribution with mean 0 and standard deviation $1/(2\sqrt{m})$. 
- Write a function that calls \li{plot_gmres} on $A_n$ for $n=-4,-2,0,2,4$. Use $m=200$, let \li{b} be an array of ones, and let x0 be the zero vector or anything else that suits you. How does the convergence of the GMRES algorithm relate to the eigenvalues?
+ Write a function that calls \li{plot_gmres} on $A_n$ for $n=-4,-2,0,2,4$. Use $m=200$, let \li{b} be an array of ones, and let \li{x0} be the zero vector or anything else that suits you. How does the convergence of the GMRES algorithm relate to the eigenvalues?
  
  Hints:
  \begin{enumerate}
  \item Create a plot with a log scale on the y-axis with \li{plt.yscale('log')}.
  \item Create a matrix with entries from a random normal distribution with \li{np.random.normal()}.  Read the documentation for more information.
+ \item Note that the parameter $A$ required here is not a callable function but a matrix; this is to allow the finding of the eigenvalues.
  \item Output for $n=2$, $m=200$ is in Figure \ref{fig:plot_gmres} below.
  \end{enumerate}
 Ideas for this problem were taken from Example 35.1 on p. 271 of \cite{Trefethen1997}.
@@ -340,17 +341,15 @@ GMRES with restarts is outlined in Algorithm \ref{alg:gmres_k}.
 
 \begin{algorithm}
 \begin{algorithmic}[1]
-\Procedure{GMRES(k)}{$A, \b, k, tol, restarts$}
-  \State $r \gets 0$ \Comment{Restart counter}
-  \State $Q \gets \empty{\size{b}}{k+1}$			\Comment{Initialize}
-\State $H \gets \zeros{k+1}{ k}$
-   \While{$r \leq restarts$}
-	\State{ Perform the GMRES algorithm, obtaining a least squares solution $\y$}
+\Procedure{GMRES(k)}{$A, \b, \x_0, k, tol, restarts$}
+  \State $n \gets 0$ \Comment{Initialize}
+   \While{$n \leq restarts$}
+	\State{ Perform the GMRES algorithm, obtaining a least squares solution $\y$}.
 	\State{ If the desired tolerance was reached, return. Otherwise, continue.}
-    \State $b \gets Q[:,k+1]\y$
-    \State $r \gets r+1$
+    \State $\x_0 \gets \y$
+    \State $n \gets n + 1$
     \EndWhile
-    \State \pseudoli{return} $Q[:,k+1]\y, \,\, res$		\Comment{Return the approximate solution and the residual}
+    \State \pseudoli{return} $\y, \,\, res$		\Comment{Return the approximate solution and the residual}
 \EndProcedure
 \end{algorithmic}
 \caption{The GMRES(k) algorithm. This algorithm performs GMRES on a vector $\b$ and matrix $A$. It iterates $k$ times before restarting. 
@@ -368,14 +367,15 @@ If the true solution $\x$ to $A\x=\b$ is nearly orthogonal to the Krylov subspac
 \begin{problem}
 Implement Algorithm \ref{alg:gmres_k} with the following function.
 \begin{lstlisting}
-def gmres_k(A, b, k=100, tol=1E-8, restarts=50):
-    '''Use the GMRES(k) algorithm to approximate the solution to Ax=b, where A is the linear operator defined by 'Amul'.
+def gmres_k(A, b, x0, k=5, tol=1E-8, restarts=50):
+    '''Use the GMRES(k) algorithm to approximate the solution to Ax=b.
     
     INPUTS:
-    A        - A callable function that calculates Ax for any input vector x.
+    A        - A callable function that calculates Ax for any vector x.
     b        - A NumPy array.
+    x0       - An arbitrary initial guess.
     k        - Maximum number of iterations of the GMRES algorithm before 
-              restarting. Defaults to 100.
+              restarting. Defaults to 5.
     tol      - Stop iterating if the residual is less than 'tol'. Defaults 
               to 1E-8.
     restarts - Maximum number of restarts. Defaults to 50.
