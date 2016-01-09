@@ -19,7 +19,7 @@ def gmres(A, b, x0, k=100, tol=1e-8):
     Return (y, res) where 'y' is an approximate solution to Ax=b and 'res' 
     is the residual.
     '''
-    raise ValueError("Problem 1 not implemented.")
+    raise NotImplementedError("Problem 1 incomplete.")
     
     
 #Problem 2: Implement the following two functions
@@ -45,7 +45,7 @@ def plot_gmres(A, b, x0, tol=1e-8):
     iteration number on the x-axis and the residual on the y-axis.
     Use a log scale on the y-axis.
     '''
-    raise ValueError("Problem 2 not implemented.")
+    raise NotImplementedError("Problem 2 incomplete.")
 
     
 def make_plots(m=200):
@@ -55,7 +55,7 @@ def make_plots(m=200):
     Print a statement explaining how the convergence relates to 
     the eigenvalues.
     '''
-    raise ValueError("make_plots not implemented.")
+    raise NotImplementedError("make_plots not yet implemented.")
     
     
 #Problem 3: Implement the following two functions
@@ -76,7 +76,7 @@ def gmres_k(Amul, b, x0, k=5, tol=1E-8, restarts=50):
     Return (y, res) where 'y' is an approximate solution to Ax=b and 'res'
     is the residual.
     '''
-    raise ValueError("Problem 3 not yet implemented.")
+    raise NotImplementedError("Problem 3 incomplete.")
     
     
 def time_gmres(m=200):
@@ -85,5 +85,5 @@ def time_gmres(m=200):
     The results might be more dramatic with an x0 of larger magnitude.
     Print your results.  What do you observe?
     '''
-    raise ValueError("time_gmres not yet implemented.")
+    raise NotImplementedError("time_gmres not yet implemented.")
     

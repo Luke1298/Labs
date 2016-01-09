@@ -1,6 +1,6 @@
+#solutions.py
 """
 Vol I Lab __: GMRES
-solutions file
 January 8, 2016
 """
 import numpy as np
