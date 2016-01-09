@@ -20,14 +20,15 @@ def Newtons_method(f, x0, Df, iters=15, tol=.1e-5):
         converged (bool): a Boolean telling whether Newton's method converged
         numiters (int): the number of iterations the method computed
     '''
+    raise NotImplementedError("Problem 1.1 Incomplete")
 
 # Problem 1.2: Implement this function.
 def problemOneTwo():
     '''
-    Run Newtons_method for f = cos(x) with x_0 = 1 and x_0 = 2.  How many
-    iterations are required if tol = 10^-5? Return a tuple with the answer
-    for x_0 = 1 and for x_0 = 2.
+    Return a tuple of the number of iterations to get five digits of accuracy
+    for f = cos(x) with x_0 = 1 and x_0 = 2.
     '''
+    raise NotImplementedError("Problem 1.2 Incomplete")
 
 # Problem 1.3: Implement this function.
 def problemOneThree():
@@ -35,16 +36,18 @@ def problemOneThree():
     Plot f(x) = sin(x)/x - x on [-4,4].  Return the zero of this function, as
     given by Newtons_method with tol = 10^-7.
     '''
+    raise NotImplementedError("Problem 1.3 Incomplete")
 
 # Problem 1.4: Implement this function.
 def problemOneFour():
     '''
-    Run Newtons_method on the function f(x) = x^9, with x_0 = 1 and tol = 10^-5.
     Return a tuple of
-    1. The number of iterations.
-    2. The approximation of the root.
-    3. A string explaining what is going wrong and how it might be remedied.
+    1. The number of iterations to get five digits of accuracy for f(x) = x^9
+        with x_0 = 1.
+    2. A string with the reason to why you think the convergence is slow for 
+        this function.
     '''
+    raise NotImplementedError("Problem 1.4 Incomplete")
 
 # Problem 1.5: Implement this function.
 def problemOneFive():
@@ -52,6 +55,7 @@ def problemOneFive():
     Return a string as to what happens and why for the function f(x) = x^(1/3) 
     where x_0 = .01.
     '''
+    raise NotImplementedError("Problem 1.5 Incomplete")
 
 # Problem 2 (Optional): Modify the function Newtons_method() to calculate the numerical
 # derivative of f using centered coefficients.
@@ -71,9 +75,11 @@ def plot_basins(f, Df, roots, xmin, xmax, ymin, ymax, numpoints=100, iters=15, c
         iters (int): Number of times to iterate Newton's method. Defaults to 15.
         colormap (str): A colormap to use in the plot. Defaults to 'brg'.
     '''
+    raise NotImplementedError("Problem 3.1 Incomplete")
 
 # Problem 3.2: Implement this function.
 def problemThreeTwo():
     '''
     Run plot_basins() on the function x^3-1 on the domain [-1.5,1.5]x[-1.5,1.5].
     '''
+    raise NotImplementedError("Problem 3.2 Incomplete")
