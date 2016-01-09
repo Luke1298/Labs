@@ -1,7 +1,7 @@
 # spec.py
 
 # Problem 1.1: Implement this function.
-def Newtons_method(f, x0, Df, iters=15, tol=.002):
+def Newtons_method(f, x0, Df, iters=15, tol=.1e-5):
     '''
     Use Newton's method to approximate a zero of a function.
     Inputs:
@@ -13,7 +13,7 @@ def Newtons_method(f, x0, Df, iters=15, tol=.002):
         iters (int): Maximum number of iterations before the function
             returns. Defaults to 15.
         tol (float): The function returns when the difference between
-            successive approximations is less than tol.
+            successive approximations is less than tol.  Defaults to 10^-5.
     Returns:
         A tuple (x, converged, numiters) with
         x (float): the approximation for a zero of f
@@ -39,10 +39,10 @@ def problemOneThree():
 # Problem 1.4: Implement this function.
 def problemOneFour():
     '''
-    Run Newtons_method on the function f(x) = x^9, with x_0 = 1 and tol = 10^-3.
+    Run Newtons_method on the function f(x) = x^9, with x_0 = 1 and tol = 10^-5.
     Return a tuple of
     1. The number of iterations.
-    2. The approximation of the root		.
+    2. The approximation of the root.
     3. A string explaining what is going wrong and how it might be remedied.
     '''
 
@@ -58,7 +58,7 @@ def problemOneFive():
 
 
 # Problem 3.1: Implement this function.
-def plot_basins(f, Df, roots, xmin, xmax, ymin, ymax, numpoints=100,iters=15, colormap='brg'):
+def plot_basins(f, Df, roots, xmin, xmax, ymin, ymax, numpoints=100, iters=15, colormap='brg'):
     '''
     Plot the basins of attraction of f.
     INPUTS:
