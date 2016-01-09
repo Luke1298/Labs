@@ -174,7 +174,7 @@ Here we have used the \li{hybr} method. There are also several algorithms for sc
 %least squares programming -- but it seems that it's already been done in Volume One
 
 SciPy also has methods for curve fitting wrapped by the \li{opt.curve_fit} function.
-Just pass it data and a function to be fit. The function should take in the independent variable as it's first argument and
+Just pass it data and a function to be fit. The function should take in the independent variable as its first argument and
 values for the fitting parameters as subsequent arguments.
 Examine the following example from the online documentation.
 \begin{lstlisting}
@@ -191,7 +191,7 @@ Examine the following example from the online documentation.
 >>> yn = y + 0.2*np.random.normal(size=len(x));
 
 >>> #perform the fit
->>> popt, pcov = curve_fit(func,x,yn)
+>>> popt, pcov = opt.curve_fit(func,x,yn)
 \end{lstlisting}
 The variable \li{popt} now contains the fitted parameters and \li{pcov} gives the covariance of the fit.
 See Figure \ref{opt:curve_fit} for a plot of the data and the fitted curve.
