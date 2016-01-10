@@ -39,7 +39,7 @@ class Node(object):
 	"""A Node class for storing data."""
 	def __init__(self, data):
 		"""Construct a new node that stores some data."""
-		self.data = data
+		self.value = data
 \end{lstlisting}
 
 \begin{lstlisting}
@@ -52,15 +52,15 @@ class Node(object):
 >>> list_node = Node([1,'abc'])
 
 # Access a node's data.
->>> list_node.data
+>>> list_node.value
 [1, 'abc']
 \end{lstlisting}
 
-% Problem 1: Node magic methods
+% Problem 1: Restricting data types on the Node class.
 \begin{problem}
-Add extra functionality to the \li{Node} class by implementing the \li{__str__} magic method so that it returns a string representation of its data.
-Also implement the \li{__lt__}, \li{__eq__}, and \li{__gt__} comparison magic methods so that the data stored inside of two Nodes is compared.
-For example, a Node \li{x} is less than a Node \li{y} if and only if the data contained in \li{x} is less than the data contained in \li{y}.
+Modify the constructor of the \li{Node} class so that a \li{Node} object may only be initialized with data of type \li{int}, \li{long}, \li{float}, or \li{str}.
+If another type of data is given, raise a \li{TypeError} with an appropriate error message.
+Also modify the class docstring to document these restrictions.
 \end{problem}
 
 \begin{info}
@@ -105,7 +105,7 @@ class LinkedListNode(Node):
         attribute for the next node in the list.
         """
         Node.__init__(self, data)
-        self.next = None
+        self.<<next>> = None
 \end{lstlisting}
 
 \begin{figure}
@@ -135,14 +135,14 @@ class LinkedListNode(Node):
   \draw[black!20!blue, shorten >=.1cm] (C2) edge (7.south);
   \node[draw=none, node distance = 1.5cm] [right of=8]{}; % centralize
 \end{tikzpicture}
-\caption{To add a new node to the end of the list, create a new node and start at the head. Iterate to the last node in the list and connect it to the new node.}
+\caption{To append a new node to the end of the list, create a new node and start at the head. Iterate to the last node in the list and connect it to the new node.}
 \label{fig:add}
 \end{figure}
 
 A basic implementation of a linked list will have a constructor and a method for adding new nodes to the end of the list.
 To get to the end of the list, start at the \li{head} of the list.
 Then traverse the list by going from node to node until the end is reached.
-Then, set the \li{next} attribute of the last node to be the new node.
+Then, set the \li{<<next>>} attribute of the last node to be the new node.
 This is done in the following class.
 See Figure \ref{fig:add} for an illustration.
 
@@ -157,7 +157,7 @@ class LinkedList(object):
 		"""
 		self.head = None
 
-	def add(self, data):
+	def append(self, data):
 		"""Add a new Node containing 'data' to the end of the list."""
 		new_node = LinkedListNode(data)
 		if self.head is None:
@@ -167,22 +167,34 @@ class LinkedList(object):
 			# If the list is not empty, traverse the list
 			# and place the new_node at the end.
 			current_node = self.head
-			while current_node.next is not None:
+			while current_node.<<next>> is not None:
 				# Move current_node to the next node if it is nonempty.
-				current_node = current_node.next
+				current_node = current_node.<<next>>
 			# current_node now points to the last node in the list.
-			current_node.next = new_node
+			current_node.<<next>> = new_node
 \end{lstlisting}
 
-% Problem 2: __str__ for the LinkedList class.
+% Problem 2: __len__() and __str__() for the LinkedList class.
 \begin{problem}
-Write the \li{__str__} method for the \li{LinkedList} class so that when a \li{LinkedList} instance is printed, its output matches that of a Python list.
+Add magic methods to the \li{LinkedList} class so it behaves more like the built-in \li{list} data structure.
+\begin{enumerate}
+\item Write the \li{__len__()} method so that the length of a \li{LinkedList} instance is equal to the number of nodes in the list. To accomplish this, add an attribute to keep track of the current size of the list. It should be updated every time a node is successfully added or removed.
+\item Write the \li{__str__()} method so that when a \li{LinkedList} instance is printed, its output matches that of a Python \li{list}. Each entry should be separated by a comma and one space, and strings are surrounded by single quotes. Note the difference between the following two lists:
+\begin{lstlisting}
+>>> num_list = [1, 2, 3]
+>>> str_list = ["1", "2", "3"]
+>>> print(num_list)
+[1, 2, 3]
+>>> print(str_list)
+<<['1', '2', '3']>>
+\end{lstlisting}
+\end{enumerate}
 \end{problem}
 
-In addition to adding new nodes to the end of a list, it is also useful to remove nodes and insert new nodes at specified locations.
+In addition to append new nodes to the end of a list, it is also useful to remove nodes and insert new nodes at specified locations.
 To delete a node, all references to the node must be removed.
 Then Python will automatically delete the object, since there is no way for the user to access it.
-Na{\"i}vely, this might be done by finding the previous node to the one being removed, and setting its \li{next} attribute to none.
+Na{\"i}vely, this might be done by finding the previous node to the one being removed, and setting its \li{<<next>>} attribute to none.
 
 \begin{figure}
 \centering
@@ -234,9 +246,6 @@ Na{\"i}vely, this might be done by finding the previous node to the one being re
 
 \begin{lstlisting}
 class LinkedList(object):
-	def __init__(self):
-		# ...
-	def add(self, data):
 		# ...
 
 	def remove(self, data):
@@ -244,18 +253,18 @@ class LinkedList(object):
 
 		# Find the node whose next node contains data
 		current_node = self.head
-		while current_node.next.data != data:
-			current_node = current_node.next
+		while current_node.<<next>>.value != data:
+			current_node = current_node.<<next>>
 
 		# Remove the next reference to the target node
-		current_node.next = None
+		current_node.<<next>> = None
 \end{lstlisting}
 
-Since the only reference to the node that is deleted is the previous node's next attribute, this will delete the node.
+Since the only reference to the node that is deleted is the previous node's \li{<<next>>} attribute, this will delete the node.
 However, since the only reference to the next node came from the deleted node, it also will deleted.
 This will continue to the end of the list.
 Thus, deleting one node in this manner deletes the remainder of the list.
-This can be remedied by pointing the previous node's next attribute to the node after the deleted node.
+This can be remedied by pointing the previous node's \li{<<next>>} attribute to the node after the deleted node.
 Then there will be no reference to the removed node and it will be deleted. 
 See Figure \ref{fig:remove} for an illustration.
 
@@ -263,7 +272,7 @@ See Figure \ref{fig:remove} for an illustration.
 class LinkedList(object):
 	def __init__(self):
 		# ...
-	def add(self, data):
+	def append(self, data):
 		# ...
 
 	def remove(self, data):
@@ -271,18 +280,18 @@ class LinkedList(object):
 		# First, check if the head is the node to be removed. If so, set the
 		# new head to be the first node after the old head. This removes
 		# the only reference to the old head, so it is then deleted.
-		if self.head.data == data:
-			self.head = self.head.next
+		if self.head.value == data:
+			self.head = self.head.<<next>>
 		else:
 			current_node = self.head
 			# Move current_node through the list until it points
 			# to the node that precedes the target node.
-			while current_node.next.data != data:
-				current_node = current_node.next
+			while current_node.<<next>>.value != data:
+				current_node = current_node.<<next>>
 	
 			# Point current_node to the node after the target node.
-			new_next_node = current_node.next.next
-			current_node.next = new_next_node
+			<<new_next_node = current_node.next.next
+			current_node.next = new_next_node>>
 \end{lstlisting}
 
 \begin{warn}
@@ -295,7 +304,7 @@ See \href{https://docs.python.org/2/library/gc.html}{here} for more information 
 % Problem 3: Complete LinkedList.remove()
 \begin{problem}
 Though the above code works to remove specified nodes, it is not quite complete.
-Modify the \li{remove} method to account for possible errors: if the list is empty, or if the target node is not in the list, raise a \li{ValueError} with error message ``\li{<data>} is not in the list.''
+Modify the \li{remove()} method to account for possible errors: if the list is empty, or if the target node is not in the list, raise a \li{ValueError} with an appropriate error message.
 \end{problem}
 
 \begin{figure}
@@ -332,12 +341,12 @@ Modify the \li{remove} method to account for possible errors: if the list is emp
 
 % Problem 4: LinkedList.insert()
 \begin{problem}
-Add an \li{insert} method to the \li{LinkedList} class that inserts a new node before the first node in the list that contains the data specified by the user.
+Add an \li{insert()} method to the \li{LinkedList} class that inserts a new node before the first node in the list that contains the data specified by the user.
 Accept data for the new node (\li{data}) and data for the node before which the new node will be inserted (\li{place}).
-If the list is empty, or there is no node containing \li{place} in the list, raise a \li{ValueError} with error message ``\li{<place>} is not in the list.''
+If the list is empty, or there is no node containing \li{place} in the list, raise a \li{ValueError} with an appropriate error message.
 
-See Figure \ref{fig:insert} for an illustration of the \li{insert} method.
-Note that since \li{insert} inserts a node before a specified node that is already in the list, it is not possible to \li{insert} at the end of the list or to an empty list.
+See Figure \ref{fig:insert} for an illustration of the \li{insert()} method.
+Note that since \li{insert()} inserts a node before a specified node that is already in the list, it is not possible to insert at the end of the list or to an empty list.
 \end{problem}
 
 \section*{Doubly-Linked Lists}
@@ -381,7 +390,7 @@ class DoublyLinkedListNode(LinkedListNode):
 	def __init__(self,data):
 		"""Set the next and prev attributes."""
 		Node.__init__(self,data)
-		self.next = None
+		self.<<next>> = None
 		self.prev = None
 \end{lstlisting}
 
@@ -496,7 +505,7 @@ See Figures \ref{fig:double_insertion} and \ref{fig:double_removal} for illustra
 \begin{problem}
 Implement a \li{DoublyLinkedList} class that inherits from \li{LinkedList} and uses \li{DoublyLinkedListNode} instances to build the list.
 Add a \li{tail} attribute that keeps track of the node at the end of the list.
-Overwrite \li{add}, \li{remove}, and \li{insert}.
+Overwrite \li{append()}, \li{remove()}, and \li{insert()}.
 Raise the same exceptions as before.
 \end{problem}
 
@@ -504,34 +513,33 @@ Raise the same exceptions as before.
 \begin{problem}
 Implement a sorted linked list.
 This data structure adds new nodes strategically so that the data is always kept in order.
-Inherit this class from \li{DoublyLinkedList}, and override the \li{add} and \li{insert} methods.
+Inherit this class from \li{DoublyLinkedList}, and override the \li{append()} and \li{insert()} methods.
 When a new node is added, traverse the list until the data in the next node is greater than or equal to the data for the new node.
 Then insert the new node, thereby preserving the ordering.
-Also override the \li{insert} method with the following:
+Also override the \li{insert()} method with the following:
 
 \begin{lstlisting}
-def insert(self, *args):
+def insert(*args, **kwargs):
     raise NotImplementedError("insert() has been disabled for this class.")
 \end{lstlisting}
 
-This effectively disables \li{insert} for the \li{SortedLinkedList} class and prevents the user from accidentally inserting a node in a location that would disrupt the ordering.
-The \li{*args} argument allows \li{insert} to receive any number of arguments without raising a \li{TypeError} exception.
+This effectively disables \li{insert()} for the \li{SortedLinkedList} class and prevents the user from accidentally inserting a node in a location that would disrupt the ordering.
+The \li{*args} argument allows \li{insert()} to receive any number of positional arguments without raising a \li{TypeError}, and the \li{**kwargs} argument allows it to receive any number of keyword arguments.
 
-To test this data structure, import the provided \li{WordList} module.
-This includes a method called \li{create_word_list} that reads each line of text from a file and returns it as a randomly-ordered list of strings.
-Write a function called \li{sort_words} that sorts the list generated by \li{create_word_list} by adding them to a \li{SortedLinkedList} object.
+Write a function called \li{sort_words()} (outside of the class) that takes in the name of a file to sort.
+Read in each line of the file and add it to a \li{SortedLinkedList} object.
 Then return the object.
 
 \begin{warn}
-\texttt{English.txt}, the default source file for \li{create_word_list}, contains over 58,000 English words.
-Sorting the entire data set should take about 15 minutes.
+The file \texttt{English.txt} has over 58,000 English words, one on each line, in random order.
+Sorting this entire data set takes about 15 minutes.
 Test your data structure on small data sets first.
 \end{warn}
 \end{problem}
 
 \begin{info}
 Python has many quick sorting methods.
-Even on the seemingly large data set of over 58,000 words used in the preceding problem, the \li{sort} method for Python lists is almost instantaneous.
+Even on the seemingly large data set of over 58,000 words used in the preceding problem, the \li{sort()} method for Python lists is almost instantaneous.
 In the next lab we turn our attention to \emph{trees}, special kinds of linked lists that allow for much quicker sorting and data retrieval.
 \end{info}
 
@@ -544,19 +552,19 @@ These structures will reappear in many future labs and applications.
 \begin{itemize}
 \item A \emph{stack} is a \emph{Last In, First Out} structure (LIFO): only the last item that was inserted can be accessed.
 A stack is like a pile of plates: the last plate put on the pile is the first one to be taken off.
-Stacks usually have two main methods: \li{push}, to insert new data, and \li{pop}, to remove and return the last piece of data inserted.
+Stacks usually have two main methods: \li{push()}, to insert new data, and \li{pop()}, to remove and return the last piece of data inserted.
 
 \item A \emph{queue} (pronounced ``cue'') is a \emph{First In, First Out} structure (FIFO): new nodes are added to the end of the queue, but an existing node can only be removed or accessed if it is at the front of the queue.
 A queue is like a line at the bank: the person at the front of the line is served next, while newcomers add themselves to the back of the line.
-Queues also usually have a \li{push} and a \li{pop} method, but \li{push} inserts data to the end of the queue while \li{pop} removes and returns the data at the front of the queue (\li{push} and \li{pop} for queues are sometimes called \li{enqueue} and \li{dequeue}, respectively).
+Queues also usually have a \li{push()} and a \li{pop()} method, but \li{push()} inserts data to the end of the queue while \li{pop()} removes and returns the data at the front of the queue (\li{push()} and \li{pop()} for queues are sometimes called \li{enqueue()} and \li{dequeue()}, respectively).
 
 \item A \emph{deque} (pronounced ``deck'') is a double-ended queue: data can be inserted or removed from either end, but data in the middle is inaccessible.
 A deque is like a deck of cards, where only the top and bottom cards are readily accessible.
-A deque has two methods for insertion and two for removal, usually called \li{append}, \li{appendleft}, \li{pop}, and \li{popleft}.
+A deque has two methods for insertion and two for removal, usually called \li{append()}, \li{appendleft()}, \li{pop()}, and \li{popleft()}.
 
 In practice, a deque can also be used as a stack or a queue.
-If we restrict our usage to \li{append} and \li{pop} (or to \li{appendleft} and \li{popleft}), we effectively have a stack.
-Similarly, if we are restricted to \li{append} and \li{popleft} (or to \li{appendleft} and \li{pop}), we effectively have a queue.
+If we restrict our usage to \li{append()} and \li{pop()} (or to \li{appendleft()} and \li{popleft()}), we effectively have a stack.
+Similarly, if we are restricted to \li{append()} and \li{popleft()} (or to \li{appendleft()} and \li{pop()}), we effectively have a queue.
 \end{itemize}
 
 The \li{collections} module in the Python standard library has a \li{deque} object, implemented as a doubly-linked list.
@@ -566,11 +574,11 @@ This is an excellent object to use in practice instead of a Python \li{list} whe
 (Optional) Write \li{Stack}, \li{Queue}, and \li{Deque} classes.
 
 The \li{Deque} class should inherit from the \li{DoublyLinkedList} class.
-Use inheritance to implement the \li{append}, \li{appendleft}, \li{pop}, and \li{popleft} methods as described in the preceding section.
-The \li{append} and \li{appendleft} methods should accept a single parameter (the data to be added) and return nothing, while the \li{pop} and \li{popleft} methods should accept no parameters and return a single value (the data removed).
+Use inheritance to implement the \li{append()}, \li{appendleft()}, \li{pop()}, and \li{popleft()} methods as described in the preceding section.
+The \li{append()} and \li{appendleft()} methods should accept a single parameter (the data to be added) and return nothing, while the \li{pop()} and \li{popleft()} methods should accept no parameters and return a single value (the data removed).
 Disable all other methods to restrict data access.
 
 The \li{Stack} and \li{Queue} classes should inherit from the \li{Deque} class.
-Add a \li{push} method and overload the \li{pop} method in each class to match the behaviors described in the preceding section.
+Add a \li{push()} method and overload the \li{pop()} method in each class to match the behaviors described in the preceding section.
 Disable any other methods.
 \end{problem}
