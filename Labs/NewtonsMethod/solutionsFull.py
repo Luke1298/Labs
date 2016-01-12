@@ -2,7 +2,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-# Problem 1.1: Implement this function.
+# Problem 1: Implement this function.
 def Newtons_method(f, x0, Df, iters=15, tol=.002):
     '''
     Use Newton's method to approximate a zero of a function.
@@ -32,8 +32,8 @@ def Newtons_method(f, x0, Df, iters=15, tol=.002):
     return xnew,False,numiters
         
 
-# Problem 1.2: Implement this function.
-def problemOneTwo():
+# Problem 2.1: Implement this function.
+def problemTwoOne():
     '''
     Return a tuple of the number of iterations to get five digits of accuracy
     for f = cos(x) with x_0 = 1 and x_0 = 2.
@@ -44,8 +44,8 @@ def problemOneTwo():
     iter2 = Newtons_method(f,2,df,tol=.00001)
     return iter1[2],iter2[2]
 
-# Problem 1.3: Implement this function.
-def problemOneThree():
+# Problem 2.2: Implement this function.
+def problemTwoTwo():
     '''
     Plot f(x) = sin(x)/x - x on [-4,4].  Return the zero of this function to
     7 digits of accuracy.
@@ -58,8 +58,8 @@ def problemOneThree():
     xnew,converged,numiters = Newtons_method(f,1,df,tol = .0000001)
     return xnew
 
-# Problem 1.4: Implement this function.
-def problemOneFour():
+# Problem 2.3: Implement this function.
+def problemTwoThree():
     '''
     Return a tuple of
     1. The number of iterations to get five digits of accuracy for f(x) = x^9
@@ -73,8 +73,8 @@ def problemOneFour():
     return numiters,"The derivative is very close to zero so it will converge slowly"
     
 
-# Problem 1.5: Implement this function.
-def problemOneFive():
+# Problem 2.4: Implement this function.
+def problemTwoFour():
     '''
     Return a string as to what happens and why for the function f(x) = x^(1/3) where
     x_0 = .01.
@@ -84,10 +84,10 @@ def problemOneFive():
     xnew,converged,numiters = Newtons_method(f,.01,df)
     return "The values are getting further and further away from the correct value so it never converges.  Because the derivative at the root is infinity."
 
-# Problem 2 (Optional): Modify the function Newtons_method() to calculate the numerical
+# Problem 3 (Optional): Modify the function Newtons_method() to calculate the numerical
 # derivative of f using centered coefficients.
 
-def Newtons_method_mod(f, x0, Df=None, iters=15, tol=.002):
+def Newtons_method_II(f, x0, Df=None, iters=15, tol=.002):
     
     if Df == None:
         h = 1e-5
@@ -103,7 +103,7 @@ def Newtons_method_mod(f, x0, Df=None, iters=15, tol=.002):
     return xnew,False,numiters
 
 
-# Problem 3.1: Implement this function.
+# Problem 4: Implement this function.
 def plot_basins(f, Df, roots, xmin, xmax, ymin, ymax, numpoints=1000,iters=15, colormap='brg'):
     '''
     Plot the basins of attraction of f.
@@ -133,8 +133,8 @@ def plot_basins(f, Df, roots, xmin, xmax, ymin, ymax, numpoints=1000,iters=15, c
     plt.show()
     
 
-# Problem 3.2: Implement this function.
-def problemThreeTwo():
+# Problem 5: Implement this function.
+def problemFive():
     '''
     Run plot_basins() on the function x^3-1 on the domain [-1.5,1.5]x[-1.5,1.5].
     '''
@@ -158,9 +158,9 @@ def testing():
     plot_basins(f,Df,roots, xmin,xmax,ymin,ymax)
 
 if __name__ == '__main__':
-    print problemOneTwo()
-    print problemOneThree()
-    print problemOneFour()
-    print problemOneFive()
-    print problemThreeTwo()
+    print problemTwoOne()
+    print problemTwoTwo()
+    print problemTwoThree()
+    print problemTwoFour()
+    print problemFive()
     print testing()

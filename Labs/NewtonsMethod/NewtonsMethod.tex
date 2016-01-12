@@ -60,8 +60,8 @@ We have already computed the root 1 to two digits of accuracy.
 \begin{problem}
 \label{prob:newton_arr}
 \leavevmode
-\begin{enumerate}
-\item Implement Newton's method with the following function.
+
+Implement Newton's method with the following function.
 \begin{lstlisting}
 def Newtons_method(f, x0, Df, iters=15, tol=1e-5):
     '''
@@ -74,11 +74,15 @@ def Newtons_method(f, x0, Df, iters=15, tol=1e-5):
         tol (float): The function returns when the difference between successive approximations is less than tol.
     Returns:
         A tuple (x, converged, numiters) with
-        x (float): the approximation for a zero of f
-        converged (bool): a Boolean telling whether Newton's method converged
-        numiters (int): the number of iterations the method computed
+        x (float): the approximation for a zero of f;
+        converged (bool): a Boolean telling whether Newton's method converged;
+        numiters (int): the number of iterations the method computed.
     '''
 \end{lstlisting}
+\end{problem}
+
+\begin{problem}
+\begin{enumerate}
 
 \item Run \li{Newtons_method()} on $f=\cos(x)$ with $x_0=1$ and $x_0=2$. 
 How many iterations are required to acheive five digits of accuracy (tolerance of $10^{-5}$)?
@@ -205,8 +209,8 @@ This is an example of \emph{chaos}.
 
 \begin{problem}
 \leavevmode
-\begin{enumerate}
-\item Complete the following function to plot the basins of attraction of a function.
+
+Complete the following function to plot the basins of attraction of a function.
 \begin{lstlisting}
 def plot_basins(f, Df, roots, xmin, xmax, ymin, ymax, numpoints=100, iters=15, colormap='brg'):
     '''Plot the basins of attraction of f.
@@ -234,13 +238,14 @@ One way to fix this problem is to compute \li{Xnew} as usual.
 Then iterate through the entries of \li{Xnew} and identify which root each entry is closest to using the input \li{roots}.
 Finally, create a new array whose entries are integers corresponding to the indices of these roots.
 Plot the array of integers to view the basins of attraction.  Hint: The roots of $f(x) = x^3-x$ are $[0,1,-1]$.
+\end{problem}
 
+\begin{problem}
 
-\item Run \li{plot_basins()} on the function $f(x) = x^3-1$ on the domain $\{a+bi \mid (a, b) \in [-1.5, 1.5] \times [-1.5, 1.5] \}$. 
+Run \li{plot_basins()} on the function $f(x) = x^3-1$ on the domain $\{a+bi \mid (a, b) \in [-1.5, 1.5] \times [-1.5, 1.5] \}$. 
 The resulting plot should look like Figure \ref{fig:fractal_hw}.  Hint: the roots of $f(x) = x^3-1$ are $[1,-1j^{1/3},1j^{2/3}]$.
 
 
-\end{enumerate}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.66]{fractal_hw}
