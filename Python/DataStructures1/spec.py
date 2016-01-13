@@ -1,38 +1,76 @@
-# name this file 'solutions.py'
+# name this file solutions.py
 """Volume II Lab 4: Data Structures 1 (Linked Lists)
 <Name>
 <Class>
 <Date>
 """
 
-# Do not modify the first two import statements (for the test driver)
-from LinkedLists import LinkedListNode, LinkedList
-from LinkedLists import DoublyLinkedList, SortedLinkedList
-from WordList import create_word_list
+
+# Problem 1: Modify the constructor of the Node class.
+class Node(object):
+    """A basic node class for storing data."""
+    def __init__(self, data):
+        """Store 'data' in the 'value' attribute."""
+        self.value = data
 
 
-# Problem 1: in LinkedLists.py, add magic methods to the Node class.
-
-# Problems 2, 3, 4: Complete the implementation of the LinkedList class.
-
-# Problem 5: Implement the DoublyLinkedList class.
-
-# Problem 6: Implement the SortedLinkedList class in LinkedLists.py and the
-# sort_words() function in this file.
-
-# Conclude problem 6 by implementing this function.
-def sort_words(filename = "English.txt"):
-    """Use the 'create_word_list' method from the 'WordList' module to generate
-    a scrambled list of words from the specified file. Use an instance of
-    the SortedLinkedList class to sort the list. Then return the list.
-    
-    Inputs:
-        filename (str, opt): the file to be parsed and sorted.
-            Defaults to 'English.txt'.
-    
-    Returns:
-        A SortedLinkedList object containing the sorted list of words.
+class LinkedListNode(Node):
+    """A node class for doubly-linked lists. Inherits from the 'Node' class.
+    Contains references to the next and previous nodes in the linked list.
     """
-    raise NotImplementedError("Problem 6 incomplete.")
+    def __init__(self, data):
+        """Store 'data' in the 'value' attribute and initialize
+        attributes for the next and previous nodes in the list.
+        """
+        Node.__init__(self, data)       # Use inheritance to set self.value.
+        self.next = None
+        self.prev = None
 
-# =========================== END OF File =========================== #
+
+# Problems 2, 3, 4, 5: Complete the LinkedList class.
+class LinkedList(object):
+    """Doubly-linked list data structure class.
+
+    Attributes:
+        head (LinkedListNode): the first node in the list.
+        tail (LinkedListNode): the last node in the list.
+    """
+    def __init__(self):
+        """Initialize the 'head' and 'tail' attributes by setting
+        them to 'None', since the list is empty initially.
+        """
+        self.head = None
+        self.tail = None
+
+    def append(self, data):
+        """Append a new node containing 'data' to the end of the list."""
+        # Create a new node to store the input data.
+        new_node = LinkedListNode(data)
+        if self.head is None:
+            # If the list is empty, assign the head and tail attributes to
+            # new_node, since it becomes the first and last node in the list.
+            self.head = new_node
+            self.tail = new_node
+        else:
+            # If the list is not empty, place new_node after the tail.
+            self.tail.next = new_node               # tail --> new_node
+            new_node.prev = self.tail               # tail <-- new_node 
+            # Now the last node in the list is new_node, so reassign the tail.
+            self.tail = new_node
+
+    # Problem 2: Write LinkedList.find().
+
+    # Problem 3: Write LinkedList.__len__() and LinkedList.__str__().
+
+    # Problem 4: Write LinkedList.remove().
+
+    # Problem 5: Write LinkedList.insert().
+
+
+# Problem 6: Write a SortedList class and a function called sort_file().
+
+
+# Problem 7: Write a Deque class and a function called reverse_file().
+
+
+# END OF File =================================================================

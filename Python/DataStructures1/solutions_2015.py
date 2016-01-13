@@ -1,250 +1,313 @@
 # solutions.py
 """Volume II Lab 4: Data Structures 1 (Linked Lists)
-Solutions file. Written by Shane McQuarrie.
+Solutions file. Written by Shane A. McQuarrie.
 """
 
-# Problem 1: Modify the constructor of the Node class.
-class Node(object):
-    """A basic node class for storing data."""
-    def __init__(self, data):
-        """Store 'data' in the 'value' attribute.
+# ============================== LinkedLists.py ============================= #
+# Provided to students and modified for problems 1-6.
 
-        Raises:
-            TypeError: if 'data' is not of type int, long, float, or str.
-        """
-        if type(data) not in {int, long, float, str}:
-            raise TypeError("Invalid data type")
-        self.value = data
+# Problem 1: Add the magic methods __str__, __lt__, __eq__, and __gt__.
+class Node(object):
+    """A Node class for storing data."""
+    def __init__(self, data):
+        """Construct a new node that stores some data."""
+        self.data = data
+    def __str__(self): return str(self.data)
+    def __lt__(self, other): return self.data <  other.data
+    def __eq__(self, other): return self.data == other.data 
+    def __gt__(self, other): return self.data >  other.data
 
 
 class LinkedListNode(Node):
-    """A node class for doubly-linked lists. Inherits from the 'Node' class.
-    Contains references to the next and previous nodes in the linked list.
+    """A Node class for linked lists. Inherits from the 'Node' class.
+    Contains a reference to the next node in the list.
     """
     def __init__(self, data):
-        """Store 'data' in the 'value' attribute and initialize
-        attributes for the next and previous nodes in the list.
+        """Construct a Node and add an attribute for the next node in the list.
         """
-        Node.__init__(self, data)       # Use inheritance to set self.value.
+        Node.__init__(self, data)
         self.next = None
-        self.prev = None
 
-
-# Problems 2, 3, 4, 5: Complete the LinkedList class.
+# Problems 2-4: Finish implementing this class.
 class LinkedList(object):
-    """Doubly-linked list data structure class.
-
-    Attributes:
-        head (LinkedListNode): the first node in the list.
-        tail (LinkedListNode): the last node in the list.
+    """Singly-linked list data structure class.
+    The first node in the list is referenced to by 'head'.
     """
     def __init__(self):
-        """Initialize the 'head' and 'tail' attributes by setting
-        them to 'None', since the list is empty initially.
+        """Create a new empty linked list. Create the head
+        attribute and set it to None since the list is empty.
         """
         self.head = None
-        self.tail = None
-        self._size = 0                              # for __len__()
-
-    def append(self, data):
-        """Append a new node containing 'data' to the end of the list."""
-        # Create a new node to store the input data.
-        new_node = LinkedListNode(data)
-        if self.head is None:
-            # If the list is empty, assign the head and tail attributes to
-            # new_node, since it becomes the first and last node in the list.
-            self.head = new_node
-            self.tail = new_node
-        else:
-            # If the list is not empty, place new_node after the tail.
-            self.tail.next = new_node               # tail --> new_node
-            new_node.prev = self.tail               # tail <-- new_node 
-            # Now the last node in the list is new_node, so reassign the tail.
-            self.tail = new_node
-        self._size += 1                             # for __len__()
-
-    # Problem 2: Write LinkedList.find().
-    def find(self, data):
-        """Return the first node in the list containing 'data'.
-        If no such node exists, raise a ValueError.
+    
+    def add(self, data):
+        """Create a new Node containing 'data' and add it to
+        the end of the list.
+        
+        Example:
+            >>> my_list = LinkedList()
+            >>> my_list.add(1)
+            >>> my_list.head.data
+            1
+            >>> my_list.add(2)
+            >>> my_list.head.next.data
+            2
         """
-        current = self.head                 # Start at the head.
-        while current is not None:          # Iterate through each node.
-            if current.value == data:       # Check for the data.
-                return current              # Return node if found; if not
-            current = current.next          #  found, raise a ValueError.
-        raise ValueError("{} is not in the list".format(data))
-
-    # Problem 3: Write LinkedList.__len__() and LinkedList.__str__().
-    def __len__(self):
-        """Return the number of nodes in the list."""
-        return self._size
-
+        new_node = LinkedListNode(data)
+        # or new_node = Node(data), depending on how LinkedListNode was imported
+        if self.head is None:
+            self.head = new_node
+        else:
+            current_node = self.head
+            while current_node.next is not None:
+                current_node = current_node.next
+            current_node.next = new_node
+    
+    # Problem 2: Implement the __str__ method so that a LinkedList instance can
+    #   be printed out the same way that Python lists are printed.
     def __str__(self):
-        """String representation: the same as a standard Python list."""
-        # List construction method (recommended).
+        """String representation: the same as a standard Python list.
+        
+        Example:
+            >>> my_list = LinkedList()
+            >>> my_list.add(1)
+            >>> my_list.add(2)
+            >>> my_list.add(3)
+            >>> print(my_list)
+            [1, 2, 3]
+            >>> str(my_list) == str([1,2,3])
+            True
+        """
+        # List construction method
         current = self.head
-        items = []
-        while current is not None:
-            items.append(current.value)
+        items = list()
+        while current:
+            items.append(current.data)
             current = current.next
         return str(items)
-        # String construction method.
+        # String construction method
         current = self.head          
         out = "["
-        while current is not None:
-            if isinstance(current.value, str):
-                item = "'{}'".format(current.value)
-            else:
-                item = str(current.value)
-            out += item
+        while current:
+            out += str(current.data)
             current = current.next
-            if current is not None:
-                out += ", "
+            if current: out += ", "
         out += "]"
         return out
 
-    # Problem 4: Write LinkedList.remove().
+    # Problem 3: Finish implementing remove() so that if the node is not
+    #   found, an exception is raised.
     def remove(self, data):
-        """Remove the first node in the list containing 'data'. Return nothing.
-
-        Raises:
-            ValueError: if the list is empty, or does not contain 'data'.
+        """Remove the node containing 'data'. If the list is empty, or if the
+        target node is not in the list, raise a ValueError with error message
+        "<data> is not in the list."
+        
+        Example:
+            >>> print(my_list)
+            [1, 2, 3]
+            >>> my_list.remove(2)
+            >>> print(my_list)
+            [1, 3]
+            >>> my_list.remove(2)
+            2 is not in the list.
+            >>> print(my_list)
+            [1, 3]
         """
-        target = self.find(data)            # Raise the ValueError if needed.
-        if self.head is self.tail:          # Case 1: remove only node.
-            self.head = None                    # reassign the head.
-            self.tail = None                    # reassign the tail.
-        elif target is self.head:           # Case 1: remove the head.
-            self.head = self.head.next          # reassign the head.
-            self.head.prev = None               # target <-/- head
-        elif target is self.tail:           # Case 2: remove the tail.
-            self.tail = self.tail.prev          # reassign the tail.
-            self.tail.next = None               # tail -/-> target
-        else:                               # Case 3: remove from middle.
-            target.prev.next = target.next      # -/-> target
-            target.next.prev = target.prev      # target <-/-
-        self._size -= 1
+        if self.head is None:           # If the list is empty, raise an error.
+            raise ValueError(str(data) + " is not in the list.")
+        if self.head.data == data:      # Remove the head:
+            self.head = self.head.next      # Reset the head
+        else:                           # Remove nonhead:
+            curr = self.head
+            while curr.next.data != data:   # Find the node before 'data' node
+                curr = curr.next
+                if curr.next is None:           # (If not found, raise an error)
+                    raise ValueError(str(data) + " is not in the list.")
+            new_next_node = curr.next.next  # point it to the node after 'data'
+            curr.next = new_next_node
 
-    # Problem 5: Write LinkedList.insert().
+    # Problem 4: Implement insert().
     def insert(self, data, place):
-        """Insert a node containing 'data' immediately before the first node
-        in the list containing 'place'. Return nothing.
-
-        Raises:
-            ValueError: if the list is empty, or does not contain 'place'.
+        """Create a new Node containing 'data'. Insert it into the list before
+        the first Node in the list containing 'place'. If the list is empty, or
+        if there is no node containing 'place' in the list, raise a ValueError
+        with error message "<place> is not in the list."
+        
+        Example:
+            >>> print(my_list)
+            [1, 3]
+            >>> my_list.insert(2,3)
+            >>> print(my_list)
+            [1, 2, 3]
+            >>> my_list.insert(2,4)
+            4 is not in the list.
         """
-        after = self.find(place)            # Raise the ValueError if needed.
-        new_node = LinkedListNode(data)      # Make the new node.
-        if after is self.head:              # Case 1: insert before the head.
-            new_node.next = self.head           # new --> head
-            self.head.prev = new_node           # new <-- head
-            self.head = new_node                # reassign the head.
-        else:                               # Case 2: insert to middle.
-            after.prev.next = new_node          # --> new
-            new_node.prev = after.prev          # <-- new
-            new_node.next = after               # new -->
-            after.prev = new_node               # new <--
-        self._size += 1
+        
+        n = LinkedListNode(data)        # Create a new node with the data.
+        if self.head is None:           # If the list is empty, raise an error.
+            raise ValueError(str(place) + " is not in the list.")
+        # Compare nodes by comparing their data, or by using the Node __eq__.
+        # if self.head == n:
+        if self.head.data == place:     # Insert at the head:
+            n.next = self.head              # Point n to the head
+            self.head = n                   # Set n as the new head node
+        else:                           # Middle insertion:
+            curr = self.head                # Find the node before 'place' node
+            while curr.next.data != place:
+                curr = curr.next
+                if curr.next is None:           # (if not found, raise an error)
+                    raise ValueError(str(place) + " is not in the list.")
+            n.next = curr.next              # point n to 'place' node
+            curr.next = n                   # point curr to n
 
 
-# Problem 6: Write a SortedList class and a function called sort_file().
-class SortedList(LinkedList):
-    """Sorted doubly-linked list data structure class.
-    Inherits from the 'LinkedList' class.
-    
-    Attributes:
-        head (LinkedListNode): the first node in the list.
-        tail (LinkedListNode): the last node in the list.
+class DoublyLinkedListNode(LinkedListNode):
+    """A Node class for doubly-linked lists. Inherits from the 'Node' class.
+    Contains references to the next and previous nodes in the list.
     """
+    def __init__(self,data):
+        """Set the next and prev attributes."""
+        Node.__init__(self,data)
+        self.next = None
+        self.prev = None
+
+# Problem 5: Implement this class.
+class DoublyLinkedList(LinkedList):
+    """Doubly-linked list data structure class. Inherits from the 'LinkedList'
+    class. Has a 'head' for the front of the list and a 'tail' for the end.
+    """
+    def __init__(self):
+        """Create a new empty doubly-linked list. Create the tail attribute and
+        set it to None.
+        """
+        LinkedList.__init__(self)
+        self.tail = None
+    
+    def add(self, data):
+        """Create a new Node containing 'data' and add it to
+        the end of the list. Use 'tail' to speed things up.
+        """
+        new_node = DoublyLinkedListNode(data)
+        if self.head is None:           # Empty list
+            self.head = new_node            # Assign head
+            self.tail = new_node            # Assign tail
+        else:                           # Nonempty list
+            self.tail.next = new_node       # tail --> new_node
+            new_node.prev = self.tail       # tail <-- new_node
+            self.tail = new_node            # reset tail to end
+
+    def remove(self, data):
+        """Remove the node containing 'data'. If the list is empty, or if the
+        target node is not in the list, print "<data> is not in the list."
+        """
+        if not self.head:               # If the list is empty, raise an error.
+            raise ValueError(str(data) + " is not in the list.")
+        if self.head.data == data:      # Remove the head:
+            if not self.head.next:          # If there's only one node:
+                self.head = None                # reset the head
+                self.tail = None                # and the tail
+                # self.__init__()               # or do both at once
+            else:                           # If there are more than one nodes:
+                self.head.next.prev = None      # head <-/- head.next
+                self.head = self.head.next      # Reset the head
+        else:                           # Remove nonhead:
+            curr = self.head
+            while curr.data != data:        # Find the target node
+                curr = curr.next
+                if not curr:                    # (if not found, raise an error)
+                    raise ValueError(str(data) + " is not in the list.")
+            if curr == self.tail:           # If it's the tail:
+                curr.prev.next = None           # tail.prev -/-> tail
+                self.tail = curr.prev           # reset the tail
+            else:                           # It it's not the tail:
+                curr.prev.next = curr.next      # target.prev --> target.next
+                curr.next.prev = curr.prev      # target.prev <-- target.next
+    
+    def insert(self, data, place):
+        """Create a new Node containing 'data'. Insert it into the list before
+        the first Node in the list containing 'place'. If the list is empty, or
+        if 'place' is not in the list, print "<place> is not in the list."
+        """
+        
+        n = DoublyLinkedListNode(data)  # Create a new node with the data.
+        if self.head is None:           # If the list is empty, raise an error.
+            raise ValueError(str(place) + " is not in the list.")
+        # Compare nodes by comparing their data, or by using the Node __eq__.
+        # if self.head == n:
+        if self.head.data == place:    # Insert at the head:
+            n.next = self.head              # n --> head
+            self.head.prev = n              # n <-- head
+            self.head = n                   # Set n as the new head node
+        else:                           # Middle insertion:
+            curr = self.head                # Find the node before 'place' node
+            while curr.next.data != place:
+                curr = curr.next
+                if not curr.next:               # (if not found, raise an error)
+                    raise ValueError(str(place) + " is not in the list.")
+            n.next = curr.next              # n --> place
+            n.prev = curr                   # curr <-- n
+            curr.next.prev = n              # n <-- place
+            curr.next = n                   # curr --> n
+
+
+# Problem 6: Implement this class for creating sorted linked lists.
+#   Use an instance of your object to sort a large data set in sort_words().
+class SortedLinkedList(DoublyLinkedList):
+    """Sorted doubly-linked list data structure class."""
 
     def add(self, data):
         """Create a new Node containing 'data' and insert it at the
         appropriate location to preserve list sorting.
+        Example:
+            >>> print(my_list)
+            [3, 5]
+            >>> my_list.add(2)
+            >>> my_list.add(4)
+            >>> my_list.add(6)
+            >>> print(my_list)
+            [2, 3, 4, 5, 6]
         """
-        if self.head is None:               # Case 1: Empty list.
-            LinkedList.append(self, data)
-        elif self.tail.value <= data:       # Case 2: Append after the tail.
-            LinkedList.append(self, data)
-        else:                               # Case 3: Insert to middle.
+        if not self.head:                   # Empty list.
+            DoublyLinkedList.add(self,data)
+        elif self.tail.data <= data:        # Insert at the tail
+            DoublyLinkedList.add(self,data)
+        else:                               # Insert not at the tail:
             current = self.head
-            while current.value < data:         # Find insertion location.
+            while current.data < data:      # Find insertion location
                 current = current.next
-            LinkedList.insert(self, data, current.value)
+            DoublyLinkedList.insert(self,data,current.data)     # Insert
     
-    def append(*args, **kwargs):
-        raise NotImplementedError("append() is disabled (use add())")
-
-    def insert(*args, **kwargs):
-        raise NotImplementedError("insert() is disabled (use add())")
-
-def sort_file(infile, outfile):
-    """Sort the file 'infile' by line and write the results to 'outfile'."""
-    with open(infile, 'r') as f:            # Read the lines in as a list.
-        lines = f.readlines()
-    sorted_list = SortedList()              # Instantiate a SortedList object.
-    for line in lines:                      # Add each line to the SortedList.
-        sorted_list.add(line)
-    current = sorted_list.head              # Write the sorted lines to the
-    with open(outfile, 'w') as f:           #  outfile.
-        while current is not None:
-            f.write(str(current.value))
-            current = current.next
+    def insert(self, *args):
+        """Disable insert() so the user is forced to use add()."""
+        raise NotImplementedError("insert() has been disabled for this class.")
 
 
-# Problem 7: Write a Deque class and a function called reverse_file().
-class Deque(LinkedList):
-    """Deque doubly-linked list data structure class.
+# =============================== solutions.py ============================== #
 
-    Attributes:
-        head (LinkedListNode): the first node in the list.
-        tail (LinkedListNode): the last node in the list.
+# from LinkedLists import LinkListNode, LinkedList
+# from LinkedLists import DoublyLinkedList, SortedLinkedList
+from WordList import create_word_list
+
+# Conclude problem 6 by implementing this function.
+def sort_words(filename = "English.txt"):
+    """Use the 'create_word_list' method from the 'WordList' module to generate
+    a scrambled list of words from the specified file. Use an instance of
+    the SortedLinkedList class to sort the list. Then return the list.
+    
+    Inputs:
+        filename (str, opt): the file to be parsed and sorted.
+            Defaults to 'English.txt'.
+    
+    Returns:
+        A SortedLinkedList object containing the sorted list of words.
     """
-    def appendleft(self, data):
-        """Place a new node containing 'data' at the beginning of the list."""
-        if self.head is None:               # Case 1: Empty list.
-            LinkedList.append(self, data)
-        else:                               # Case 2: Nonempty list.
-            LinkedList.insert(self, data, self.head.value)
-
-    def pop(self):
-        """Remove the last node in the list and return its value."""
-        if self.tail is None:               # Case 1: Empty list.
-            raise ValueError("The list is empty")
-        else:                               # Case 2: Nonempty list.
-            data = self.tail.value
-            LinkedList.remove(self, data)
-            return data
-
-    def popleft():
-        """Remove the first node in the list and return its value."""
-        if self.head is None:               # Case 1: Empty list.
-            raise ValueError("The list is empty")
-        else:                               # Case 2: Nonempty list.
-            data = self.head.value
-            LinkedList.remove(self, data)
-            return data
-
-    def remove(*args, **kwargs):
-        raise NotImplementedError("remove() is disabled")
-
-    def insert(*args, **kwargs):
-        raise NotImplementedError("insert() is disabled")
-
-def reverse_file(infile, outfile):
-    """Reverse the file 'infile' by line and write the results to 'outfile'."""
-    with open(infile, 'r') as f:            # Read the lines in as a list.
-        lines = f.readlines()
-    deque = Deque()                         # Instantiate a SortedList object.
-    for line in lines:                      # Add each line to the SortedList.
-        print(repr(line))
-        deque.append(line)
-    with open(outfile, 'w') as f:           # Write to the outfile in reverse.
-        while deque.head is not None:
-            f.write(str(deque.pop()))
+    s = SortedLinkedList()                  # Create the Sorted List object
+    word_list = create_word_list(filename)  # Generate the word list
+    for word in word_list:                  # Add each word to the Sorted List
+        s.add(word)
+    return s                                # Return the Sorted Linked List.
 
 
-# END OF SOLUTIONS ========================================================== #
+# =========================== END OF SOLUTIONS =========================== #
 
 
 from numpy.random import permutation # numpy is not required for this lab

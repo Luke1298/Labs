@@ -7,6 +7,10 @@ As a dataset grows, so does the amount of time it takes to access and analyze it
 To write effecient algorithms involving large data sets, it is therefore essential to be able to design or choose the data structures that are most optimal for a particular problem.
 In this lab we begin our study of data structures by constructing a generic linked list, then using it to implement a few common data structures.}
 
+% TODO:
+%     - better error message in SortedList problem (disable)?
+%     - explanation about pros and cons of Python lists at the end. 
+
 \section*{Introduction}
 
 \emph{Data structures} are specialized objects for organizing data efficiently.
@@ -46,7 +50,7 @@ class Node(object):
 \end{lstlisting}
 Modify the constructor of the \li{Node} class so that it only accepts data of type \li{int}, \li{long}, \li{float}, or \li{str} (comparable types).
 If another type of data is given, raise a \li{TypeError} with an appropriate error message.
-Also modify the class docstring to document these restrictions.
+Modify the constructor docstring to document these restrictions.
 \end{problem}
 
 \begin{info}
@@ -166,9 +170,9 @@ class LinkedList(object):
         else:
             # If the list is not empty, place new_node after the tail.
             self.tail.<<next>> = new_node               # tail --> new_node
-            new_node.prev = self.tail               # new_node <-- tail
+            new_node.prev = self.tail               # tail <-- new_node
             # Now the last node in the list is new_node, so reassign the tail.
-            self.tail = current_node
+            self.tail = new_node
 \end{lstlisting}
 
 \begin{figure} % append().
@@ -248,13 +252,13 @@ To access any other node, we must use each successive node's \li{<<next>>} and \
 # and the 'next' and 'value' attributes of each node in the list.
 >>> my_list.head.value
 2
->>> <<my_list.head.next.value>>
+>>> my_list.head.<<next>>.value
 4
->>> <<my_list.head.next.next.value>>
+>>> my_list.head.<<next.next>>.value
 6
->>> <<my_list.head.next.next>> is self.tail
+>>> my_list.head.<<next.next>> is my_list.tail
 True
->>> my_list.tail.prev.prev is self.head
+>>> my_list.tail.prev.prev is my_list.head
 True
 \end{lstlisting}
 
@@ -416,7 +420,7 @@ See Figure \ref{fig:remove_good}.
 % Problem 4: LinkedList.remove().
 \begin{problem}
 Modify the \li{remove()} method given above so that it correctly removes the first node in the list containing the specified data.
-Account for the special cases of removing the first or last node. % TODO: or only node?
+Account for the special cases of removing the first, last, or only node.
 \end{problem}
 
 % Garbage collection warning.
@@ -477,14 +481,13 @@ See \url{https://docs.python.org/2/library/gc.html} for more information on pyth
 \label{fig:insert}
 \end{figure}
 
-% TODO: fix this wording.
 % Problem 4: LinkedList.insert()
 \begin{problem}
 Add a method called \li{insert(self, data, place)} to the \li{LinkedList} class that inserts a new node containing \li{data} immediately before the first node in the list containing \li{place}.
-If the list is empty, or there is no node containing \li{place} in the list, raise a \li{ValueError} with an appropriate error message.
+Account for the special case of inserting before the first node.
 
 See Figure \ref{fig:insert} for an illustration.
-Note that since \li{insert} places a new node before an existing node, it is not possible to \li{insert()} at the end of the list or to an empty list.
+Note that since \li{insert()} places a new node before an existing node, it is not possible to \li{insert()} at the end of the list or to an empty list.
 \end{problem}
 
 \section*{Sorted Lists}
@@ -504,21 +507,21 @@ This data structure adds new nodes strategically so that the data is always kept
 \item Write a method called \li{add(self, data)} that inserts a new node containing \li{data} before the first node in the list that has a \li{value} that is greater or equal to \li{data} (thereby preserving the ordering).
 
 Hint: use inherited methods when appropriate.
-\item Override the \li{insert()} method with the following:
+\item Override the \li{append()} method with the following:
 
 \begin{lstlisting}
-def insert(*args, **kwargs):
-    raise NotImplementedError("insert() is disabled (use add())")
+def append(*args, **kwargs):
+    raise NotImplementedError("append() is disabled (use add())")
 \end{lstlisting} % TODO: better error message?
 
-This effectively disables \li{insert()} for the \li{SortedList} class, preventing the user from inserting a node in a location that would disrupt the ordering of the data in the list.
+This effectively disables \li{append()} for the \li{SortedList} class, preventing the user from inserting a node in a location that would disrupt the ordering of the data in the list.
 
 \begin{info}
-The \li{*args} argument allows the \li{insert()} method to receive any number of positional arguments without raising a \li{TypeError}, and the \li{**kwargs} argument allows it to receive any number of keyword arguments.
+The \li{*args} argument allows the \li{append()} method to receive any number of positional arguments without raising a \li{TypeError}, and the \li{**kwargs} argument allows it to receive any number of keyword arguments.
 This is the most general form of a function signature.
 \end{info}
 
-\item Also disable the \li{append()} method.
+\item Also disable the \li{insert()} method.
 
 \end{enumerate}
 Outside of the class, write a function called \li{sort_file(infile, outfile)} that reads each line of \li{infile}, adds each line to a \li{SortedList} instance, then writes the lines to \li{outfile} in alphabetical order by iterating through the list.
@@ -608,12 +611,13 @@ The \li{LinkedList} class we have built is still somewhat minimal.
 Below are some ideas for improving it.
 
 \begin{enumerate}
-\item Add a keyword argument to the constructor so that if an iterable is input, the data is added immediately to the structure.
-Python's standard data structures support this feature.
+\item Add a keyword argument to the constructor so that if an iterable is input, the data is added automatically to the structure.
+This makes it possible to cast other iterables as a \li{LinkedList}, like
+Python's standard data structures.
 \begin{lstlisting}
->>> my_set = {1, 2, 3, 4, 5}
->>> my_list = list(my_set)
->>> print(my_list)
+>>> my_list = [1, 2, 3, 4, 5]
+>>> my_linked_list = LinkedList(my_set)     # Cast my_list as a LinkedList.
+>>> print(my_linked_list)
 [1, 2, 3, 4, 5]
 \end{lstlisting}
 Repeat this for the \li{SortedList} and \li{Deque} classes.
@@ -621,7 +625,7 @@ Repeat this for the \li{SortedList} and \li{Deque} classes.
 \item Add a method called \li{reverse()} that reverses the ordering of the data of the list inplace.
 \item Implement the \li{__max__()} and \li{__min__()} magic methods for finding the greatest or least element in the list.
 \item Implement the \li{__getitem__()} and \li{__setitem__()} magic methods to enable standard bracket indexing.
-\item Implement the \li{__iter__()} magic method to support \li{for} loop iteration and the \li{iter()} built-in function.
+\item Implement the \li{__iter__()} magic method to support \li{for} loop iteration, the \li{iter()} built-in function, and the \li{in} statement.
 \end{enumerate}
 
 % \begin{problem}
