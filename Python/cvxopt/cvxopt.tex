@@ -113,7 +113,7 @@ and then simply convert them to the CVXOPT matrix data type:
 Use whichever method is most convenient. Note that we made sure the entries in the matrices are floats.
 
 Having initialized the necessary objects, we are now ready to solve the problem.
-We will use the CVXOPT function \li{solvers.lp}, and we simply need to pass in $c$, $G$, and $h$ as arguments.
+We will use the CVXOPT function for linear programming \li{solvers.lp}, and we simply need to pass in $c$, $G$, and $h$ as arguments.
 \begin{lstlisting}
 >>> from cvxopt import solvers
 >>> sol = solvers.lp(c, G, h)
@@ -377,6 +377,7 @@ As an example, let us minimize the quadratic function
 f(x,y) = 2x^2 +2xy + y^2 +x -y.
 \]
 Note that there are no constraints, so we only need to initialize the matrix $Q$ and the vector $p$.
+To solve this optimization problem, we will use the CVXOPT function for quadratic programming \li{solvers.qp}.
 \begin{lstlisting}
 >>> Q = matrix([[4., 2.], [2., 2.]])
 >>> p = matrix([1., -1.])
@@ -435,7 +436,7 @@ We seek to find the best possible allocation, subject to forest-wide restriction
 
 The file \li{ForestData.npy} contains data for a fictional national forest (you can also find the data
 in Table \ref{tab:forest}). There are 7 areas of analysis and 3 prescriptions for each of them. 
-The first column is the area of analysis, denoted $i$. The second column is the size of the analysis area (in thousands of acres), denoted $s_i$. The third column is a prescription number, denoted $j$. The forth column is the net present value (NPV) per acre of all uses in area $i$ under prescription $j$, and is denoted $p_{i,j}$. The fifth column is protected timber yield (in board-feet per acre) in area $i$ under prescription $j$, denoted $t_{i,j}$. The sixth column is protected grazing capability (in animal-unit months per acre) for area $i$ under prescription $j$, denoted
+The first column is the area of analysis, denoted $i$. The second column is the size of the analysis area (in thousands of acres), denoted $s_i$. The third column is a prescription number, denoted $j$. The fourth column is the net present value (NPV) per acre of all uses in area $i$ under prescription $j$, and is denoted $p_{i,j}$. The fifth column is protected timber yield (in board-feet per acre) in area $i$ under prescription $j$, denoted $t_{i,j}$. The sixth column is protected grazing capability (in animal-unit months per acre) for area $i$ under prescription $j$, denoted
 $g_{i,j}$. The seventh and last column is the wilderness index rating (0 to 100) for area $i$ under prescription $j$, denoted $w_{i,j}$. Let $x_{i,j}$ be the amount of land in area $i$ allocated to prescription $j$.
 
 \begin{table}[h]
