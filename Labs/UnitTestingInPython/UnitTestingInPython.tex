@@ -55,10 +55,10 @@ For exmaple if one runs 'py.test' in the following directory:
 \begin{lstlisting}[language=bash]
 $ tree `to show children directories recursivly`
 |-- api_tests
-|   |-- test_accounts.py
-|   |-- test_auth.py
-|   |-- test_base.py
-|   |-- test_common.py
+|   |-- test_accounts.py
+|   |-- test_auth.py
+|   |-- test_base.py
+|   |-- test_common.py
 |-- platform_tests
       |-- test_bulk.py
       |-- test_calendar.py
@@ -137,7 +137,7 @@ as it will allow you to very quickly see which function causes greif in the futu
 
 Often times when developing software we want to throw exceptions when certain input is given to our code.
 For example if a user feeds a bad value to a calculator (like dividing by 0) we want it to be very explicit as to why the proccess isn't being complete.
-Standard assert functions simply will not do as they did for the addition and Fibinachi functions.
+Standard assert functions simply will not do as they did for the addition and Fibonacci functions.
 Instead we must develop methods from the actual pytest module which allow us to not only see the exception message, but also test the type of exception thrown.
 A function might have several different type of exceptions to throw as well, so to gaurentee it is useful to have unique messages and/or excepiton types thrown.
 For example:
@@ -248,7 +248,7 @@ If it does then you know that part of what you deleted is un-tested.
 
 Kent Beck, the creator of \href{https://en.wikipedia.org/wiki/Extreme_programming}{Extreme programming} claims to have re-discovered  Test Driven Development (TDD), saying:
 "The original description of TDD was in an ancient book about programming. It said you take the input tape, manually type in the output tape you expect, then program until the actual output tape matches the expected output."
-TDD incentivises simple design, elegant code, and gives quatifiable checkpoints in the development proccess.
+TDD incentivizes simple design, elegant code, and gives quantifiable checkpoints in the development proccess.
 The idea is simple enough:
 \begin{tikzpicture}
 \matrix [column sep=40mm, row sep=5mm] {
@@ -261,7 +261,7 @@ The idea is simple enough:
 \end{tikzpicture}\\
 The idea must be a bit more concrete then "I want to add a chat room to my website." The general idea of how the chat room will look in code (like a history module, a data base, and a sketch of required functions, etc.) is required.
 Next that idea is transformed into tests because the inputs and outputs of required functionality are understood.
-Following the example of the chat room you could write a unit test that checks what a given api returns when a user has broadcasted some message.
+Following the example of the chat room you could write a unit test that checks what a given API returns when a user has broadcasted some message.
 The implementation is simply adding, changing and editing code until all the required tests pass.
 
 \begin{problem}
