@@ -1,30 +1,30 @@
 \lab{Unit Testing In Python}{Unit Testing In Python}
 
-\objective{Convey the importance of unit testing in code, especially in the corprate world. Unit testing in python is easy, valulable and powerful. Any software development position will appreciate a developer who is able to accuratly test their code.}
+\objective{Convey the importance of unit testing in code, especially in the corporate world. Unit testing in python is easy, valulable and powerful. Any software development position will appreciate a developer who is able to accurately test their code.}
 
 Though many projects done in school are ussualy done in isolation, when one writes code they should always be thinking about how other developers would react to their code.
-When working on projects over 100 thousand lines of code long it is simply impossible to understand how every single function is working together to make your product work the way it does.
+When working on projects over 100,000 lines of code long, it is simply impossible to understand how every single function is working together to make your product work the way it does.
 
 However, a simple and elegant solution to this problem prevents developers from being required to be omniscient about the code they are writing: Unit Testing.
 Unit testing allows a developer to only know what the inputs and outputs of a function are, then they can rely on the unit tests that have been written to know rather or not the software is working as expected.
-It helps Developers understand requirements, keeps developers aware of dependency changes, and give a developer confidence about where code is broken.
+If you're a developer, it helps you understand requirements, keeps you aware of dependency changes, and gives you confidence about where code is broken.
 
-Imagine you where a developer for a company. On your first day you are assigned the task of tracking down why the banner upload tool isn't allowing this particular user upload a banner.
-Very quickly you discover that the user simply doesn't have the correct credentials for the tool, so you can either change the requirements for the upload for the credentials of the user.
-You decide to go with the later and change the requirments for the upload. You mark the task as complete and your code is shipped for the user to see.
-Very soon however the bug fix comes back to haunt you! Now the person uploading the Banner is having the same exact issue.
-In confusion you go back to find that your coworker had change the permissions back to fix an issue where anyone could up load a banner, including those who where not supposed to be able to.
-It isn't strictly your coworks fault that you are tasked with the same bug again, there was nothing to indicate to him that he should not have simply put that code back in place.
-Unit testing is the perfect thing to implement in order to prevent this sort of hold up on code production.
-A well written unit test would have perhaps prevented any developer from editing code to allow any user to add a banner, you would have then been aware that your fix was inappropriate.
+Imagine you were a developer for a company. On your first day, you are assigned the task of tracking down why the banner upload tool isn't allowing this particular user to upload a banner.
+Very quickly you discover that the user simply doesn't have the correct credentials for the tool, so you can either change the requirements for the upload or the credentials of the user.
+You decide to go with the latter and change the requirements for the upload. You mark the task as complete and your code is shipped for the user to see.
+Very soon, however, the bug fix comes back to haunt you! Now the person uploading the banner is having the same exact issue.
+In confusion you go back to find that your coworker had changed the permissions back to fix an issue where anyone could upload a banner, including those who where not supposed to be able to.
+It isn't strictly your coworker's fault that you are tasked with the same bug again; there was nothing to indicate to him that he should not have simply put that code back in place.
+Unit testing is the perfect thing to implement in order to prevent this sort of hold up code production.
+A well written unit test would have perhaps prevented any developer from changing the code to allow users without credentials to upload a banner. Running the test would have alerted you that your fix was inappropriate.
 
 Test coverage is even sometimes used in the sales arena to describe the quality of a product!
 
 \section*{PyTest}
 
 Okay, so we've disscussed enough of the why. Now we will disscuss and explore the "how" to test code in python.
-It is easiest and most effcient to think about testing individual functions rather than entire files or modules.
-(As we will discuss later, testing classes should even happen at a method based level)
+It is easiest and most efficient to test individual functions, rather than entire files or modules.
+(As we will discuss later, testing classes likewise happen on a method-based level)
 As an example we might test the following:
 \begin{lstlisting}
 >>> def addition(a,b):
@@ -39,21 +39,21 @@ with this test function:
 ...     assert addition(6,14) == 20
 \end{lstlisting}
 
-Now this is all good and pretty, we are able to write tests for a function, by asserting that they give us a particular output based on some fixed input.
-But what makes unit testing in python so useful isn't this, it is running the following in your current directory (from the terminal):
+Now this is all good and pretty; we are able to write tests for a function by asserting that they give us a particular output based on some fixed input.
+However, this isn't what makes unit testing in python so useful. The better way to do it is running the following in your current directory (from the terminal):
 \begin{lstlisting}[language=bash]
   $ py.test
 \end{lstlisting}
 
 \begin{info}
-In order for py.test to find the tests that you have written it is required for the file name to have the word "test" and end with ".py".
-Also all the functions that you want the py.test to call should begin with the word "test".
-(If this behavior donsen't work for whatever reason or a new behavior is required look into setting up pytest.ini from the directory where you will be testing)\\
+In order for py.test to find the tests that you have written, the file name needs to have the word "test" and end with ".py".
+Also, all the functions that you want py.test to call should begin with the word "test".
+(If this behavior doesn't work for whatever reason, or a new behavior is required, look into setting up pytest.ini from the directory where you will be testing)\\
 \end{info}
 
-For exmaple if one runs 'py.test' in the following directory:
+For example, if you run 'py.test' in the following directory:
 \begin{lstlisting}[language=bash]
-$ tree `to show children directories recursivly`
+$ tree `to show children directories recursively`
 |-- api_tests
 |   |-- test_accounts.py
 |   |-- test_auth.py
