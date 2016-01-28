@@ -1,4 +1,4 @@
-import solutions
+"""import solutions
 import pytest
 
 # 78 Statments in problem 4
@@ -102,4 +102,4 @@ def test_linked_list_insert(set_linked_list):
         a.insert(5, 6)
     assert excinfo.typename == "ValueError"
     assert excinfo.value.args[0] == "6 is not in the list."
-
+"""
